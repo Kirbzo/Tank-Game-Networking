@@ -4,10 +4,10 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 
 ## Scope and source
 
-- Keep all changes inside `C:\Users\broth\OneDrive\Desktop\codex stuff\Codex for COMP214`. The current repository and documentation are in its `COMP214` subfolder.
-- Read `C:\Users\broth\Downloads\Requirements Document.docx` as the current requirements source. Never edit, replace, move, or delete source requirements documents, including the earlier PDF if present.
-- The current user request authorizes updating README.md and AGENTS.md and creating the required status.md and prompt log. It does not request game implementation.
-- Preserve unrelated files and user changes. Leave documentation_rationale.txt as the historical October 13 record.
+- Keep all changes inside the project repository root (`.`), defined as the folder containing this AGENTS.md and README.md. Resolve project file paths relative to that root, regardless of the checkout location or operating system.
+- Read `MoozeTanks/Requirements Document.docx` relative to the repository root as the current requirements source. If it is unavailable in another checkout, ask for its location. Never edit, replace, move, or delete source requirements documents, including the earlier PDF if present.
+- The current user request authorizes making documentation paths portable and maintaining the required status and prompt logs. It does not request game implementation.
+- Preserve unrelated files and user changes. Preserve documentation_rationale.txt as the historical October 13 record, while allowing path references to be made portable.
 - Retain Godot **4.7.2** and **GDScript** from the prior instructions. The updated DOCX does not restate these constraints. Do not silently substitute another version or language.
 
 ## Alpha scope ? October 20, 2026

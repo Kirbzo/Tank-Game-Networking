@@ -4,7 +4,7 @@ A student two-player networking framework built in Godot, with visual placeholde
 
 ## Source and current status
 
-Updated October 16, 2026 from `C:\Users\broth\Downloads\Requirements Document.docx`, titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only.
+Updated October 16, 2026 from [Requirements Document.docx](MoozeTanks/Requirements%20Document.docx), titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only. The current requirements document is available at `MoozeTanks/Requirements Document.docx`, relative to the repository root. Project documentation links are relative to the repository root (the folder containing this README.md and AGENTS.md).
 
 This checkout contains documentation only: no Godot project, scenes, scripts, executable, or runtime tests are present. Requirements below describe intended behavior. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
 

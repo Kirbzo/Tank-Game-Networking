@@ -1,7 +1,7 @@
 # Requirements status
 
-Updated: October 16, 2026. Revision: S-2026-10-16-01. Prompt: P002.
-Source: `C:\Users\broth\Downloads\Requirements Document.docx` (Server Requirement).
+Updated: October 16, 2026. Revision: S-2026-10-16-02. Prompt: P003.
+Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: this checkout contains documentation and Git metadata only; no Godot project or implementation is present. Runtime behavior has not been tested. README coverage alone does not complete a functional requirement.
 
@@ -37,3 +37,5 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 ## Revision history
 
 - S-2026-10-16-01 (P002): created tracking for AR1?AR5 and FR1?FR15; FR13?FR15 complete as documentation deliverables; AR1?AR4 and FR1?FR12 not implemented; AR5 unverified. No runtime tests performed.
+
+- S-2026-10-16-02 (P003): made documentation paths portable across machines; requirement completion statuses unchanged. No runtime tests performed.

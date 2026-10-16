@@ -5,7 +5,7 @@ This file provides a concise summary of the approach, decisions, and verificatio
 documentation task.
 
 Source
-The Requirements Document.pdf in C:\Users\broth\Downloads was read without editing it. 
+The user-provided Requirements Document.pdf was read without editing it. 
 Its title is "Server Requirement and README". The source covers four alpha demonstration 
 requirements, twelve framework functional requirements, a README outline, and agent constraints 
 specifying Godot 4.7.2 and GDScript.
