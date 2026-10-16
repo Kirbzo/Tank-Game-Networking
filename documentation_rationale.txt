@@ -1,0 +1,41 @@
+Documentation rationale
+Date: October 13, 2026
+
+This file provides a concise summary of the approach, decisions, and verification for the 
+documentation task.
+
+Source
+The Requirements Document.pdf in C:\Users\broth\Downloads was read without editing it. 
+Its title is "Server Requirement and README". The source covers four alpha demonstration 
+requirements, twelve framework functional requirements, a README outline, and agent constraints 
+specifying Godot 4.7.2 and GDScript.
+
+Documentation choices
+README.md follows the PDF's project name and purpose. It separates the October 20, 2026 
+alpha lobby demonstration from the framework requirements because the PDF permits simulated 
+joining during the alpha while requiring real networking for the framework. Tables preserve 
+each requirement ID and its acceptance criteria for review.
+
+The target folder was empty when inspected. The README therefore describes required and intended
+ behavior and explicitly states that no runnable implementation is present. Setup commands, 
+ ports, controls, and scene names were not invented because the source does not specify them.
+
+AGENTS.md translates the PDF's constraints into practical instructions for future agents. 
+It also records the user's folder boundary, protects the source PDF, and limits the current task 
+to the three requested documentation files. Future implementation requires a later user request.
+
+Start permissions, movement/action rules, and the match-end trigger remain decisions for the 
+team. They were documented as unresolved rather than assigned arbitrary values.
+
+Verification
+The requirements were extracted from the PDF in memory using read-only operations. No extraction
+ file or dependency was added. The completed documentation was checked against the four alpha 
+ and twelve framework requirements. The final folder contents and PDF SHA-256 were checked after
+creating the files.
+
+Source PDF SHA-256 before creation:
+7fc9eb924ac2e34c14f4c3bd2fa4973bbdf54798e2f73ce95acced5fc743d1a7
+
+Only README.md, AGENTS.md, and documentation_rationale.txt were created, all inside Codex for 
+COMP214. No application implementation or gameplay tests were performed for this documentation 
+task.
