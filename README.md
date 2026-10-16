@@ -1,77 +1,78 @@
 # Moooze Tanks Game Server Team
 
-A student two-player networking framework built in Godot, with visual placeholders for testing player connections and multiplayer interactions.
+A student two-player networking framework built in Godot, with visual placeholders for connection and multiplayer testing.
 
 ## Source and current status
 
-This README is based on `C:\Users\broth\Downloads\Requirements Document.pdf` (title: **Server Requirement and README**). The PDF is the requirements source and must remain unchanged.
+Updated October 16, 2026 from `C:\Users\broth\Downloads\Requirements Document.docx`, titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only.
 
-This folder currently contains documentation only. No Godot project, executable, or verified implementation is included. The capabilities below describe required behavior, not completed features.
+This checkout contains documentation only: no Godot project, scenes, scripts, executable, or runtime tests are present. Requirements below describe intended behavior. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
 
-## Technology requirements
+## Technology baseline
 
-- Godot **4.7.2**, as specified in the requirements document.
-- **GDScript**.
-- A two-player session hosted on a local device.
+Retain **Godot 4.7.2** and **GDScript** from the existing project instructions. The updated DOCX does not specify an engine version or language; these are retained constraints from the earlier documentation, not new DOCX requirements.
 
-The document does not specify a networking transport, port, discovery mechanism, project entry scene, or installation commands. Record those details when implementation is authorized and available.
+## Alpha demonstration ? October 20, 2026
 
-## Alpha demonstration — October 20, 2026
+The alpha implements hosting and visibility of hosted games to another user. Initially, two users see an empty game list. Only Host works: hosting launches a game, and its entry becomes visible in the other user's lobby. Join stays disabled; real joining is deferred to WP2. Leaving is also incomplete in the alpha. Do not implement non-alpha gameplay functionality in this iteration (AR5).
 
-The alpha focuses on the intended lobby experience. Joining may be simulated when connection functionality is incomplete; clearly identify which steps work and which are simulated.
-
-| PDF alpha ID | Required demonstration | Acceptance criteria |
+| ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
-| 1 | Lobby interface with Host, Join, and Exit buttons. | A reviewer can identify each button and its intended purpose. |
-| 2 | List of available games. | The demo displays identifiable game entries. |
-| 3 | Game IDs identify sessions; players select a listed session or enter an ID to join. | Each listed session displays its ID, and either joining route targets the matching session. Joining may be simulated. |
-| 4 | Player flow for finding or identifying a game and using the lobby. | A reviewer can follow hosting, joining, and leaving, with working and simulated steps clearly distinguished. |
+| AR1 | Show the intended lobby interface with Host, Join,  Exit buttons and a game list. | A reviewer can identify each button and its intended purpose. The host button will launch a game that is visible in the lobby to other connected users. Join is disabled; the functionality will be in WP2. |
+| AR2 | Show a list of available games. | The demonstration displays identifiable game entries.  When a user hits the host button the game will be visible for other users in the list of available games. |
+| AR3 | Show how game IDs identify sessions and how a player can either click or enter an ID to join a specific session. | Each listed session displays its game ID. The demonstration shows how a player selects a listed session or enters an ID to join the matching session. Joining may be simulated if the connection functionality is incomplete. |
+| AR4 | Demonstrate the player's flow for finding a game and using the lobby. | A reviewer can follow the intended hosting, joining, and leaving sequence. Simulated and working steps are clearly distinguished. |
+| AR5 | Consider all framework and functional requirements below but do not implement if not part of the alpha demonstration requirements. | No non alpha functionality present in this iteration. |
 
-Suggested walkthrough: show the lobby controls, host a session, show its game ID in the available-games list, demonstrate joining by selection and by ID, then demonstrate leaving. Explain any simulated steps as they occur.
+### Demo walkthrough and source ambiguities
+
+1. Open the lobby for two users and show the initially empty game lists.
+2. Identify Host, Join, and Exit, with Join disabled.
+3. Use Host to launch a game and show its identifiable entry and game ID in the other user's list. This must be working behavior, not a simulated list entry.
+4. Explain the intended selection/ID joining and leaving flow. Any demonstration of these incomplete steps must be explicitly simulated; it must not enable real joining or suggest that leaving works.
+
+The overview calls the controls Join, Leave, and Host, while AR1 says Host, Join, and Exit. Retain the AR1 labels in the documented demo and confirm whether Exit means application exit or leaving a session before implementing that control. AR3 permits simulated joining, while AR1 requires Join disabled and defers its functionality to WP2. Keep Join disabled and explain or separately simulate the intended flow pending team clarification. AR4's leaving sequence is an explanation or simulation during alpha because the overview explicitly defers leaving.
 
 ## Framework functional requirements
 
-These IDs correspond to the PDF's framework table, separately from the alpha IDs.
+FR1?FR12 describe the overall framework; implement only the subset needed for AR1?AR4 during alpha. FR13?FR15 require the documentation delivered here. Full networking and gameplay acceptance remains unverified.
 
-| PDF framework ID | Required behavior | Acceptance criteria |
+| ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
-| 1 | Support two players in a session hosted on a local device. | Both players connect to the same hosted session. |
-| 2 | Provide a lobby for hosting and connecting games. | A player can host or choose a game to join. |
-| 3 | Maintain and expose available hosted games. | Available games appear in the list; closed games are no longer offered. |
-| 4 | Join by selecting a listed game or entering its game ID. | Either route joins the matching session; invalid IDs produce an understandable error. |
-| 5 | Create, join, leave, and close game rooms. | Each action updates membership or availability as expected. |
-| 6 | Select and start a game through the lobby. | Connected players enter the same game session through the agreed start flow; start permissions need team confirmation. |
-| 7 | Detect disconnections and communicate connection errors, join/leave events, and host disconnections. | Events are detected and appropriate status reaches the client interface wherever a connection remains available. |
-| 8 | Receive player inputs, update shared world state, and send authoritative position updates. | Both players' movement appears across connected instances, using server state as the reference. |
-| 9 | Validate inputs against agreed movement and action rules. | Selected invalid inputs cause no invalid state changes; agree on rules before testing. |
-| 10 | Determine hits on the server and communicate results for client reconciliation. | Both clients reflect server hit results and placeholder health/damage state. |
-| 11 | Reset game state after a match and prepare the lobby for the next round. | After the agreed match-end trigger, prior match state is cleared and another round can be prepared. |
-| 12 | Include basic connection and gameplay test placeholders. | Testing can use player rectangles, synchronized movement, basic bullets, health/damage indicators, a moose hazard placeholder, and interpolation visual markers. |
-
-## Intended player flow
-
-- **Host:** create a game session on the host's device.
-- **Join:** connect by selecting an available game or entering its game ID.
-- **Leave:** disconnect from the current session.
-- **Start:** enter the selected game together through a team-agreed start flow.
-- **Synchronization:** share movement and game-state updates using server authority.
-- **Hit detection:** receive server-determined hit results and health/damage updates.
-- **Game reset:** clear completed match state and prepare another round.
+| FR1 | The framework shall support a two-player session hosted on a local device. | Two players connect to the same hosted session. |
+| FR2 | The system shall provide a lobby for hosting and connecting games. | A player can host a game or choose a game to join. |
+| FR3 | The system shall maintain and expose a list of available hosted games. | An available game appears in the list, and a closed game is no longer offered as available. |
+| FR4 | The system shall allow a player to join a specific game by selecting it from the available-games list or entering its game ID. | Selecting an available game or entering its valid ID joins the matching session. An invalid ID displays an understandable error message. |
+| FR5 | The system shall create, join, leave, and close game rooms. | Each action changes room membership or availability as expected. |
+| FR6 | The system shall support selecting and starting a game from the lobby flow. | Connected players enter the same game session through the agreed start flow. Exact start permissions require team confirmation. |
+| FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Each event is detected, and the appropriate status reaches the client interface where a connection remains available. |
+| FR8 | The server shall receive player inputs, update the shared world state, and send authoritative position updates. | Movement from both players is reflected across the connected instances using server state as the reference. |
+| FR9 | The server shall validate inputs to prevent impossible movement and illegal actions according to agreed game rules. | Selected invalid inputs do not produce invalid state changes. Movement limits and action rules must be agreed before testing. |
+| FR10 | The server shall determine hits and communicate the resulting state so clients can reconcile with the server. | Both clients reflect the server's hit result and related placeholder health/damage state. |
+| FR11 | The server shall reset the game state after a match and prepare the lobby for the next round. | After the agreed match-end trigger, prior match state is cleared and the next round can be prepared. |
+| FR12 | The project shall include basic placeholders for connection and gameplay testing. | Tests can use player rectangles, synchronized movement, basic bullets, health/damage indicators, a moose hazard placeholder, and interpolation visual markers. |
+| FR13 | Generate a status.md file that logs the completion status of these requirements. | Status.md file created with status of all requirements. |
+| FR14 | Add a prompt log that captures the prompt Id, prompt, the date, the status.md | Log created and updated with results. |
+| FR15 | Create a README.md and AGENTS.md file based off of these requirements. | READEME.md and AGENTS.md created. |
 
 ## Decisions requiring team confirmation
 
-- Exact game-start permissions and start flow.
-- Movement limits and legal action rules before validation testing.
-- Match-end trigger before reset testing.
+- Exact start permissions and agreed game-start flow (FR6).
+- Movement limits and legal action rules before testing input validation (FR9).
+- Match-end trigger before reset testing (FR11).
+- Exit/Leave meaning and how to present AR3 without enabling Join during alpha.
+
+Transport, ports, game-discovery mechanism, controls, and entry scenes are not specified. Document actual choices when implementation is authorized.
 
 ## Running and verification
 
-There is no runnable project in this folder yet. Once implementation is available, document the actual project import steps, launch configuration, controls, and two-player setup here.
+There is no runnable project in this checkout. No setup or launch commands have been verified. Once a project exists, document import steps, launch settings, controls, and the two-user test setup.
 
-Use the alpha table to review the lobby demonstration. Use the framework table to verify real two-player networking, room lifecycle, invalid IDs, disconnection messages, authoritative movement, invalid-input rejection, shared hit results, and reset behavior. Record observed results and remaining gaps; simulated alpha behavior does not demonstrate completed framework functionality.
+For alpha, verify two-user initial empty lists, working Host, remote game-list visibility, visible game IDs, disabled Join, and clearly identified simulated joining/leaving steps. Check AR5 against the actual implementation. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
 
-## Documentation files
+## Documentation
 
-- `README.md`: project overview, requirements, acceptance criteria, and current status.
-- `AGENTS.md`: instructions for agents working in this folder.
-- `documentation_rationale.txt`: concise explanation of documentation choices and verification.
+- [AGENTS.md](AGENTS.md): agent scope, alpha limits, and maintenance instructions.
+- [status.md](status.md): completion status and evidence for AR1?AR5 and FR1?FR15.
+- [prompt_log.md](prompt_log.md): prompt IDs, prompts, dates, and status results.
+- [documentation_rationale.txt](documentation_rationale.txt): historical rationale for the October 13 documentation task; it describes the earlier PDF and is not the current requirements baseline.
