@@ -13,8 +13,20 @@ func check(condition: bool, message: String) -> bool:
 
 func run() -> void:
 	lobby = load("res://lobby.tscn").instantiate()
+	# Keep a user's running lobby out of the test's initial-empty/expiry assertions.
+	lobby.discovery.protocol = "moooze-alpha-smoke-2"
 	root.add_child(lobby)
 	await process_frame
+	if OS.get_cmdline_user_args().has("unicast"):
+		# Disable announcements on both processes: only request/reply can discover.
+		lobby.discovery.broadcast_enabled = false
+		if not OS.get_cmdline_user_args().has("host"):
+			lobby.network_address.text_submitted.emit("bad-address")
+			if not check(lobby.network_status.text.contains("valid IPv4"), "Invalid network address must be explained"):
+				return
+			lobby.network_address.text_submitted.emit("127.0.0.1")
+			if not check(lobby.discovery.direct_address == "127.0.0.1", "Manual lookup must target entered address"):
+				return
 	if not check(lobby.listed_ids.is_empty(), "Initial game list must be empty"):
 		return
 	if not check(lobby.join_button.disabled and lobby.exit_button.disabled, "Join and leaving must be disabled"):

@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-01. Prompt: P004.
+Updated: October 19, 2026. Revision: S-2026-10-19-02. Prompt: P005.
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -30,11 +30,15 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 
 ## Scope and open issues
 
+P005 LAN update: discovery binds explicitly to IPv4, supports repeated direct-IP queries with host replies, displays local IPv4 addresses, and reports invalid addresses/send errors. Setup and firewall instructions are in Godot/README.md. AR1/AR2 and FR3 remain partial until physical two-laptop and visual checks pass. Automated tests use a separate protocol identifier to avoid interference from an existing demonstration host.
+
 Alpha requires working hosting and visibility of its game entry to another user. Join remains disabled until WP2; leaving is incomplete. AR3/AR4 joining and leaving flows may be explained or clearly simulated. Exit means leave the hosted session per user clarification on October 19, 2026. Joining/leaving remain explanation-only and disabled.
 
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-10-19-02 (P005): IPv4 binding and direct-IP discovery added. Godot 4.7.2 actual-lobby host/observer tests printed PASS for automatic discovery and for direct-IP request/reply with announcements disabled. Both checked matching IDs, disabled Join/Exit, lookup, and expiry; direct mode also checked invalid-IP feedback. An initial automatic run encountered an already-running demonstration host, so tests now use a separate protocol identifier. A GDScript type-inference error found during import was fixed before the passing tests. Sandbox user-log/certificate-store errors persist; no script errors in final tests. All 20 requirement IDs and local links checked; source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Physical two-laptop and visual review remain unverified; requirement statuses unchanged.
 
 - S-2026-10-16-01 (P002): created tracking for AR1?AR5 and FR1?FR15; FR13?FR15 complete as documentation deliverables; AR1?AR4 and FR1?FR12 not implemented; AR5 unverified. No runtime tests performed.
 

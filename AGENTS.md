@@ -18,6 +18,7 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 - AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Explain or separately simulate the incomplete steps and label them clearly. Do not enable real Join or claim simulations satisfy final networking acceptance.
 - The user clarified on October 19, 2026 that Exit means leaving the hosted session. Retain the Exit label and keep it disabled while alpha leaving remains incomplete.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
+- The subsequent October 19 request authorizes two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not authorize real joining.
 
 ## Overall framework
 

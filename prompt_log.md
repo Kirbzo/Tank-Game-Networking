@@ -1,5 +1,17 @@
 # Prompt log
 
+## P005 - October 19, 2026
+
+Prompt:
+
+> Enable the lobby to work on two separate laptops on the same network.
+
+Result: made discovery bind explicitly to IPv4; added direct-IP discovery request/reply when broadcast is blocked; displayed local IPv4 addresses and network feedback; and documented two-laptop setup/firewall requirements. Join/Exit remain disabled within alpha scope. Updated Godot/discovery.gd, Godot/lobby.gd, Godot/tests/alpha_smoke.gd, Godot/README.md, README.md, AGENTS.md, status.md, and this log. Preserved the pre-existing project.godot working-tree state. Normalized Godot/README.md and this log from legacy encoding to UTF-8 for editing.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-02. Functional requirement statuses remain unchanged; physical two-laptop and visual acceptance remain unverified. See that revision's validation record for test results. Requirements DOCX retained unchanged.
+
+Validation: Godot 4.7.2 host/observer tests printed PASS for automatic discovery and direct-IP request/reply with automatic announcements disabled, including matching IDs, disabled controls, lookup, and listing expiry; direct mode also checked invalid IPv4 feedback. An existing demonstration host initially interfered with the automatic test, so tests were isolated by protocol. Fixed an import-time type-inference error before final tests. Sandbox user-log/certificate-store errors remain. Checked all 20 IDs, local links, source checksum and change boundaries. Physical two-laptop acceptance is still unverified.
+
 Dates use America/Regina. IDs are assigned in conversation order. Historical entries are reconstructed from the visible conversation and the dated documentation record; no runtime results are inferred. Historical prompt path references have been normalized to source filenames for portability; other wording is preserved.
 
 ## P001 ? October 13, 2026
@@ -46,7 +58,7 @@ Prompt:
 
 Clarification prompt (asked by the agent):
 
-> AR1 says Exit, while the overview says Leave. Should Exit close the application or leave a hosted session? I’ll keep it visibly disabled until this is resolved.
+> AR1 says Exit, while the overview says Leave. Should Exit close the application or leave a hosted session? Iâ€™ll keep it visibly disabled until this is resolved.
 
 Actual user answer:
 
@@ -54,6 +66,6 @@ Actual user answer:
 
 Result: created the Godot 4.7.2 GDScript alpha lobby under Godot/, with real hosted ENet endpoint and UDP local-network discovery, session IDs, selection/typed-ID identification, disabled Join/Exit, and explicitly explained incomplete joining/leaving. Updated README.md, AGENTS.md, status.md and this log. No non-alpha gameplay implemented.
 
-Associated status.md: [status.md](status.md), revision S-2026-10-19-01. AR1–AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; FR13–FR15 maintained; other framework behavior deferred.
+Associated status.md: [status.md](status.md), revision S-2026-10-19-01. AR1â€“AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; FR13â€“FR15 maintained; other framework behavior deferred.
 
 Validation: Godot 4.7.2 import and actual host/observer headless process tests passed initial empty lists, hosting, remote matching game ID, disabled controls, selection, typed/unknown IDs, and expiry after host shutdown. Sandbox user-log/certificate-store errors were reported; no script errors. Visual layout and two-physical-device LAN checks remain unverified. Checked all 20 requirement IDs, relative documentation links, source checksum and changed-file boundaries. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
