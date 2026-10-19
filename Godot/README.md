@@ -18,21 +18,7 @@ Discovery uses UDP broadcast and loopback on ports 49140–49155, with one port 
 
 Discovery now binds explicitly to IPv4 on all interfaces. Direct-IP queries repeat every 0.75 seconds and hosting lobbies reply directly to the requesting address and port. This bypasses broadcast restrictions but cannot bypass firewalls, Wi-Fi client isolation, or blocked device-to-device traffic. Send errors appear in the lobby; a successful send alone does not prove reception. Physical two-laptop acceptance remains unverified until this walkthrough is performed on the target network.
 
-<<<<<<< HEAD
-## Troubleshooting discovery with multiple IPv4 addresses
-
-Joining is intentionally unavailable: the Join button is disabled and the ENet host refuses new connections. Discovering a listing does not join it.
-
-On each Windows laptop, run `ipconfig` and identify the connected Wi-Fi/Ethernet adapter used for the shared network. Use the host's IPv4 from that adapter in the other laptop's network-address field, then press Enter while Host is running. Do not use loopback, a disconnected adapter, or a VPN/virtual-adapter address. Compare subnet masks as well as addresses; matching Wi-Fi names alone do not establish device-to-device reachability. The lobby currently lists addresses without adapter labels.
-
-Automatic discovery sends to loopback and the limited broadcast address `255.255.255.255`; it does not explicitly select or send separately through each adapter. Binding to `0.0.0.0` accepts IPv4 traffic on all interfaces but does not establish that broadcasts reach the intended LAN. Direct-IP lookup already bypasses the broadcast path. If direct lookup works but automatic discovery does not, investigate broadcast forwarding/interface routing. If neither works, check the selected host address, that the current project is running and hosting, firewall rules on both laptops, and network client isolation or VLAN separation. A successful UDP send is not proof of delivery.
-
-Use `netstat -ano -p udp` while the lobby runs to confirm a listener within UDP 49140–49155. Check the firewall's active profile and that its allow rule matches the executable actually running (editor, console executable, or export). A Private-only rule does not cover a Public-profile network. On managed/campus Wi-Fi, ask the administrator about peer-to-peer UDP access; do not disable the firewall or reclassify a shared network merely to test. A trusted hotspot or home LAN can provide a comparison test. Direct lookup still requires device-to-device UDP access.
-
-Investigation on October 19, 2026: this workstation had one active Wi-Fi IPv4 interface and disconnected Ethernet/Wi-Fi Direct adapters, a Public firewall profile with a Godot executable UDP allow rule, and no discovery listener at inspection time. Multiple active host IPv4 interfaces were not reproduced here. The other laptop and packet delivery were not inspected, so the specific discovery failure remains unconfirmed. Repeat the two-laptop walkthrough above, including matching IDs and expiry, before claiming acceptance.
-=======
 Automatic LAN queries and host announcements also repeat every 0.75 seconds. Each game ID produces one listing, with fresh replies updating its endpoint and expiry; a known LAN address takes precedence over loopback. Host creates one server per instance and advertises its actual port only after successful creation. Listings identify that same hosted endpoint across devices; discovery does not connect players to it. The protocol remains `moooze-alpha-1` with the existing announcement fields unchanged.
->>>>>>> origin/Jaden
 
 ## Automated checks
 
