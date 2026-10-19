@@ -55,10 +55,7 @@ func _process(delta: float) -> void:
 		var port := int(data.get("port", 0))
 		if not id.begins_with("MT-") or id.length() != 27 or port < 1 or port > 65535:
 			continue
-		var is_new: bool = not games.has(id) or games[id]["address"] != address
-		games[id] = {"id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
-		if is_new:
-			games_changed.emit()
+		remember_game(id, address, port)
 	var expired: Array = []
 	for id in games:
 		if Time.get_ticks_msec() - int(games[id]["seen"]) > EXPIRY_MS:
@@ -71,7 +68,17 @@ func _process(delta: float) -> void:
 	if elapsed >= 0.75:
 		elapsed = 0.0
 		advertise()
-		query_direct_host()
+		query_hosts()
+
+func remember_game(id: String, address: String, port: int) -> void:
+	# Announcements and replies describe one session; prefer LAN to loopback.
+	var previous: Dictionary = games.get(id, {})
+	if address.begins_with("127.") and not previous.is_empty() and not str(previous["address"]).begins_with("127."):
+		address = previous["address"]
+	var changed: bool = previous.is_empty() or previous["address"] != address or int(previous["port"]) != port
+	games[id] = {"id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
+	if changed:
+		games_changed.emit()
 
 func set_direct_address(value: String) -> bool:
 	var address := value.strip_edges()
@@ -85,9 +92,20 @@ func set_direct_address(value: String) -> bool:
 func query_direct_host() -> void:
 	if direct_address.is_empty() or bound_port == -1:
 		return
+	query_address(direct_address)
+
+func query_hosts() -> void:
+	if bound_port == -1:
+		return
+	if broadcast_enabled:
+		query_address("127.0.0.1")
+		query_address("255.255.255.255")
+	query_direct_host()
+
+func query_address(address: String) -> void:
 	var packet := JSON.stringify({"protocol": protocol, "instance": instance_id, "type": "query"}).to_utf8_buffer()
 	for port in range(FIRST_PORT, FIRST_PORT + SLOT_COUNT):
-		send_packet(direct_address, port, packet)
+		send_packet(address, port, packet)
 
 func announcement() -> PackedByteArray:
 	var data := hosted_game.duplicate()

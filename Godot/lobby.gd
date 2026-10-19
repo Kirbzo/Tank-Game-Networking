@@ -13,6 +13,7 @@ var hosted: Label
 var network_status: Label
 var network_address: LineEdit
 var listed_ids: Array[String] = []
+var local_addresses: Array[String] = []
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -42,11 +43,10 @@ func _ready() -> void:
 	exit_button.disabled = true
 	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
 	hosted = add_label(column, "No session hosted. Only Host is functional in this alpha.")
-	var addresses: Array[String] = []
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
-			addresses.append(address)
-	add_label(column, "This laptop's IPv4: " + (", ".join(addresses) if not addresses.is_empty() else "No LAN IPv4 address found"))
+			local_addresses.append(address)
+	add_label(column, "This laptop's IPv4: " + (", ".join(local_addresses) if not local_addresses.is_empty() else "No LAN IPv4 address found"))
 	network_address = LineEdit.new()
 	network_address.placeholder_text = "If no game appears: enter the host laptop's IPv4 and press Enter"
 	network_address.text_submitted.connect(set_network_address)
@@ -85,11 +85,14 @@ func add_button(parent: Node, text: String) -> Button:
 	return button
 
 func host_game() -> void:
+	# Guard the action as well as the button: one server per hosting instance.
+	if session != null:
+		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
 		return
 	session = ENetMultiplayerPeer.new()
-	var result := session.create_server(0, 1)
+	var result := create_host_session()
 	if result != OK:
 		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
 		session = null
@@ -100,9 +103,17 @@ func host_game() -> void:
 	session.refuse_new_connections = true
 	discovery.advertise()
 	host_button.disabled = true
-	hosted.text = "HOSTED SESSION  |  %s\nSession launched. Waiting for WP2 joining; no gameplay in alpha." % id
+	var endpoints: Array[String] = []
+	for address in local_addresses:
+		endpoints.append("%s:%d" % [address, discovery.hosted_game["port"]])
+	if endpoints.is_empty():
+		endpoints.append("127.0.0.1:%d (no LAN address found)" % discovery.hosted_game["port"])
+	hosted.text = "HOSTED SESSION  |  %s\nServer: %s\nDiscovery only; no player connection. Joining is deferred to WP2." % [id, ", ".join(endpoints)]
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
+
+func create_host_session() -> Error:
+	return session.create_server(0, 1)
 
 func refresh_games() -> void:
 	var selected := game_id.text.strip_edges().to_upper()
@@ -111,12 +122,12 @@ func refresh_games() -> void:
 	var entries := discovery.games.duplicate()
 	if not discovery.hosted_game.is_empty():
 		var own_id: String = discovery.hosted_game["id"]
-		entries[own_id] = {"id": own_id, "address": "this device", "port": discovery.hosted_game["port"]}
+		entries[own_id] = {"id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
 	var ids: Array = entries.keys()
 	ids.sort()
 	for id in ids:
 		listed_ids.append(str(id))
-		game_list.add_item("%s  |  %s  |  hosted alpha session" % [id, entries[id]["address"]])
+		game_list.add_item("%s  |  %s:%d  |  discovery only" % [id, entries[id]["address"], entries[id]["port"]])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
 	if entries.is_empty():

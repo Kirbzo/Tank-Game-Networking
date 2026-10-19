@@ -68,6 +68,8 @@ Transport, ports, game-discovery mechanism, controls, and entry scenes are not s
 
 For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join and Exit remain disabled. Physical two-laptop acceptance remains unverified.
 
+Listings show each session's game ID and host IP:port. Automatic queries find already-running hosts, and repeated announcements update one listing per ID. Godot 4.7.2 process tests verified matching host/observer IDs and actual server ports, automatic/direct discovery, late discovery, duplicate refresh, expiry, and the hosting-failure path. This confirms discovery of the same advertised server endpoint, without a player connection.
+
 See [Godot/README.md](Godot/README.md) for import instructions, implementation choices, and reproducible two-process tests. Godot 4.7.2 imported the project and passed the actual host/observer headless test. Environment errors concerned user log storage and the certificate store; no GDScript parse/runtime errors were reported. Visual layout and separate-device LAN behavior still require review.
 
 For alpha, verify two-user initial empty lists, working Host, remote game-list visibility, visible game IDs, disabled Join, and clearly identified simulated joining/leaving steps. Check AR5 against the actual implementation. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.

@@ -10,11 +10,13 @@ Discovery uses UDP broadcast and loopback on ports 49140–49155, with one port 
 
 1. Run this project with Godot 4.7.2 on both laptops, connected to the same local Wi-Fi or Ethernet network. Avoid guest networks that isolate devices.
 2. Allow the Godot executable through each laptop's firewall on the trusted local network (Private profile on Windows). If using port rules, allow inbound UDP 49140–49155 from the local subnet on both laptops. No router port forwarding is needed. The project does not change firewall settings.
-3. With no existing hosts, both lists should be empty. Press Host on laptop A. Laptop B should show the same game ID shortly afterward.
+3. With no existing hosts, both lists should be empty. Press Host on laptop A. Laptop B should show the same game ID and server port shortly afterward. Compare B's displayed IP:port with the matching LAN endpoint in A's host status. If A has multiple network interfaces, use the endpoint for the network shared by both devices. Also open B after A is already hosting and confirm discovery still works.
 4. If nothing appears, read A's IPv4 address from its lobby. Enter that address into B's network-address field and press Enter. If several addresses are shown, use the one for the shared Wi-Fi/Ethernet network. This requests a real listing; it neither fabricates an entry nor joins a session. Clear the field and press Enter to stop manual lookup.
 5. Select the entry or type its ID into the separate game-ID field. Join and Exit remain disabled. Close A's window and confirm its entry disappears on B after about four seconds. Repeat with laptop roles reversed.
 
 Discovery now binds explicitly to IPv4 on all interfaces. Direct-IP queries repeat every 0.75 seconds and hosting lobbies reply directly to the requesting address and port. This bypasses broadcast restrictions but cannot bypass firewalls, Wi-Fi client isolation, or blocked device-to-device traffic. Send errors appear in the lobby; a successful send alone does not prove reception. Physical two-laptop acceptance remains unverified until this walkthrough is performed on the target network.
+
+Automatic LAN queries and host announcements also repeat every 0.75 seconds. Each game ID produces one listing, with fresh replies updating its endpoint and expiry; a known LAN address takes precedence over loopback. Host creates one server per instance and advertises its actual port only after successful creation. Listings identify that same hosted endpoint across devices; discovery does not connect players to it. The protocol remains `moooze-alpha-1` with the existing announcement fields unchanged.
 
 ## Automated checks
 
@@ -31,3 +33,14 @@ godot --headless --path Godot --script res://tests/alpha_smoke.gd -- host
 Both must print PASS and exit successfully. Tests instantiate the actual lobby scene, activate its Host signal, and check empty lists, disabled controls, remote ID visibility, selection, typed IDs, unknown IDs, and removal after host shutdown. This is a same-computer two-process test, not two-device or final networking acceptance.
 
 Repeat both commands with `unicast` appended after `observer` / `host` to test direct-IP request/reply. This disables automatic announcements on both processes and enters `127.0.0.1` through the UI signal, so discovery requires a real query/reply. Invalid IPv4 feedback is also checked. Tests use a separate protocol identifier so running demonstration lobbies do not affect initial-empty/expiry assertions; run only one test pair at a time.
+
+For discovery of an already-running host, append `late` to both commands and start **host first**, then observer within a few seconds. The test host suppresses unsolicited announcements, so discovery requires the observer's automatic query. Host and observer print their game ID and port; both values must match. Repeated Host calls must retain the same server and duplicate packets must retain one listing.
+
+Run these single-process checks as well:
+
+```powershell
+godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure
+godot --headless --path Godot --script res://tests/alpha_smoke.gd -- packets
+```
+
+The failure check injects a server-creation error and verifies that no session is advertised and retry remains available. The packet check uses real loopback UDP for duplicate/endpoint/liveness refresh and controlled LAN-address metadata for deterministic address-preference checks. It does not establish physical LAN delivery.

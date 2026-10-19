@@ -1,5 +1,63 @@
 # Prompt log
 
+## P006 - October 19, 2026
+
+Actual planning request:
+
+> With the hosting functionality with the lobby. Enable the host game to be available on any devices on the game and ensure that the game is on the same server. Make sure to update the promt_log whenever there is a new prompt.
+
+Clarifications asked and actual answers:
+
+- “Which devices should be able to discover the host?” Answer: “Same local network (Recommended)”.
+- “Should devices only see the same hosted session, or actually connect to it?” Answer: “Shared listing only (Recommended)”.
+
+Result: inspected the repository and produced the Consistent LAN lobby listings plan. No files were edited during that Plan Mode turn. This previously unlogged planning prompt is recorded now, preserving its actual date and wording.
+
+Associated status.md: [status.md](status.md), S-2026-10-19-02 at planning time; implementation outcome in S-2026-10-19-03 with P007 below. Same-network discovery and shared endpoint listings were selected; real joining remains outside alpha.
+
+## P007 - October 19, 2026
+
+Actual implementation request (including the supplied plan):
+
+> PLEASE IMPLEMENT THIS PLAN:
+> # Consistent LAN lobby listings
+>
+> ## Summary
+>
+> Make devices running the Godot project on the same local network discover the same hosted session and display its game ID consistently. Keep Join and Exit disabled; devices will discover the host without joining its game server.
+>
+> ## Implementation changes
+>
+> - Keep one ENet server endpoint per hosting instance. Advertise only after server creation succeeds, using a stable game ID and the actual server port.
+> - Send periodic LAN discovery queries as well as host announcements. Hosts reply directly, allowing a newly opened lobby to find an existing host promptly.
+> - Retain manual host-IPv4 lookup when broadcast is blocked.
+> - Maintain one listing per game ID. Refresh its address, port, and expiry from received announcements without creating duplicates. Prefer a LAN address over loopback when both identify the same host.
+> - Display the game ID and host endpoint in the listing and host status so users can compare them across devices. Distinguish discovery from a player connection.
+> - Preserve the existing protocol identifier and announcement fields; add no gameplay or player-joining messages.
+>
+> ## Verification
+>
+> - Run Godot 4.7.2 checks with separate host and observer processes: empty initial lists, matching game IDs and server ports, discovery of an already-running host, duplicate suppression, and expiry after shutdown.
+> - Repeat with broadcasts disabled to verify direct-IP request/reply.
+> - Confirm hosting failure produces no advertised session and Join/Exit remain disabled.
+> - Perform the documented two-laptop walkthrough in both directions. Leave physical-device acceptance unverified unless that test is actually completed.
+>
+> ## Documentation and prompt logging
+>
+> - Record this exact request as **P006**, dated October 19, 2026, with its clarification answers, results, and associated status revision **S-2026-10-19-03**.
+> - Update setup instructions and requirement evidence, preserving all 20 requirement IDs and the source document checksum.
+> - Continue recording each subsequent project prompt with a unique ID and its actual text. Preserve existing entries and unrelated user changes.
+>
+> ## Assumptions
+>
+> “Any devices” means compatible devices running this project on the same Wi-Fi/Ethernet network. Firewall access and device-to-device network communication are required. “Same server” means the same advertised host session and endpoint; no central server or internet hosting is introduced.
+
+ID note: P006 records the original request and clarification answers as specified by the plan. This subsequent implementation prompt receives P007 to retain a unique ID for every new prompt. Both are associated with [status.md](status.md), revision S-2026-10-19-03.
+
+Result: added periodic automatic queries, one-server guarding, consistent endpoint display and LAN-over-loopback address preference while keeping protocol/announcement fields compatible and Join/Exit disabled. Updated discovery, lobby, smoke tests, project/root READMEs, AGENTS.md, status.md and this log. No gameplay, internet service or real player joining added.
+
+Validation: Godot 4.7.2 host/observer processes passed automatic, direct-IP (broadcast disabled), and already-running/query-only host discovery. Matched actual host/observer game IDs and ENet ports. Checked duplicate refresh, repeated Host, ID lookup, disabled Join/Exit, expiry and injected server-creation failure. Loopback UDP packet tests checked port/liveness refresh; LAN-address preference used controlled metadata after actual local LAN-interface binding proved unavailable. Physical two-laptop and visual review remain unverified. Sandbox user-log/certificate-store errors persist; final tests reported no script errors. Checked all 20 requirement IDs, links, status/log consistency, file boundaries and source checksum. DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
 ## P005 - October 19, 2026
 
 Prompt:

@@ -19,6 +19,7 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 - The user clarified on October 19, 2026 that Exit means leaving the hosted session. Retain the Exit label and keep it disabled while alpha leaving remains incomplete.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
 - The subsequent October 19 request authorizes two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not authorize real joining.
+- The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance and Join/Exit disabled; do not imply discovery establishes a player connection.
 
 ## Overall framework
 
@@ -30,6 +31,7 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 
 - FR13: maintain lowercase `status.md` with an entry for every AR1?AR5 and FR1?FR15 requirement. Record status, evidence, and remaining work. Distinguish not implemented, partial, complete, and unverified; mark complete only with supporting evidence.
 - FR14: maintain `prompt_log.md` with a unique prompt ID, actual prompt text, date, associated status.md revision/snapshot, and results. Add an entry for each subsequent project work request; do not fabricate unavailable historical dates or prompts.
+- Log planning requests and their clarifications too. A subsequent implementation request receives its own prompt ID while linking the planning entry and the resulting status revision.
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
 - Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.
 - Keep source ambiguities visible until resolved by the team or a later user instruction.
