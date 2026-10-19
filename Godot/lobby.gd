@@ -1,6 +1,7 @@
 extends Control
 
 const Discovery = preload("res://discovery.gd")
+const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
 var host_button: Button
@@ -13,6 +14,7 @@ var hosted: Label
 var network_status: Label
 var network_address: LineEdit
 var listed_ids: Array[String] = []
+var local_addresses: Array[String] = []
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -30,9 +32,15 @@ func _ready() -> void:
 	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
-	var controls := HBoxContainer.new()
-	controls.add_theme_constant_override("separation", 12)
-	column.add_child(controls)
+	# Match LobbyImage.jpeg: stacked actions beside the game list.
+	var lobby_row := HBoxContainer.new()
+	lobby_row.add_theme_constant_override("separation", 32)
+	column.add_child(lobby_row)
+	var controls := VBoxContainer.new()
+	controls.custom_minimum_size.x = 200
+	controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	controls.add_theme_constant_override("separation", 18)
+	lobby_row.add_child(controls)
 	host_button = add_button(controls, "Host")
 	host_button.pressed.connect(host_game)
 	join_button = add_button(controls, "Join")
@@ -41,29 +49,32 @@ func _ready() -> void:
 	exit_button = add_button(controls, "Exit")
 	exit_button.disabled = true
 	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
+	var games_column := VBoxContainer.new()
+	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	games_column.add_theme_constant_override("separation", 12)
+	lobby_row.add_child(games_column)
+	var games_title := add_label(games_column, "List of Games")
+	games_title.add_theme_font_size_override("font_size", 28)
+	game_list = ItemList.new()
+	game_list.custom_minimum_size = Vector2(0, 280)
+	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	game_list.item_selected.connect(select_game)
+	games_column.add_child(game_list)
+	game_id = LineEdit.new()
+	game_id.placeholder_text = "Enter a game ID (joining unavailable)"
+	game_id.text_changed.connect(identify_game)
+	games_column.add_child(game_id)
+	feedback = add_label(column, "No games available. Ask another user to press Host.")
 	hosted = add_label(column, "No session hosted. Only Host is functional in this alpha.")
-	var addresses: Array[String] = []
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
-			addresses.append(address)
-	add_label(column, "This laptop's IPv4: " + (", ".join(addresses) if not addresses.is_empty() else "No LAN IPv4 address found"))
+			local_addresses.append(address)
+	add_label(column, "This laptop's IPv4: " + (", ".join(local_addresses) if not local_addresses.is_empty() else "No LAN IPv4 address found"))
 	network_address = LineEdit.new()
 	network_address.placeholder_text = "If no game appears: enter the host laptop's IPv4 and press Enter"
 	network_address.text_submitted.connect(set_network_address)
 	column.add_child(network_address)
 	network_status = add_label(column, "LAN discovery active. Both laptops must allow Godot on the local network.")
-	add_label(column, "AVAILABLE GAMES  /  select an entry to identify its session")
-	game_list = ItemList.new()
-	game_list.custom_minimum_size = Vector2(0, 210)
-	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	game_list.item_selected.connect(select_game)
-	column.add_child(game_list)
-	game_id = LineEdit.new()
-	game_id.placeholder_text = "Enter a game ID to identify a session (joining unavailable)"
-	game_id.text_changed.connect(identify_game)
-	column.add_child(game_id)
-	feedback = add_label(column, "No games available. Ask another user to press Host.")
-	add_label(column, "ALPHA WALKTHROUGH\n1. Working: Host starts a session and advertises its ID to other lobbies.\n2. Explanation only: select a game or enter its ID; Join stays disabled until WP2.\n3. Explanation only: Exit will leave the hosted session. Leaving is incomplete.\nClose the window to end this alpha process; its listing expires after four seconds.")
 	discovery.games_changed.connect(refresh_games)
 	discovery.discovery_failed.connect(discovery_error)
 	discovery.network_warning.connect(func(message: String): network_status.text = message)
@@ -80,29 +91,47 @@ func add_label(parent: Node, text: String) -> Label:
 func add_button(parent: Node, text: String) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(130, 44)
+	button.custom_minimum_size = Vector2(200, 64)
+	button.add_theme_font_size_override("font_size", 28)
 	parent.add_child(button)
 	return button
 
 func host_game() -> void:
+	# Guard the action as well as the button: one server per hosting instance.
+	if session != null:
+		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
 		return
 	session = ENetMultiplayerPeer.new()
-	var result := session.create_server(0, 1)
+	var result := create_host_session()
 	if result != OK:
 		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
 		session = null
 		return
-	var id := "MT-" + discovery.instance_id.to_upper()
+	var id := generate_session_id()
 	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port()}
 	# The endpoint is real, but alpha never connects clients to it.
 	session.refuse_new_connections = true
 	discovery.advertise()
 	host_button.disabled = true
-	hosted.text = "HOSTED SESSION  |  %s\nSession launched. Waiting for WP2 joining; no gameplay in alpha." % id
+	var endpoints: Array[String] = []
+	for address in local_addresses:
+		endpoints.append("%s:%d" % [address, discovery.hosted_game["port"]])
+	if endpoints.is_empty():
+		endpoints.append("127.0.0.1:%d (no LAN address found)" % discovery.hosted_game["port"])
+	hosted.text = "HOSTED SESSION  |  %s\nServer: %s\nDiscovery only; no player connection. Joining is deferred to WP2." % [id, ", ".join(endpoints)]
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
+
+func create_host_session() -> Error:
+	return session.create_server(0, 1)
+
+func generate_session_id() -> String:
+	var id := ""
+	for index in range(6):
+		id += SESSION_ID_CHARACTERS[randi_range(0, SESSION_ID_CHARACTERS.length() - 1)]
+	return id
 
 func refresh_games() -> void:
 	var selected := game_id.text.strip_edges().to_upper()
@@ -111,12 +140,12 @@ func refresh_games() -> void:
 	var entries := discovery.games.duplicate()
 	if not discovery.hosted_game.is_empty():
 		var own_id: String = discovery.hosted_game["id"]
-		entries[own_id] = {"id": own_id, "address": "this device", "port": discovery.hosted_game["port"]}
+		entries[own_id] = {"id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
 	var ids: Array = entries.keys()
 	ids.sort()
 	for id in ids:
 		listed_ids.append(str(id))
-		game_list.add_item("%s  |  %s  |  hosted alpha session" % [id, entries[id]["address"]])
+		game_list.add_item("%s  |  %s:%d  |  discovery only" % [id, entries[id]["address"], entries[id]["port"]])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
 	if entries.is_empty():

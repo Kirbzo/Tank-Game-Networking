@@ -1,6 +1,10 @@
 # Requirements status
 
+<<<<<<< HEAD
 Updated: October 19, 2026. Revision: S-2026-10-19-03. Prompt: P006.
+=======
+Updated: October 19, 2026. Revision: S-2026-10-19-06. Prompt: P012 (six-character host IDs).
+>>>>>>> origin/Jaden
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -8,13 +12,13 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 | ID | Requirement summary | Status | Evidence / remaining work |
 | --- | --- | --- | --- |
 | AR1 | Show the intended lobby interface with Host, Join,  Exit buttons and a game list. | Partial | Host, Join, Exit and game list exist in Godot/lobby.gd. Actual two-process Host and remote visibility passed; Join/Exit disabled. Visual acceptance remains unverified. |
-| AR2 | Show a list of available games. | Partial | Real UDP discovery exposes matching host ID to another process; expiry passed. Separate-device discovery and visual acceptance remain unverified. |
+| AR2 | Show a list of available games. | Partial | Automatic, direct-IP, and late-host discovery expose matching game IDs and actual server ports in separate processes. Duplicate refresh, address preference and expiry checked. Physical two-device discovery and visual acceptance remain unverified. |
 | AR3 | Show how game IDs identify sessions and how a player can either click or enter an ID to join a specific session. | Partial | Selection and typed IDs identify the matching session; unknown ID explanation tested. UI explicitly states no connection made. Visual walkthrough remains unverified. |
 | AR4 | Demonstrate the player's flow for finding a game and using the lobby. | Partial | Working hosting and explanation-only joining/leaving steps are labelled in the UI. Exit clarified as leave; disabled. Reviewer walkthrough remains outstanding. |
 | AR5 | Consider all framework and functional requirements below but do not implement if not part of the alpha demonstration requirements. | Complete | Source review: only alpha lobby, hosting endpoint, discovery, and identification/explanation implemented; no gameplay or real joining/leaving. |
 | FR1 | The framework shall support a two-player session hosted on a local device. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR2 | The system shall provide a lobby for hosting and connecting games. | Partial | Alpha hosting and lobby implemented; connecting/joining deferred to WP2. |
-| FR3 | The system shall maintain and expose a list of available hosted games. | Partial | Remote advertisement and expiry after shutdown passed in two local processes; two-device LAN behavior unverified. |
+| FR3 | The system shall maintain and expose a list of available hosted games. | Partial | One listing per ID with endpoint/liveness refresh; process tests confirm the same advertised server endpoint and expiry. Physical two-device LAN behavior unverified. |
 | FR4 | The system shall allow a player to join a specific game by selecting it from the available-games list or entering its game ID. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR5 | The system shall create, join, leave, and close game rooms. | Partial | Host creates a real ENet endpoint; process shutdown closes it. Join, leave, and full room lifecycle deferred. |
 | FR6 | The system shall support selecting and starting a game from the lobby flow. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
@@ -30,6 +34,8 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 
 ## Scope and open issues
 
+P006/P007: “same server” means a consistent advertised game ID and endpoint on the same LAN, not real joining or a central/internet server. Periodic automatic queries, single-host guarding, endpoint display and LAN-over-loopback address preference are implemented. Host failure does not publish a listing. Join/Exit remain disabled.
+
 P005 LAN update: discovery binds explicitly to IPv4, supports repeated direct-IP queries with host replies, displays local IPv4 addresses, and reports invalid addresses/send errors. Setup and firewall instructions are in Godot/README.md. AR1/AR2 and FR3 remain partial until physical two-laptop and visual checks pass. Automated tests use a separate protocol identifier to avoid interference from an existing demonstration host.
 
 Alpha requires working hosting and visibility of its game entry to another user. Join remains disabled until WP2; leaving is incomplete. AR3/AR4 joining and leaving flows may be explained or clearly simulated. Exit means leave the hosted session per user clarification on October 19, 2026. Joining/leaving remain explanation-only and disabled.
@@ -38,7 +44,15 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 
 ## Revision history
 
+<<<<<<< HEAD
 - S-2026-10-19-03 (P006): investigated discovery and joining without changing runtime code. Confirmed disabled Join and refusal of connections; discovery listens on all IPv4 interfaces but sends automatic announcements only to loopback/limited broadcast. Local Windows inspection showed one active Wi-Fi IPv4 interface, disconnected Ethernet/Wi-Fi Direct adapters, Public firewall with an executable-specific Godot UDP allow rule, and no discovery listener at inspection time. CIM network inspection was access denied; ipconfig, route, netstat and netsh provided read-only evidence. The reported multi-address host and second laptop were not verified. Added adapter selection, direct-IP diagnosis, active-profile/executable firewall checks, and isolation guidance to Godot/README.md. Requirement statuses unchanged; no runtime or two-device success claimed. Documentation validation checked all 20 IDs, local links, status/log consistency and change boundaries; source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+=======
+- S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
+
+- S-2026-10-19-04 (P009): rearranged the lobby to match `MoozeTanks/LobbyImage.jpeg`, with vertical Host/Join/Exit controls left of the List of Games panel. Preserved ID identification, LAN lookup, feedback, and disabled Join/Exit. Godot 4.7.2 import and actual host/observer smoke tests passed, including matching ID/port, selection, typed/unknown IDs, repeated Host, disabled controls, and expiry. Environment log, certificate-store, and editor-settings access errors remain; no script errors were reported. Requirement statuses remain unchanged; visual acceptance and physical two-laptop testing remain unverified. P008 backfills the earlier explanation-only prompt against S-2026-10-19-02.
+
+- S-2026-10-19-03 (P006 planning, P007 implementation): Godot 4.7.2 separate-process tests passed automatic discovery, broadcast-disabled direct-IP lookup, and a query-only already-running host. Host/observer output matched both game ID and actual ENet port. Checked repeated Host, duplicate listings, lookup, disabled Join/Exit and expiry; injected creation failure publishes no session. Packet tests checked endpoint/liveness refresh over actual loopback UDP and deterministic address preference using controlled LAN metadata. Attempted local LAN-interface binding was unavailable in this environment, so no physical LAN delivery is claimed. Sandbox user-log/certificate errors persist; final tests had no script errors. All 20 requirement IDs, relative links, prompt/status references, change boundaries and unchanged source SHA256 checked. Physical two-laptop and visual acceptance remain unverified; requirement completion statuses unchanged.
+>>>>>>> origin/Jaden
 
 - S-2026-10-19-02 (P005): IPv4 binding and direct-IP discovery added. Godot 4.7.2 actual-lobby host/observer tests printed PASS for automatic discovery and for direct-IP request/reply with announcements disabled. Both checked matching IDs, disabled Join/Exit, lookup, and expiry; direct mode also checked invalid-IP feedback. An initial automatic run encountered an already-running demonstration host, so tests now use a separate protocol identifier. A GDScript type-inference error found during import was fixed before the passing tests. Sandbox user-log/certificate-store errors persist; no script errors in final tests. All 20 requirement IDs and local links checked; source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Physical two-laptop and visual review remain unverified; requirement statuses unchanged.
 
@@ -47,3 +61,7 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 - S-2026-10-16-02 (P003): made documentation paths portable across machines; requirement completion statuses unchanged. No runtime tests performed.
 
 - S-2026-10-19-01 (P004): alpha implemented in Godot/; two-process checks passed on Godot 4.7.2. AR1–AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; other framework behavior deferred. Source SHA256: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+- S-2026-10-19-06 (P012): host IDs now contain six random uppercase letters/digits; discovery accepts this format and repeated hosting retains the ID. Updated smoke checks. Requirement statuses unchanged; visual and physical two-device acceptance remain unverified. README.md and AGENTS.md unchanged.
+
+Validation: Godot 4.7.2 actual host/observer processes passed with matching ID YSPXOJ and port 61416, six-character format, stable repeated Host, selection, lowercase lookup, disabled controls and expiry. No script errors; environment log/certificate-store errors remain.
