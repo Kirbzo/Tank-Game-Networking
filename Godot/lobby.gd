@@ -1,6 +1,7 @@
 extends Control
 
 const Discovery = preload("res://discovery.gd")
+const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
 var host_button: Button
@@ -108,7 +109,7 @@ func host_game() -> void:
 		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
 		session = null
 		return
-	var id := "MT-" + discovery.instance_id.to_upper()
+	var id := generate_session_id()
 	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port()}
 	# The endpoint is real, but alpha never connects clients to it.
 	session.refuse_new_connections = true
@@ -125,6 +126,12 @@ func host_game() -> void:
 
 func create_host_session() -> Error:
 	return session.create_server(0, 1)
+
+func generate_session_id() -> String:
+	var id := ""
+	for index in range(6):
+		id += SESSION_ID_CHARACTERS[randi_range(0, SESSION_ID_CHARACTERS.length() - 1)]
+	return id
 
 func refresh_games() -> void:
 	var selected := game_id.text.strip_edges().to_upper()

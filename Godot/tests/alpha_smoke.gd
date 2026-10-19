@@ -64,8 +64,15 @@ func run() -> void:
 		if not check(lobby.session != null and lobby.host_button.disabled, "Host must launch a real session"):
 			return
 		var original_session: ENetMultiplayerPeer = lobby.session
+		var original_id: String = lobby.discovery.hosted_game["id"]
+		var id_pattern := RegEx.new()
+		id_pattern.compile("^[A-Z0-9]{6}$")
+		if not check(id_pattern.search(original_id) != null, "Host ID must contain exactly six uppercase letters or digits"):
+			return
 		var port: int = lobby.session.get_host().get_local_port()
 		lobby.host_game()
+		if not check(lobby.discovery.hosted_game["id"] == original_id, "Repeated Host must retain the same session ID"):
+			return
 		if not check(lobby.session == original_session and int(lobby.discovery.hosted_game["port"]) == port, "Repeated Host must keep one server and stable endpoint"):
 			return
 		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0).contains(":%d" % port), "Host UI must show actual server port"):
@@ -111,7 +118,7 @@ func packet_checks() -> void:
 	var sender := PacketPeerUDP.new()
 	if not check(sender.bind(0, "0.0.0.0") == OK and receiver.bound_port != -1, "Packet test sockets must bind"):
 		return
-	var id := "MT-0123456789ABCDEF01234567"
+	var id := "AB12CD"
 	var data := {"protocol": receiver.protocol, "instance": "fixture", "type": "announcement", "id": id, "port": 32100}
 	sender.set_dest_address("127.0.0.1", receiver.bound_port)
 	sender.put_packet(JSON.stringify(data).to_utf8_buffer())

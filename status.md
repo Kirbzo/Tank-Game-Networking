@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-05. Prompt: P010 (remove lobby walkthrough).
+Updated: October 19, 2026. Revision: S-2026-10-19-06. Prompt: P012 (six-character host IDs).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -53,3 +53,7 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 - S-2026-10-16-02 (P003): made documentation paths portable across machines; requirement completion statuses unchanged. No runtime tests performed.
 
 - S-2026-10-19-01 (P004): alpha implemented in Godot/; two-process checks passed on Godot 4.7.2. AR1–AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; other framework behavior deferred. Source SHA256: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+- S-2026-10-19-06 (P012): host IDs now contain six random uppercase letters/digits; discovery accepts this format and repeated hosting retains the ID. Updated smoke checks. Requirement statuses unchanged; visual and physical two-device acceptance remain unverified. README.md and AGENTS.md unchanged.
+
+Validation: Godot 4.7.2 actual host/observer processes passed with matching ID YSPXOJ and port 61416, six-character format, stable repeated Host, selection, lowercase lookup, disabled controls and expiry. No script errors; environment log/certificate-store errors remain.

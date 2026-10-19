@@ -53,7 +53,9 @@ func _process(delta: float) -> void:
 		if not (data.get("port") is float or data.get("port") is int):
 			continue
 		var port := int(data.get("port", 0))
-		if not id.begins_with("MT-") or id.length() != 27 or port < 1 or port > 65535:
+		if id.length() != 6 or port < 1 or port > 65535:
+			continue
+		if not valid_session_id(id):
 			continue
 		remember_game(id, address, port)
 	var expired: Array = []
@@ -69,6 +71,12 @@ func _process(delta: float) -> void:
 		elapsed = 0.0
 		advertise()
 		query_hosts()
+
+func valid_session_id(id: String) -> bool:
+	for character in id:
+		if not "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".contains(character):
+			return false
+	return id.length() == 6
 
 func remember_game(id: String, address: String, port: int) -> void:
 	# Announcements and replies describe one session; prefer LAN to loopback.

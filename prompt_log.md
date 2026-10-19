@@ -1,5 +1,19 @@
 # Prompt log
 
+## P012 - October 19, 2026
+
+Actual request:
+
+> Look at the COMP214 and read README.md and AGENTS.md. Do not change the README.md and AGENTS.md. Update the prompt_log.md, and do not delete anything inside the prompt_log.md.
+>
+> Change the host session identifier to 6 random numbers and letters
+
+Result: replaced the prefixed session identifier with six random uppercase letters/digits, generated once after successful hosting. Updated discovery validation and the smoke checks for the new format and stable repeated hosting. README.md and AGENTS.md were read and left unchanged. Existing prompt-log content is preserved.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-06. Requirement statuses unchanged. Date uses America/Regina. Visual and physical two-device LAN acceptance remain unverified. Initial observer checks exposed the old discovery ID validation; corrected it before final verification. Environment log/certificate errors persist.
+
+Validation: Godot 4.7.2 actual host/observer processes passed with matching ID YSPXOJ and port 61416, six-character format, stable repeated Host, selection, lowercase lookup, disabled controls and expiry. No script errors; environment log/certificate-store errors remain.
+
 ## P011 - October 19, 2026
 
 Actual request:
