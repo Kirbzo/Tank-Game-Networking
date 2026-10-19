@@ -31,9 +31,15 @@ func _ready() -> void:
 	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
-	var controls := HBoxContainer.new()
-	controls.add_theme_constant_override("separation", 12)
-	column.add_child(controls)
+	# Match LobbyImage.jpeg: stacked actions beside the game list.
+	var lobby_row := HBoxContainer.new()
+	lobby_row.add_theme_constant_override("separation", 32)
+	column.add_child(lobby_row)
+	var controls := VBoxContainer.new()
+	controls.custom_minimum_size.x = 200
+	controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	controls.add_theme_constant_override("separation", 18)
+	lobby_row.add_child(controls)
 	host_button = add_button(controls, "Host")
 	host_button.pressed.connect(host_game)
 	join_button = add_button(controls, "Join")
@@ -42,6 +48,22 @@ func _ready() -> void:
 	exit_button = add_button(controls, "Exit")
 	exit_button.disabled = true
 	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
+	var games_column := VBoxContainer.new()
+	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	games_column.add_theme_constant_override("separation", 12)
+	lobby_row.add_child(games_column)
+	var games_title := add_label(games_column, "List of Games")
+	games_title.add_theme_font_size_override("font_size", 28)
+	game_list = ItemList.new()
+	game_list.custom_minimum_size = Vector2(0, 280)
+	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	game_list.item_selected.connect(select_game)
+	games_column.add_child(game_list)
+	game_id = LineEdit.new()
+	game_id.placeholder_text = "Enter a game ID (joining unavailable)"
+	game_id.text_changed.connect(identify_game)
+	games_column.add_child(game_id)
+	feedback = add_label(column, "No games available. Ask another user to press Host.")
 	hosted = add_label(column, "No session hosted. Only Host is functional in this alpha.")
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
@@ -52,18 +74,6 @@ func _ready() -> void:
 	network_address.text_submitted.connect(set_network_address)
 	column.add_child(network_address)
 	network_status = add_label(column, "LAN discovery active. Both laptops must allow Godot on the local network.")
-	add_label(column, "AVAILABLE GAMES  /  select an entry to identify its session")
-	game_list = ItemList.new()
-	game_list.custom_minimum_size = Vector2(0, 210)
-	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	game_list.item_selected.connect(select_game)
-	column.add_child(game_list)
-	game_id = LineEdit.new()
-	game_id.placeholder_text = "Enter a game ID to identify a session (joining unavailable)"
-	game_id.text_changed.connect(identify_game)
-	column.add_child(game_id)
-	feedback = add_label(column, "No games available. Ask another user to press Host.")
-	add_label(column, "ALPHA WALKTHROUGH\n1. Working: Host starts a session and advertises its ID to other lobbies.\n2. Explanation only: select a game or enter its ID; Join stays disabled until WP2.\n3. Explanation only: Exit will leave the hosted session. Leaving is incomplete.\nClose the window to end this alpha process; its listing expires after four seconds.")
 	discovery.games_changed.connect(refresh_games)
 	discovery.discovery_failed.connect(discovery_error)
 	discovery.network_warning.connect(func(message: String): network_status.text = message)
@@ -80,7 +90,8 @@ func add_label(parent: Node, text: String) -> Label:
 func add_button(parent: Node, text: String) -> Button:
 	var button := Button.new()
 	button.text = text
-	button.custom_minimum_size = Vector2(130, 44)
+	button.custom_minimum_size = Vector2(200, 64)
+	button.add_theme_font_size_override("font_size", 28)
 	parent.add_child(button)
 	return button
 

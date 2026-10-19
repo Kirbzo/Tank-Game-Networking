@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-03. Prompts: P006 (planning), P007 (implementation).
+Updated: October 19, 2026. Revision: S-2026-10-19-05. Prompt: P010 (remove lobby walkthrough).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -39,6 +39,10 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
+
+- S-2026-10-19-04 (P009): rearranged the lobby to match `MoozeTanks/LobbyImage.jpeg`, with vertical Host/Join/Exit controls left of the List of Games panel. Preserved ID identification, LAN lookup, feedback, and disabled Join/Exit. Godot 4.7.2 import and actual host/observer smoke tests passed, including matching ID/port, selection, typed/unknown IDs, repeated Host, disabled controls, and expiry. Environment log, certificate-store, and editor-settings access errors remain; no script errors were reported. Requirement statuses remain unchanged; visual acceptance and physical two-laptop testing remain unverified. P008 backfills the earlier explanation-only prompt against S-2026-10-19-02.
 
 - S-2026-10-19-03 (P006 planning, P007 implementation): Godot 4.7.2 separate-process tests passed automatic discovery, broadcast-disabled direct-IP lookup, and a query-only already-running host. Host/observer output matched both game ID and actual ENet port. Checked repeated Host, duplicate listings, lookup, disabled Join/Exit and expiry; injected creation failure publishes no session. Packet tests checked endpoint/liveness refresh over actual loopback UDP and deterministic address preference using controlled LAN metadata. Attempted local LAN-interface binding was unavailable in this environment, so no physical LAN delivery is claimed. Sandbox user-log/certificate errors persist; final tests had no script errors. All 20 requirement IDs, relative links, prompt/status references, change boundaries and unchanged source SHA256 checked. Physical two-laptop and visual acceptance remain unverified; requirement completion statuses unchanged.
 

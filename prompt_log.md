@@ -1,5 +1,39 @@
 # Prompt log
 
+## P010 - October 19, 2026
+
+Actual request:
+
+> Can you remove the Alpha walkthrough description at the bottom of the lobby?
+
+Result: removed the Alpha Walkthrough label from Godot/lobby.gd. Updated status.md and this log. Existing controls, tooltips, feedback, and networking behavior are unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-05. Requirement statuses unchanged. Date uses America/Edmonton.
+
+Validation: source review confirmed the walkthrough label is absent. Checked all 20 requirement IDs, local documentation links, status/log consistency, source checksum, and change scope. No runtime tests were needed for this text-only UI removal; visual and physical two-device acceptance remain unverified.
+
+## P008 - October 19, 2026
+
+Actual request:
+
+> Describe the functionality of the hosting, and how each device on the network can connect to the game to see the available games when the host button is clicked. Also remember to update the prompt_log whenever there is a prompt.
+
+Result: explained host creation, LAN advertisements, direct-IP listing lookup, game IDs, expiry, and the alpha restriction on real joining. The original response made no edits because it was in Plan Mode. This entry backfills that request using the next available unique ID; P006 and P007 were already assigned in the current repository. No new runtime verification was performed for that explanation.
+
+Associated status.md: [status.md](status.md), snapshot S-2026-10-19-02 inspected during the explanation. Requirement statuses were unchanged. Date uses America/Edmonton.
+
+## P009 - October 19, 2026
+
+Actual request:
+
+> Can you update the lobby to use the same layout as the LobbyImage.jpeg in the MoozeTanks folder?
+
+Result: updated Godot/lobby.gd to place large Host, Join, and Exit buttons vertically on the left and a List of Games panel on the right, matching the reference arrangement. Preserved game-ID lookup, session feedback, LAN settings, and alpha behavior. Updated README.md, Godot/README.md, status.md, and this log. AGENTS.md remains consistent without changes. Preserved pre-existing .gitattributes and Godot/project.godot modifications and source/reference files.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-04. Requirement statuses remain unchanged. Date uses America/Edmonton.
+
+Validation: Godot 4.7.2 import and real host/observer smoke tests passed, including matching IDs/ports, disabled controls, ID lookup, repeated hosting protection, and expiry. Environment log/certificate/editor-settings access errors were reported; no script errors. Visual acceptance and physical two-device testing remain unverified. Checked all 20 requirement IDs, local Markdown links, status/log consistency, source checksum, and changed-file boundaries. Requirements DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
 ## P006 - October 19, 2026
 
 Actual planning request:

@@ -1,5 +1,7 @@
 # Running the alpha
 
+The lobby follows `MoozeTanks/LobbyImage.jpeg`: Host, Join, and Exit are stacked on the left, beside a large List of Games panel on the right. Game-ID lookup sits beneath the list; session feedback and LAN lookup remain below the main layout. The page scrolls vertically when needed. Join and Exit remain disabled for alpha.
+
 Import `project.godot` in **Godot 4.7.2** and run the main scene (F6 runs the open scene; F5 runs the project). Use two separate project runs, either from two editor instances or the editor's multiple-instance run setting. Both lists initially contain no entries when no host is running. Press Host in one window: it launches an ENet session endpoint and displays its game ID. The other window should show that same ID within about one second.
 
 Select the entry or type its ID to identify it. This only explains the intended joining flow; Join is disabled until WP2. Exit means leaving the hosted session, as clarified by the user on October 19, 2026; it is disabled because leaving is incomplete for alpha. Close the window using the operating system to stop this demonstration process. Its listing expires in about four seconds. No gameplay or actual joining is implemented.
