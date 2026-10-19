@@ -1,5 +1,22 @@
 # Prompt log
 
+## P006 - October 19, 2026
+
+Prompt:
+
+> Please investigate why our multiplayer server cannot be discovered or joined from another laptop on the same local network.
+>
+> Current situation:
+> - Laptop A hosts a game.
+> - Laptop B is connected to the same network but cannot see the hosted game.
+> - The host laptop has multiple IPv4 addresses.
+
+Result: reviewed the current requirements and discovery/lobby source, inspected local adapters, routes, UDP listeners and firewall configuration. Joining is intentionally disabled and refused by the alpha host. Multi-interface broadcast routing, wrong address selection, firewall configuration and network isolation remain discovery hypotheses; no two-laptop cause was proven. This workstation had one active Wi-Fi IPv4 address, Public firewall with a Godot UDP allow rule, and no discovery listener at inspection time. Documented concrete diagnosis steps in Godot/README.md. Updated status.md and this log; preserved the existing project.godot modification. No runtime code or firewall settings changed.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-03. Requirement statuses unchanged; physical two-laptop acceptance remains unverified.
+
+Validation: checked all 20 requirement IDs, local links, status/log consistency, unchanged source DOCX checksum and file-change boundaries. No gameplay tests run for this investigation/documentation task.
+
 ## P005 - October 19, 2026
 
 Prompt:

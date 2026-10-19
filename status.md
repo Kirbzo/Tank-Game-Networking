@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-02. Prompt: P005.
+Updated: October 19, 2026. Revision: S-2026-10-19-03. Prompt: P006.
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -37,6 +37,8 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-10-19-03 (P006): investigated discovery and joining without changing runtime code. Confirmed disabled Join and refusal of connections; discovery listens on all IPv4 interfaces but sends automatic announcements only to loopback/limited broadcast. Local Windows inspection showed one active Wi-Fi IPv4 interface, disconnected Ethernet/Wi-Fi Direct adapters, Public firewall with an executable-specific Godot UDP allow rule, and no discovery listener at inspection time. CIM network inspection was access denied; ipconfig, route, netstat and netsh provided read-only evidence. The reported multi-address host and second laptop were not verified. Added adapter selection, direct-IP diagnosis, active-profile/executable firewall checks, and isolation guidance to Godot/README.md. Requirement statuses unchanged; no runtime or two-device success claimed. Documentation validation checked all 20 IDs, local links, status/log consistency and change boundaries; source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
 
 - S-2026-10-19-02 (P005): IPv4 binding and direct-IP discovery added. Godot 4.7.2 actual-lobby host/observer tests printed PASS for automatic discovery and for direct-IP request/reply with announcements disabled. Both checked matching IDs, disabled Join/Exit, lookup, and expiry; direct mode also checked invalid-IP feedback. An initial automatic run encountered an already-running demonstration host, so tests now use a separate protocol identifier. A GDScript type-inference error found during import was fixed before the passing tests. Sandbox user-log/certificate-store errors persist; no script errors in final tests. All 20 requirement IDs and local links checked; source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Physical two-laptop and visual review remain unverified; requirement statuses unchanged.
 
