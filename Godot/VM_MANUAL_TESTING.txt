@@ -1,0 +1,185 @@
+START THE VM AND MANUALLY TEST THE ALPHA LOBBY
+October 19, 2026
+
+This guide uses Windows as one device and the Ubuntu VM as the other.
+It checks real lobby discovery between two different IP addresses.
+Join and Exit stay disabled; no player connection or gameplay is expected.
+
+IMPORTANT: WHAT IS CURRENTLY INSTALLED
+
+VM name: COMP214-Linux-Test
+VM UUID: 4fc19b60-ee31-4a8f-8e3e-c25d29011acd
+Linux hostname/account: comp214-test / comp214
+Windows host-only IPv4: 192.168.56.1
+Ubuntu host-only IPv4: 192.168.56.101
+Ubuntu is a server installation WITHOUT a desktop. Use its text console for
+the terminal commands below, and use Windows for clicking the lobby controls.
+
+The current repository differs from the older saved VM copy. Synchronize the
+files in step 3 before testing them together. The current repository uses
+Enter for IPv4 lookup and has NO Reload button. Its game-ID field identifies
+already discovered entries; entering an ID alone does not locate an unknown
+IP address. Discovery also queries automatically every 0.75 seconds.
+These instructions describe the checked-out code, not an older UI.
+
+1. START VIRTUALBOX AND LOG IN
+
+Open Oracle VirtualBox from the Windows Start menu. Select COMP214-Linux-Test.
+If Powered Off, click Start. If already Running, open/show its existing window.
+Wait for the Ubuntu login prompt; this VM can boot slowly.
+Username: comp214. Use the account password set earlier in this conversation.
+The password does not show on screen while typing. Press Enter after it.
+To release captured keyboard/mouse input, use the Host Key shown in the
+VirtualBox status bar.
+
+The VM files on this computer are under:
+C:\Users\broth\VirtualBox VMs\COMP214-Test\COMP214-Linux-Test
+The verified original installer is preserved at:
+C:\Users\broth\VirtualBox VMs\COMP214-Test\ISO\ubuntu-24.04.4-live-server-amd64.iso
+ISO size: 3,405,469,696 bytes (approximately 3.41 GB / 3.17 GiB).
+The running OS uses a separate preinstalled Ubuntu disk; do not boot the ISO
+installer again or choose to reinstall Ubuntu for these tests.
+
+2. CHECK THE TWO ADDRESSES
+
+In the Ubuntu console:
+  ip -4 -o address
+
+Expect enp0s8 to show 192.168.56.101/24. The additional 10.0.2.15 address is
+the VM's NAT adapter for internet access; do not use it for this lobby test.
+
+On Windows, open PowerShell and run:
+  ipconfig
+
+Find VirtualBox Host-Only Ethernet Adapter and confirm 192.168.56.1.
+If the addresses differ, use the actual host-only addresses in all later
+commands. VirtualBox Adapter 1 is NAT; Adapter 2 is Host-only Adapter using
+VirtualBox Host-Only Ethernet Adapter. Do not change these to plain NAT-only.
+127.0.0.1 refers to the same OS, so it cannot prove a two-IP test.
+
+3. SYNCHRONIZE THE CURRENT PROJECT TO THE VM
+
+Open PowerShell in the COMP214 repository root (the directory containing
+README.md, AGENTS.md and Godot). Run:
+
+  $vmAssets = Join-Path $env:USERPROFILE 'VirtualBox VMs\COMP214-Test'
+  $vmKey = Join-Path $vmAssets 'access\id_ed25519'
+  $vmOptions = @('-i', $vmKey, '-o', "UserKnownHostsFile=$vmAssets/access/known_hosts", '-o', 'StrictHostKeyChecking=yes')
+  ssh.exe @vmOptions comp214@192.168.56.101 'mkdir -p /home/comp214/COMP214/Godot/tests'
+  scp.exe @vmOptions .\Godot\project.godot .\Godot\lobby.tscn .\Godot\lobby.gd .\Godot\discovery.gd comp214@192.168.56.101:/home/comp214/COMP214/Godot/
+  scp.exe @vmOptions .\Godot\tests\manual_vm.gd comp214@192.168.56.101:/home/comp214/COMP214/Godot/tests/
+
+Each command must finish without an error. The SSH key already belongs to this
+test setup; do not share it. These four core files and the manual driver are
+sufficient for the current alpha. Restart any running lobby after copying.
+Do not run the old cross_device_smoke.gd left in the VM against this checkout;
+that saved script expects controls from a different project revision.
+
+4. ALLOW DISCOVERY FOR THIS TEST
+
+If Godot is not already allowed on this network, open a separate Windows
+PowerShell window using Run as administrator and approve the Windows prompt.
+Add a rule limited to the two test addresses and existing discovery ports:
+
+  New-NetFirewallRule -Name 'COMP214-Manual-VM-Discovery' -DisplayName 'COMP214 manual VM discovery' -Direction Inbound -Action Allow -Protocol UDP -LocalPort 49140-49155 -LocalAddress 192.168.56.1 -RemoteAddress 192.168.56.101 -Profile Any
+
+If that named rule already exists, inspect/reuse it instead of adding it again.
+Do not disable the firewall. An administrator prompt is needed because Windows
+requires administrator rights to add/remove firewall rules. Only add this rule
+on the trusted host-only test network. If Ubuntu has an enabled firewall, it
+also needs to permit UDP 49140-49155 from the Windows host-only address.
+
+5. OPEN THE WINDOWS LOBBY AND CHECK GODOT IN UBUNTU
+
+On Windows, open Godot 4.7.2, import Godot/project.godot from this repository,
+open the project, and press F5. Keep the lobby window open.
+
+In Ubuntu:
+  /home/comp214/tools/Godot_v4.7.2-stable_linux.x86_64 --version
+
+Expect 4.7.2. Use --headless in the following commands: this VM has no desktop.
+The helper runs the real lobby scene, prints its listings and calls its Host
+or IPv4 controls. It does not create fake listings or enable joining.
+
+6. TEST EMPTY LISTS, VM HOSTING AND WINDOWS DISCOVERY
+
+Close old game runs before starting. In Ubuntu, run an observer first:
+
+  /home/comp214/tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path /home/comp214/COMP214/Godot --script res://tests/manual_vm.gd -- observer
+
+With no hosts running, Windows and the VM should report no available games.
+The terminal should print Join disabled: true; Exit disabled: true.
+Stop the VM observer with Ctrl+C, then start its host:
+
+  /home/comp214/tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path /home/comp214/COMP214/Godot --script res://tests/manual_vm.gd -- host
+
+Keep that command running. Record HOST ID AND PORT from the terminal.
+Expect a six-character uppercase letter/digit ID and an actual server port.
+On Windows, wait a few seconds. Success: a listing shows the SAME game ID and
+port, normally with the VM's 192.168.56.101 address. One session should have
+one entry. An automatic-discovery failure is a failure of that step; continue
+with direct IPv4 lookup below to distinguish it from a complete network block.
+
+7. TEST DIRECT IPv4 LOOKUP AND ID IDENTIFICATION ON WINDOWS
+
+Enter 192.168.56.101 into the Windows lobby's IPv4/network-address field and
+press Enter. Do not enter the IP into the game-ID field.
+Success: status says it is looking for hosted games at that address, and the
+VM's actual matching ID and port appear in the list. Status alone is not proof.
+
+Click the listing. Success: the game-ID field fills and feedback identifies
+the session, explicitly saying no connection was made. Type that same ID in
+lowercase: it should still identify the session. Type ZZZZZZ (or another ID
+not currently listed): feedback should explain that no available game matches.
+Typing an ID does not join. Join and Exit must stay disabled throughout.
+
+Enter bad-address into the IPv4 field and press Enter. Expect a valid-IPv4
+error. Restore 192.168.56.101 and press Enter; the listing should remain or
+reappear. Clear the IPv4 field and press Enter to return to automatic lookup.
+
+8. TEST HOST CLOSURE AND LIST EXPIRY
+
+In the VM host terminal, press Ctrl+C. Do not press the disabled Exit button.
+Success: the VM's listing disappears from Windows after about four seconds;
+allow a little extra time if the VM or host is busy. Record how long it takes.
+Restarting the VM host creates a new session; compare its new ID and port.
+
+9. REVERSE THE ROLES: WINDOWS HOST, VM OBSERVER
+
+Close/restart the Windows lobby so it is not already hosting. Click Host on
+Windows and record its game ID and the port in the HOSTED SESSION details.
+Host should become disabled; Join and Exit remain disabled.
+
+In Ubuntu, run this observer (replace ABC123 with the actual Windows ID):
+
+  /home/comp214/tools/Godot_v4.7.2-stable_linux.x86_64 --headless --path /home/comp214/COMP214/Godot --script res://tests/manual_vm.gd -- observer ip=192.168.56.1 id=ABC123
+
+Success: the terminal prints the SAME ID and port at Windows' 192.168.56.1,
+then identifies it and says no connection was made. To try automatic discovery,
+stop the observer with Ctrl+C and rerun the command without ip=192.168.56.1.
+If automatic mode fails but direct mode passes, record that distinction.
+Close the Windows game window. The VM terminal should update its list after
+about four seconds. Stop the observer using Ctrl+C.
+
+10. CLEAN UP AND RECORD THE OUTCOME
+
+Close game runs. In the administrator PowerShell window, remove only the
+temporary manual-test rule if you created it:
+  Remove-NetFirewallRule -Name 'COMP214-Manual-VM-Discovery'
+
+To shut down Ubuntu normally from its console:
+  sudo shutdown -h now
+
+If asked, enter the Linux account password. Wait for VirtualBox to show Powered
+Off. Prefer normal guest shutdown to VirtualBox's forced Power Off action.
+
+Record date, Godot version, the two IP addresses, host ID/port in each direction,
+automatic versus direct lookup outcomes, ID/invalid-input feedback, disabled
+Join/Exit, and expiry time. Keep failed steps visible instead of marking a
+fallback as proof that automatic discovery passed.
+
+This guide was written from the current source and read-only VM inspection.
+The manual sequence was not performed while writing it. A host-only VM test
+does not establish physical Wi-Fi, router-isolation or full gameplay acceptance.
+To click both lobbies visually, a Linux desktop/display would first be needed;
+this guide does not install or change the VM's desktop environment.
