@@ -6,7 +6,7 @@ A student two-player networking framework built in Godot, with visual placeholde
 
 Updated October 16, 2026 from [Requirements Document.docx](MoozeTanks/Requirements%20Document.docx), titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only. The current requirements document is available at `MoozeTanks/Requirements Document.docx`, relative to the repository root. Project documentation links are relative to the repository root (the folder containing this README.md and AGENTS.md).
 
-This checkout contains documentation only: no Godot project, scenes, scripts, executable, or runtime tests are present. Requirements below describe intended behavior. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
+This checkout contains the alpha Godot project in [Godot/](Godot/README.md): hosting, discovery, game IDs, and a lobby interface. Joining and leaving remain disabled. Same-computer two-process runtime checks passed on Godot 4.7.2; visual review and two-device LAN verification remain outstanding. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
 
 ## Technology baseline
 
@@ -31,7 +31,7 @@ The alpha implements hosting and visibility of hosted games to another user. Ini
 3. Use Host to launch a game and show its identifiable entry and game ID in the other user's list. This must be working behavior, not a simulated list entry.
 4. Explain the intended selection/ID joining and leaving flow. Any demonstration of these incomplete steps must be explicitly simulated; it must not enable real joining or suggest that leaving works.
 
-The overview calls the controls Join, Leave, and Host, while AR1 says Host, Join, and Exit. Retain the AR1 labels in the documented demo and confirm whether Exit means application exit or leaving a session before implementing that control. AR3 permits simulated joining, while AR1 requires Join disabled and defers its functionality to WP2. Keep Join disabled and explain or separately simulate the intended flow pending team clarification. AR4's leaving sequence is an explanation or simulation during alpha because the overview explicitly defers leaving.
+The overview calls the controls Join, Leave, and Host, while AR1 says Host, Join, and Exit. The user clarified on October 19, 2026 that Exit means leaving the hosted session. Retain the AR1 label; the control remains disabled because alpha leaving is incomplete. AR3 permits simulated joining, while AR1 requires Join disabled and defers its functionality to WP2. Keep Join disabled and explain or separately simulate the intended flow pending team clarification. AR4's leaving sequence is an explanation or simulation during alpha because the overview explicitly defers leaving.
 
 ## Framework functional requirements
 
@@ -60,13 +60,13 @@ FR1?FR12 describe the overall framework; implement only the subset needed for AR
 - Exact start permissions and agreed game-start flow (FR6).
 - Movement limits and legal action rules before testing input validation (FR9).
 - Match-end trigger before reset testing (FR11).
-- Exit/Leave meaning and how to present AR3 without enabling Join during alpha.
+- Exit means leave the hosted session (user clarification, October 19, 2026); leaving remains incomplete. AR3 uses selection/ID lookup and an explicit explanation without joining.
 
 Transport, ports, game-discovery mechanism, controls, and entry scenes are not specified. Document actual choices when implementation is authorized.
 
 ## Running and verification
 
-There is no runnable project in this checkout. No setup or launch commands have been verified. Once a project exists, document import steps, launch settings, controls, and the two-user test setup.
+See [Godot/README.md](Godot/README.md) for import instructions, implementation choices, and reproducible two-process tests. Godot 4.7.2 imported the project and passed the actual host/observer headless test. Environment errors concerned user log storage and the certificate store; no GDScript parse/runtime errors were reported. Visual layout and separate-device LAN behavior still require review.
 
 For alpha, verify two-user initial empty lists, working Host, remote game-list visibility, visible game IDs, disabled Join, and clearly identified simulated joining/leaving steps. Check AR5 against the actual implementation. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
 

@@ -37,3 +37,23 @@ Result: replaced machine-specific absolute paths and Downloads assumptions acros
 Associated status.md: [status.md](status.md), revision S-2026-10-16-02. Requirement completion statuses remain unchanged.
 
 Validation: scanned project files (excluding Git metadata) for machine-specific paths, verified local Markdown links and all 20 requirement IDs, and checked that changes were limited to the five documentation files. Source requirements documents were not modified. No runtime tests were needed.
+
+## P004 - October 19, 2026
+
+Prompt:
+
+> Follow the alpha requirements to create the lobby using Godot and put the godot files into the Godot folder in this directory. Only follow the alpha requirements.
+
+Clarification prompt (asked by the agent):
+
+> AR1 says Exit, while the overview says Leave. Should Exit close the application or leave a hosted session? I’ll keep it visibly disabled until this is resolved.
+
+Actual user answer:
+
+> Leave the hosted session
+
+Result: created the Godot 4.7.2 GDScript alpha lobby under Godot/, with real hosted ENet endpoint and UDP local-network discovery, session IDs, selection/typed-ID identification, disabled Join/Exit, and explicitly explained incomplete joining/leaving. Updated README.md, AGENTS.md, status.md and this log. No non-alpha gameplay implemented.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-19-01. AR1–AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; FR13–FR15 maintained; other framework behavior deferred.
+
+Validation: Godot 4.7.2 import and actual host/observer headless process tests passed initial empty lists, hosting, remote matching game ID, disabled controls, selection, typed/unknown IDs, and expiry after host shutdown. Sandbox user-log/certificate-store errors were reported; no script errors. Visual layout and two-physical-device LAN checks remain unverified. Checked all 20 requirement IDs, relative documentation links, source checksum and changed-file boundaries. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
