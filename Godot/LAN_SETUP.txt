@@ -1,0 +1,82 @@
+TWO-DEVICE WI-FI LOBBY SETUP (Godot 4.7.2, alpha)
+
+Use the same updated project on both devices. Older builds use a different
+discovery protocol and will not list these six-character sessions.
+
+1. Connect both devices to the same trusted Wi-Fi network. Avoid guest Wi-Fi
+   with client isolation. Allow Godot through each device's firewall on the
+   trusted local network. Discovery uses inbound IPv4 UDP ports 49140-49155
+   from the local subnet. Router port forwarding is not needed.
+2. Open Godot/project.godot in Godot 4.7.2 on both devices and press F5.
+   With no hosts running, both available-game lists should be empty.
+3. On device A, click Host. Success: HOSTED SESSION displays a six-character
+   ID containing random uppercase letters and numbers, for example A7K2Q9.
+   Host becomes disabled. The host's own list shows its session.
+4. On device B, wait about a second. Success: the same ID appears in AVAILABLE
+   GAMES with device A's network address. If it appears, skip to step 8.
+
+FIND A LISTING BY SESSION ID (NO JOINING)
+
+On device B, enter A's six-character ID into the session-ID field and click
+Reload (or press Enter there). Leave IPv4 blank for automatic Wi-Fi discovery.
+The status shows the ID being searched for. A matching host replies with its
+actual listing; its ID and address appear in AVAILABLE GAMES and the feedback
+says it was identified. Lowercase input is accepted. No player connection is
+made. Clear the ID and click Reload to request all hosted listings again.
+Other already discovered games remain visible. If the host is unavailable or
+the ID is wrong, no matching listing appears. A session ID needs working LAN
+discovery; it cannot locate an IP address through blocked Wi-Fi isolation.
+If broadcasts are blocked, enter the host IPv4 as described below; Reload
+uses both the entered ID and IPv4. Join and Exit remain disabled throughout.
+
+IF NO LOBBY APPEARS: ENTER THE HOST'S IPv4
+
+5. On device A, read "This laptop's IPv4" in the lobby. If multiple addresses
+   appear, use the address belonging to the shared Wi-Fi adapter. On Windows,
+   open Command Prompt, run ipconfig, and read IPv4 Address under the active
+   Wireless LAN adapter Wi-Fi. Do not use Default Gateway, an IPv6 address,
+   127.0.0.1 (which refers to the same device), or the six-character game ID.
+6. On device B, enter A's IPv4 (for example 192.168.1.25) into the network
+   address field above Reload. Do not put it in the separate game-ID field.
+7. Clear the session-ID field to request all games from A, or enter A's ID
+   to request that specific session. Click Reload, or press Enter while the
+   address field is focused.
+   Expected sequence:
+   - Status says "Looking for hosted games at" the IPv4, or "Looking for
+     session" with the ID and IPv4 if an ID was entered.
+   - B sends a listing query directly to A; A replies with its actual session.
+   - Within a few seconds, A's six-character ID appears in B's game list.
+   Queries repeat every 0.75 seconds. Reload retries immediately. A lookup
+   message alone does not prove success: the matching list entry must appear.
+   Clear the address field and click Reload to return to automatic discovery.
+8. Select the session on B. Success: its ID fills the game-ID field and the
+   feedback says it was identified and "No connection was made". Typing the
+   same ID in lowercase also identifies it. Join and Exit remain disabled:
+   real joining and leaving are incomplete in alpha; no gameplay starts.
+9. Close A's game window. Success: B's remote entry disappears in about four
+   seconds. Restart both runs and repeat with the device roles reversed.
+
+IF LOOKUP STILL FAILS
+
+An invalid address produces "Enter a valid IPv4 address". Correct the address
+and click Reload. If a valid address yields no entry, confirm A is hosting,
+both devices run this updated build, and the address is A's current Wi-Fi IPv4.
+Check both firewalls, VPN routing, and router client isolation. Manual lookup
+bypasses broadcast restrictions but cannot bypass blocked device-to-device
+traffic. A discovery-unavailable error requires freeing a local lobby slot
+and restarting; Reload does not rebind a failed discovery socket.
+
+Verification: automatic and direct-IP listing passed between two processes on
+one computer. Session-ID Reload also passed with unsolicited announcements
+disabled and no manual IPv4, including wrong-ID and malformed-ID cases.
+To repeat this check, run the two commands in Godot/README.md with session-id
+appended after observer / host (one test pair at a time).
+The steps above still require testing on two physical devices;
+they describe expected success, not a claim of physical Wi-Fi acceptance.
+
+October 19 VM validation: Windows 192.168.56.1 and Ubuntu 192.168.56.101
+passed automatic, session-ID Reload, and direct-IP discovery with both host
+roles, including listing expiry and disabled Join/Exit. Discovery was fixed
+to broadcast from each eligible IPv4 interface instead of only the default
+adapter. See tests/VM_TEST_REPORT.txt and tests/vm_test_results.json for actual
+results. Physical Wi-Fi and visual acceptance still require separate testing.

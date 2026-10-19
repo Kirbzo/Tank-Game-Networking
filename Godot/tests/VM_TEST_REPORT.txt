@@ -1,0 +1,68 @@
+COMP214 VIRTUAL MACHINE LOBBY TEST REPORT
+Date: October 19, 2026 (America/Regina)
+
+Windows host-only IPv4: 192.168.56.1
+Ubuntu VM host-only IPv4: 192.168.56.101
+Engine on both systems: Godot 4.7.2.stable.official.ed1daf0bf, GDScript.
+VM: COMP214-Linux-Test, Ubuntu 24.04.5 LTS, VirtualBox 7.2.20r175154.
+
+RESULTS (all six acceptance cases passed)
+PASS windows-host/automatic: ID 0MWDNG, sender 192.168.56.1, observer 192.168.56.101
+PASS windows-host/session-id: ID DZDWCV, sender 192.168.56.1, observer 192.168.56.101
+PASS windows-host/direct: ID YU23BQ, sender 192.168.56.1, observer 192.168.56.101
+PASS linux-host/automatic: ID 8QH3KL, sender 192.168.56.101, observer 192.168.56.1
+PASS linux-host/session-id: ID GQRQD9, sender 192.168.56.101, observer 192.168.56.1
+PASS linux-host/direct: ID 737IO9, sender 192.168.56.101, observer 192.168.56.1
+
+Each test instantiated the actual lobby scene, created a real hosting endpoint,
+pressed Reload through its UI signal, checked a real matching listing received
+from the other non-loopback IPv4, identified the ID without joining, checked
+Join/Exit disabled, and checked removal after the host process stopped.
+Session-ID mode disabled unsolicited announcements and used no manual IPv4.
+Direct mode disabled automatic discovery on the observer; the host responded
+to an actual IPv4 query. No mock listings or player connections were used.
+
+ISSUE FOUND AND FIXED
+The original wildcard UDP broadcast used the default adapter instead of the
+host-only LAN. The baseline passed only direct-IP lookup (2 of 6 cases).
+Godot/discovery.gd now creates broadcast senders bound to each eligible local
+IPv4 address and receives query replies on those sockets. It retains the
+existing listening ports, loopback discovery and IPv4 fallback.
+One subsequent automatic-mode expiry test timed out while the slow VM's
+fixed-duration host was still running. The test controller was changed to
+request host shutdown after receiving the real remote listing. The targeted
+Linux-host automatic-discovery/expiry rerun passed. Five other cases had
+already passed with the same fixed discovery code; their evidence is retained.
+
+EVIDENCE
+vm_test_results.json: consolidated latest passing evidence for all six cases.
+vm_test_baseline_results.json: original default-adapter discovery failures.
+vm_test_pre_shutdown_control_results.json: first post-fix run (5/6 passed).
+vm_test_controlled_shutdown_results.json: passing targeted expiry rerun.
+Discovery SHA256: 03f2346ff34b6df10e670ffed48269fb3986853504e4ead4dae617b20c6ccdf7
+The VM's copied core project files were checked against Windows checksums.
+Additional local regressions passed session-ID lookup (including malformed and
+wrong IDs, clearing the filter) and direct-IP lookup (including invalid IPv4),
+with disabled controls, identification and listing expiry.
+
+ENVIRONMENT AND LIMITS
+The ISO installer stalled before installation; an official checksum-verified
+Ubuntu preinstalled VM image was used, preserving the original ISO and VDI.
+See VM_SETUP.txt for ISO/image locations, exact sizes and VM settings.
+Windows required administrator approval for a temporary inbound Godot UDP
+49140-49155 rule restricted to 192.168.56.1 and 192.168.56.101. The test script
+removed that rule afterward. No firewall was disabled. Physical Wi-Fi and
+router isolation remain unverified; this was a virtual LAN with separate OSes
+and IP addresses. Headless testing does not establish visual acceptance.
+Joining and leaving remain incomplete and disabled; no gameplay tested.
+README.md, AGENTS.md and source requirements were preserved.
+
+REPRODUCING
+Godot/tests/run_cross_device.py runs cross_device_smoke.gd locally and over SSH.
+Its --help lists the required IP, engine, SSH-key, known-host and output paths.
+Use administrator-approved, narrowly scoped discovery firewall access for the
+host-only network. --direction linux-host --mode automatic repeats the targeted
+case; omitting both selectors runs all six. The current controller stops each
+host only after the actual matching remote listing is observed. It checks
+expiry afterward; stop files control only the test process, never player Join
+or the alpha Exit button.

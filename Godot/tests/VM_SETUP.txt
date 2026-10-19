@@ -1,0 +1,67 @@
+COMP214 VIRTUAL MACHINE SETUP RECORD
+Date: October 19, 2026 (America/Regina)
+
+These absolute paths record this computer's test assets only. The project
+does not depend on them; project files still resolve from the repository root.
+
+Installer: Ubuntu Server 24.04.4 LTS, AMD64
+Source: https://releases.ubuntu.com/24.04/ubuntu-24.04.4-live-server-amd64.iso
+ISO location:
+C:\Users\broth\VirtualBox VMs\COMP214-Test\ISO\ubuntu-24.04.4-live-server-amd64.iso
+Verified ISO size: 3,405,469,696 bytes (3.405 GB / approximately 3.172 GiB).
+Download/checksum status: complete; SHA256 matches the official SHA256SUMS.
+Official SHA256SUMS stored alongside the ISO.
+Verified SHA256:
+e907d92eeec9df64163a7e454cbc8d7755e8ddc7ed42f99dbc80c40f1a138433
+
+VirtualBox executable:
+C:\Program Files\Oracle\VirtualBox\VBoxManage.exe
+Observed VirtualBox version: 7.2.20r175154
+VM name: COMP214-Linux-Test
+VM UUID: 4fc19b60-ee31-4a8f-8e3e-c25d29011acd
+VM folder:
+C:\Users\broth\VirtualBox VMs\COMP214-Test\COMP214-Linux-Test
+Configuration: COMP214-Linux-Test.vbox
+Virtual disk: COMP214-Linux-Test.vdi
+Disk maximum capacity: 25 GiB (26,843,545,600 bytes), dynamically allocated.
+Disk file after creation: 2,097,152 bytes (2 MiB); grows during installation.
+Memory: 4,096 MiB. CPU: initially 2 virtual cores; current test setup uses 1.
+Network adapter 1: NAT for guest downloads.
+Network adapter 2: existing VirtualBox Host-Only Ethernet Adapter.
+Host-only host address: 192.168.56.1/24.
+Existing DHCP pool: 192.168.56.101 through 192.168.56.254.
+
+Scope: one Linux VM versus the existing Windows host is the first test pair.
+A host-only network tests separate operating systems and IP addresses on a
+virtual LAN. It does not verify physical Wi-Fi or router isolation behavior.
+The ISO installation stalled during early driver loading. A verified official
+preinstalled Ubuntu image was used instead; the ISO and original VDI are intact.
+Current guest: Ubuntu 24.04.5 LTS, hostname comp214-test.
+Cloud image source:
+https://cloud-images.ubuntu.com/releases/noble/release-20261017/ubuntu-24.04-server-cloudimg-amd64.vmdk
+Cloud image location:
+C:\Users\broth\VirtualBox VMs\COMP214-Test\cloud-image\ubuntu-24.04-server-cloudimg-amd64.vmdk
+Cloud image size: 590,749,696 bytes. Official SHA256 verified:
+9A1E3959C9F4AD9D4752101FD4FF9A43191FB7D72E61FA20E033F9FD235CE794
+Active disk in VM folder: COMP214-Ubuntu-Cloud.vdi, expanded to 25 GiB capacity.
+Original COMP214-Linux-Test.vdi is preserved and detached.
+SATA port 0: active cloud disk. SATA port 1: cloud-image\seed.viso (cloud-init).
+Current VM settings: KVM paravirtualization, HPET enabled, one virtual CPU.
+These settings resolved the observed virtual timer failure during boot.
+
+Windows test IPv4: 192.168.56.1. Linux test IPv4: 192.168.56.101/24 (static).
+Guest NAT address: 10.0.2.15; used for internet access, not acceptance evidence.
+Guest account: comp214, configured with test-only SSH key authentication.
+Test keys are in the external asset folder's access directory, not the repo.
+Godot Linux binary, verified against official SHA512-SUMS.txt:
+/home/comp214/tools/Godot_v4.7.2-stable_linux.x86_64
+Guest project: /home/comp214/COMP214/Godot
+Both Windows and Linux report 4.7.2.stable.official.ed1daf0bf.
+Management-only NAT forwarding at 127.0.0.1:2222 to guest SSH port 22 was
+removed after testing. Actual lobby tests used the host-only IP addresses.
+Temporary Windows discovery firewall rule removal was verified afterward.
+Final cloud VDI file size after testing: 2,239,758,336 bytes; maximum 25 GiB.
+Normal guest shutdown was requested after the final checksum check.
+Cross-IP test results are recorded separately in vm_test_results.json.
+Baseline failures before the discovery fix are in vm_test_baseline_results.json.
+Join and Exit remain disabled in the alpha. README.md and AGENTS.md unchanged.

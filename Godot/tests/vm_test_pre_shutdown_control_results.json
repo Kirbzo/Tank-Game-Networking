@@ -1,0 +1,56 @@
+[
+  {
+    "case": "windows-host/automatic",
+    "passed": true,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"0MWDNG\",\"port\":51796}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nREMOTE_LISTING {\"direct_address\":\"\",\"id\":\"0MWDNG\",\"mode\":\"automatic\",\"port\":51796,\"sender_ipv4\":\"192.168.56.1\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  },
+  {
+    "case": "windows-host/session-id",
+    "passed": true,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"DZDWCV\",\"port\":59662}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nREMOTE_LISTING {\"direct_address\":\"\",\"id\":\"DZDWCV\",\"mode\":\"session-id\",\"port\":59662,\"sender_ipv4\":\"192.168.56.1\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  },
+  {
+    "case": "windows-host/direct",
+    "passed": true,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"YU23BQ\",\"port\":55836}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nREMOTE_LISTING {\"direct_address\":\"192.168.56.1\",\"id\":\"YU23BQ\",\"mode\":\"direct\",\"port\":55836,\"sender_ipv4\":\"192.168.56.1\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  },
+  {
+    "case": "linux-host/automatic",
+    "passed": false,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"FNYE22\",\"port\":37179}\nPASS cross-device host\n",
+    "error": "Host or observer failed",
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nREMOTE_LISTING {\"direct_address\":\"\",\"id\":\"FNYE22\",\"mode\":\"automatic\",\"port\":37179,\"sender_ipv4\":\"192.168.56.101\"}\nFAIL cross-device: Host listing must expire after shutdown\n"
+  },
+  {
+    "case": "linux-host/session-id",
+    "passed": true,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"GQRQD9\",\"port\":48395}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nREMOTE_LISTING {\"direct_address\":\"\",\"id\":\"GQRQD9\",\"mode\":\"session-id\",\"port\":48395,\"sender_ipv4\":\"192.168.56.101\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  },
+  {
+    "case": "linux-host/direct",
+    "passed": true,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"737IO9\",\"port\":39275}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nREMOTE_LISTING {\"direct_address\":\"192.168.56.101\",\"id\":\"737IO9\",\"mode\":\"direct\",\"port\":39275,\"sender_ipv4\":\"192.168.56.101\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  }
+]

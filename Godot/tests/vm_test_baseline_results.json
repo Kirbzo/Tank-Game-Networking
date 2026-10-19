@@ -1,0 +1,56 @@
+[
+  {
+    "case": "windows-host/automatic",
+    "passed": false,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"F616LM\",\"port\":50470}\nPASS cross-device host\n",
+    "error": "Host or observer failed",
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nFAIL cross-device: Reload must find the remote session: Reloading automatic LAN discovery. Manual host lookup cleared.\n"
+  },
+  {
+    "case": "windows-host/session-id",
+    "passed": false,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"8KQU1A\",\"port\":61719}\nPASS cross-device host\n",
+    "error": "Host or observer failed",
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nFAIL cross-device: Reload must find the remote session: Looking for session 8KQU1A on the local network. Join remains disabled.\n"
+  },
+  {
+    "case": "windows-host/direct",
+    "passed": true,
+    "host_ip": "192.168.56.1",
+    "observer_ip": "192.168.56.101",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nHOST_READY {\"id\":\"4WZRI3\",\"port\":49372}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nREMOTE_LISTING {\"direct_address\":\"192.168.56.1\",\"id\":\"4WZRI3\",\"mode\":\"direct\",\"port\":49372,\"sender_ipv4\":\"192.168.56.1\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  },
+  {
+    "case": "linux-host/automatic",
+    "passed": false,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"SIIIIS\",\"port\":55443}\nPASS cross-device host\n",
+    "error": "Host or observer failed",
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nFAIL cross-device: Listing sender must be the expected remote IPv4, got 127.0.0.1\n"
+  },
+  {
+    "case": "linux-host/session-id",
+    "passed": false,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"OK7CKI\",\"port\":40126}\nPASS cross-device host\n",
+    "error": "Host or observer failed",
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nFAIL cross-device: Reload must find the remote session: Looking for session OK7CKI on the local network. Join remains disabled.\n"
+  },
+  {
+    "case": "linux-host/direct",
+    "passed": true,
+    "host_ip": "192.168.56.101",
+    "observer_ip": "192.168.56.1",
+    "host_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 192.168.56.101,fe80:0:0:0:a00:27ff:fe8a:f5a,10.0.2.15,fd17:625c:f037:2:a00:27ff:fea8:9e92,fe80:0:0:0:a00:27ff:fea8:9e92,127.0.0.1,0:0:0:0:0:0:0:1\nHOST_READY {\"id\":\"IBB6CK\",\"port\":41836}\nPASS cross-device host\n",
+    "error": null,
+    "observer_log": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nLOCAL_IPV4 0:0:0:0:0:0:0:1,127.0.0.1,fe80:0:0:0:fbe:822e:15a4:ce55,10.51.112.52,fe80:0:0:0:9b52:4c10:e986:f417,169.254.86.235,fe80:0:0:0:259c:74a4:c024:c6d1,169.254.82.106,fe80:0:0:0:aa44:6f00:d774:6d50,192.168.56.1,fe80:0:0:0:a5e4:7f12:85a1:df53,169.254.1.100\nREMOTE_LISTING {\"direct_address\":\"192.168.56.101\",\"id\":\"IBB6CK\",\"mode\":\"direct\",\"port\":41836,\"sender_ipv4\":\"192.168.56.101\"}\nPASS cross-device observer: different IPv4, Reload, remote listing, disabled joining, expiry\n"
+  }
+]
