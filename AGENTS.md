@@ -6,9 +6,10 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 
 - Keep all changes inside the project repository root (`.`), defined as the folder containing this AGENTS.md and README.md. Resolve project file paths relative to that root, regardless of the checkout location or operating system.
 - Read `MoozeTanks/Requirements Document.docx` relative to the repository root as the current requirements source. If it is unavailable in another checkout, ask for its location. Never edit, replace, move, or delete source requirements documents, including the earlier PDF if present.
-- The October 19, 2026 user request authorizes alpha-only lobby implementation in Godot/ and maintenance of the required documentation and logs. Do not add non-alpha gameplay or real joining.
 - Preserve unrelated files and user changes. Preserve documentation_rationale.txt as the historical October 13 record, while allowing path references to be made portable.
 - Retain Godot **4.7.2** and **GDScript** from the prior instructions. The updated DOCX does not restate these constraints. Do not silently substitute another version or language.
+- Do not add, remove, or change anything in the AGENTS.md and README.md without approval. Explain why these changes are suggested.
+- DO not repair other issues found during a task without reporting them.
 
 ## Alpha scope ? October 20, 2026
 
@@ -16,9 +17,9 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 - Show Host, Join, Exit, and a game list. Two users initially see an empty list. Host must launch a game whose identifiable entry and game ID are visible to the other user.
 - Keep Join disabled. Real joining belongs to WP2, and leaving is incomplete for alpha.
 - AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Explain or separately simulate the incomplete steps and label them clearly. Do not enable real Join or claim simulations satisfy final networking acceptance.
-- The user clarified on October 19, 2026 that Exit means leaving the hosted session. Retain the Exit label and keep it disabled while alpha leaving remains incomplete.
+- Exit means leaving the hosted session. Retain the Exit label and keep it disabled while alpha leaving remains incomplete.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
-- The subsequent October 19 request authorizes two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not authorize real joining.
+- You are authorized to do two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not authorize real joining.
 - The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance and Join/Exit disabled; do not imply discovery establishes a player connection.
 
 ## Overall framework

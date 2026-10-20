@@ -1,0 +1,154 @@
+COMP214 AGENTS.md comparison and proposed changes
+Date: October 20, 2026 (America/Regina)
+Request: P013. Associated status revision: S-2026-10-20-01.
+
+APPROVAL AND SCOPE
+This file contains recommendations for review, not approved amendments. The user authorized this separate text 
+document and prohibited changing COMP214/AGENTS.md. No individual recommendation has been explicitly approved.
+Record later approvals here only after receiving them; approval of this document does not itself apply changes 
+to AGENTS.md. Both AGENTS.md files and README.md remain unchanged.
+
+SOURCES
+- COMP214 AGENTS.md and README.md, relative to the project root.
+- CodexDemo/AGENTS.md, read from the separate CodexDemo folder; this is comparative material, not instructions 
+governing COMP214.
+- MoozeTanks/Requirements Document.docx, current requirements source.
+- status.md, prompt_log.md, and the existing Godot file layout.
+The earlier PDF was not found in this checkout. The DOCX supersedes it; no historical PDF contents are assumed.
+The temporary Word lock file is not a requirements source.
+DOCX SHA256: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A
+
+COMPARISON
+Both files restrict work to the requested task, protect unrelated behavior, and require reporting other issues 
+before repair.
+CodexDemo is a short Java workshop guide: Java/JDK restrictions, service/repository/UI responsibilities, 
+naming/comments, pre-edit inspection, small changes, behavioral regression tests, exact Java validation 
+commands, and a branch-before-code rule.
+COMP214 is a Godot networking guide: portable paths, protected requirements, Godot 4.7.2/GDScript, AR1-AR5 
+scope, disabled Join/Exit, actual host discovery evidence, future FR1-FR12 work, FR13-FR15 tracking, and team 
+decisions. Its detail is necessary for this project's acceptance criteria.
+The main gap is explicit everyday coding/workflow guidance, rather than missing product requirements. 
+CodexDemo's architecture, tooling and language restrictions cannot be copied directly.
+
+RECOMMENDATIONS (ALL PENDING USER APPROVAL)
+
+S01 - Inspect relevant files before editing. Priority: high.
+Inspired by CodexDemo's Workflow section.
+Suggested wording: "Before editing, read the relevant code, README.md, current requirements, and applicable 
+status.md entries. Preserve existing user changes and inspect the current working state."
+Reason: connects implementation decisions to AR5 and FR13-FR15 without expanding scope.
+
+S02 - Add GDScript coding standards. Priority: high.
+Inspired by CodexDemo's Coding standards section.
+Suggested wording: "Use descriptive identifiers and follow the existing GDScript style: snake_case for 
+variables and functions, PascalCase for named classes, and UPPER_SNAKE_CASE for constants. Keep comments 
+focused on intent, protocol assumptions, or non-obvious behavior; update them when behavior changes."
+Reason: improves maintainability while retaining Godot 4.7.2 and GDScript. These conventions are proposed 
+project policy, not DOCX requirements.
+
+S03 - Preserve existing responsibilities. Priority: medium.
+Adapt CodexDemo's separation of business rules, storage and interaction.
+Suggested wording: "Keep lobby presentation and interaction in the existing lobby code and discovery behavior 
+in the existing discovery code. Follow the project's current structure; do not introduce architectural layers 
+or move files unless needed for the requested task."
+Reason: the current layout includes Godot/lobby.gd and Godot/discovery.gd. This describes the observed 
+implementation, not required scene names or an invented networking architecture. Future server authority 
+must follow FR8-FR10 when authorized.
+
+S04 - Make minimal-change expectations explicit. Priority: high.
+Inspired by CodexDemo's smallest-change and no-unrelated-refactoring rules.
+Suggested wording: "Implement the smallest change that satisfies the requested acceptance criteria. 
+Avoid unrelated refactoring, formatting, dependency changes, and cleanup. Report other issues separately."
+Reason: reinforces existing scope protections and AR5. Do not copy the Java-only standard-library or 
+no-framework rule into a Godot project.
+
+S05 - Clarify planning-only work and requested artifacts. Priority: high.
+Adapt CodexDemo's investigation/plan-only rule rather than copying it literally.
+Suggested wording: "For investigation or planning requests, do not change implementation files. Produce 
+requested planning artifacts and update status.md and prompt_log.md as required by FR13-FR14. Do not apply 
+proposed changes to protected files without explicit approval."
+Reason: a blanket 'do not edit files' rule would conflict with this request for a text document and the 
+mandatory planning log. Preserve the existing approval protection for AGENTS.md and README.md.
+
+S06 - Add targeted behavioral regression guidance. Priority: high.
+Inspired by CodexDemo's behavioral tests and assertion-integrity rule.
+Suggested wording: "For changed behavior, run relevant existing checks and add or adjust behavioral regression 
+coverage when needed. Never weaken assertions to obtain a passing result. Documentation-only changes use 
+documentation validation. Record test limitations and retain unverified acceptance statuses."
+Reason: supports AR1-AR4 and applicable FR1-FR12 without imposing gameplay tests for prose changes. Existing 
+Godot/tests/alpha_smoke.gd is a candidate when the affected behavior is covered. Same-machine processes do 
+not verify physical two-laptop LAN acceptance.
+
+S07 - Refer to project validation instructions. Priority: high.
+Adapt CodexDemo's exact compile/test workflow.
+Suggested wording: "Use the relevant commands documented in Godot/README.md after checking they apply to the 
+current checkout. Report exact commands attempted and actual results, including unavailable tools and checks 
+not run. Do not claim a command was verified solely because documentation lists it."
+Reason: javac and AllTests are Java-specific. Do not invent Godot executable paths or treat implementation 
+commands as DOCX requirements. Git was unavailable on PATH during this review; no Git-based verification is 
+claimed.
+
+S08 - Make branch creation conditional. Priority: medium.
+Adapt CodexDemo's branch-before-code rule.
+Suggested wording: "Before code changes, inspect the current branch and working tree when Git is available. If 
+a separate branch is requested or appropriate, use a descriptive name without discarding user work or 
+disturbing an existing task branch. Report when Git is unavailable."
+Reason: a mandatory new branch for every change can disrupt existing work and cannot be assumed feasible here. 
+This documentation task needs no branch change. Branch policy is a workflow proposal, not a source requirement.
+
+S09 - Extend the final reporting checklist. Priority: high.
+Inspired by CodexDemo's changed-files, commands and actual-results rule.
+Suggested wording: "Report changed files, why they changed, validation commands and results, checks not run, 
+outstanding approval items, and remaining simulated or unverified behavior. Separate prior recorded evidence 
+from checks performed for the current request."
+Reason: makes existing validation/reporting rules more concrete and protects against overstated AR/FR 
+completion.
+
+S10 - Clarify sources and readability without losing safeguards. Priority: medium.
+Suggested wording: "The current requirements source is the DOCX. Retained engine/language constraints and 
+explicit user clarifications remain applicable where the DOCX is silent. CodexDemo supplies workflow examples 
+only. Keep product requirements, current implementation choices, and historical evidence distinguishable."
+Reason: retain all current alpha, LAN discovery, logging and approval rules. Group future approved 
+coding/workflow additions under those headings. If approved, replace visibly ambiguous range separators such 
+as AR1?AR5 with 'AR1 through AR5'; preserve each source ID. Check the actual UTF-8 text before treating 
+console display artifacts as file corruption. Do not silently rewrite technical content.
+
+REQUIREMENT COVERAGE AND RULES TO RETAIN
+AR1: Host/Join/Exit and game list; actual hosting; Join disabled until WP2.
+AR2: identifiable hosted listings visible to another actual user; mock lists insufficient.
+AR3: game IDs plus selection/typed identification; incomplete joining clearly explained or separately simulated.
+AR4: hosting/joining/leaving flow; working and simulated steps distinguished; Exit remains disabled.
+AR5: no non-alpha implementation without a later authorized scope change.
+FR1: locally hosted two-player sessions remain future full acceptance; discovery alone is not connection.
+FR2: hosting/connecting lobby; connecting remains deferred.
+FR3: accurate available-game listings, refresh and removal; physical LAN acceptance remains unverified.
+FR4: joining by selection or ID and understandable errors remains future work.
+FR5: create/join/leave/close lifecycle remains partial; do not enable Join/Exit.
+FR6: agreed selection/start flow and team confirmation of start permissions.
+FR7: disconnects, connection errors and connection-event reporting when authorized.
+FR8: server-authoritative shared state and positions when authorized.
+FR9: input validation after team agreement on movement/action rules.
+FR10: server hit determination and client reconciliation when authorized.
+FR11: reset and next-round preparation after team agreement on match-end trigger.
+FR12: rectangles, movement, bullets, health/damage, moose hazard and interpolation placeholders remain later 
+scope.
+FR13: lowercase status.md with all 20 IDs, evidence and remaining work.
+FR14: unique prompt IDs, actual text, actual dates, linked status revision/snapshot and results; log plans too.
+FR15: retain protected README.md/AGENTS.md consistency; propose amendments without bypassing approval.
+Keep repository-relative paths, source-document protection, historical rationale preservation, one server per 
+hosting instance, matching advertised game ID/endpoint, and the distinction between discovery and player 
+connection.
+Do not import Java versions, package names, repositories/services/ConsoleMenu, in-memory fixture restrictions, 
+Maven/Gradle/JUnit bans, or Java commands.
+No transport, port, engine substitution, gameplay rule or scene requirement is added by these recommendations.
+
+APPROVAL REGISTER
+S01-S10: Pending explicit user approval. None applied.
+When approval arrives, record the approved IDs and any requested wording changes in this separate document. 
+Keep COMP214/AGENTS.md unchanged under the current request.
+
+VALIDATION
+Compared both AGENTS.md files and read the current DOCX. Reviewed all 20 source IDs against status.md. 
+Requirement completion statuses remain unchanged. No gameplay tests are needed or claimed. Source and 
+protected-file checksums and local documentation links are checked for this documentation-only task. 
+Changed files: this report, status.md, prompt_log.md. Prior prompt entries are preserved.

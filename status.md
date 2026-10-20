@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-06. Prompt: P012 (six-character host IDs).
+Updated: October 20, 2026. Revision: S-2026-10-20-01. Prompt: P013 (AGENTS comparison and recommendations).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -57,3 +57,5 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 - S-2026-10-19-06 (P012): host IDs now contain six random uppercase letters/digits; discovery accepts this format and repeated hosting retains the ID. Updated smoke checks. Requirement statuses unchanged; visual and physical two-device acceptance remain unverified. README.md and AGENTS.md unchanged.
 
 Validation: Godot 4.7.2 actual host/observer processes passed with matching ID YSPXOJ and port 61416, six-character format, stable repeated Host, selection, lowercase lookup, disabled controls and expiry. No script errors; environment log/certificate-store errors remain.
+
+- S-2026-10-20-01 (P013): compared COMP214 and CodexDemo AGENTS.md with the current DOCX; created AGENTS_comparison_suggestions.txt with ten pending recommendations and a 20-ID coverage review. Neither AGENTS.md nor README.md changed. No individual recommendation has been approved or applied. Requirement statuses and prior runtime evidence unchanged. Documentation validation only; no gameplay tests.
