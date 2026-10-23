@@ -41,6 +41,8 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
 - Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.
 - Keep source ambiguities visible until resolved by the team or a later user instruction.
+- For each prompt-log entry, record the request date, time, and timezone when available. If the actual request timestamp is unavailable, write “Unavailable.” Do not substitute the log-update time or invent historical timestamps.
+- After each task finishes, record its actual token usage in prompt_log.md when available. Identify the usage source and whether the count covers that task or the entire session. If final usage becomes available only after Codex finishes responding, add it in a follow-up update. Otherwise, write “Unavailable.” Do not estimate or invent token counts.
 
 ## Validation and reporting
 
