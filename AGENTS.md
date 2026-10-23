@@ -11,6 +11,11 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 - Do not add, remove, or change anything in the AGENTS.md and README.md without approval. Explain why these changes are suggested.
 - DO not repair other issues found during a task without reporting them.
 
+## Workflow
+
+- Before editing, read the relevant code, README.md, current requirements, and applicable status.md entries. Preserve existing user changes and inspect the current working state.
+- For investigation or planning requests, do not change implementation files. Produce requested planning artifacts and update status.md and prompt_log.md as required by FR13-FR14. Do not apply proposed changes to protected files without explicit approval.
+
 ## Alpha scope ? October 20, 2026
 
 - Follow AR1?AR5. Implement only alpha behavior when alpha implementation is requested; consider FR1?FR12 without adding non-alpha functionality (AR5).
@@ -39,8 +44,10 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 
 ## Validation and reporting
 
+Use the relevant commands documented in Godot/README.md after checking they apply to the current checkout. Report exact commands attempted and actual results, including unavailable tools and checks not run. Do not claim a command was verified solely because documentation lists it.
+
 For documentation tasks, check all 20 requirement IDs, local links, status/log consistency, the source document checksum, and file-change boundaries. No gameplay tests are needed for documentation alone.
 
 For authorized implementation, test the applicable acceptance criteria with actual user instances where necessary. For future framework work, cover errors, room availability, disconnect handling, authoritative movement, invalid-input rejection, hit reconciliation, and reset as relevant.
 
-Report changed files, verification, and unresolved or simulated behavior. Do not claim runtime success from documentation review.
+Report changed files, why they changed, validation commands and results, checks not run, outstanding approval items, and remaining simulated or unverified behavior. Separate prior recorded evidence from checks performed for the current request. Do not claim runtime success from documentation review.
