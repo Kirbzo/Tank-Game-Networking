@@ -37,6 +37,12 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 
 - FR13: maintain lowercase `status.md` with an entry for every AR1?AR5 and FR1?FR15 requirement. Record status, evidence, and remaining work. Distinguish not implemented, partial, complete, and unverified; mark complete only with supporting evidence.
 - FR14: maintain `prompt_log.md` with a unique prompt ID, actual prompt text, date, associated status.md revision/snapshot, and results. Add an entry for each subsequent project work request; do not fabricate unavailable historical dates or prompts.
+- Record each prompt's date and time separately. Use zero-padded, 12-hour `hh:mm:ss AM/PM` format and timezone `America/Regina`, for example `Time: 02:05:09 PM`. Use the prompt's receipt time when available; otherwise label it as the recording time. Mark unavailable historical times **Unavailable** rather than inventing them.
+- For each new `prompt_log.md` entry, record token usage when reliable per-request usage records are available: input tokens, cached input tokens, output tokens, model, and usage source. State whether cached input is included in the input total to avoid double counting.
+- Associate usage with the prompt ID and include all model calls used to complete that request, including tool-related continuations.
+- Record estimated monetary cost only when the model, applicable rates, and usage breakdown are known. Include currency, pricing source, and rate date. Label estimates separately from actual billed charges.
+- If usage or cost cannot be reliably determined, record **Unavailable** with a brief reason. Never invent figures or treat the user's prompt text alone as the total token usage.
+- Preserve historical entries. Backfill usage or cost only when reliable records can be matched to the original prompt ID.
 - Log planning requests and their clarifications too. A subsequent implementation request receives its own prompt ID while linking the planning entry and the resulting status revision.
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
 - Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.

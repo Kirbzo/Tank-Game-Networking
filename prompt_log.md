@@ -1,5 +1,87 @@
 # Prompt log
 
+## P020 - October 23, 2026
+
+Receipt time: **Unavailable** (not provided by chat metadata).
+Recording time: 11:26:26 AM (America/Regina; current UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> the addition is approved
+
+Result: applied the P019 timestamp wording approved by this request to AGENTS.md. New entries use separate date and time, zero-padded 12-hour hh:mm:ss AM/PM, America/Regina, and explicit receipt/recording provenance. Backfilled P019 with unavailable historical time. Existing entries preserved. README.md and implementation unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-03. Planning/clarification: P018 and P019.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record, and estimated/actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed in this chat. Usage source: unavailable; currency, rates, pricing source and rate date unavailable.
+
+Validation: PowerShell invoked Python through `python -` to check all 20 requirement rows, local links, descending unique prompt IDs, current status/log references, unchanged prior log content, exact approved AGENTS.md addition, source DOCX checksum, and the three-file change boundary. No gameplay tests needed or run; prior runtime evidence was not rerun. Git was previously unavailable on PATH; this request used file hashes.
+
+## P019 - October 23, 2026
+
+Time: **Unavailable** (historical receipt/recording time was not captured).
+Timezone: America/Regina.
+
+Actual request:
+
+> change the time formatting to a AM/PM format with it being hh:mm:ss
+
+Result: revised the proposed timestamp rule to zero-padded 12-hour hh:mm:ss AM/PM with America/Regina and explicit receipt/recording provenance. No edits in that turn. Backfilled during P020; approved and implemented by P020.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-03; prior snapshot S-2026-10-23-02. Date uses America/Regina.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record, and estimated/actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed in this chat. Usage source: unavailable; currency, rates, pricing source and rate date unavailable.
+
+## P018 - October 23, 2026
+
+Actual request:
+
+> The suggestion is approved, also suggest what we should update to make the prompt log include a time in the format hh/mm/ss (Hour/Minute/Seconds)
+
+Result: Applied the five approved token usage/cost rules to AGENTS.md. Suggested a separate 24-hour timestamp rule using hh/mm/ss and America/Regina, with receipt time distinguished from recording time; that rule remains pending approval. README.md and implementation unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Date uses America/Regina.
+
+Token usage: **Unavailable** (input, cached input, output, and cache-inclusion breakdown are not exposed as reliable per-request records in this chat). Model: **Unavailable** (no per-call usage record). Usage source: no per-request telemetry available. Estimated cost and actual billed charges: **Unavailable** (no attributable usage/billing record); currency, rates, pricing source and rate date are unavailable.
+
+Validation for P018: Python documentation checks verified all 20 requirement rows, local links, unique descending prompt IDs, status revision references, preservation of prior log entries and unrelated AGENTS.md text, unchanged source DOCX checksum, and changes limited to AGENTS.md, status.md, and prompt_log.md. Git status was attempted but git is unavailable on PATH. No gameplay tests run; prior runtime evidence was not rerun.
+
+## P017 - October 23, 2026
+
+Actual request:
+
+> how would you add this to AGENTS.md?
+
+Result: Proposed five logging rules for reliable token usage, request-wide aggregation, sourced cost estimates, unavailable data, and historical preservation. No edits in that turn; approved and applied in P018.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Backfilled from the visible conversation during P018; no historical time or usage inferred. Date uses America/Regina.
+
+Token usage: **Unavailable** (input, cached input, output, and cache-inclusion breakdown are not exposed as reliable per-request records in this chat). Model: **Unavailable** (no per-call usage record). Usage source: no per-request telemetry available. Estimated cost and actual billed charges: **Unavailable** (no attributable usage/billing record); currency, rates, pricing source and rate date are unavailable.
+
+## P016 - October 23, 2026
+
+Actual request:
+
+> is it possible for you to add the token cost of each prompt in the prompt log?
+
+Result: Explained that logging is possible when reliable usage records exist, while exact per-prompt usage and billing figures are not exposed in this chat. No edits in that turn.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Backfilled from the visible conversation during P018; no historical time or usage inferred. Date uses America/Regina.
+
+Token usage: **Unavailable** (input, cached input, output, and cache-inclusion breakdown are not exposed as reliable per-request records in this chat). Model: **Unavailable** (no per-call usage record). Usage source: no per-request telemetry available. Estimated cost and actual billed charges: **Unavailable** (no attributable usage/billing record); currency, rates, pricing source and rate date are unavailable.
+
+## P015 - October 23, 2026
+
+Actual request:
+
+> Read the AGENTS.md and README.md. Explain what you understand
+
+Result: Read both files and explained project scope, alpha restrictions, evidence limits, and documentation workflow. No edits or runtime tests in that turn.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Backfilled from the visible conversation during P018; no historical time or usage inferred. Date uses America/Regina.
+
+Token usage: **Unavailable** (input, cached input, output, and cache-inclusion breakdown are not exposed as reliable per-request records in this chat). Model: **Unavailable** (no per-call usage record). Usage source: no per-request telemetry available. Estimated cost and actual billed charges: **Unavailable** (no attributable usage/billing record); currency, rates, pricing source and rate date are unavailable.
+
 ## P014 - October 23, 2026
 
 Actual request:

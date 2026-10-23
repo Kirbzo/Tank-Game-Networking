@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 23, 2026. Revision: S-2026-10-23-01. Prompt: P014 (approved AGENTS workflow and reporting changes).
+Updated: October 23, 2026. Revision: S-2026-10-23-03. Prompt: P020 (approved AM/PM timestamp rule).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -61,3 +61,7 @@ Validation: Godot 4.7.2 actual host/observer processes passed with matching ID Y
 - S-2026-10-20-01 (P013): compared COMP214 and CodexDemo AGENTS.md with the current DOCX; created AGENTS_comparison_suggestions.txt with ten pending recommendations and a 20-ID coverage review. Neither AGENTS.md nor README.md changed. No individual recommendation has been approved or applied. Requirement statuses and prior runtime evidence unchanged. Documentation validation only; no gameplay tests.
 
 - S-2026-10-23-01 (P014; implements P013 suggestions S01, S05, S07, S09): added pre-edit inspection, planning-only scope, applicable documented validation commands, and expanded reporting to AGENTS.md with explicit user approval. Updated the suggestions approval register and prompt log. Other suggestions remain pending; requirement statuses and prior runtime evidence unchanged. Documentation checks passed; README.md, requirements source, and implementation files unchanged. No gameplay tests run.
+
+- S-2026-10-23-02 (P015-P018): backfilled three visible read/explanation/planning requests and recorded P018 approval. Added approved token usage/cost rules to AGENTS.md; unavailable telemetry is explicitly labelled in new log entries. Suggested hh/mm/ss timestamps with timezone and provenance; timestamp rule remains pending approval. All 20 requirement statuses and prior runtime evidence unchanged. Documentation validation passed; source DOCX, README.md and implementation unchanged. Git unavailable on PATH; file hashes used for change boundaries. No gameplay tests needed or run.
+
+- S-2026-10-23-03 (P019 clarification, P020 approval): added the approved separate date/time rule to AGENTS.md using zero-padded 12-hour hh:mm:ss AM/PM and America/Regina. Prompt log distinguishes receipt time from recording time and marks unavailable historical times explicitly. Prior entries and all 20 requirement statuses preserved. Documentation checks passed; README.md, source DOCX and implementation unchanged. No gameplay tests run; prior runtime evidence remains historical.
