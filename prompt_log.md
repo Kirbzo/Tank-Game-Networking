@@ -1,5 +1,29 @@
 # Prompt log
 
+## P014 - October 23, 2026
+
+Actual request:
+
+> Implement S01, S05, S07, and S09 into the AGETNS.md file within COMP214
+
+Result: applied the four explicitly approved P013 suggestions to AGENTS.md: inspect relevant files before editing (S01), preserve implementation files during planning while producing requested artifacts/logs (S05), use applicable documented validation commands and report actual outcomes (S07), and expand final reporting while separating historical evidence (S09). Updated [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt) to record approval and implementation. Other suggestions remain pending. README.md, implementation files, and source requirements unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-01. Planning entry: P013, revision S-2026-10-20-01. Requirement completion statuses unchanged. Date uses America/Regina.
+
+Validation: PowerShell invoked a Python documentation check through `python -`; it verified the four approved clauses, preservation of unrelated AGENTS.md text, all 20 requirement rows, local documentation links, unique descending prompt IDs, preservation of prior prompt entries, status/log revision references, unchanged source SHA256 and README.md, and the four-file change boundary. No gameplay commands run because this request changes documentation only. Visual and physical two-device LAN acceptance remain unverified; prior runtime results were not rerun.
+
+## P013 - October 20, 2026
+
+Actual request:
+
+> Look at the AGENTS.md within the COMP214 folder and the AGENTS.md inside the CodexDemo folder and compair each of them. Make suggestions on changes towards the AGENTS.md based off the AGENTS.md from the CodexDemo folder and the Requirements Docs. After suggestions are complete, do not change the AGENTS.md inside the COMP214 folder, instead make a seperate text docs with all suggestions approved
+
+Result: created [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt), comparing both instruction files with the current DOCX and proposing ten adapted workflow/coding improvements. The report records all suggestions as pending explicit approval rather than inventing approval. No changes to either AGENTS.md or README.md. Updated status tracking without changing requirement completion statuses. Existing prompt entries preserved.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-20-01. Date uses America/Regina.
+
+Validation: checked all 20 requirement IDs, local documentation links, prompt/status references, unchanged DOCX and protected-file checksums, and changes limited to the report, status.md and this log. No gameplay tests needed. Git unavailable on PATH; file hashes used for this task's change-boundary verification. Physical two-device and visual acceptance remain unverified.
+
 ## P012 - October 19, 2026
 
 Actual request:
