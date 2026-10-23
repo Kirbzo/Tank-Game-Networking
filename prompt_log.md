@@ -1,5 +1,21 @@
 # Prompt log
 
+## P014 - October 23, 2026
+
+Actual request:
+
+> Investigate why a third user cannot host a separate game.
+> Observed behavior: three members run the project. After two members host their own games, the third member’s Host button is grayed out and cannot be clicked.
+> Expected behavior: each member can host one separate game. The two-player limit applies to players within a game, not the number of separate hosted games.
+> Check what disables the Host button and whether hosting is incorrectly limited by the number of discovered games, a shared hosting flag, or a networking error.
+> Do not change implementation files, AGENTS.md, or README.md yet. Explain the cause, identify the relevant code, and propose the smallest fix. Update the required logs with actual findings.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-01. Date uses America/Regina.
+
+Result: source review at b805909 found only successful local hosting and discovery initialization failure disable Host. No discovered-game cap or shared hosting flag exists. Discovery attempts 16 local IPv4 UDP ports at startup; every failed bind is discarded and the final message incorrectly assumes slot exhaustion. Ordinary discovery send errors do not disable Host, and server-creation errors leave retry available. For a never-hosted instance running this code, discovery initialization failure explains the disabled state, but the affected device's actual cause remains unconfirmed without its feedback/errors and build comparison. A transition caused solely by two remote listings is not present in this source. Proposed the smallest diagnostic fix: retain/report bind errors and ports; consider discovery retry only if transient bind failure is confirmed. No implementation fix applied. Recorded three-instance/device follow-up acceptance and the existing tests' coverage gap in status.md. Requirement completion statuses unchanged.
+
+Validation: reviewed the requirements DOCX and all Host-disable paths, discovery signals, instance state, scene/project configuration, and existing smoke tests. Checked all 20 requirement IDs, local documentation links, unique descending prompt IDs, status/log revision consistency, and changes limited to status.md and prompt_log.md. Source DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. No runtime tests performed; three-device behavior remains unverified. Implementation files, AGENTS.md, README.md, and historical records preserved.
+
 ## P013 - October 20, 2026
 
 Actual request:
