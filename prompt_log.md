@@ -1,5 +1,76 @@
 # Prompt log
 
+## P016 - October 23, 2026
+
+Actual request:
+
+> Update only status.md and prompt_log.md with our user-reported manual test results from October 23, 2026.
+>
+> Earlier hotspot test:
+>
+> - Three members used separate laptops connected through a hotspot.
+> - After two members hosted separate games, the third member’s Host button was disabled.
+> - The underlying cause was not confirmed.
+>
+> Today’s wired retest:
+>
+> - We connected three laptops through a switch using Ethernet cables.
+> - All three members successfully hosted separate games at the same time.
+> - One member closed and reopened the application. When she returned to the lobby, she could see the games still hosted by the other two members.
+> - Your investigation made no implementation changes. Do not describe this result as a code fix.
+>
+> Record three-device simultaneous hosting and the returning member’s discovery of the other two hosted games as manually verified on this wired setup. Identify these as tests performed by our team, not runtime tests performed by Codex.
+>
+> Do not mark hotspot operation, joining, the Leave/Exit feature, or other untested acceptance criteria as verified. Keep the earlier hotspot failure recorded as unresolved. Do not mark an entire requirement complete unless all its acceptance criteria have supporting evidence.
+>
+> Preserve the original investigation entry and add this follow-up with a new unique prompt ID linked to the resulting status revision.
+>
+> Do not change implementation files, AGENTS.md, README.md, or source requirements. Report every changed file and summarize the status updates.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Follows investigation P015 (identifier reconciliation below). Date uses America/Regina.
+
+Result: recorded team-performed, user-reported manual verification of three simultaneous separate hosted games on three laptops connected by Ethernet through a switch, and a returning member discovering the other two still-hosted games after closing/reopening the application. The earlier three-laptop hotspot failure remains unresolved; its cause is unconfirmed. This is additional test evidence, not a code fix. Updated only status.md and prompt_log.md. AR1/AR2 and FR2/FR3/FR5 remain Partial; no entire requirement promoted. Joining, Leave/Exit, hotspot operation, and other unreported acceptance criteria remain unverified by this retest.
+
+Validation: Codex performed documentation checks only using `python -` via PowerShell (all 20 requirement IDs, local links, preservation of existing prompt entries and requirement statuses, unique descending prompt IDs, revision consistency, and unchanged source SHA256), plus `git diff --check` and `git status --short` for whitespace and the two-file boundary. No Godot/runtime/gameplay tests run by Codex. Source SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Older README physical-LAN statements remain unchanged under the requested scope; current evidence is in status.md.
+
+## P015 - October 23, 2026
+
+Original investigation request (backfilled from this conversation):
+
+> Investigate why a third user cannot host a separate game.
+> Observed behavior: three members run the project. After two members host their own games, the third member’s Host button is grayed out and cannot be clicked.
+> Expected behavior: each member can host one separate game. The two-player limit applies to players within a game, not the number of separate hosted games.
+> Check what disables the Host button and whether hosting is incorrectly limited by the number of discovered games, a shared hosting flag, or a networking error.
+> Do not change implementation files, AGENTS.md, or README.md yet. Explain the cause, identify the relevant code, and propose the smallest fix. Update the required logs with actual findings.
+
+Identifier reconciliation: the prior conversation labelled this investigation P014 / S-2026-10-23-01, but those identifiers already belong to the approved AGENTS update in the current checkout, where the investigation entry is absent. That existing P014 and all earlier entries are preserved. This backfill retains the original request and findings under unique P015, associated with [status.md](status.md), S-2026-10-23-02; no separate historical snapshot is fabricated.
+
+Original findings: only successful local hosting (Godot/lobby.gd:117) and discovery initialization failure via discovery_error() (Godot/lobby.gd:171) disable Host. No discovered-game-count cap or shared hosting flag exists. Discovery tries 16 local IPv4 UDP ports at startup (Godot/discovery.gd:22-30), discards bind errors, and assumes slot exhaustion if all attempts fail. The affected device's underlying failure was not confirmed. Remote hosts do not consume its local discovery slots; server-creation failure permits retry and discovery send errors only display feedback. Proposed the smallest diagnostic change: retain/report bind errors and ports before deciding a behavioral fix; consider discovery retry for confirmed transient failure. No implementation changes or runtime tests were performed. The original investigation's three-device acceptance was unverified at that time; subsequent team evidence is recorded separately in P016.
+
+## P014 - October 23, 2026
+
+Actual request:
+
+> Implement S01, S05, S07, and S09 into the AGETNS.md file within COMP214
+
+Result: applied the four explicitly approved P013 suggestions to AGENTS.md: inspect relevant files before editing (S01), preserve implementation files during planning while producing requested artifacts/logs (S05), use applicable documented validation commands and report actual outcomes (S07), and expand final reporting while separating historical evidence (S09). Updated [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt) to record approval and implementation. Other suggestions remain pending. README.md, implementation files, and source requirements unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-01. Planning entry: P013, revision S-2026-10-20-01. Requirement completion statuses unchanged. Date uses America/Regina.
+
+Validation: PowerShell invoked a Python documentation check through `python -`; it verified the four approved clauses, preservation of unrelated AGENTS.md text, all 20 requirement rows, local documentation links, unique descending prompt IDs, preservation of prior prompt entries, status/log revision references, unchanged source SHA256 and README.md, and the four-file change boundary. No gameplay commands run because this request changes documentation only. Visual and physical two-device LAN acceptance remain unverified; prior runtime results were not rerun.
+
+## P013 - October 20, 2026
+
+Actual request:
+
+> Look at the AGENTS.md within the COMP214 folder and the AGENTS.md inside the CodexDemo folder and compair each of them. Make suggestions on changes towards the AGENTS.md based off the AGENTS.md from the CodexDemo folder and the Requirements Docs. After suggestions are complete, do not change the AGENTS.md inside the COMP214 folder, instead make a seperate text docs with all suggestions approved
+
+Result: created [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt), comparing both instruction files with the current DOCX and proposing ten adapted workflow/coding improvements. The report records all suggestions as pending explicit approval rather than inventing approval. No changes to either AGENTS.md or README.md. Updated status tracking without changing requirement completion statuses. Existing prompt entries preserved.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-20-01. Date uses America/Regina.
+
+Validation: checked all 20 requirement IDs, local documentation links, prompt/status references, unchanged DOCX and protected-file checksums, and changes limited to the report, status.md and this log. No gameplay tests needed. Git unavailable on PATH; file hashes used for this task's change-boundary verification. Physical two-device and visual acceptance remain unverified.
+
 ## P012 - October 19, 2026
 
 Actual request:
