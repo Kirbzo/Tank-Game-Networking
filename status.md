@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 23, 2026. Revision: S-2026-10-23-01. Prompt: P014 (third-user hosting investigation).
+Updated: October 23, 2026. Revision: S-2026-10-23-01. Prompt: P014 (approved AGENTS workflow and reporting changes).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -30,14 +30,6 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 
 ## Scope and open issues
 
-P014 investigation (source review at b805909): user reports that after two members host separate games, the third member's Host is disabled. This occurrence has not been reproduced or diagnosed on the affected device. AR1/AR2 and FR2/FR3/FR5 remain partial; three-device hosting acceptance is unverified. Each member may host one separate game; FR1's two-player scope is per session, not a limit on hosted games.
-
-Only two code paths disable Host: successful local hosting (`Godot/lobby.gd:117`) and `discovery_error()` (`Godot/lobby.gd:171-174`). The latter is connected to `discovery_failed` at line 79, emitted only when every IPv4 UDP bind attempt to ports 49140-49155 fails (`Godot/discovery.gd:22-30`). Binding occurs at startup, not when a second game is discovered. Discovery entries do not change Host state (`refresh_games()`, lobby lines 136-156). The `session`, `discovery`, and `hosted_game` fields belong to each instance; no shared hosting flag or discovered-game-count cap exists. `create_server(0, 1)` is a per-server creation call, not a global game counter. Server-creation failure clears the local session and permits retry (lobby lines 108-111); discovery send failures only update network feedback (discovery lines 126-133).
-
-Confirmed diagnostic defect: discovery discards each bind error and labels every failure as "all 16 local lobby slots are in use," although the actual reason is unknown. A never-hosted instance running this source can become disabled through discovery initialization failure, but no affected-device error or source-version comparison is available to confirm that explanation. Two remote hosts do not consume the third device's local discovery slots. If Host was enabled and becomes disabled only as remote listings arrive, this source has no matching transition; compare the affected running build with this checkout and check whether that instance already hosted.
-
-Smallest proposed change, not applied: preserve and report actual bind errors and attempted ports in discovery startup failure feedback. Diagnose the affected machine before choosing a behavioral fix; do not increase the player limit or add a game-count rule. If transient binding failure is confirmed, a narrowly scoped discovery retry can re-enable Host only after a successful bind and while no local session exists. Keep successful-host guarding and Join/Exit disabled. Follow-up verification should run three independent instances/devices, let two host, confirm the third remains enabled, then host the third and compare all three distinct IDs/endpoints in every list. Existing smoke tests cover one host plus one observer and injected server-creation failure, not this scenario or discovery-bind failure.
-
 P006/P007: “same server” means a consistent advertised game ID and endpoint on the same LAN, not real joining or a central/internet server. Periodic automatic queries, single-host guarding, endpoint display and LAN-over-loopback address preference are implemented. Host failure does not publish a listing. Join/Exit remain disabled.
 
 P005 LAN update: discovery binds explicitly to IPv4, supports repeated direct-IP queries with host replies, displays local IPv4 addresses, and reports invalid addresses/send errors. Setup and firewall instructions are in Godot/README.md. AR1/AR2 and FR3 remain partial until physical two-laptop and visual checks pass. Automated tests use a separate protocol identifier to avoid interference from an existing demonstration host.
@@ -47,8 +39,6 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
-
-- S-2026-10-23-01 (P014): investigation and required log updates only. Reviewed current requirements, lobby/discovery scripts, scene/project configuration, and existing smoke-test coverage. No implementation, AGENTS.md, or README.md changes; no runtime or gameplay tests performed. Checked all 20 requirement IDs, local documentation links, prompt/status consistency, change boundaries, and unchanged DOCX SHA256 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Prior runtime evidence is historical; the reported third-user failure and physical multi-device acceptance remain unverified.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 
@@ -69,3 +59,5 @@ FR1?FR12 are longer-term framework requirements; only their alpha subset belongs
 Validation: Godot 4.7.2 actual host/observer processes passed with matching ID YSPXOJ and port 61416, six-character format, stable repeated Host, selection, lowercase lookup, disabled controls and expiry. No script errors; environment log/certificate-store errors remain.
 
 - S-2026-10-20-01 (P013): compared COMP214 and CodexDemo AGENTS.md with the current DOCX; created AGENTS_comparison_suggestions.txt with ten pending recommendations and a 20-ID coverage review. Neither AGENTS.md nor README.md changed. No individual recommendation has been approved or applied. Requirement statuses and prior runtime evidence unchanged. Documentation validation only; no gameplay tests.
+
+- S-2026-10-23-01 (P014; implements P013 suggestions S01, S05, S07, S09): added pre-edit inspection, planning-only scope, applicable documented validation commands, and expanded reporting to AGENTS.md with explicit user approval. Updated the suggestions approval register and prompt log. Other suggestions remain pending; requirement statuses and prior runtime evidence unchanged. Documentation checks passed; README.md, requirements source, and implementation files unchanged. No gameplay tests run.

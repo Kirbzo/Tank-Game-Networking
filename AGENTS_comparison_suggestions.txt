@@ -3,10 +3,7 @@ Date: October 20, 2026 (America/Regina)
 Request: P013. Associated status revision: S-2026-10-20-01.
 
 APPROVAL AND SCOPE
-This file contains recommendations for review, not approved amendments. The user authorized this separate text 
-document and prohibited changing COMP214/AGENTS.md. No individual recommendation has been explicitly approved.
-Record later approvals here only after receiving them; approval of this document does not itself apply changes 
-to AGENTS.md. Both AGENTS.md files and README.md remain unchanged.
+This file records the original P013 recommendations and subsequent approvals. On October 23, 2026, the user explicitly requested implementation of S01, S05, S07, and S09 in COMP214/AGENTS.md (P014), superseding the original no-edit restriction for those four suggestions. They are now approved and applied. S02, S03, S04, S06, S08, and S10 remain pending. README.md and CodexDemo/AGENTS.md remain unchanged.
 
 SOURCES
 - COMP214 AGENTS.md and README.md, relative to the project root.
@@ -30,7 +27,7 @@ decisions. Its detail is necessary for this project's acceptance criteria.
 The main gap is explicit everyday coding/workflow guidance, rather than missing product requirements. 
 CodexDemo's architecture, tooling and language restrictions cannot be copied directly.
 
-RECOMMENDATIONS (ALL PENDING USER APPROVAL)
+RECOMMENDATIONS (S01, S05, S07, S09 APPROVED AND APPLIED; OTHERS PENDING)
 
 S01 - Inspect relevant files before editing. Priority: high.
 Inspired by CodexDemo's Workflow section.
@@ -143,12 +140,17 @@ Maven/Gradle/JUnit bans, or Java commands.
 No transport, port, engine substitution, gameplay rule or scene requirement is added by these recommendations.
 
 APPROVAL REGISTER
-S01-S10: Pending explicit user approval. None applied.
-When approval arrives, record the approved IDs and any requested wording changes in this separate document. 
-Keep COMP214/AGENTS.md unchanged under the current request.
+October 23, 2026 - P014; status revision S-2026-10-23-01.
+S01, S05, S07, S09: Explicitly approved and applied to COMP214/AGENTS.md using the suggested wording. S09 replaces the shorter existing reporting sentence while retaining the prohibition on claiming runtime success from documentation review.
+S02, S03, S04, S06, S08, S10: Pending; not applied.
+Approval prompt: Implement S01, S05, S07, and S09 into the AGETNS.md file within COMP214
 
-VALIDATION
+VALIDATION (ORIGINAL P013 REVIEW)
 Compared both AGENTS.md files and read the current DOCX. Reviewed all 20 source IDs against status.md. 
 Requirement completion statuses remain unchanged. No gameplay tests are needed or claimed. Source and 
 protected-file checksums and local documentation links are checked for this documentation-only task. 
 Changed files: this report, status.md, prompt_log.md. Prior prompt entries are preserved.
+
+
+P014 VALIDATION - October 23, 2026
+Verified the four approved additions, preservation of other AGENTS.md instructions, all 20 requirement IDs, local links, status/log consistency, source checksum, and changes limited to AGENTS.md, this approval record, status.md, and prompt_log.md. README.md and implementation files unchanged. No gameplay tests needed or run.
