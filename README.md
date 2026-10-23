@@ -70,7 +70,9 @@ The lobby follows the supplied `MoozeTanks/LobbyImage.jpeg` layout, with Host, J
 
 For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join and Exit remain disabled. Physical two-laptop acceptance remains unverified.
 
-Listings show each session's game ID and host IP:port. Automatic queries find already-running hosts, and repeated announcements update one listing per ID. Godot 4.7.2 process tests verified matching host/observer IDs and actual server ports, automatic/direct discovery, late discovery, duplicate refresh, expiry, and the hosting-failure path. This confirms discovery of the same advertised server endpoint, without a player connection.
+Listings show each session's game ID and the host's assigned username, for example `AB12CD | BraveMoose | discovery only`. The host's username is shared through LAN discovery after Host is clicked. IP addresses and ports remain available internally, and the host's server endpoint appears in its status information for troubleshooting. Automatic queries find already-running hosts, and repeated announcements refresh one listing per game ID. Usernames may repeat; game IDs identify sessions. Discovery does not establish a player connection, and Join and Exit remain disabled.
+
+Earlier Godot 4.7.2 process tests verified ID and endpoint discovery, refresh, expiry, and hosting failure. On October 23, 2026, updated username listings passed the packet and same-computer host/observer tests on Godot 4.7.2. Visual and physical two-device verification remain outstanding.
 
 See [Godot/README.md](Godot/README.md) for import instructions, implementation choices, and reproducible two-process tests. Godot 4.7.2 imported the project and passed the actual host/observer headless test. Environment errors concerned user log storage and the certificate store; no GDScript parse/runtime errors were reported. Visual layout and separate-device LAN behavior still require review.
 

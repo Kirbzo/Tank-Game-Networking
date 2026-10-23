@@ -1,5 +1,95 @@
 # Prompt log
 
+## P026 - October 23, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:55:59 AM (America/Regina; task inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> the wording is approved. Also how would i fix the PATH so that you could run tests?
+
+Result: applied approved root README.md wording for ID/host-username listings, retaining endpoint diagnostics and disabled Join/Exit. Found Godot on Desktop and ran tests by full path without changing PATH. Added current passing evidence to README.md and status.md. Explained user PATH folder setup, executable-name resolution, and full-path commands. No system settings or implementation changed.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-07. Resolves P023 wording approval and P025 README approval item.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record, estimated/actual cost: **Unavailable**; reliable per-request usage/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Validation: full executable path was discovered locally (kept out of portable project setup instructions). Invoked `& '<Godot 4.7.2 executable>' --version` (4.7.2.stable.official.ed1daf0bf, exit 0) and `& '<Godot 4.7.2 executable>' --headless --path Godot --script res://tests/alpha_smoke.gd -- packets`, plus separate `observer` and `host` processes using the same command prefix. All exited 0 and printed PASS. Host/observer matched ID 0Z9UAX, port 65462; assertions verify BraveMoose replaces endpoint in list rows. Godot reported user-log write and root-certificate-store errors; no GDScript errors reported. These are current checks, distinct from historical evidence. Visual, physical LAN, direct-IP/late modes and failure test not rerun. Python via PowerShell `python -` checked all 20 requirement IDs, links, status/log consistency, prompt ordering, source checksum and three-document change boundary. AGENTS.md preserved.
+
+## P025 - October 23, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:53:37 AM (America/Regina; task inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> can you recreate it and implement the changes i mentioned earlier in regards to the username?
+
+Result: Recreated Godot/usernames.gd; restored 30 adjectives and 30 animal nouns (900 combinations), one random name per lobby launch and visible username label. Host discovery includes username; local/remote rows replace IP:port with that name while retaining game IDs and internal endpoints. Added safe fallback and name refresh handling. Updated existing smoke tests and Godot/README.md. Join/Exit remain disabled. Source checks passed; runtime unverified.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-06 (restoration/backfill snapshot). 
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated and actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed. Usage source, currency, pricing source, rates and rate date: unavailable.
+
+Validation: attempted `godot --headless --path Godot --script res://tests/alpha_smoke.gd -- packets`; could not start because godot is not on PATH. Host/observer, import, visual and physical LAN tests not run. Python invoked through PowerShell `python -` checked 30 unique words per list, 900 combinations, source wiring, all 20 requirement IDs, local links, prompt order/status references, unchanged source checksum and seven-file boundary. Prior runtime evidence was not rerun. Approval item: root README.md correction from IP:port to username listings remains pending; protected files unchanged.
+
+## P024 - October 23, 2026
+
+Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
+
+Actual request:
+
+> before that, can you find the location of the username file?
+
+Result: Checked Godot/usernames.gd, repository filename search, and username references. File and code references were absent in this checkout. Reported the missing prior edits; no implementation changes made in that turn.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-06 (restoration/backfill snapshot). 
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated and actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed. Usage source, currency, pricing source, rates and rate date: unavailable.
+
+## P023 - October 23, 2026
+
+Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
+
+Actual request:
+
+> what would be your wording for the readme document be
+
+Result: Proposed replacement README wording for ID/host-username listings, discovery, duplicate names, and outstanding verification. No approval to modify protected README.md was given.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-06 (restoration/backfill snapshot). 
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated and actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed. Usage source, currency, pricing source, rates and rate date: unavailable.
+
+## P022 - October 23, 2026
+
+Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
+
+Actual request:
+
+> lets make it so the username appears in the list of games when you click host. replace the ip address with the username
+
+Result: Earlier turn reported implementation of advertised host usernames and ID/name listing rows, test updates and source/documentation checks; runtime could not run. Those code/log edits were absent on P025 inspection. Restored by P025; do not treat the earlier report as current runtime evidence.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-06 (restoration/backfill snapshot). Prior conversation referenced S-2026-10-23-04 and S-2026-10-23-05 for P021/P022; those revisions were absent in the inspected checkout. 
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated and actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed. Usage source, currency, pricing source, rates and rate date: unavailable.
+
+## P021 - October 23, 2026
+
+Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
+
+Actual request:
+
+> now lets generate a list of usernames thats assigned to a user when they launch the game. Make the list 30 different common adjectives and nouns or find a package that does have a list of names.
+
+Result: Earlier turn reported creating 30 adjectives and 30 nouns, launch assignment and display, with source checks only. Code/log edits were absent on P025 inspection; recreated by P025. No runtime verification was claimed.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-23-06 (restoration/backfill snapshot). Prior conversation referenced S-2026-10-23-04 and S-2026-10-23-05 for P021/P022; those revisions were absent in the inspected checkout. 
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated and actual cost: **Unavailable**; reliable per-request telemetry and billing records are not exposed. Usage source, currency, pricing source, rates and rate date: unavailable.
+
 ## P020 - October 23, 2026
 
 Receipt time: **Unavailable** (not provided by chat metadata).

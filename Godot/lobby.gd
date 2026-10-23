@@ -1,6 +1,8 @@
 extends Control
 
 const Discovery = preload("res://discovery.gd")
+const Usernames = preload("res://usernames.gd")
+var username: String = Usernames.generate()
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
@@ -31,6 +33,7 @@ func _ready() -> void:
 	scroll.add_child(column)
 	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
+	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
 	# Match LobbyImage.jpeg: stacked actions beside the game list.
 	var lobby_row := HBoxContainer.new()
@@ -110,7 +113,7 @@ func host_game() -> void:
 		session = null
 		return
 	var id := generate_session_id()
-	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port()}
+	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username}
 	# The endpoint is real, but alpha never connects clients to it.
 	session.refuse_new_connections = true
 	discovery.advertise()
@@ -140,12 +143,12 @@ func refresh_games() -> void:
 	var entries := discovery.games.duplicate()
 	if not discovery.hosted_game.is_empty():
 		var own_id: String = discovery.hosted_game["id"]
-		entries[own_id] = {"id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
+		entries[own_id] = {"username": username, "id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
 	var ids: Array = entries.keys()
 	ids.sort()
 	for id in ids:
 		listed_ids.append(str(id))
-		game_list.add_item("%s  |  %s:%d  |  discovery only" % [id, entries[id]["address"], entries[id]["port"]])
+		game_list.add_item("%s  |  %s  |  discovery only" % [id, entries[id].get("username", "UnknownHost")])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
 	if entries.is_empty():
