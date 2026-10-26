@@ -19,11 +19,8 @@ var joining_screen: Control
 var joining := false
 var join_target: Dictionary = {}
 var connected_game_id := ""
-<<<<<<< HEAD
 var join_attempt := 0
-=======
 var exit_screen: Control
->>>>>>> a399c0c9cf748f327ffa1c547b464214107b0a84
 
 func _ready() -> void:
 	var margin := MarginContainer.new()

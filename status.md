@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 26, 2026. Revision: S-2026-10-26-04. Prompt: P018 (confirmed project path; Join visibility trace).
+Updated: October 26, 2026. Revision: S-2026-10-26-05. Prompt: P019 (blank startup fixed).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 P018 clarification: the user confirmed this exact Godot/project.godot. Its Host / Join / Exit controls are built by lobby.gd on lobby.tscn. join_connected explicitly hides the loading screen and restores the lobby on successful connection, as implemented before Exit. The reported pre-selection disappearance remains unconfirmed; no application fix is claimed.
@@ -69,3 +69,5 @@ Validation: Godot 4.7.2 actual host/observer processes passed with matching ID Y
 - S-2026-10-26-02 (P015): enabled Exit and added a separate GDScript screen displaying exactly “Exiting game...”. The lobby is hidden while its session stays alive. No automatic quit or actual leaving. Updated existing smoke assertions for enabled Exit. Requirement completion statuses unchanged; visual acceptance remains unverified.
 
 Validation: Godot 4.7.2 headless check passed exact exit text, hidden lobby, duplicate-click protection, and application/host persistence after a delay. The temporary check was removed. Environment user-log and certificate-store errors remain; the final run had no script errors. All 20 requirement IDs, local documentation links, status revision/log references, unchanged requirements DOCX SHA256, and change boundaries checked. Visual acceptance remains unverified.
+
+- S-2026-10-26-05 (P019): fixed blank startup at cc04fc9 by removing the three unresolved merge-conflict markers introduced in lobby.gd by 2a8ff28. Both join_attempt and exit_screen declarations retained. Graphical configured-main-scene launch reproduced the parse failure before the fix and ran without script errors afterward; a rendered viewport capture was inspected and showed the full lobby. Host/client mouse-input Join and Exit/session-preservation tests and failure/Retry/Back passed. Editor F5/panels were not directly operated; equivalent configured-scene graphical launch and console diagnostics were used. Existing sandbox log/certificate errors persist. No scene/layout changes; requirement statuses unchanged; physical-device acceptance remains unverified. All 20 requirement IDs, local documentation links, status/log references, source checksum, conflict-marker scan and change boundaries checked. Requirements DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.

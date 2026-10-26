@@ -342,3 +342,21 @@ Actual clarification:
 Result: confirmed the supplied project starts res://lobby.tscn (AlphaLobby). Its attached lobby.gd builds all three buttons in _ready; Join connects once to join_game. The next page is joining_screen.gd, a connection progress screen, not a hosted-game selector. start_join displays it and starts ENet the next frame. The connected_to_server handler join_connected explicitly hides it at lobby.gd:237 and restores the lobby at line 238, displaying 'Connected to game <ID>. Waiting in the lobby.' This path predates Exit (655fdac) and matches the P017 runtime trace. Explicit Back is the other loading-screen hide path. No overlapping Exit action or scene change was found. The prior tests therefore verified the programmed immediate return on successful connection, not persistence of a game-selection page. The user's runtime path is now confirmed; whether their disappearance is accompanied by the connected status still needs confirmation. No application change made: a persistent selection or success page would change the existing flow, and the reported pre-selection behavior remains inconsistent with the current disabled-before-selection control.
 
 Associated status: [status.md](status.md), S-2026-10-26-04. Earlier P016/P017 runtime evidence retained; no new runtime test claimed. Exit behavior unchanged. Requirement completion statuses unchanged.
+
+## P019 - October 26, 2026
+
+Actual request:
+
+> Update: my laptop now also opens a game window with a title bar but blank content. Previously, it displayed the full Alpha Lobby.
+>
+> Follow AGENTS.md and investigate this startup failure first. Check the current working changes and recent commits, reproduce using F5 with Godot/project.godot, and inspect Output and Debugger errors.
+>
+> Trace lobby.tscn and lobby.gd startup, especially the runtime UI creation. Identify and fix the actual cause without assuming it is related to Exit. Preserve Host, Join, and Exit behavior.
+>
+> Verify that the full lobby renders when running the project normally. Update the required logs and explain the cause and fix.
+
+Result: checkout was clean at cc04fc9, with new commits since the previous investigation. Merge commit 2a8ff28 committed unresolved conflict markers around join_attempt and exit_screen in lobby.gd. Graphical Godot 4.7.2 startup using the configured main scene reported 'Unexpected "VCS conflict marker" in class body' at res://lobby.gd:22 and failed to load the script. lobby.tscn contains only the root Control; _ready builds all visible content, so the parse failure produces an empty game window. Removed only the three conflict-marker lines, retaining both declarations and all newer Join logic and Exit wiring. Scene, layout, and other application scripts unchanged.
+
+Validation: graphical launch with --path Godot --quit-after 60 reproduced the parse error before the fix and had no script errors afterward. A temporary graphical capture harness loaded the configured main scene and captured the viewport after rendering; inspected image shows the complete Alpha Lobby, all three buttons, game list, ID entry, status and LAN fields. Harness and image removed after inspection. Real separate-process host/client tests passed using mouse input, including discovery, Join success and display-only Exit with connection persistence on both peers; failure mode passed timeout, animation, duplicate guard, Retry and Back. F5 and editor Output/Debugger panels were not directly operated; console output and the same configured main scene were used. User-log access and certificate-store errors persist, but rendering and tested networking succeeded. Physical-device acceptance and the earlier reported Join-page expectation remain separate from this fixed startup failure.
+
+Associated status: [status.md](status.md), S-2026-10-26-05. Requirement completion statuses unchanged. Source checksum and documentation checks recorded in that revision.

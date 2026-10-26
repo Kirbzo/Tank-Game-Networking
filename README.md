@@ -1,5 +1,7 @@
 # Moooze Tanks Game Server Team
 
+Startup repair (P019, October 26): removed committed merge-conflict markers that prevented lobby.gd from parsing and left the window blank. Graphical startup now renders the full Alpha Lobby; Host/Join and display-only Exit checks pass. See [status.md](status.md) for evidence and limitations.
+
 October 26 investigation (P016/P017): this checkout starts directly in `Godot/lobby.tscn`, with the game list visible and Join enabled only after selecting or identifying a discovered game. Its loading screen returns to the lobby on connection success. The reported separate main-menu → pre-selection Join page is not present here; the user has confirmed this project path (P018), but the reported pre-selection disappearance remains unresolved. The existing success handler explicitly hides loading and restores the lobby. Headless mouse-input Join and display-only Exit checks pass; see [status.md](status.md).
 
 Current Exit behavior (P015, October 26, 2026): click Exit to display “Exiting game...” on a separate screen. This is display-only, with no automatic application close, session leave, or return control. Earlier disabled-Exit descriptions below record the alpha baseline and are superseded by this request.
