@@ -271,9 +271,7 @@ func join_connected() -> void:
 		return
 	joining = false
 	connected_game_id = join_target["id"]
-	joining_screen.timeout.stop()
-	joining_screen.hide()
-	get_child(0).show()
+	joining_screen.show_connected(connected_game_id)
 	host_button.disabled = true
 	update_session_feedback()
 	update_join_button()

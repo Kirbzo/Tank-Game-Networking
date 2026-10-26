@@ -1,5 +1,7 @@
 # Moooze Tanks Game Server Team
 
+Current Joining-page behavior (P021, October 26, 2026): successful connections keep the existing Joining page visible, stop its timeout and progress animation, and show the connected game ID. The existing Back button explicitly returns to the lobby without disconnecting, where Exit remains available. This supersedes earlier automatic-return descriptions below. No delay, gameplay or new room screen is added.
+
 Connected lobby (P020, October 26): returning from Joining to the lobby is intentional. Host and Join remain disabled while the instance owns or has joined a session. The host now reports the game ID and live player count (1/2 waiting, 2/2 client connected); the client retains its connected status even when selecting another listing. Both explain that game start is not implemented. Local two-process tests verified matching game ID/host port, reciprocal peer IDs and five seconds of persistent connection. Two-laptop membership and persistence still require checking on those devices; Exit remains display-only.
 
 Startup repair (P019, October 26): removed committed merge-conflict markers that prevented lobby.gd from parsing and left the window blank. Graphical startup now renders the full Alpha Lobby; Host/Join and display-only Exit checks pass. See [status.md](status.md) for evidence and limitations.

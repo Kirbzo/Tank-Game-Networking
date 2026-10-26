@@ -55,6 +55,14 @@ func begin() -> void:
 	back_button.hide()
 	timeout.start()
 
+func show_connected(game_id: String) -> void:
+	timeout.stop()
+	status.text = "Connected to game %s. Back returns to the lobby without disconnecting." % game_id
+	indicator.hide()
+	retry_button.hide()
+	back_button.show()
+	back_button.grab_focus()
+
 func show_failure() -> void:
 	timeout.stop()
 	title.text = "Unable to join the game."

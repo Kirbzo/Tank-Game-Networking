@@ -1,5 +1,7 @@
 # Agent instructions ? Codex for COMP214
 
+Current Joining-page behavior (P021, October 26, 2026): successful connections keep the existing Joining page visible, stop its timeout and progress animation, and show the connected game ID. The existing Back button explicitly returns to the lobby without disconnecting, where Exit remains available. This supersedes earlier automatic-return descriptions below. No delay, gameplay or new room screen is added.
+
 This is a student server-side framework for Moooze Tanks. Work only on the requested task.
 
 ## Current Exit screen extension - October 26, 2026

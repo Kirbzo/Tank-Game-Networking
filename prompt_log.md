@@ -382,3 +382,21 @@ Verification: actual Godot 4.7.2 host/client processes on one computer with view
 Changed: Godot/lobby.gd, Godot/tests/join_smoke.gd, README.md, Godot/README.md, status.md, prompt_log.md. AGENTS.md remains consistent and unchanged.
 
 Associated status: [status.md](status.md), S-2026-10-26-06. Requirement statuses unchanged. All 20 IDs, local links, source checksum, diff whitespace and change boundaries checked.
+
+## P021 - October 26, 2026
+
+Actual request:
+
+> Restore the Joining page behavior from the earlier working version.
+>
+> Currently, clicking Join briefly shows that page, then hides it and returns to the lobby. I want the Joining page to remain visible the same way it did before.
+>
+> Follow AGENTS.md. Inspect Git history to find the previous working behavior and restore it while preserving the current networking connection and working Exit button.
+>
+> Do not just change status messages or add an artificial delay. Do not add gameplay or a new game-room screen. Verify the Joining page stays visible after a successful connection, and update the required logs.
+
+Result: inspected earliest Join commit 655fdac, its branch squash 745b29b, and Join fix 124c166. All explicitly hid joining_screen and showed lobby content in join_connected; no historical implementation matching persistent success was found. Implemented the user's explicit requested visibility behavior on the existing screen rather than claiming a historical restoration. join_connected now leaves that screen visible and lobby content hidden, stops the timeout/progress animation, and shows the connected ID. Existing Back explicitly returns to the lobby without disconnecting; existing Exit remains accessible there and unchanged. No artificial delay, gameplay, new scene or networking changes. Updated AGENTS.md and both READMEs to supersede earlier automatic-return instructions.
+
+Validation: real Godot 4.7.2 host/client processes retained reciprocal peers and the same session for eleven seconds; the client's existing Joining screen stayed visible throughout, timer stopped and success status intact. Explicit Back preserved the connection and restored the lobby; Exit on both peers retained the session and displayed the exact exit text. Host membership returned to 1/2 after the client process closed. Failure/timeout/Retry/Back also passed. Existing sandbox log/certificate errors persist; no script errors. Physical two-laptop and visual acceptance remain unverified. Tests use elapsed time only to verify persistence, not to delay production UI behavior.
+
+Associated status: [status.md](status.md), S-2026-10-26-07. Requirement completion statuses unchanged.

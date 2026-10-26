@@ -1,5 +1,7 @@
 # Running the alpha
 
+Current Joining-page behavior (P021, October 26, 2026): successful connections keep the existing Joining page visible, stop its timeout and progress animation, and show the connected game ID. The existing Back button explicitly returns to the lobby without disconnecting, where Exit remains available. This supersedes earlier automatic-return descriptions below. No delay, gameplay or new room screen is added.
+
 Current Exit behavior (P015, October 26, 2026): click Exit to display “Exiting game...” on a separate screen. This is display-only, with no automatic application close, session leave, or return control. Earlier disabled-Exit descriptions below record the alpha baseline and are superseded by this request.
 
 ## Join extension - October 26, 2026

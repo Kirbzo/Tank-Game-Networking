@@ -47,12 +47,14 @@ func connected_lobby_checks(is_host: bool) -> bool:
 	var session: ENetMultiplayerPeer = lobby.session
 	var peers: PackedInt32Array = lobby.multiplayer.get_peers()
 	var id: String = lobby.discovery.hosted_game["id"] if is_host else lobby.connected_game_id
-	var deadline := Time.get_ticks_msec() + 5000
+	var deadline := Time.get_ticks_msec() + 11000
 	while Time.get_ticks_msec() < deadline:
 		await process_frame
-		if not require(lobby.session == session and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and lobby.multiplayer.get_peers() == peers and peers.size() == 1, "Both peers must remain in the same session for five seconds"):
+		if not require(lobby.session == session and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and lobby.multiplayer.get_peers() == peers and peers.size() == 1, "Both peers must remain in the same session beyond the original ten-second timeout"):
 			return false
-		if not require(lobby.visible and lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled and not lobby.exit_button.disabled, "Connected lobby must remain visible with Host/Join locked and Exit available"):
+		if not require(lobby.visible and lobby.get_child(0).visible == is_host and lobby.host_button.disabled and lobby.join_button.disabled and not lobby.exit_button.disabled, "Host lobby stays visible; client stays on Joining with session actions locked"):
+			return false
+		if not is_host and not require(lobby.joining_screen.is_visible_in_tree() and lobby.joining_screen.timeout.is_stopped() and not lobby.joining_screen.indicator.visible and lobby.joining_screen.status.text.contains(id), "Joining page must remain visible in its connected state"):
 			return false
 	# Discovery refresh and ID interaction must not replace connection feedback.
 	lobby.refresh_games()
@@ -119,10 +121,14 @@ func run() -> void:
 		await process_frame
 	if not require(not lobby.connected_game_id.is_empty() and lobby.session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED, "Join must establish a real ENet connection"):
 		return
-	if not require(not lobby.joining_screen.visible and lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled, "Success must return to the existing lobby without creating another host"):
+	if not require(lobby.joining_screen.visible and not lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled, "Success must preserve the Joining page without creating another host"):
 		return
 	print("PASS client joined " + lobby.connected_game_id)
 	if not await connected_lobby_checks(false):
+		return
+	var connected_session: ENetMultiplayerPeer = lobby.session
+	await click(lobby.joining_screen.back_button)
+	if not require(not lobby.joining_screen.visible and lobby.get_child(0).visible and lobby.session == connected_session and lobby.host_button.disabled and lobby.join_button.disabled, "Explicit Back must restore the lobby without replacing the connection"):
 		return
 	if not await exit_checks():
 		return
