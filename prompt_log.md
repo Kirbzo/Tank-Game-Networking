@@ -1,5 +1,29 @@
 # Prompt log
 
+## P017 - October 26, 2026
+
+Request date: October 26, 2026. Request time: Unavailable. Timezone: America/Regina (client context).
+
+Actual request:
+
+> Implement the Exit button so that clicking it opens a separate screen displaying “Exiting game...”.
+>
+> Read AGENTS.md, README.md, and the relevant existing code before making changes. Follow the project’s existing Godot structure and coding style. Keep changes limited to this behavior and update the required project logs.
+>
+> For now, only display the exit screen. Do not close the application automatically.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-26-01.
+
+Result: this request overrides the earlier disabled-Exit instruction only for display-only behavior.
+
+Added Godot/exit_screen.tscn with centered text “Exiting game...”. Godot/lobby.gd enables Exit, hides the lobby UI, and instantiates the separate screen while retaining the lobby, discovery, and any hosted session. Repeated activation is guarded. No automatic quit or real leaving is implemented; Join stays disabled. Updated existing Godot/tests/alpha_smoke.gd assertions for enabled display-only Exit. AR1/AR4/FR5 remain Partial; runtime and visual acceptance remain unverified.
+
+Validation: attempted `godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure`; PowerShell reported godot not recognized (exit 1). No runtime, visual click, or two-process checks completed for this request. Prior runtime evidence is historical. Static validation via `python -` through PowerShell checks all 20 requirement IDs, local Markdown links, unique prompt IDs, matching revision, scene text/signal wiring, and source checksum. `git diff --check` and `git status --short` check whitespace and file boundaries. Final inspection found the three implementation files already present in HEAD commit `77ec45b` (`exit button commit`); only the two logs remain in the working-tree diff. This agent did not create that commit. An initial Python documentation update failed due to the default encoding; retried using explicit UTF-8.
+
+README.md, Godot/README.md, and AGENTS.md remain unchanged. Their stale Exit-disabled wording needs approval to update; FR15 is Partial until reconciled. Other requirement statuses are unchanged. Source SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+Actual token usage: Unavailable. Usage source: no task/session usage counter exposed. Scope unavailable; no estimate recorded.
+
 ## P016 - October 23, 2026
 
 Actual request:
