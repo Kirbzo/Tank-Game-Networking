@@ -1,6 +1,7 @@
 extends Control
 
 const Discovery = preload("res://discovery.gd")
+const ExitScreen = preload("res://exit_screen.tscn")
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
@@ -47,8 +48,8 @@ func _ready() -> void:
 	join_button.disabled = true
 	join_button.tooltip_text = "Real joining is deferred to WP2."
 	exit_button = add_button(controls, "Exit")
-	exit_button.disabled = true
-	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
+	exit_button.pressed.connect(show_exit_screen.bind(margin))
+	exit_button.tooltip_text = "Display the exit screen only. Leaving is incomplete for alpha."
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
@@ -65,7 +66,7 @@ func _ready() -> void:
 	game_id.text_changed.connect(identify_game)
 	games_column.add_child(game_id)
 	feedback = add_label(column, "No games available. Ask another user to press Host.")
-	hosted = add_label(column, "No session hosted. Only Host is functional in this alpha.")
+	hosted = add_label(column, "No session hosted. Exit displays a screen only; leaving is incomplete.")
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
 			local_addresses.append(address)
@@ -80,6 +81,13 @@ func _ready() -> void:
 	discovery.network_warning.connect(func(message: String): network_status.text = message)
 	refresh_games()
 	add_child(discovery)
+
+func show_exit_screen(lobby_view: Control) -> void:
+	if not lobby_view.visible:
+		return
+	# Keep the lobby alive: displaying this screen must not close its session.
+	lobby_view.hide()
+	add_child(ExitScreen.instantiate())
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
