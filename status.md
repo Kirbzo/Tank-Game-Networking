@@ -1,7 +1,9 @@
 # Requirements status
 
-Updated: October 26, 2026. Revision: S-2026-10-26-05. Prompt: P019 (blank startup fixed).
+Updated: October 26, 2026. Revision: S-2026-10-26-06. Prompt: P020 (connected lobby feedback and persistence verification).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
+
+P020 supersedes the earlier uncertainty about the reported Join sequence: the user confirms selection precedes Join on two laptops. Successful Join returning to the existing lobby and disabling Host/Join is intended under the current extension; FR6 start/gameplay remains unimplemented. Fixed missing host membership feedback and client status overwritten by selection. Local Godot 4.7.2 processes verified matching game ID 0YXTDN, host port 60275, reciprocal peers (1 / 1195934187), five seconds of connection persistence, status retention, Exit session preservation, and host count returning to 1/2 after client shutdown. Failure/Retry/Back also passed. User-reported two-laptop behavior is consistent with success but physical membership/persistence is not independently verified. No requirement completion statuses upgraded.
 
 P018 clarification: the user confirmed this exact Godot/project.godot. Its Host / Join / Exit controls are built by lobby.gd on lobby.tscn. join_connected explicitly hides the loading screen and restores the lobby on successful connection, as implemented before Exit. The reported pre-selection disappearance remains unconfirmed; no application fix is claimed.
 

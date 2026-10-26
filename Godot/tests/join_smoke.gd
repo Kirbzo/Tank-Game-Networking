@@ -43,6 +43,25 @@ func exit_checks() -> bool:
 	await create_timer(0.3).timeout
 	return require(lobby.session == session and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED, "Exit must keep the application and session alive")
 
+func connected_lobby_checks(is_host: bool) -> bool:
+	var session: ENetMultiplayerPeer = lobby.session
+	var peers: PackedInt32Array = lobby.multiplayer.get_peers()
+	var id: String = lobby.discovery.hosted_game["id"] if is_host else lobby.connected_game_id
+	var deadline := Time.get_ticks_msec() + 5000
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		if not require(lobby.session == session and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED and lobby.multiplayer.get_peers() == peers and peers.size() == 1, "Both peers must remain in the same session for five seconds"):
+			return false
+		if not require(lobby.visible and lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled and not lobby.exit_button.disabled, "Connected lobby must remain visible with Host/Join locked and Exit available"):
+			return false
+	# Discovery refresh and ID interaction must not replace connection feedback.
+	lobby.refresh_games()
+	lobby.identify_game("UNKNOWN")
+	if not require(lobby.feedback.text.contains(id) and lobby.feedback.text.contains("Game start is not implemented") and lobby.feedback.text.contains("Players: 2/2" if is_host else "Connected to game"), "Both lobbies must explain their actual session state"):
+		return false
+	print("PASS persistent session id=%s local_peer=%d peers=%s endpoint_port=%d" % [id, lobby.multiplayer.get_unique_id(), peers, session.get_host().get_local_port() if is_host else lobby.join_target["port"]])
+	return true
+
 func run() -> void:
 	lobby = load("res://lobby.tscn").instantiate()
 	lobby.discovery.protocol = "moooze-join-smoke"
@@ -68,10 +87,15 @@ func run() -> void:
 		if not require(lobby.multiplayer.get_peers().size() == 1, "Existing host must accept one real client"):
 			return
 		print("PASS host accepted client")
+		if not await connected_lobby_checks(true):
+			return
 		if not await exit_checks():
 			return
 		print("PASS host Exit mouse input and session persistence")
 		await create_timer(3.0).timeout
+		if not require(lobby.multiplayer.get_peers().is_empty() and lobby.feedback.text.contains("Players: 1/2") and lobby.feedback.text.contains("Waiting for a client"), "Host must report client departure after the client test process closes"):
+			return
+		print("PASS host membership feedback after client disconnect")
 		quit()
 		return
 	if OS.get_cmdline_user_args().has("failure"):
@@ -98,6 +122,8 @@ func run() -> void:
 	if not require(not lobby.joining_screen.visible and lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled, "Success must return to the existing lobby without creating another host"):
 		return
 	print("PASS client joined " + lobby.connected_game_id)
+	if not await connected_lobby_checks(false):
+		return
 	if not await exit_checks():
 		return
 	print("PASS client Join/Exit mouse input and session persistence")

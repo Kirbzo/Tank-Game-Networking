@@ -360,3 +360,25 @@ Result: checkout was clean at cc04fc9, with new commits since the previous inves
 Validation: graphical launch with --path Godot --quit-after 60 reproduced the parse error before the fix and had no script errors afterward. A temporary graphical capture harness loaded the configured main scene and captured the viewport after rendering; inspected image shows the complete Alpha Lobby, all three buttons, game list, ID entry, status and LAN fields. Harness and image removed after inspection. Real separate-process host/client tests passed using mouse input, including discovery, Join success and display-only Exit with connection persistence on both peers; failure mode passed timeout, animation, duplicate guard, Retry and Back. F5 and editor Output/Debugger panels were not directly operated; console output and the same configured main scene were used. User-log access and certificate-store errors persist, but rendering and tested networking succeeded. Physical-device acceptance and the earlier reported Join-page expectation remain separate from this fixed startup failure.
 
 Associated status: [status.md](status.md), S-2026-10-26-05. Requirement completion statuses unchanged. Source checksum and documentation checks recorded in that revision.
+
+## P020 - October 26, 2026
+
+Actual request:
+
+> The blank startup is fixed. Here is the exact remaining Join behavior:
+>
+> With two laptops, one hosts and the other selects its game and clicks Join. The Joining page appears briefly, then returns to the lobby. Afterward, Host and Join are disabled on both laptops.
+>
+> Check whether this is the intended connected state or a bug. Verify that the host registers the client and that both laptops remain in the same session. Inspect the status messages and explain why Host and Join become disabled.
+>
+> Compare the post-connection screen with the current requirements. If the connection succeeds but the UI is incorrect, fix the UI transition while preserving the connection. Do not keep the Joining screen visible after success just to hide the symptom.
+>
+> Preserve Exit, follow AGENTS.md, and update the required logs. Clearly distinguish what you verified locally from what still needs testing across two laptops.
+
+Result: returning to the existing lobby is explicitly required by the current Join extension in AGENTS.md; FR6's start flow remains unimplemented. host_game disables Host on the host, join_connected disables it on the client, and update_join_button disables Join while session is non-null. This protects the active session; the short loading screen is not a disconnect. Found a UI reporting defect: no host peer-event feedback, host status overwritten by discovery refresh, and client connected status overwritten by list/ID interaction. Added a shared session-feedback updater and deferred peer-connected/disconnected refresh. Existing feedback labels now show host game ID and actual player count, client connection status, disabled-button explanation, and unavailable game start. Preserved the successful transition, transport, scene/layout, and display-only Exit. No artificial delay or persistent loading screen added.
+
+Verification: actual Godot 4.7.2 host/client processes on one computer with viewport mouse input passed. Host game 0YXTDN at port 60275 registered client peer 1195934187; that client reported host peer 1 and the same game ID/port. Both retained their original session object, connected status and reciprocal peer membership for five seconds in the visible lobby with Host/Join disabled and Exit enabled. Status survived discovery refresh and ID interaction. Exit preserved each connection; host count changed to 1/2 waiting after client process shutdown. Failure test passed timeout, animation, duplicate-click guard, Retry and Back. No script errors; sandbox log-file/certificate-store errors persist. Two physical laptops were not accessible: the user's report is consistent with success, but matching IDs, host 2/2 membership, sustained connection, and departure reporting still require on-device checks documented in Godot/README.md. Full gameplay/start/leave acceptance is not claimed.
+
+Changed: Godot/lobby.gd, Godot/tests/join_smoke.gd, README.md, Godot/README.md, status.md, prompt_log.md. AGENTS.md remains consistent and unchanged.
+
+Associated status: [status.md](status.md), S-2026-10-26-06. Requirement statuses unchanged. All 20 IDs, local links, source checksum, diff whitespace and change boundaries checked.

@@ -91,6 +91,25 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(join_connected)
 	multiplayer.connection_failed.connect(join_failed)
 	multiplayer.server_disconnected.connect(join_server_disconnected)
+	multiplayer.peer_connected.connect(session_peers_changed)
+	multiplayer.peer_disconnected.connect(session_peers_changed)
+
+func session_peers_changed(_peer_id: int) -> void:
+	# Read the peer list after Godot finishes processing the connection event.
+	update_session_feedback.call_deferred()
+
+func update_session_feedback() -> bool:
+	if session == null or joining:
+		return false
+	var explanation := " Host and Join are disabled while in a session. Game start is not implemented."
+	if not discovery.hosted_game.is_empty():
+		var players := 1 + multiplayer.get_peers().size()
+		feedback.text = "Hosting game %s. Players: %d/2. %s" % [discovery.hosted_game["id"], players, "Client connected." if players == 2 else "Waiting for a client."] + explanation
+	elif not connected_game_id.is_empty():
+		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id + explanation
+	else:
+		return false
+	return true
 
 func show_exit_screen() -> void:
 	if exit_screen != null:
@@ -173,8 +192,7 @@ func refresh_games() -> void:
 		identify_game(selected)
 	else:
 		feedback.text = "%d hosted session(s) found. Select one to see its game ID." % entries.size()
-	if not connected_game_id.is_empty():
-		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id
+	update_session_feedback()
 	update_join_button()
 
 func select_game(index: int) -> void:
@@ -182,6 +200,9 @@ func select_game(index: int) -> void:
 	identify_game(game_id.text)
 
 func identify_game(value: String) -> void:
+	if update_session_feedback():
+		update_join_button()
+		return
 	var id := value.strip_edges().to_upper()
 	if id.is_empty():
 		feedback.text = "Select a game or enter its ID. Joining is unavailable in alpha."
@@ -254,7 +275,7 @@ func join_connected() -> void:
 	joining_screen.hide()
 	get_child(0).show()
 	host_button.disabled = true
-	feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id
+	update_session_feedback()
 	update_join_button()
 
 func join_failed() -> void:

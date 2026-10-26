@@ -1,5 +1,7 @@
 # Moooze Tanks Game Server Team
 
+Connected lobby (P020, October 26): returning from Joining to the lobby is intentional. Host and Join remain disabled while the instance owns or has joined a session. The host now reports the game ID and live player count (1/2 waiting, 2/2 client connected); the client retains its connected status even when selecting another listing. Both explain that game start is not implemented. Local two-process tests verified matching game ID/host port, reciprocal peer IDs and five seconds of persistent connection. Two-laptop membership and persistence still require checking on those devices; Exit remains display-only.
+
 Startup repair (P019, October 26): removed committed merge-conflict markers that prevented lobby.gd from parsing and left the window blank. Graphical startup now renders the full Alpha Lobby; Host/Join and display-only Exit checks pass. See [status.md](status.md) for evidence and limitations.
 
 October 26 investigation (P016/P017): this checkout starts directly in `Godot/lobby.tscn`, with the game list visible and Join enabled only after selecting or identifying a discovered game. Its loading screen returns to the lobby on connection success. The reported separate main-menu → pre-selection Join page is not present here; the user has confirmed this project path (P018), but the reported pre-selection disappearance remains unresolved. The existing success handler explicitly hides loading and restores the lobby. Headless mouse-input Join and display-only Exit checks pass; see [status.md](status.md).
