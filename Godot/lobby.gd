@@ -19,7 +19,11 @@ var joining_screen: Control
 var joining := false
 var join_target: Dictionary = {}
 var connected_game_id := ""
+<<<<<<< HEAD
+var join_attempt := 0
+=======
 var exit_screen: Control
+>>>>>>> a399c0c9cf748f327ffa1c547b464214107b0a84
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -191,22 +195,38 @@ func identify_game(value: String) -> void:
 	update_join_button()
 
 func update_join_button() -> void:
-	join_button.disabled = joining or session != null or (joining_screen != null and joining_screen.visible) or not discovery.games.has(game_id.text.strip_edges().to_upper())
+	join_button.disabled = joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+
+func available_join_target() -> Dictionary:
+	var id := game_id.text.strip_edges().to_upper()
+	if discovery.games.has(id):
+		return discovery.games[id]
+	# Discovery can expire while the loading/error screen is open. Back must
+	# still allow the same real connection attempt, just like Retry does.
+	if not join_target.is_empty() and join_target["id"] == id:
+		return join_target
+	return {}
 
 func join_game() -> void:
 	if joining or session != null:
 		return
-	var id := game_id.text.strip_edges().to_upper()
-	if not discovery.games.has(id):
+	var target := available_join_target()
+	if target.is_empty():
+		feedback.text = "Select an available game or enter its game ID before joining."
 		update_join_button()
 		return
-	join_target = discovery.games[id].duplicate()
+	join_target = target.duplicate()
 	start_join()
 
 func start_join() -> void:
 	if joining or session != null:
 		return
 	joining = true
+	join_attempt += 1
+	var attempt := join_attempt
+	# Prefer fresh discovery data if the endpoint changed before Retry.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
 	join_button.disabled = true
 	if joining_screen == null:
 		joining_screen = preload("res://joining_screen.gd").new()
@@ -219,7 +239,7 @@ func start_join() -> void:
 	joining_screen.begin()
 	# Show the screen immediately; start the network attempt on the next frame.
 	await get_tree().process_frame
-	if not joining or not is_inside_tree():
+	if not joining or attempt != join_attempt or not is_inside_tree():
 		return
 	session = ENetMultiplayerPeer.new()
 	var result := session.create_client(join_target["address"], int(join_target["port"]))
@@ -244,6 +264,7 @@ func join_failed() -> void:
 	if not joining:
 		return
 	joining = false
+	join_attempt += 1
 	multiplayer.multiplayer_peer = null
 	if session != null:
 		session.close()
@@ -255,8 +276,7 @@ func join_back() -> void:
 	joining_screen.hide()
 	get_child(0).show()
 	refresh_games()
-	# Allow another attempt after Back, including a stale target (which may fail).
-	join_button.disabled = false
+	update_join_button()
 	join_button.grab_focus()
 
 func join_server_disconnected() -> void:
