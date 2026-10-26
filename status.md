@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 26, 2026. Revision: S-2026-10-26-01. Prompt: P014 (real Join extension).
+Updated: October 26, 2026. Revision: S-2026-10-26-02. Prompt: P015 (Join failure fix).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. October 26 extension: actual ENet joining passed a same-computer host/client test. Leaving and gameplay remain unimplemented. Earlier disabled-Join evidence describes the original alpha baseline.
@@ -30,6 +30,8 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 
 ## Scope and open issues
 
+P015: reproduced and fixed silent Join after timeout/Back when the selected discovery entry expired. Retained endpoint retries and consistent button gating now restore loading; Retry prefers refreshed metadata and cancelled deferred attempts are invalidated. Real mouse-input success/failure tests passed on Godot 4.7.2, including actual host/client connection. Only Godot/lobby.gd and required status/prompt logs changed. The exact stop on the user's device remains unconfirmed; physical-device and visual acceptance remain unverified. Requirement completion statuses unchanged.
+
 Current October 26 extension: the latest request supersedes disabled-Join/alpha-only restrictions for this functionality. Join connects via the existing ENet transport, with a separate blocking loading/error screen and a 10-second timeout. The host now attaches its existing peer to Godot's multiplayer API instead of refusing connections. Success returns to the existing lobby because no gameplay/start scene exists. No existing scene file, layout, theme or discovery script changed. Earlier scope notes below describe historical decisions; they do not override this extension. Physical-device and visual acceptance remain unverified.
 
 P006/P007: “same server” means a consistent advertised game ID and endpoint on the same LAN, not real joining or a central/internet server. Periodic automatic queries, single-host guarding, endpoint display and LAN-over-loopback address preference are implemented. Host failure does not publish a listing. Join/Exit remain disabled.
@@ -41,6 +43,8 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-10-26-02 (P015): minimal Join fix in lobby.gd; regression reproduced before and passed after the patch. Real mouse-input tests passed actual ENet connection, timeout/loading animation, duplicate-click guard, Retry and Back. Ignored test scripts required explicit viewport sizing/layout settling before computing click coordinates; these setup issues were corrected. Final runs had no script errors; environment log/certificate errors persist. No existing tests, other production scripts, scene files, README or AGENTS changed. All 20 requirement IDs, local links, unique prompt IDs and source checksum checked. The user's exact device-specific symptom remains unconfirmed.
 
 - S-2026-10-26-01 (P014): implemented user-authorized Join/loading/error/retry/back and minimal host multiplayer wiring. Godot 4.7.2 actual host/client processes passed a real connection test; silent-endpoint timeout, progress animation, exact text, duplicate-click guard, Retry and Back also passed. The initial success test closed the client before the host confirmation frame; keeping it alive through confirmation resolved the test timing. Discovery/hosting regression checked. Added separate joining_screen.gd and join_smoke.gd; existing lobby.tscn/project.godot and discovery.gd unchanged. P013 historical request restored to prompt_log.md from available conversation because it was absent from this checkout. Existing source DOCX checksum unchanged. All 20 requirement IDs, links, log/status references and change boundaries checked. User-log/certificate-store environment errors persist; no script errors in final runs. Physical two-device and visual review remain unverified.
 

@@ -1,5 +1,25 @@
 # Prompt log
 
+## P015 - October 26, 2026
+
+Actual request:
+
+> THE JOIN BUTTON IS NOT WORKING SOLVE IT AND MAKE IT RUN PROPERLY WITHOUT ANY ERROR AND BE CARE OTHER FILES SHOULD REMAIN AS IT IS
+
+Clarification asked:
+
+> What happens when you try Join: is it disabled, does clicking do nothing, or does “Joining Game...” end in an error? Are host and client on one computer or separate laptops? Include any Godot error text.
+
+Actual answer:
+
+> YES ONCE WE CLICK JOIN THEN SUDDENLY IT STOPS WORKING LIKE BEFORE IT EAS SHOWING THAT LOADING ETC
+
+Result: reproduced a silent Join failure after timeout/Back when discovery had expired the selected game. The button was enabled, but join_game returned without starting loading because it required a live discovery entry. Fixed only Godot/lobby.gd: retain the previously selected endpoint for another real attempt, refresh Retry from newer discovery metadata, gate the button consistently, and invalidate deferred attempts after failure so an older attempt cannot overwrite a newer one. The exact user-reported stop on the target device remains unconfirmed; no device topology or error text was provided. Other production code, UI/scene files, existing test files, README.md and AGENTS.md preserved. Tests were run from ignored Godot/.godot/ files to keep those files unchanged.
+
+Associated status.md: [status.md](status.md), S-2026-10-26-02. Requirement completion statuses unchanged; physical-device LAN joining and visual review remain unverified.
+
+Validation: regression failed before the fix and passed afterward for Join after Back with an expired discovery entry. Godot 4.7.2 real mouse-input checks passed list selection and Join with actual host/client ENet connection (game U5Z5DD), and actual clicks for loading animation, duplicate-click protection, timeout, Retry and Back. Test setup initially needed a real viewport size and a layout frame before computing click positions; corrected these test-only issues. Available user logs contained no script errors explaining the reported stop. Final runs had no script errors; sandbox user-log/certificate-store errors persist, so a universal error-free runtime is not claimed. Checked all 20 requirement IDs, local links, unique prompt IDs, unchanged source DOCX checksum and boundaries: only lobby.gd and required status/prompt logs changed.
+
 ## P013 - October 23, 2026
 
 Actual request, restored from the visible conversation because this entry was absent from the current checkout:
