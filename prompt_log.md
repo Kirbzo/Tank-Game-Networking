@@ -1,99 +1,66 @@
 # Prompt log
 
-## P017 - October 26, 2026
+## P013 - October 23, 2026
 
-Request date: October 26, 2026. Request time: Unavailable. Timezone: America/Regina (client context).
+Actual request, restored from the visible conversation because this entry was absent from the current checkout:
 
-Actual request:
+> While we are going to host ! why is it not allowing more than two people to host??
 
-> Implement the Exit button so that clicking it opens a separate screen displaying “Exiting game...”.
->
-> Read AGENTS.md, README.md, and the relevant existing code before making changes. Follow the project’s existing Godot structure and coding style. Keep changes limited to this behavior and update the required project logs.
->
-> For now, only display the exit screen. Do not close the application automatically.
+Historical result: the prior conversation reported that three Godot processes each hosted and listed all three games, with no two-host cap found. It asked for the third device's symptom/error; no answer is available. That turn recorded status revision S-2026-10-23-01, which is not present in this checkout. This entry preserves the known history without claiming the earlier multi-host test was rerun during P014. Current associated status: [status.md](status.md), S-2026-10-26-01. Physical multi-device behavior remained unverified.
 
-Associated status.md: [status.md](status.md), revision S-2026-10-26-01.
-
-Result: this request overrides the earlier disabled-Exit instruction only for display-only behavior.
-
-Added Godot/exit_screen.tscn with centered text “Exiting game...”. Godot/lobby.gd enables Exit, hides the lobby UI, and instantiates the separate screen while retaining the lobby, discovery, and any hosted session. Repeated activation is guarded. No automatic quit or real leaving is implemented; Join stays disabled. Updated existing Godot/tests/alpha_smoke.gd assertions for enabled display-only Exit. AR1/AR4/FR5 remain Partial; runtime and visual acceptance remain unverified.
-
-Validation: attempted `godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure`; PowerShell reported godot not recognized (exit 1). No runtime, visual click, or two-process checks completed for this request. Prior runtime evidence is historical. Static validation via `python -` through PowerShell checks all 20 requirement IDs, local Markdown links, unique prompt IDs, matching revision, scene text/signal wiring, and source checksum. `git diff --check` and `git status --short` check whitespace and file boundaries. Final inspection found the three implementation files already present in HEAD commit `77ec45b` (`exit button commit`); only the two logs remain in the working-tree diff. This agent did not create that commit. An initial Python documentation update failed due to the default encoding; retried using explicit UTF-8.
-
-README.md, Godot/README.md, and AGENTS.md remain unchanged. Their stale Exit-disabled wording needs approval to update; FR15 is Partial until reconciled. Other requirement statuses are unchanged. Source SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
-
-Actual token usage: Unavailable. Usage source: no task/session usage counter exposed. Scope unavailable; no estimate recorded.
-
-## P016 - October 23, 2026
+## P014 - October 26, 2026
 
 Actual request:
 
-> Update only status.md and prompt_log.md with our user-reported manual test results from October 23, 2026.
+> Implement the functionality for the existing "Join" button without redesigning or modifying the current UI.
 >
-> Earlier hotspot test:
+> Requirements:
+> - Do NOT change the layout, styling, theme, or appearance of any existing scenes.
+> - Keep all existing node names, scene structure, and scripts unless absolutely necessary.
+> - Only add the logic required for the Join button.
 >
-> - Three members used separate laptops connected through a hotspot.
-> - After two members hosted separate games, the third member’s Host button was disabled.
-> - The underlying cause was not confirmed.
+> Behavior:
+> 1. When the player clicks the "Join" button:
+>    - Disable the Join button to prevent multiple clicks.
+>    - Immediately transition to the existing loading/joining screen (or create one only if it does not already exist).
+>    - Display the text:
+>      "Joining Game..."
+>    - Display a status message:
+>      "Please wait while we connect you to the game server..."
+>    - Show a loading indicator (spinner, animated icon, or progress animation).
 >
-> Today’s wired retest:
+> 2. While the connection is being established:
+>    - Keep the loading screen visible.
+>    - Prevent any further user interaction.
+>    - Update the status text if appropriate (e.g. "Connecting to server...", "Joining lobby...", etc.).
 >
-> - We connected three laptops through a switch using Ethernet cables.
-> - All three members successfully hosted separate games at the same time.
-> - One member closed and reopened the application. When she returned to the lobby, she could see the games still hosted by the other two members.
-> - Your investigation made no implementation changes. Do not describe this result as a code fix.
+> 3. If the connection succeeds:
+>    - Continue with the existing multiplayer flow and load the appropriate lobby/game scene.
+>    - Do not alter the current networking implementation.
 >
-> Record three-device simultaneous hosting and the returning member’s discovery of the other two hosted games as manually verified on this wired setup. Identify these as tests performed by our team, not runtime tests performed by Codex.
+> 4. If the connection fails or times out:
+>    - Display:
+>      "Unable to join the game."
+>      "Please try again."
+>    - Provide:
+>      - Retry button (attempts the connection again)
+>      - Back button (returns to the previous menu)
+>    - Re-enable the Join button if the player returns.
 >
-> Do not mark hotspot operation, joining, the Leave/Exit feature, or other untested acceptance criteria as verified. Keep the earlier hotspot failure recorded as unresolved. Do not mark an entire requirement complete unless all its acceptance criteria have supporting evidence.
->
-> Preserve the original investigation entry and add this follow-up with a new unique prompt ID linked to the resulting status revision.
->
-> Do not change implementation files, AGENTS.md, README.md, or source requirements. Report every changed file and summarize the status updates.
+> Constraints:
+> - Preserve all existing code unless it directly conflicts with this functionality.
+> - Do not refactor unrelated scripts.
+> - Do not rename files, scenes, nodes, signals, or variables.
+> - Follow the existing project architecture and coding style.
+> - Add clear comments only where new logic is introduced.
+> - Ensure the implementation works with the current Godot multiplayer system already present in the project.
+> - Produce only the minimal code changes necessary to make the Join button functional.
 
-Associated status.md: [status.md](status.md), revision S-2026-10-23-02. Follows investigation P015 (identifier reconciliation below). Date uses America/Regina.
+Result: enabled Join for a selected/typed discovered session, added a separate blocking loading/error screen with progress animation, a 10-second timeout, Retry and Back, and real ENet connection handling. The existing host peer must attach to Godot multiplayer and accept connections instead of refusing them; this necessary change preserves transport, discovery and capacity. Success returns to the existing lobby because no gameplay/start scene exists. Existing scene files, layout, styling, theme and node names preserved. Conflicting alpha-only restrictions are explicitly superseded by this request. Updated required documentation and this log without removing existing entries.
 
-Result: recorded team-performed, user-reported manual verification of three simultaneous separate hosted games on three laptops connected by Ethernet through a switch, and a returning member discovering the other two still-hosted games after closing/reopening the application. The earlier three-laptop hotspot failure remains unresolved; its cause is unconfirmed. This is additional test evidence, not a code fix. Updated only status.md and prompt_log.md. AR1/AR2 and FR2/FR3/FR5 remain Partial; no entire requirement promoted. Joining, Leave/Exit, hotspot operation, and other unreported acceptance criteria remain unverified by this retest.
+Associated status.md: [status.md](status.md), S-2026-10-26-01. FR1/FR4/FR7 now partial with real-join evidence; AR5 partial because the explicit request expands beyond the original alpha scope. Full lifecycle/gameplay and physical-device/visual acceptance remain incomplete or unverified.
 
-Validation: Codex performed documentation checks only using `python -` via PowerShell (all 20 requirement IDs, local links, preservation of existing prompt entries and requirement statuses, unique descending prompt IDs, revision consistency, and unchanged source SHA256), plus `git diff --check` and `git status --short` for whitespace and the two-file boundary. No Godot/runtime/gameplay tests run by Codex. Source SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Older README physical-LAN statements remain unchanged under the requested scope; current evidence is in status.md.
-
-## P015 - October 23, 2026
-
-Original investigation request (backfilled from this conversation):
-
-> Investigate why a third user cannot host a separate game.
-> Observed behavior: three members run the project. After two members host their own games, the third member’s Host button is grayed out and cannot be clicked.
-> Expected behavior: each member can host one separate game. The two-player limit applies to players within a game, not the number of separate hosted games.
-> Check what disables the Host button and whether hosting is incorrectly limited by the number of discovered games, a shared hosting flag, or a networking error.
-> Do not change implementation files, AGENTS.md, or README.md yet. Explain the cause, identify the relevant code, and propose the smallest fix. Update the required logs with actual findings.
-
-Identifier reconciliation: the prior conversation labelled this investigation P014 / S-2026-10-23-01, but those identifiers already belong to the approved AGENTS update in the current checkout, where the investigation entry is absent. That existing P014 and all earlier entries are preserved. This backfill retains the original request and findings under unique P015, associated with [status.md](status.md), S-2026-10-23-02; no separate historical snapshot is fabricated.
-
-Original findings: only successful local hosting (Godot/lobby.gd:117) and discovery initialization failure via discovery_error() (Godot/lobby.gd:171) disable Host. No discovered-game-count cap or shared hosting flag exists. Discovery tries 16 local IPv4 UDP ports at startup (Godot/discovery.gd:22-30), discards bind errors, and assumes slot exhaustion if all attempts fail. The affected device's underlying failure was not confirmed. Remote hosts do not consume its local discovery slots; server-creation failure permits retry and discovery send errors only display feedback. Proposed the smallest diagnostic change: retain/report bind errors and ports before deciding a behavioral fix; consider discovery retry for confirmed transient failure. No implementation changes or runtime tests were performed. The original investigation's three-device acceptance was unverified at that time; subsequent team evidence is recorded separately in P016.
-
-## P014 - October 23, 2026
-
-Actual request:
-
-> Implement S01, S05, S07, and S09 into the AGETNS.md file within COMP214
-
-Result: applied the four explicitly approved P013 suggestions to AGENTS.md: inspect relevant files before editing (S01), preserve implementation files during planning while producing requested artifacts/logs (S05), use applicable documented validation commands and report actual outcomes (S07), and expand final reporting while separating historical evidence (S09). Updated [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt) to record approval and implementation. Other suggestions remain pending. README.md, implementation files, and source requirements unchanged.
-
-Associated status.md: [status.md](status.md), revision S-2026-10-23-01. Planning entry: P013, revision S-2026-10-20-01. Requirement completion statuses unchanged. Date uses America/Regina.
-
-Validation: PowerShell invoked a Python documentation check through `python -`; it verified the four approved clauses, preservation of unrelated AGENTS.md text, all 20 requirement rows, local documentation links, unique descending prompt IDs, preservation of prior prompt entries, status/log revision references, unchanged source SHA256 and README.md, and the four-file change boundary. No gameplay commands run because this request changes documentation only. Visual and physical two-device LAN acceptance remain unverified; prior runtime results were not rerun.
-
-## P013 - October 20, 2026
-
-Actual request:
-
-> Look at the AGENTS.md within the COMP214 folder and the AGENTS.md inside the CodexDemo folder and compair each of them. Make suggestions on changes towards the AGENTS.md based off the AGENTS.md from the CodexDemo folder and the Requirements Docs. After suggestions are complete, do not change the AGENTS.md inside the COMP214 folder, instead make a seperate text docs with all suggestions approved
-
-Result: created [AGENTS_comparison_suggestions.txt](AGENTS_comparison_suggestions.txt), comparing both instruction files with the current DOCX and proposing ten adapted workflow/coding improvements. The report records all suggestions as pending explicit approval rather than inventing approval. No changes to either AGENTS.md or README.md. Updated status tracking without changing requirement completion statuses. Existing prompt entries preserved.
-
-Associated status.md: [status.md](status.md), revision S-2026-10-20-01. Date uses America/Regina.
-
-Validation: checked all 20 requirement IDs, local documentation links, prompt/status references, unchanged DOCX and protected-file checksums, and changes limited to the report, status.md and this log. No gameplay tests needed. Git unavailable on PATH; file hashes used for this task's change-boundary verification. Physical two-device and visual acceptance remain unverified.
+Validation: Godot 4.7.2 separate host/client processes passed a real connection to game EEPJBL; both host acceptance and client success were confirmed. Silent UDP endpoint tests passed actual timeout, exact loading/failure text, progress animation, duplicate-click protection, Retry and Back with Join restored. Existing host-creation failure test passed. Discovery/hosting regression passed. Environment user-log/certificate errors persist; no script errors in final runs. All 20 requirement IDs, links, unique prompt IDs and file boundaries checked. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Physical two-device LAN joining and visual review remain unverified.
 
 ## P012 - October 19, 2026
 

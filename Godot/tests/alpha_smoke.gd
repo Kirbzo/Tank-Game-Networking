@@ -92,7 +92,7 @@ func run() -> void:
 	if not check(lobby.game_list.get_item_text(0).contains(":%d" % port), "Observer must display advertised server endpoint"):
 		return
 	lobby.game_list.item_selected.emit(0)
-	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("No connection was made"), "Selection must identify without joining"):
+	if not check(lobby.game_id.text == id and not lobby.join_button.disabled and lobby.session == null, "Selection must enable Join without connecting before a click"):
 		return
 	lobby.game_id.text_changed.emit(id.to_lower())
 	if not check(lobby.feedback.text.contains("Identified"), "Typed ID must identify host"):
