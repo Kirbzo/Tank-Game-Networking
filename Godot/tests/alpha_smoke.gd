@@ -30,7 +30,7 @@ func run() -> void:
 		failing.host_game()
 		if not check(failing.session == null and failing.discovery.hosted_game.is_empty() and failing.listed_ids.is_empty(), "Failed hosting must not advertise or list a game"):
 			return
-		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep joining/leaving disabled"):
+		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and not failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep Join disabled and Exit available"):
 			return
 		failing.queue_free()
 		await process_frame
@@ -57,7 +57,7 @@ func run() -> void:
 				return
 	if not args.has("late") and not check(lobby.listed_ids.is_empty(), "Initial game list must be empty"):
 		return
-	if not check(lobby.join_button.disabled and lobby.exit_button.disabled, "Join and leaving must be disabled"):
+	if not check(lobby.join_button.disabled and not lobby.exit_button.disabled, "Join must initially be disabled and Exit available"):
 		return
 	if OS.get_cmdline_user_args().has("host"):
 		lobby.host_button.pressed.emit()

@@ -19,6 +19,7 @@ var joining_screen: Control
 var joining := false
 var join_target: Dictionary = {}
 var connected_game_id := ""
+var exit_screen: Control
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -52,8 +53,8 @@ func _ready() -> void:
 	join_button.tooltip_text = "Select a game or enter its ID to join."
 	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
-	exit_button.disabled = true
-	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
+	exit_button.tooltip_text = "Show the exit screen. Leaving the session is not implemented yet."
+	exit_button.pressed.connect(show_exit_screen)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
@@ -89,6 +90,14 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(join_connected)
 	multiplayer.connection_failed.connect(join_failed)
 	multiplayer.server_disconnected.connect(join_server_disconnected)
+
+func show_exit_screen() -> void:
+	if exit_screen != null:
+		return
+	exit_screen = preload("res://exit_screen.gd").new()
+	get_parent().add_child(exit_screen)
+	# Keep the session alive; this step only replaces the visible screen.
+	hide()
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()

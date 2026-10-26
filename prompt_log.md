@@ -249,3 +249,19 @@ Prompt:
 Result: created README.md, AGENTS.md, and documentation_rationale.txt based on the earlier PDF. The prior task recorded an unchanged PDF checksum. These files are now located in the COMP214 subfolder.
 
 Associated status.md: none existed at that time; requirement tracking was introduced by the updated DOCX. Historical snapshot: documentation created; no game implementation verified.
+
+## P015 - October 26, 2026
+
+Actual request:
+
+> Implement the Exit button so that clicking it opens a separate screen displaying “Exiting game...”.
+>
+> Read AGENTS.md, README.md, and the relevant existing code before making changes. Follow the project’s existing Godot structure and coding style. Keep changes limited to this behavior and update the required project logs.
+>
+> For now, only display the exit screen. Do not close the application automatically.
+
+Result: enabled Exit, connected its pressed signal, and added Godot/exit_screen.gd using the existing programmatic Control/PanelContainer structure. The lobby hides and the separate screen remains displayed; application and session stay running. Actual leaving remains incomplete. Updated existing alpha smoke assertions, README.md, Godot/README.md, AGENTS.md, and status.md.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-26-02. Requirement completion statuses unchanged.
+
+Validation: Godot 4.7.2 headless check passed exact exit text, hidden lobby, duplicate-click protection, and application/host persistence after a delay. The temporary check was removed. Environment user-log and certificate-store errors remain; the final run had no script errors. All 20 requirement IDs, local documentation links, status revision/log references, unchanged requirements DOCX SHA256, and change boundaries checked. Visual acceptance remains unverified.
