@@ -265,3 +265,60 @@ Result: enabled Exit, connected its pressed signal, and added Godot/exit_screen.
 Associated status.md: [status.md](status.md), revision S-2026-10-26-02. Requirement completion statuses unchanged.
 
 Validation: Godot 4.7.2 headless check passed exact exit text, hidden lobby, duplicate-click protection, and application/host persistence after a delay. The temporary check was removed. Environment user-log and certificate-store errors remain; the final run had no script errors. All 20 requirement IDs, local documentation links, status revision/log references, unchanged requirements DOCX SHA256, and change boundaries checked. Visual acceptance remains unverified.
+
+## P016 - October 26, 2026
+
+Actual request:
+
+> Investigate and fix a regression on main.
+>
+> Sequence:
+> 1. Join was working on main.
+> 2. I implemented Exit on my branch and merged it into main, but the Exit change did not appear.
+> 3. I redid Exit directly on main.
+> 4. Exit now works, but Join no longer works.
+>
+> Read AGENTS.md, README.md, and the relevant code. Compare the current implementation with the last version where Join worked, including the merge and subsequent Exit changes. Identify the actual cause before editing.
+>
+> Restore Join’s previous working behavior while preserving Exit: clicking Exit opens a separate screen displaying “Exiting game...”, without automatically closing the application.
+>
+> Check button signals, handlers, scene paths, and any UI elements that could block clicks. Keep changes focused and avoid adding new Join functionality.
+>
+> Verify both buttons and update the required project logs. Explain the cause, the fix, and any testing limitations.
+
+Result: investigated 655fdac (Join), 77ec45b (branch Exit), d9abba4 (merge main into rica), 745b29b (Join squash on rica), and a399c0c (Exit on main). d9abba4 retained branch Exit; 745b29b replaced its lobby wiring with the Join version, disabling Exit. Neither branch Exit nor that merge is an ancestor of current main. Current main's Exit commit does not modify Join handlers, discovery, joining_screen.gd, project.godot or lobby.tscn. No evidence establishes Exit as the cause of the reported Join failure. Existing tests passed on unchanged application code. Strengthened join_smoke.gd with viewport mouse input and display-only Exit/session checks; those passed too. The user interrupted before logs were written; this entry records that work during the continuation P017.
+
+Associated status: [status.md](status.md), S-2026-10-26-03. No application fix claimed. Manual reproduction remained unresolved.
+
+## P017 - October 26, 2026
+
+Actual request:
+
+> Continue investigating. I stopped because I thought my teammate had fixed it, but the problem still happens.
+>
+> When I click Join, I briefly see the Join page flash, then it disappears. Investigate the main menu’s Join button opening the Join page first; this happens before I can select a hosted game.
+>
+> Trace what happens immediately after the page opens. Check for another scene change, a visibility reset, overlapping button actions, or code that immediately returns to the menu. Add temporary diagnostic logging if needed to identify the actual sequence.
+>
+> Your tests passed, but my manual UI behavior still fails. Verify that clicking Join from the main menu opens the correct page and that it stays visible and usable.
+>
+> Preserve the working Exit behavior. Follow AGENTS.md, keep the fix focused, and update the required logs. Do not assume Exit caused this without evidence.
+
+Result: searched tracked and ignored project source files; the sole scene is Godot/lobby.tscn, configured as startup. There is no separate main menu or pre-selection Join page. Join's pressed signal has one handler, join_game; it requires a discovered selected ID. start_join hides the lobby content and shows loading, then starts ENet next frame. Only join_connected and explicit Back hide loading; failure keeps it visible. No change_scene calls exist. Exit's blocking screen is created only by Exit's own signal, and mouse-input tests confirm no click obstruction in the tested flow. Test-only TRACE output captured Join at 462 ms with loading visible and connected_to_server at 482 ms with loading hidden and a connected game ID. This explains the post-selection success flash only; it is not evidence for the user's pre-selection symptom.
+
+Added an initial-state mouse-input check and test-only diagnostic state/path output. All four modes (host, client, initial, failure) passed on Godot 4.7.2. Host/client use real separate ENet processes; failure uses a real silent UDP endpoint with an accelerated test timeout. Exact Exit text, hidden lobby and session persistence passed for both peers. Sandbox user-log and certificate-store errors occurred; final runs had no script errors. No production scripts or scenes changed. Requested the running project.godot and main-menu scene paths because the described navigation is absent from the available checkout. Manual UI reproduction, the requested persistent selection page, and physical-device LAN verification remain unresolved. README.md and Godot/README.md document the distinction; AGENTS.md remains applicable and unchanged.
+
+Associated status: [status.md](status.md), S-2026-10-26-03, continuing P016. Requirement completion statuses unchanged.
+
+## P018 - October 26, 2026
+
+Actual clarification:
+
+> The project I run is:
+> C:\Users\ricaa\OneDrive - Saskatchewan Polytechnic\Documents\GitHub\Tank-Game-Networking\Godot\project.godot
+>
+> Please inspect this project to locate the scene containing the Host / Join / Exit buttons. Clicking Join briefly shows the next page, then it disappears.
+
+Result: confirmed the supplied project starts res://lobby.tscn (AlphaLobby). Its attached lobby.gd builds all three buttons in _ready; Join connects once to join_game. The next page is joining_screen.gd, a connection progress screen, not a hosted-game selector. start_join displays it and starts ENet the next frame. The connected_to_server handler join_connected explicitly hides it at lobby.gd:237 and restores the lobby at line 238, displaying 'Connected to game <ID>. Waiting in the lobby.' This path predates Exit (655fdac) and matches the P017 runtime trace. Explicit Back is the other loading-screen hide path. No overlapping Exit action or scene change was found. The prior tests therefore verified the programmed immediate return on successful connection, not persistence of a game-selection page. The user's runtime path is now confirmed; whether their disappearance is accompanied by the connected status still needs confirmation. No application change made: a persistent selection or success page would change the existing flow, and the reported pre-selection behavior remains inconsistent with the current disabled-before-selection control.
+
+Associated status: [status.md](status.md), S-2026-10-26-04. Earlier P016/P017 runtime evidence retained; no new runtime test claimed. Exit behavior unchanged. Requirement completion statuses unchanged.

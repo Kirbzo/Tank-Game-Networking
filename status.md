@@ -1,7 +1,11 @@
 # Requirements status
 
-Updated: October 26, 2026. Revision: S-2026-10-26-02. Prompt: P015 (display-only Exit screen).
+Updated: October 26, 2026. Revision: S-2026-10-26-04. Prompt: P018 (confirmed project path; Join visibility trace).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
+
+P018 clarification: the user confirmed this exact Godot/project.godot. Its Host / Join / Exit controls are built by lobby.gd on lobby.tscn. join_connected explicitly hides the loading screen and restores the lobby on successful connection, as implemented before Exit. The reported pre-selection disappearance remains unconfirmed; no application fix is claimed.
+
+P016/P017 investigation: current main is a399c0c. Application code is unchanged pending identification of the reported main-menu / pre-selection Join page, which is absent from this checkout. Godot 4.7.2 headless mouse-input tests pass list selection, real host/client Join, timeout/Retry/Back, and host/client Exit with session persistence. Initial Join is disabled and the list already visible. A trace confirms a selected-game loading screen is hidden by connected_to_server after 20 ms; this does not establish the cause of the reported pre-selection flash. Manual UI reproduction and physical-device acceptance remain unresolved; no requirement completion status is upgraded. See P016/P017 in prompt_log.md.
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. October 26 extension: actual ENet joining passed a same-computer host/client test. Leaving and gameplay remain unimplemented. Earlier disabled-Join evidence describes the original alpha baseline.
 

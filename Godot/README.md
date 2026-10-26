@@ -12,9 +12,12 @@ Godot 4.7.2 checks, run from the repository root:
 godot --headless --path Godot --script res://tests/join_smoke.gd -- host
 godot --headless --path Godot --script res://tests/join_smoke.gd -- client
 godot --headless --path Godot --script res://tests/join_smoke.gd -- failure
+godot --headless --path Godot --script res://tests/join_smoke.gd -- initial
 ```
 
 Run host and client concurrently in separate terminals. Both must print PASS. Run failure separately to verify actual timeout against a silent UDP endpoint, progress animation, exact text, duplicate-click protection, Retry and Back. Existing alpha smoke checks now expect selection to enable Join without connecting until it is clicked. Visual review and physical-device LAN joining remain unverified.
+
+P016/P017: join_smoke now injects viewport mouse input for list selection, Host, Join, Retry, Back and Exit, and verifies Exit preserves each peer's session. The `initial` mode checks the actual startup behavior: the list is already visible and Join is disabled without selection. Test-only TRACE output identifies the project path and connection transition; a successful local connection can hide loading within milliseconds. This does not verify the reported main-menu → pre-selection page flow, which is absent from this checkout. Application scripts and scenes have not been changed during this investigation.
 
 ## Original alpha baseline
 
