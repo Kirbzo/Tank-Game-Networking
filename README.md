@@ -1,5 +1,7 @@
 # Moooze Tanks Game Server Team
 
+Current extension (October 26, 2026): the existing Join button now connects to a selected/discovered game ID using ENet. A separate loading screen blocks interaction, animates progress, and provides Retry/Back after failure or a 10-second timeout. Successful connections return to the existing lobby; no gameplay/start scene exists. Exit remains disabled. Lobby layout, styles, scene structure and discovery are unchanged. The earlier alpha requirement tables below preserve the source baseline; their disabled-Join statements are superseded by this explicit user-authorized extension. Real host/client connection and failure-flow checks passed in Godot 4.7.2 processes on one computer; physical LAN and visual acceptance remain unverified.
+
 A student two-player networking framework built in Godot, with visual placeholders for connection and multiplayer testing.
 
 ## Source and current status

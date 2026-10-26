@@ -2,6 +2,10 @@
 
 This is a student server-side framework for Moooze Tanks. Work only on the requested task.
 
+## Current Join extension - October 26, 2026
+
+The latest user request explicitly authorizes real Join, superseding earlier alpha instructions to disable Join or refuse player connections. Preserve the existing lobby layout, node names, styling, theme and scene files. Only add the Join loading/error/retry/back flow and the minimal ENet host wiring required to accept it. No gameplay/start flow exists: successful connections return to the existing lobby. Exit/leaving remains incomplete. Earlier alpha-only restrictions below describe the original baseline and still apply to unrelated work.
+
 ## Scope and source
 
 - Keep all changes inside the project repository root (`.`), defined as the folder containing this AGENTS.md and README.md. Resolve project file paths relative to that root, regardless of the checkout location or operating system.
