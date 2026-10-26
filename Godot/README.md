@@ -1,5 +1,21 @@
 # Running the alpha
 
+## Join extension - October 26, 2026
+
+The user-authorized Join extension supersedes the original disabled-Join alpha behavior described below. Select a discovered remote game or type its ID, then press Join. The existing lobby is temporarily hidden behind a separate screen showing “Joining Game...” and “Please wait while we connect you to the game server...” with animated progress. ENet success returns to the existing lobby with a connected status; there is no game/start scene to load. Errors or a 10-second timeout show “Unable to join the game.” / “Please try again.” with Retry and Back. Retry uses the same endpoint; Back restores the original lobby and enables Join. Exit remains disabled. Hosts accept one client, retaining the existing two-player capacity and UDP discovery implementation. On separate devices, permit the Godot executable's UDP traffic (including the host's dynamically allocated ENet port), not just the discovery port range.
+
+Godot 4.7.2 checks, run from the repository root:
+
+```powershell
+godot --headless --path Godot --script res://tests/join_smoke.gd -- host
+godot --headless --path Godot --script res://tests/join_smoke.gd -- client
+godot --headless --path Godot --script res://tests/join_smoke.gd -- failure
+```
+
+Run host and client concurrently in separate terminals. Both must print PASS. Run failure separately to verify actual timeout against a silent UDP endpoint, progress animation, exact text, duplicate-click protection, Retry and Back. Existing alpha smoke checks now expect selection to enable Join without connecting until it is clicked. Visual review and physical-device LAN joining remain unverified.
+
+## Original alpha baseline
+
 The lobby follows `MoozeTanks/LobbyImage.jpeg`: Host, Join, and Exit are stacked on the left, beside a large List of Games panel on the right. Game-ID lookup sits beneath the list; session feedback and LAN lookup remain below the main layout. The page scrolls vertically when needed. Join and Exit remain disabled for alpha.
 
 Import `project.godot` in **Godot 4.7.2** and run the main scene (F6 runs the open scene; F5 runs the project). Use two separate project runs, either from two editor instances or the editor's multiple-instance run setting. Both lists initially contain no entries when no host is running. Press Host in one window: it launches an ENet session endpoint and displays its game ID. The other window should show that same ID within about one second.

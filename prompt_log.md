@@ -1,5 +1,67 @@
 # Prompt log
 
+## P013 - October 23, 2026
+
+Actual request, restored from the visible conversation because this entry was absent from the current checkout:
+
+> While we are going to host ! why is it not allowing more than two people to host??
+
+Historical result: the prior conversation reported that three Godot processes each hosted and listed all three games, with no two-host cap found. It asked for the third device's symptom/error; no answer is available. That turn recorded status revision S-2026-10-23-01, which is not present in this checkout. This entry preserves the known history without claiming the earlier multi-host test was rerun during P014. Current associated status: [status.md](status.md), S-2026-10-26-01. Physical multi-device behavior remained unverified.
+
+## P014 - October 26, 2026
+
+Actual request:
+
+> Implement the functionality for the existing "Join" button without redesigning or modifying the current UI.
+>
+> Requirements:
+> - Do NOT change the layout, styling, theme, or appearance of any existing scenes.
+> - Keep all existing node names, scene structure, and scripts unless absolutely necessary.
+> - Only add the logic required for the Join button.
+>
+> Behavior:
+> 1. When the player clicks the "Join" button:
+>    - Disable the Join button to prevent multiple clicks.
+>    - Immediately transition to the existing loading/joining screen (or create one only if it does not already exist).
+>    - Display the text:
+>      "Joining Game..."
+>    - Display a status message:
+>      "Please wait while we connect you to the game server..."
+>    - Show a loading indicator (spinner, animated icon, or progress animation).
+>
+> 2. While the connection is being established:
+>    - Keep the loading screen visible.
+>    - Prevent any further user interaction.
+>    - Update the status text if appropriate (e.g. "Connecting to server...", "Joining lobby...", etc.).
+>
+> 3. If the connection succeeds:
+>    - Continue with the existing multiplayer flow and load the appropriate lobby/game scene.
+>    - Do not alter the current networking implementation.
+>
+> 4. If the connection fails or times out:
+>    - Display:
+>      "Unable to join the game."
+>      "Please try again."
+>    - Provide:
+>      - Retry button (attempts the connection again)
+>      - Back button (returns to the previous menu)
+>    - Re-enable the Join button if the player returns.
+>
+> Constraints:
+> - Preserve all existing code unless it directly conflicts with this functionality.
+> - Do not refactor unrelated scripts.
+> - Do not rename files, scenes, nodes, signals, or variables.
+> - Follow the existing project architecture and coding style.
+> - Add clear comments only where new logic is introduced.
+> - Ensure the implementation works with the current Godot multiplayer system already present in the project.
+> - Produce only the minimal code changes necessary to make the Join button functional.
+
+Result: enabled Join for a selected/typed discovered session, added a separate blocking loading/error screen with progress animation, a 10-second timeout, Retry and Back, and real ENet connection handling. The existing host peer must attach to Godot multiplayer and accept connections instead of refusing them; this necessary change preserves transport, discovery and capacity. Success returns to the existing lobby because no gameplay/start scene exists. Existing scene files, layout, styling, theme and node names preserved. Conflicting alpha-only restrictions are explicitly superseded by this request. Updated required documentation and this log without removing existing entries.
+
+Associated status.md: [status.md](status.md), S-2026-10-26-01. FR1/FR4/FR7 now partial with real-join evidence; AR5 partial because the explicit request expands beyond the original alpha scope. Full lifecycle/gameplay and physical-device/visual acceptance remain incomplete or unverified.
+
+Validation: Godot 4.7.2 separate host/client processes passed a real connection to game EEPJBL; both host acceptance and client success were confirmed. Silent UDP endpoint tests passed actual timeout, exact loading/failure text, progress animation, duplicate-click protection, Retry and Back with Join restored. Existing host-creation failure test passed. Discovery/hosting regression passed. Environment user-log/certificate errors persist; no script errors in final runs. All 20 requirement IDs, links, unique prompt IDs and file boundaries checked. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Physical two-device LAN joining and visual review remain unverified.
+
 ## P012 - October 19, 2026
 
 Actual request:

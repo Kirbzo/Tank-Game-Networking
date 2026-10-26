@@ -1,24 +1,24 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-06. Prompt: P012 (six-character host IDs).
+Updated: October 26, 2026. Revision: S-2026-10-26-01. Prompt: P014 (real Join extension).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
-Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
+Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. October 26 extension: actual ENet joining passed a same-computer host/client test. Leaving and gameplay remain unimplemented. Earlier disabled-Join evidence describes the original alpha baseline.
 
 | ID | Requirement summary | Status | Evidence / remaining work |
 | --- | --- | --- | --- |
-| AR1 | Show the intended lobby interface with Host, Join,  Exit buttons and a game list. | Partial | Host, Join, Exit and game list exist in Godot/lobby.gd. Actual two-process Host and remote visibility passed; Join/Exit disabled. Visual acceptance remains unverified. |
+| AR1 | Show the intended lobby interface with Host, Join,  Exit buttons and a game list. | Partial | Host, Join, Exit and game list preserved. The October 26 user explicitly supersedes disabled Join with real joining; Exit remains disabled. Visual/physical-device acceptance outstanding. |
 | AR2 | Show a list of available games. | Partial | Automatic, direct-IP, and late-host discovery expose matching game IDs and actual server ports in separate processes. Duplicate refresh, address preference and expiry checked. Physical two-device discovery and visual acceptance remain unverified. |
-| AR3 | Show how game IDs identify sessions and how a player can either click or enter an ID to join a specific session. | Partial | Selection and typed IDs identify the matching session; unknown ID explanation tested. UI explicitly states no connection made. Visual walkthrough remains unverified. |
-| AR4 | Demonstrate the player's flow for finding a game and using the lobby. | Partial | Working hosting and explanation-only joining/leaving steps are labelled in the UI. Exit clarified as leave; disabled. Reviewer walkthrough remains outstanding. |
-| AR5 | Consider all framework and functional requirements below but do not implement if not part of the alpha demonstration requirements. | Complete | Source review: only alpha lobby, hosting endpoint, discovery, and identification/explanation implemented; no gameplay or real joining/leaving. |
-| FR1 | The framework shall support a two-player session hosted on a local device. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR2 | The system shall provide a lobby for hosting and connecting games. | Partial | Alpha hosting and lobby implemented; connecting/joining deferred to WP2. |
+| AR3 | Show how game IDs identify sessions and how a player can either click or enter an ID to join a specific session. | Partial | Selection or ID lookup enables Join; actual ENet connection and failure/retry/back implemented. Source alpha simulation-only baseline superseded by October 26 request; physical-device acceptance unverified. |
+| AR4 | Demonstrate the player's flow for finding a game and using the lobby. | Partial | Hosting and joining now work in same-computer process tests; loading/error/back flow tested. Leaving remains incomplete; reviewer walkthrough outstanding. |
+| AR5 | Consider all framework and functional requirements below but do not implement if not part of the alpha demonstration requirements. | Partial | October 26 user explicitly expands beyond alpha to implement real joining. No gameplay or unrelated framework work added; original alpha-only scope is no longer fully met. |
+| FR1 | The framework shall support a two-player session hosted on a local device. | Partial | Real host/client ENet connection passed in separate processes on one computer. Physical-device acceptance unverified. |
+| FR2 | The system shall provide a lobby for hosting and connecting games. | Partial | Existing lobby now hosts and joins selected/discovered sessions with loading/error UI; visual and physical-device acceptance outstanding. |
 | FR3 | The system shall maintain and expose a list of available hosted games. | Partial | One listing per ID with endpoint/liveness refresh; process tests confirm the same advertised server endpoint and expiry. Physical two-device LAN behavior unverified. |
-| FR4 | The system shall allow a player to join a specific game by selecting it from the available-games list or entering its game ID. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR5 | The system shall create, join, leave, and close game rooms. | Partial | Host creates a real ENet endpoint; process shutdown closes it. Join, leave, and full room lifecycle deferred. |
+| FR4 | The system shall allow a player to join a specific game by selecting it from the available-games list or entering its game ID. | Partial | Selected or typed discovered ID enables Join; ENet success, timeout, Retry and Back tested. Unknown IDs are explained. Full physical-device acceptance unverified. |
+| FR5 | The system shall create, join, leave, and close game rooms. | Partial | Host creates and client joins an ENet session; errors close the failed client. Leave/full lifecycle deferred. |
 | FR6 | The system shall support selecting and starting a game from the lobby flow. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
+| FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Partial | Client connection_failed, timeout and server_disconnected handling added. Timeout/retry/back tested; broader disconnect and connection-event reporting remains incomplete. |
 | FR8 | The server shall receive player inputs, update the shared world state, and send authoritative position updates. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR9 | The server shall validate inputs to prevent impossible movement and illegal actions according to agreed game rules. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR10 | The server shall determine hits and communicate the resulting state so clients can reconcile with the server. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
@@ -30,6 +30,8 @@ Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless
 
 ## Scope and open issues
 
+Current October 26 extension: the latest request supersedes disabled-Join/alpha-only restrictions for this functionality. Join connects via the existing ENet transport, with a separate blocking loading/error screen and a 10-second timeout. The host now attaches its existing peer to Godot's multiplayer API instead of refusing connections. Success returns to the existing lobby because no gameplay/start scene exists. No existing scene file, layout, theme or discovery script changed. Earlier scope notes below describe historical decisions; they do not override this extension. Physical-device and visual acceptance remain unverified.
+
 P006/P007: “same server” means a consistent advertised game ID and endpoint on the same LAN, not real joining or a central/internet server. Periodic automatic queries, single-host guarding, endpoint display and LAN-over-loopback address preference are implemented. Host failure does not publish a listing. Join/Exit remain disabled.
 
 P005 LAN update: discovery binds explicitly to IPv4, supports repeated direct-IP queries with host replies, displays local IPv4 addresses, and reports invalid addresses/send errors. Setup and firewall instructions are in Godot/README.md. AR1/AR2 and FR3 remain partial until physical two-laptop and visual checks pass. Automated tests use a separate protocol identifier to avoid interference from an existing demonstration host.
@@ -39,6 +41,8 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-10-26-01 (P014): implemented user-authorized Join/loading/error/retry/back and minimal host multiplayer wiring. Godot 4.7.2 actual host/client processes passed a real connection test; silent-endpoint timeout, progress animation, exact text, duplicate-click guard, Retry and Back also passed. The initial success test closed the client before the host confirmation frame; keeping it alive through confirmation resolved the test timing. Discovery/hosting regression checked. Added separate joining_screen.gd and join_smoke.gd; existing lobby.tscn/project.godot and discovery.gd unchanged. P013 historical request restored to prompt_log.md from available conversation because it was absent from this checkout. Existing source DOCX checksum unchanged. All 20 requirement IDs, links, log/status references and change boundaries checked. User-log/certificate-store environment errors persist; no script errors in final runs. Physical two-device and visual review remain unverified.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 

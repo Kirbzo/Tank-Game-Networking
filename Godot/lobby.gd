@@ -15,6 +15,10 @@ var network_status: Label
 var network_address: LineEdit
 var listed_ids: Array[String] = []
 var local_addresses: Array[String] = []
+var joining_screen: Control
+var joining := false
+var join_target: Dictionary = {}
+var connected_game_id := ""
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -45,7 +49,8 @@ func _ready() -> void:
 	host_button.pressed.connect(host_game)
 	join_button = add_button(controls, "Join")
 	join_button.disabled = true
-	join_button.tooltip_text = "Real joining is deferred to WP2."
+	join_button.tooltip_text = "Select a game or enter its ID to join."
+	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
 	exit_button.disabled = true
 	exit_button.tooltip_text = "Exit means leave the hosted session. Leaving is incomplete for alpha."
@@ -61,11 +66,11 @@ func _ready() -> void:
 	game_list.item_selected.connect(select_game)
 	games_column.add_child(game_list)
 	game_id = LineEdit.new()
-	game_id.placeholder_text = "Enter a game ID (joining unavailable)"
+	game_id.placeholder_text = "Enter a game ID"
 	game_id.text_changed.connect(identify_game)
 	games_column.add_child(game_id)
 	feedback = add_label(column, "No games available. Ask another user to press Host.")
-	hosted = add_label(column, "No session hosted. Only Host is functional in this alpha.")
+	hosted = add_label(column, "No session hosted.")
 	for address in IP.get_local_addresses():
 		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
 			local_addresses.append(address)
@@ -80,6 +85,10 @@ func _ready() -> void:
 	discovery.network_warning.connect(func(message: String): network_status.text = message)
 	refresh_games()
 	add_child(discovery)
+	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
+	multiplayer.connected_to_server.connect(join_connected)
+	multiplayer.connection_failed.connect(join_failed)
+	multiplayer.server_disconnected.connect(join_server_disconnected)
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
@@ -111,8 +120,8 @@ func host_game() -> void:
 		return
 	var id := generate_session_id()
 	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port()}
-	# The endpoint is real, but alpha never connects clients to it.
-	session.refuse_new_connections = true
+	# Joining requires the existing host endpoint to accept and poll peers.
+	multiplayer.multiplayer_peer = session
 	discovery.advertise()
 	host_button.disabled = true
 	var endpoints: Array[String] = []
@@ -120,7 +129,7 @@ func host_game() -> void:
 		endpoints.append("%s:%d" % [address, discovery.hosted_game["port"]])
 	if endpoints.is_empty():
 		endpoints.append("127.0.0.1:%d (no LAN address found)" % discovery.hosted_game["port"])
-	hosted.text = "HOSTED SESSION  |  %s\nServer: %s\nDiscovery only; no player connection. Joining is deferred to WP2." % [id, ", ".join(endpoints)]
+	hosted.text = "HOSTED SESSION  |  %s\nServer: %s" % [id, ", ".join(endpoints)]
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
 
@@ -154,6 +163,9 @@ func refresh_games() -> void:
 		identify_game(selected)
 	else:
 		feedback.text = "%d hosted session(s) found. Select one to see its game ID." % entries.size()
+	if not connected_game_id.is_empty():
+		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id
+	update_join_button()
 
 func select_game(index: int) -> void:
 	game_id.text = listed_ids[index]
@@ -164,9 +176,90 @@ func identify_game(value: String) -> void:
 	if id.is_empty():
 		feedback.text = "Select a game or enter its ID. Joining is unavailable in alpha."
 	elif listed_ids.has(id):
-		feedback.text = "Identified %s. Intended next step: Join (WP2). No connection was made." % id
+		feedback.text = "Identified %s. Select Join to connect." % id
 	else:
 		feedback.text = "No available game matches this ID. Check the ID or wait for its host."
+	update_join_button()
+
+func update_join_button() -> void:
+	join_button.disabled = joining or session != null or (joining_screen != null and joining_screen.visible) or not discovery.games.has(game_id.text.strip_edges().to_upper())
+
+func join_game() -> void:
+	if joining or session != null:
+		return
+	var id := game_id.text.strip_edges().to_upper()
+	if not discovery.games.has(id):
+		update_join_button()
+		return
+	join_target = discovery.games[id].duplicate()
+	start_join()
+
+func start_join() -> void:
+	if joining or session != null:
+		return
+	joining = true
+	join_button.disabled = true
+	if joining_screen == null:
+		joining_screen = preload("res://joining_screen.gd").new()
+		add_child(joining_screen)
+		joining_screen.retry_requested.connect(start_join)
+		joining_screen.back_requested.connect(join_back)
+		joining_screen.timed_out.connect(join_failed)
+	# Hiding the previous UI also removes its mouse/keyboard focus targets.
+	get_child(0).hide()
+	joining_screen.begin()
+	# Show the screen immediately; start the network attempt on the next frame.
+	await get_tree().process_frame
+	if not joining or not is_inside_tree():
+		return
+	session = ENetMultiplayerPeer.new()
+	var result := session.create_client(join_target["address"], int(join_target["port"]))
+	if result != OK:
+		join_failed()
+		return
+	multiplayer.multiplayer_peer = session
+
+func join_connected() -> void:
+	if not joining:
+		return
+	joining = false
+	connected_game_id = join_target["id"]
+	joining_screen.timeout.stop()
+	joining_screen.hide()
+	get_child(0).show()
+	host_button.disabled = true
+	feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id
+	update_join_button()
+
+func join_failed() -> void:
+	if not joining:
+		return
+	joining = false
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	joining_screen.show_failure()
+
+func join_back() -> void:
+	joining_screen.timeout.stop()
+	joining_screen.hide()
+	get_child(0).show()
+	refresh_games()
+	# Allow another attempt after Back, including a stale target (which may fail).
+	join_button.disabled = false
+	join_button.grab_focus()
+
+func join_server_disconnected() -> void:
+	if connected_game_id.is_empty():
+		join_failed()
+		return
+	connected_game_id = ""
+	joining = true
+	get_child(0).hide()
+	joining_screen.show()
+	join_failed()
+	host_button.disabled = discovery.bound_port == -1
 
 func discovery_error(message: String) -> void:
 	host_button.disabled = true
