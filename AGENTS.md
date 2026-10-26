@@ -2,6 +2,10 @@
 
 This is a student server-side framework for Moooze Tanks. Work only on the requested task.
 
+## Current Exit screen extension - October 26, 2026
+
+P015 explicitly enables Exit to display a separate screen reading “Exiting game...”. This supersedes disabled-Exit instructions below for this display-only behavior. Do not automatically quit, disconnect, or close the session. Actual leaving remains incomplete. Preserve the existing lobby layout and scene files.
+
 ## Current Join extension - October 26, 2026
 
 The latest user request explicitly authorizes real Join, superseding earlier alpha instructions to disable Join or refuse player connections. Preserve the existing lobby layout, node names, styling, theme and scene files. Only add the Join loading/error/retry/back flow and the minimal ENet host wiring required to accept it. No gameplay/start flow exists: successful connections return to the existing lobby. Exit/leaving remains incomplete. Earlier alpha-only restrictions below describe the original baseline and still apply to unrelated work.

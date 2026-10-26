@@ -1,8 +1,10 @@
 # Running the alpha
 
+Current Exit behavior (P015, October 26, 2026): click Exit to display “Exiting game...” on a separate screen. This is display-only, with no automatic application close, session leave, or return control. Earlier disabled-Exit descriptions below record the alpha baseline and are superseded by this request.
+
 ## Join extension - October 26, 2026
 
-The user-authorized Join extension supersedes the original disabled-Join alpha behavior described below. Select a discovered remote game or type its ID, then press Join. The existing lobby is temporarily hidden behind a separate screen showing “Joining Game...” and “Please wait while we connect you to the game server...” with animated progress. ENet success returns to the existing lobby with a connected status; there is no game/start scene to load. Errors or a 10-second timeout show “Unable to join the game.” / “Please try again.” with Retry and Back. Retry uses the same endpoint; Back restores the original lobby and enables Join. Exit remains disabled. Hosts accept one client, retaining the existing two-player capacity and UDP discovery implementation. On separate devices, permit the Godot executable's UDP traffic (including the host's dynamically allocated ENet port), not just the discovery port range.
+The user-authorized Join extension supersedes the original disabled-Join alpha behavior described below. Select a discovered remote game or type its ID, then press Join. The existing lobby is temporarily hidden behind a separate screen showing “Joining Game...” and “Please wait while we connect you to the game server...” with animated progress. ENet success returns to the existing lobby with a connected status; there is no game/start scene to load. Errors or a 10-second timeout show “Unable to join the game.” / “Please try again.” with Retry and Back. Retry uses the same endpoint; Back restores the original lobby and enables Join. Exit opens a separate “Exiting game...” screen while the application and session remain running. Hosts accept one client, retaining the existing two-player capacity and UDP discovery implementation. On separate devices, permit the Godot executable's UDP traffic (including the host's dynamically allocated ENet port), not just the discovery port range.
 
 Godot 4.7.2 checks, run from the repository root:
 
