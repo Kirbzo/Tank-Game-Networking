@@ -16,16 +16,24 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 - Before editing, read the relevant code, README.md, current requirements, and applicable status.md entries. Preserve existing user changes and inspect the current working state.
 - For investigation or planning requests, do not change implementation files. Produce requested planning artifacts and update status.md and prompt_log.md as required by FR13-FR14. Do not apply proposed changes to protected files without explicit approval.
 
-## Alpha scope ? October 20, 2026
+## October 27, 2026 scope update
+
+The user authorized real joining on `malik-other-branch`, extending the original hosting-only alpha. Players can join a discovered session by selecting its listing or entering its game ID. Listings display the game ID and host's randomly assigned username. Join includes loading, connection confirmation, timeout, Retry, and Back behavior.
+
+Exit disconnects the player from the hosted session and displays "Exiting game..." while keeping the application open. When a client exits, the host remains active and its player count decreases. When the host exits, the hosted session closes, its client disconnects, and the game listing expires. Exit also cancels any pending connection attempt. Routing to a future main screen remains unimplemented.
+
+## Original alpha scope ? October 20, 2026
+
+The original alpha baseline below is preserved for source traceability. The October 27 scope update supersedes its disabled-Join/Exit restrictions for the current branch.
 
 - Follow AR1?AR5. Implement only alpha behavior when alpha implementation is requested; consider FR1?FR12 without adding non-alpha functionality (AR5).
 - Show Host, Join, Exit, and a game list. Two users initially see an empty list. Host must launch a game whose identifiable entry and game ID are visible to the other user.
-- Keep Join disabled. Real joining belongs to WP2, and leaving is incomplete for alpha.
-- AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Explain or separately simulate the incomplete steps and label them clearly. Do not enable real Join or claim simulations satisfy final networking acceptance.
-- Exit means leaving the hosted session. Retain the Exit label and keep it disabled while alpha leaving remains incomplete.
+- Preserve the authorized Join flow. Disable Join when no valid target is available, during a connection attempt, or while already in a session. Preserve Exit's disconnect behavior. Do not restore the earlier behavior that kept players connected after Exit. Keep the "Exiting game..." screen until main-screen routing is requested.
+- AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Preserve the source distinction: joining was simulated/deferred in the original alpha; the October 27 update authorizes real Join. Label any remaining simulations clearly and do not claim they satisfy final networking acceptance.
+- Exit means leaving the hosted session. Retain the Exit label for the authorized disconnect action and exit screen.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
-- You are authorized to do two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not authorize real joining.
-- The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance and Join/Exit disabled; do not imply discovery establishes a player connection.
+- You are authorized to do two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not establish a connection; real joining is separately authorized by the October 27 update.
+- The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance; apply the authorized Join/Exit behavior above and do not imply discovery establishes a player connection.
 
 ## Overall framework
 
@@ -37,6 +45,12 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 
 - FR13: maintain lowercase `status.md` with an entry for every AR1?AR5 and FR1?FR15 requirement. Record status, evidence, and remaining work. Distinguish not implemented, partial, complete, and unverified; mark complete only with supporting evidence.
 - FR14: maintain `prompt_log.md` with a unique prompt ID, actual prompt text, date, associated status.md revision/snapshot, and results. Add an entry for each subsequent project work request; do not fabricate unavailable historical dates or prompts.
+- Record each prompt's date and time separately. Use zero-padded, 12-hour `hh:mm:ss AM/PM` format and timezone `America/Regina`, for example `Time: 02:05:09 PM`. Use the prompt's receipt time when available; otherwise label it as the recording time. Mark unavailable historical times **Unavailable** rather than inventing them.
+- For each new `prompt_log.md` entry, record token usage when reliable per-request usage records are available: input tokens, cached input tokens, output tokens, model, and usage source. State whether cached input is included in the input total to avoid double counting.
+- Associate usage with the prompt ID and include all model calls used to complete that request, including tool-related continuations.
+- Record estimated monetary cost only when the model, applicable rates, and usage breakdown are known. Include currency, pricing source, and rate date. Label estimates separately from actual billed charges.
+- If usage or cost cannot be reliably determined, record **Unavailable** with a brief reason. Never invent figures or treat the user's prompt text alone as the total token usage.
+- Preserve historical entries. Backfill usage or cost only when reliable records can be matched to the original prompt ID.
 - Log planning requests and their clarifications too. A subsequent implementation request receives its own prompt ID while linking the planning entry and the resulting status revision.
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
 - Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.
