@@ -1,32 +1,28 @@
 # Moooze Tanks Game Server Team
 
-Current Joining-page behavior (P021, October 26, 2026): successful connections keep the existing Joining page visible, stop its timeout and progress animation, and show the connected game ID. The existing Back button explicitly returns to the lobby without disconnecting, where Exit remains available. This supersedes earlier automatic-return descriptions below. No delay, gameplay or new room screen is added.
-
-Connected lobby (P020, October 26): returning from Joining to the lobby is intentional. Host and Join remain disabled while the instance owns or has joined a session. The host now reports the game ID and live player count (1/2 waiting, 2/2 client connected); the client retains its connected status even when selecting another listing. Both explain that game start is not implemented. Local two-process tests verified matching game ID/host port, reciprocal peer IDs and five seconds of persistent connection. Two-laptop membership and persistence still require checking on those devices; Exit remains display-only.
-
-Startup repair (P019, October 26): removed committed merge-conflict markers that prevented lobby.gd from parsing and left the window blank. Graphical startup now renders the full Alpha Lobby; Host/Join and display-only Exit checks pass. See [status.md](status.md) for evidence and limitations.
-
-October 26 investigation (P016/P017): this checkout starts directly in `Godot/lobby.tscn`, with the game list visible and Join enabled only after selecting or identifying a discovered game. Its loading screen returns to the lobby on connection success. The reported separate main-menu → pre-selection Join page is not present here; the user has confirmed this project path (P018), but the reported pre-selection disappearance remains unresolved. The existing success handler explicitly hides loading and restores the lobby. Headless mouse-input Join and display-only Exit checks pass; see [status.md](status.md).
-
-Current Exit behavior (P015, October 26, 2026): click Exit to display “Exiting game...” on a separate screen. This is display-only, with no automatic application close, session leave, or return control. Earlier disabled-Exit descriptions below record the alpha baseline and are superseded by this request.
-
-Current extension (October 26, 2026): the existing Join button now connects to a selected/discovered game ID using ENet. A separate loading screen blocks interaction, animates progress, and provides Retry/Back after failure or a 10-second timeout. Successful connections return to the existing lobby; no gameplay/start scene exists. Exit opens a separate “Exiting game...” screen while the application and session remain running. Lobby layout, styles, scene structure and discovery are unchanged. The earlier alpha requirement tables below preserve the source baseline; their disabled-Join statements are superseded by this explicit user-authorized extension. Real host/client connection and failure-flow checks passed in Godot 4.7.2 processes on one computer; physical LAN and visual acceptance remain unverified.
-
 A student two-player networking framework built in Godot, with visual placeholders for connection and multiplayer testing.
 
 ## Source and current status
 
 Updated October 16, 2026 from [Requirements Document.docx](MoozeTanks/Requirements%20Document.docx), titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only. The current requirements document is available at `MoozeTanks/Requirements Document.docx`, relative to the repository root. Project documentation links are relative to the repository root (the folder containing this README.md and AGENTS.md).
 
-This checkout contains the alpha Godot project in [Godot/](Godot/README.md): hosting, discovery, game IDs, and a lobby interface. Joining and leaving remain disabled. Same-computer two-process runtime checks passed on Godot 4.7.2; visual review and two-device LAN verification remain outstanding. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
+This checkout contains the Godot lobby project in [Godot/](Godot/README.md): hosting, discovery, game IDs, and a lobby interface. Real joining and Exit disconnection are implemented; the application stays open on "Exiting game..." and main-screen routing remains unimplemented. Same-computer two-process runtime checks passed on Godot 4.7.2; visual review and two-device LAN verification remain outstanding. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
 
 ## Technology baseline
 
 Retain **Godot 4.7.2** and **GDScript** from the existing project instructions. The updated DOCX does not specify an engine version or language; these are retained constraints from the earlier documentation, not new DOCX requirements.
 
-## Alpha demonstration ? October 20, 2026
+## October 27, 2026 scope update
 
-The alpha implements hosting and visibility of hosted games to another user. Initially, two users see an empty game list. Only Host works: hosting launches a game, and its entry becomes visible in the other user's lobby. Join stays disabled; real joining is deferred to WP2. Leaving is also incomplete in the alpha. Do not implement non-alpha gameplay functionality in this iteration (AR5).
+The user authorized real joining on `malik-other-branch`, extending the original hosting-only alpha. Players can join a discovered session by selecting its listing or entering its game ID. Listings display the game ID and host's randomly assigned username. Join includes loading, connection confirmation, timeout, Retry, and Back behavior.
+
+Exit disconnects the player from the hosted session and displays "Exiting game..." while keeping the application open. When a client exits, the host remains active and its player count decreases. When the host exits, the hosted session closes, its client disconnects, and the game listing expires. Exit also cancels any pending connection attempt. Routing to a future main screen remains unimplemented.
+
+## Original alpha demonstration ? October 20, 2026
+
+This section and its source requirement table record the original alpha baseline, not the current Join/Exit behavior. The October 27 scope update above supersedes the original disabled-Join restrictions for this branch.
+
+The alpha implements hosting and visibility of hosted games to another user. Initially, two users see an empty game list. Only Host works: hosting launches a game, and its entry becomes visible in the other user's lobby. Join stays disabled; real joining is deferred to WP2. Leaving is also incomplete in the alpha. The original iteration excluded non-alpha functionality (AR5); the October 27 request explicitly extends it to real joining.
 
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
@@ -36,7 +32,9 @@ The alpha implements hosting and visibility of hosted games to another user. Ini
 | AR4 | Demonstrate the player's flow for finding a game and using the lobby. | A reviewer can follow the intended hosting, joining, and leaving sequence. Simulated and working steps are clearly distinguished. |
 | AR5 | Consider all framework and functional requirements below but do not implement if not part of the alpha demonstration requirements. | No non alpha functionality present in this iteration. |
 
-### Demo walkthrough and source ambiguities
+### Original alpha walkthrough and source ambiguities
+
+The following walkthrough records the original alpha plan. Use the current Host/Join/Exit flow in [Godot/README.md](Godot/README.md) for this branch.
 
 1. Open the lobby for two users and show the initially empty game lists.
 2. Identify Host, Join, and Exit, with Join disabled.
@@ -47,7 +45,7 @@ The overview calls the controls Join, Leave, and Host, while AR1 says Host, Join
 
 ## Framework functional requirements
 
-FR1?FR12 describe the overall framework; implement only the subset needed for AR1?AR4 during alpha. FR13?FR15 require the documentation delivered here. Full networking and gameplay acceptance remains unverified.
+FR1?FR12 describe the overall framework. The original alpha implemented only the AR1?AR4 subset; the October 27 update adds real joining without gameplay. FR13?FR15 require the documentation delivered here. Full networking and gameplay acceptance remains unverified.
 
 | ID | Requirement | Acceptance criteria |
 | --- | --- | --- |
@@ -72,7 +70,7 @@ FR1?FR12 describe the overall framework; implement only the subset needed for AR
 - Exact start permissions and agreed game-start flow (FR6).
 - Movement limits and legal action rules before testing input validation (FR9).
 - Match-end trigger before reset testing (FR11).
-- Exit means leave the hosted session (user clarification, October 19, 2026); leaving remains incomplete. AR3 uses selection/ID lookup and an explicit explanation without joining.
+- Exit originally meant leave the hosted session (October 19 clarification). The later October 27 request supersedes the display-only placeholder: Exit now disconnects and retains "Exiting game..." until future main-screen routing. AR3 selection/ID lookup now supports real joining.
 
 Transport, ports, game-discovery mechanism, controls, and entry scenes are not specified. Document actual choices when implementation is authorized.
 
@@ -80,13 +78,15 @@ Transport, ports, game-discovery mechanism, controls, and entry scenes are not s
 
 The lobby follows the supplied `MoozeTanks/LobbyImage.jpeg` layout, with Host, Join, and Exit stacked to the left of the game list. Game-ID identification and LAN lookup remain available.
 
-For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join and Exit remain disabled. Physical two-laptop acceptance remains unverified.
+For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join connects to a selected or typed remote game ID. Exit disconnects and displays "Exiting game..." while keeping the application open. Physical two-laptop acceptance remains unverified.
 
-Listings show each session's game ID and host IP:port. Automatic queries find already-running hosts, and repeated announcements update one listing per ID. Godot 4.7.2 process tests verified matching host/observer IDs and actual server ports, automatic/direct discovery, late discovery, duplicate refresh, expiry, and the hosting-failure path. This confirms discovery of the same advertised server endpoint, without a player connection.
+Listings show each session's game ID and the host's assigned username, for example `AB12CD | BraveMoose`. The host's username is shared through LAN discovery after Host is clicked. IP addresses and ports remain available internally for discovery and connections. The lobby displays one selected IPv4 address separately; hosted-session status shows the game ID without the server endpoint. Automatic queries find already-running hosts, and repeated announcements refresh one listing per game ID. Usernames may repeat; game IDs identify sessions. Discovery alone does not establish a player connection; pressing Join does. Exit closes the player connection; a host Exit also closes its hosted session.
+
+Earlier Godot 4.7.2 process tests verified ID and endpoint discovery, refresh, expiry, and hosting failure. On October 23, 2026, updated username listings passed the packet and same-computer host/observer tests on Godot 4.7.2. Visual and physical two-device verification remain outstanding.
 
 See [Godot/README.md](Godot/README.md) for import instructions, implementation choices, and reproducible two-process tests. Godot 4.7.2 imported the project and passed the actual host/observer headless test. Environment errors concerned user log storage and the certificate store; no GDScript parse/runtime errors were reported. Visual layout and separate-device LAN behavior still require review.
 
-For alpha, verify two-user initial empty lists, working Host, remote game-list visibility, visible game IDs, disabled Join, and clearly identified simulated joining/leaving steps. Check AR5 against the actual implementation. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
+Godot 4.7.2 same-computer tests recorded on October 27 passed for joining by selection and ID, username listings, connection persistence, timeout/retry/back, host-disconnect recovery, and the earlier display-only Exit. Later P034 tests verified client Exit disconnection, host Exit closure and listing expiry, pending-Join cancellation, and no-session Exit. Visual review and physical two-device LAN verification remain outstanding. These are prior recorded results, not new runtime checks for this wording update. Check AR5 against the explicitly expanded scope; main-screen routing remains incomplete. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
 
 ## Documentation
 

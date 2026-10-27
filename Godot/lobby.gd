@@ -1,6 +1,9 @@
 extends Control
 
 const Discovery = preload("res://discovery.gd")
+const Usernames = preload("res://usernames.gd")
+const LanAddress = preload("res://lan_address.gd")
+var username: String = Usernames.generate()
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
@@ -15,12 +18,14 @@ var network_status: Label
 var network_address: LineEdit
 var listed_ids: Array[String] = []
 var local_addresses: Array[String] = []
+var ipv4_label: Label
 var joining_screen: Control
 var joining := false
 var join_target: Dictionary = {}
 var connected_game_id := ""
 var join_attempt := 0
 var exit_screen: Control
+var exiting := false
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -37,6 +42,7 @@ func _ready() -> void:
 	scroll.add_child(column)
 	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
+	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
 	# Match LobbyImage.jpeg: stacked actions beside the game list.
 	var lobby_row := HBoxContainer.new()
@@ -54,7 +60,7 @@ func _ready() -> void:
 	join_button.tooltip_text = "Select a game or enter its ID to join."
 	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
-	exit_button.tooltip_text = "Show the exit screen. Leaving the session is not implemented yet."
+	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
 	exit_button.pressed.connect(show_exit_screen)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -73,18 +79,19 @@ func _ready() -> void:
 	games_column.add_child(game_id)
 	feedback = add_label(column, "No games available. Ask another user to press Host.")
 	hosted = add_label(column, "No session hosted.")
-	for address in IP.get_local_addresses():
-		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
-			local_addresses.append(address)
-	add_label(column, "This laptop's IPv4: " + (", ".join(local_addresses) if not local_addresses.is_empty() else "No LAN IPv4 address found"))
+	var address := LanAddress.detect()
+	if not address.is_empty():
+		local_addresses.append(address)
+	ipv4_label = add_label(column, "IPv4: " + (address if not address.is_empty() else "No unambiguous LAN address found"))
 	network_address = LineEdit.new()
 	network_address.placeholder_text = "If no game appears: enter the host laptop's IPv4 and press Enter"
 	network_address.text_submitted.connect(set_network_address)
 	column.add_child(network_address)
-	network_status = add_label(column, "LAN discovery active. Both laptops must allow Godot on the local network.")
+	network_status = add_label(column, "")
+	network_status.hide()
 	discovery.games_changed.connect(refresh_games)
 	discovery.discovery_failed.connect(discovery_error)
-	discovery.network_warning.connect(func(message: String): network_status.text = message)
+	discovery.network_warning.connect(show_network_status)
 	refresh_games()
 	add_child(discovery)
 	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
@@ -96,7 +103,15 @@ func _ready() -> void:
 
 func session_peers_changed(_peer_id: int) -> void:
 	# Read the peer list after Godot finishes processing the connection event.
-	update_session_feedback.call_deferred()
+	refresh_session_players.call_deferred()
+
+func refresh_session_players() -> void:
+	if exiting:
+		return
+	if session != null and not discovery.hosted_game.is_empty():
+		discovery.hosted_game["players"] = 1 + multiplayer.get_peers().size()
+		discovery.advertise()
+	refresh_games()
 
 func update_session_feedback() -> bool:
 	if session == null or joining:
@@ -114,10 +129,34 @@ func update_session_feedback() -> bool:
 func show_exit_screen() -> void:
 	if exit_screen != null:
 		return
+	exiting = true
+	leave_game()
 	exit_screen = preload("res://exit_screen.gd").new()
 	get_parent().add_child(exit_screen)
-	# Keep the session alive; this step only replaces the visible screen.
+	# Keep the application open for the future main-screen destination.
 	hide()
+
+func leave_game() -> void:
+	# Cancel a pending join before its deferred frame or timeout can resume it.
+	joining = false
+	join_attempt += 1
+	connected_game_id = ""
+	join_target.clear()
+	if joining_screen != null:
+		joining_screen.timeout.stop()
+		joining_screen.hide()
+	# Clearing the listing stops announcements and direct-query replies.
+	if not discovery.hosted_game.is_empty():
+		discovery.games.erase(discovery.hosted_game["id"])
+	discovery.hosted_game.clear()
+	var leaving_session := session
+	session = null
+	multiplayer.multiplayer_peer = null
+	if leaving_session != null:
+		leaving_session.close()
+	hosted.text = "No session hosted."
+	host_button.disabled = true
+	refresh_games()
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
@@ -136,7 +175,7 @@ func add_button(parent: Node, text: String) -> Button:
 
 func host_game() -> void:
 	# Guard the action as well as the button: one server per hosting instance.
-	if session != null:
+	if exiting or session != null:
 		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
@@ -148,17 +187,12 @@ func host_game() -> void:
 		session = null
 		return
 	var id := generate_session_id()
-	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port()}
+	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username, "players": 1}
 	# Joining requires the existing host endpoint to accept and poll peers.
 	multiplayer.multiplayer_peer = session
 	discovery.advertise()
 	host_button.disabled = true
-	var endpoints: Array[String] = []
-	for address in local_addresses:
-		endpoints.append("%s:%d" % [address, discovery.hosted_game["port"]])
-	if endpoints.is_empty():
-		endpoints.append("127.0.0.1:%d (no LAN address found)" % discovery.hosted_game["port"])
-	hosted.text = "HOSTED SESSION  |  %s\nServer: %s" % [id, ", ".join(endpoints)]
+	hosted.text = "HOSTED SESSION  |  %s" % id
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
 
@@ -178,12 +212,14 @@ func refresh_games() -> void:
 	var entries := discovery.games.duplicate()
 	if not discovery.hosted_game.is_empty():
 		var own_id: String = discovery.hosted_game["id"]
-		entries[own_id] = {"id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
+		entries[own_id] = {"players": discovery.hosted_game["players"], "username": username, "id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
 	var ids: Array = entries.keys()
 	ids.sort()
 	for id in ids:
 		listed_ids.append(str(id))
-		game_list.add_item("%s  |  %s:%d  |  discovery only" % [id, entries[id]["address"], entries[id]["port"]])
+		var players: int = entries[id].get("players", 0)
+		var count := "%d/2 players" % players if players > 0 else "?/2 players"
+		game_list.add_item("%s  |  %s  |  %s" % [id, entries[id].get("username", "UnknownHost"), count])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
 	if entries.is_empty():
@@ -205,7 +241,7 @@ func identify_game(value: String) -> void:
 		return
 	var id := value.strip_edges().to_upper()
 	if id.is_empty():
-		feedback.text = "Select a game or enter its ID. Joining is unavailable in alpha."
+		feedback.text = "Select a game or enter its ID to join."
 	elif listed_ids.has(id):
 		feedback.text = "Identified %s. Select Join to connect." % id
 	else:
@@ -213,7 +249,7 @@ func identify_game(value: String) -> void:
 	update_join_button()
 
 func update_join_button() -> void:
-	join_button.disabled = joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+	join_button.disabled = exiting or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
 
 func available_join_target() -> Dictionary:
 	var id := game_id.text.strip_edges().to_upper()
@@ -226,7 +262,7 @@ func available_join_target() -> Dictionary:
 	return {}
 
 func join_game() -> void:
-	if joining or session != null:
+	if exiting or joining or session != null:
 		return
 	var target := available_join_target()
 	if target.is_empty():
@@ -237,7 +273,7 @@ func join_game() -> void:
 	start_join()
 
 func start_join() -> void:
-	if joining or session != null:
+	if exiting or joining or session != null:
 		return
 	joining = true
 	join_attempt += 1
@@ -288,6 +324,8 @@ func join_failed() -> void:
 	joining_screen.show_failure()
 
 func join_back() -> void:
+	if exiting:
+		return
 	joining_screen.timeout.stop()
 	joining_screen.hide()
 	get_child(0).show()
@@ -296,6 +334,8 @@ func join_back() -> void:
 	join_button.grab_focus()
 
 func join_server_disconnected() -> void:
+	if exiting:
+		return
 	if connected_game_id.is_empty():
 		join_failed()
 		return
@@ -309,15 +349,20 @@ func join_server_disconnected() -> void:
 func discovery_error(message: String) -> void:
 	host_button.disabled = true
 	feedback.text = message
+	show_network_status(message)
+
+func show_network_status(message: String) -> void:
 	network_status.text = message
+	network_status.visible = not message.is_empty()
 
 func set_network_address(value: String) -> void:
 	if not discovery.set_direct_address(value):
-		network_status.text = "Enter a valid IPv4 address, such as 192.168.1.25 (not a game ID)."
+		show_network_status("Enter a valid IPv4 address, such as 192.168.1.25 (not a game ID).")
 	elif discovery.direct_address.is_empty():
-		network_status.text = "Automatic LAN discovery active. Manual host lookup cleared."
+		network_status.text = ""
+		network_status.hide()
 	else:
-		network_status.text = "Looking for hosted games at %s. If none appear, check both firewalls and Wi-Fi isolation." % discovery.direct_address
+		show_network_status("Looking for hosted games at %s. If none appear, check both firewalls and Wi-Fi isolation." % discovery.direct_address)
 
 func _exit_tree() -> void:
 	if session != null:

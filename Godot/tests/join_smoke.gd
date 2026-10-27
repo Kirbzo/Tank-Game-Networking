@@ -41,7 +41,11 @@ func exit_checks() -> bool:
 	if not require(labels.size() == 1 and labels[0].text == "Exiting game...", "Exit text must match"):
 		return false
 	await create_timer(0.3).timeout
-	return require(lobby.session == session and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED, "Exit must keep the application and session alive")
+	var screen: Control = lobby.exit_screen
+	lobby.show_exit_screen()
+	lobby.host_game()
+	lobby.join_game()
+	return require(lobby.session == null and lobby.connected_game_id.is_empty() and lobby.discovery.hosted_game.is_empty() and not lobby.joining and lobby.exit_screen == screen and (session == null or session.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED), "Exit must close the session, clear membership, prevent reconnects and keep one exit screen alive")
 
 func connected_lobby_checks(is_host: bool) -> bool:
 	var session: ENetMultiplayerPeer = lobby.session
@@ -61,24 +65,32 @@ func connected_lobby_checks(is_host: bool) -> bool:
 	lobby.identify_game("UNKNOWN")
 	if not require(lobby.feedback.text.contains(id) and lobby.feedback.text.contains("Game start is not implemented") and lobby.feedback.text.contains("Players: 2/2" if is_host else "Connected to game"), "Both lobbies must explain their actual session state"):
 		return false
+	if not require(lobby.game_list.get_item_text(lobby.listed_ids.find(id)) == "%s  |  BraveMoose  |  2/2 players" % id, "Connected host and client listings must show 2/2"):
+		return false
 	print("PASS persistent session id=%s local_peer=%d peers=%s endpoint_port=%d" % [id, lobby.multiplayer.get_unique_id(), peers, session.get_host().get_local_port() if is_host else lobby.join_target["port"]])
 	return true
 
 func run() -> void:
 	lobby = load("res://lobby.tscn").instantiate()
 	lobby.discovery.protocol = "moooze-join-smoke"
+	lobby.username = "BraveMoose" if OS.get_cmdline_user_args().has("host") else "LuckyOtter"
 	root.add_child(lobby)
 	print("TRACE project=" + ProjectSettings.globalize_path("res://") + " scene=" + lobby.scene_file_path)
 	lobby.join_button.pressed.connect(func(): trace_state("Join pressed"))
 	lobby.multiplayer.connected_to_server.connect(func(): trace_state("connected_to_server"))
 	lobby.multiplayer.connection_failed.connect(func(): trace_state("connection_failed"))
+	if OS.get_cmdline_user_args().has("counts"):
+		await count_checks()
+		return
 	if OS.get_cmdline_user_args().has("initial"):
 		await click(lobby.join_button)
 		await create_timer(1.0).timeout
 		trace_state("initial Join click, no selection")
 		if not require(lobby.join_button.disabled and lobby.joining_screen == null and lobby.visible and lobby.game_list.is_visible_in_tree(), "Before selection, this project's Join is disabled and its game list is already visible"):
 			return
-		print("PASS initial lobby remains usable; no pre-selection Join page exists")
+		if not await exit_checks():
+			return
+		print("PASS initial lobby and Exit without a session")
 		quit()
 		return
 	if OS.get_cmdline_user_args().has("host"):
@@ -89,15 +101,27 @@ func run() -> void:
 		if not require(lobby.multiplayer.get_peers().size() == 1, "Existing host must accept one real client"):
 			return
 		print("PASS host accepted client")
+		if OS.get_cmdline_user_args().has("disconnect"):
+			await create_timer(1.0).timeout
+			if not await exit_checks():
+				return
+			await create_timer(2.0).timeout
+			print("PASS host disconnect fixture")
+			quit()
+			return
 		if not await connected_lobby_checks(true):
 			return
+		var leave_deadline := Time.get_ticks_msec() + 5000
+		while (not lobby.multiplayer.get_peers().is_empty() or not lobby.feedback.text.contains("Players: 1/2")) and Time.get_ticks_msec() < leave_deadline:
+			await process_frame
+		if not require(lobby.multiplayer.get_peers().is_empty() and lobby.feedback.text.contains("Players: 1/2") and lobby.feedback.text.contains("Waiting for a client"), "Host must report client Exit while the client application is still open"):
+			return
+		if not require(lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % lobby.discovery.hosted_game["id"], "Host list must return to 1/2 after client departure"):
+			return
+		print("PASS host membership and 1/2 count after client Exit")
 		if not await exit_checks():
 			return
-		print("PASS host Exit mouse input and session persistence")
-		await create_timer(3.0).timeout
-		if not require(lobby.multiplayer.get_peers().is_empty() and lobby.feedback.text.contains("Players: 1/2") and lobby.feedback.text.contains("Waiting for a client"), "Host must report client departure after the client test process closes"):
-			return
-		print("PASS host membership feedback after client disconnect")
+		print("PASS host Exit closes hosting and retains the exit screen")
 		quit()
 		return
 	if OS.get_cmdline_user_args().has("failure"):
@@ -108,7 +132,13 @@ func run() -> void:
 		await process_frame
 	if not require(not lobby.discovery.games.is_empty(), "Client must discover host"):
 		return
-	await click(lobby.game_list, lobby.game_list.get_item_rect(0).get_center())
+	if not require(lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % lobby.listed_ids[0] and lobby.username == "LuckyOtter", "Remote listing must show host name while client retains its own name"):
+		return
+	if OS.get_cmdline_user_args().has("typed"):
+		lobby.game_id.text = lobby.listed_ids[0].to_lower()
+		lobby.game_id.text_changed.emit(lobby.game_id.text)
+	else:
+		await click(lobby.game_list, lobby.game_list.get_item_rect(0).get_center())
 	if not require(not lobby.join_button.disabled, "Selecting a remote game must enable Join"):
 		return
 	await click(lobby.join_button)
@@ -124,6 +154,21 @@ func run() -> void:
 	if not require(lobby.joining_screen.visible and not lobby.get_child(0).visible and lobby.host_button.disabled and lobby.join_button.disabled, "Success must preserve the Joining page without creating another host"):
 		return
 	print("PASS client joined " + lobby.connected_game_id)
+	if OS.get_cmdline_user_args().has("disconnect"):
+		deadline = Time.get_ticks_msec() + 10000
+		while lobby.session != null and Time.get_ticks_msec() < deadline:
+			await process_frame
+		if not require(lobby.session == null and lobby.connected_game_id.is_empty() and lobby.joining_screen.retry_button.visible, "Host departure must clean up the client and expose Retry/Back"):
+			return
+		await click(lobby.joining_screen.back_button)
+		if not require(lobby.get_child(0).visible and not lobby.host_button.disabled, "Back after host departure must restore a usable lobby"):
+			return
+		await create_timer(5.0).timeout
+		if not require(lobby.discovery.games.is_empty(), "Exited host must stop advertising and expire from remote listings"):
+			return
+		print("PASS host Exit disconnect recovery and listing expiry")
+		quit()
+		return
 	if not await connected_lobby_checks(false):
 		return
 	var connected_session: ENetMultiplayerPeer = lobby.session
@@ -132,9 +177,9 @@ func run() -> void:
 		return
 	if not await exit_checks():
 		return
-	print("PASS client Join/Exit mouse input and session persistence")
+	print("PASS client Exit disconnects while application remains open")
 	# Keep the client alive through the host's confirmation frame.
-	await create_timer(1.0).timeout
+	await create_timer(2.0).timeout
 	quit()
 
 func failure_checks() -> void:
@@ -166,6 +211,30 @@ func failure_checks() -> void:
 	await click(screen.back_button)
 	if not require(not screen.visible and lobby.get_child(0).visible and not lobby.join_button.disabled and lobby.session == null, "Back must restore the original menu and re-enable Join"):
 		return
+	lobby.join_game()
+	lobby.show_exit_screen()
+	await create_timer(0.3).timeout
+	if not require(lobby.session == null and not lobby.joining and lobby.exit_screen.visible and screen.timeout.is_stopped(), "Exit during pending Join must cancel the attempt and timeout"):
+		return
 	silent_server.close()
 	print("PASS timeout, loading animation, duplicate-click guard, retry and back")
 	quit()
+
+func count_checks() -> void:
+	var deadline := Time.get_ticks_msec() + 30000
+	var observed: Array[int] = []
+	while Time.get_ticks_msec() < deadline:
+		if not lobby.listed_ids.is_empty():
+			var id: String = lobby.listed_ids[0]
+			var count: int = lobby.discovery.games[id].get("players", 0)
+			if count > 0 and (observed.is_empty() or observed.back() != count):
+				observed.append(count)
+				if not require(lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  %d/2 players" % [id, count], "Observer row must render the received count beside username"):
+					return
+				print("OBSERVER_COUNT %s %d/2" % [id, count])
+				if observed == [1, 2, 1]:
+					print("PASS observer saw 1/2 -> 2/2 -> 1/2 without joining")
+					quit()
+					return
+		await process_frame
+	require(false, "Observer must see host alone, connected client, and client departure")

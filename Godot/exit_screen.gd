@@ -1,5 +1,5 @@
 extends Control
-## Display-only exit screen. Session leaving will be implemented separately.
+## Shown after the lobby disconnects; future main-screen routing is deferred.
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
