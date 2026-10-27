@@ -2,10 +2,6 @@
 
 This is a student server-side framework for Moooze Tanks. Work only on the requested task.
 
-## Current Join extension - October 26, 2026
-
-The latest user request explicitly authorizes real Join, superseding earlier alpha instructions to disable Join or refuse player connections. Preserve the existing lobby layout, node names, styling, theme and scene files. Only add the Join loading/error/retry/back flow and the minimal ENet host wiring required to accept it. No gameplay/start flow exists: successful connections return to the existing lobby. Exit/leaving remains incomplete. Earlier alpha-only restrictions below describe the original baseline and still apply to unrelated work.
-
 ## Scope and source
 
 - Keep all changes inside the project repository root (`.`), defined as the folder containing this AGENTS.md and README.md. Resolve project file paths relative to that root, regardless of the checkout location or operating system.
@@ -45,8 +41,6 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
 - Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.
 - Keep source ambiguities visible until resolved by the team or a later user instruction.
-- For each prompt-log entry, record the request date, time, and timezone when available. If the actual request timestamp is unavailable, write “Unavailable.” Do not substitute the log-update time or invent historical timestamps.
-- After each task finishes, record its actual token usage in prompt_log.md when available. Identify the usage source and whether the count covers that task or the entire session. If final usage becomes available only after Codex finishes responding, add it in a follow-up update. Otherwise, write “Unavailable.” Do not estimate or invent token counts.
 
 ## Validation and reporting
 
