@@ -30,7 +30,7 @@ func run() -> void:
 		failing.host_game()
 		if not check(failing.session == null and failing.discovery.hosted_game.is_empty() and failing.listed_ids.is_empty(), "Failed hosting must not advertise or list a game"):
 			return
-		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep joining/leaving disabled"):
+		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and not failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep Join disabled without a selection"):
 			return
 		failing.queue_free()
 		await process_frame
@@ -43,6 +43,8 @@ func run() -> void:
 		lobby.discovery = QueryOnlyDiscovery.new()
 	# Keep a user's running lobby out of the test's initial-empty/expiry assertions.
 	lobby.discovery.protocol = "moooze-alpha-smoke-2"
+	if args.has("host"):
+		lobby.username = "BraveMoose"
 	root.add_child(lobby)
 	await process_frame
 	if OS.get_cmdline_user_args().has("unicast"):
@@ -57,7 +59,7 @@ func run() -> void:
 				return
 	if not args.has("late") and not check(lobby.listed_ids.is_empty(), "Initial game list must be empty"):
 		return
-	if not check(lobby.join_button.disabled and lobby.exit_button.disabled, "Join and leaving must be disabled"):
+	if not check(lobby.join_button.disabled and not lobby.exit_button.disabled, "Join needs a target; Exit opens the session screen"):
 		return
 	if OS.get_cmdline_user_args().has("host"):
 		lobby.host_button.pressed.emit()
@@ -75,7 +77,7 @@ func run() -> void:
 			return
 		if not check(lobby.session == original_session and int(lobby.discovery.hosted_game["port"]) == port, "Repeated Host must keep one server and stable endpoint"):
 			return
-		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0).contains(":%d" % port), "Host UI must show actual server port"):
+		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % original_id, "Host status must retain port; game row must show host username"):
 			return
 		print("HOST_STARTED %s %d" % [lobby.discovery.hosted_game["id"], port])
 		await create_timer(4.0).timeout
@@ -89,10 +91,10 @@ func run() -> void:
 		return
 	var id: String = lobby.listed_ids[0]
 	var port: int = lobby.discovery.games[id]["port"]
-	if not check(lobby.game_list.get_item_text(0).contains(":%d" % port), "Observer must display advertised server endpoint"):
+	if not check(lobby.discovery.games[id]["username"] == "BraveMoose" and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % id, "Observer must show advertised host username instead of endpoint"):
 		return
 	lobby.game_list.item_selected.emit(0)
-	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("No connection was made"), "Selection must identify without joining"):
+	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("Select Join") and not lobby.join_button.disabled, "Selection must identify without joining"):
 		return
 	lobby.game_id.text_changed.emit(id.to_lower())
 	if not check(lobby.feedback.text.contains("Identified"), "Typed ID must identify host"):
@@ -107,7 +109,7 @@ func run() -> void:
 	await create_timer(9.0).timeout
 	if not check(lobby.listed_ids.is_empty(), "Closed host listing must expire"):
 		return
-	print("PASS observer: remote visibility, IDs, disabled controls, expiry")
+	print("PASS observer: remote visibility, IDs, selection, expiry")
 	quit()
 
 func packet_checks() -> void:
@@ -119,27 +121,51 @@ func packet_checks() -> void:
 	if not check(sender.bind(0, "0.0.0.0") == OK and receiver.bound_port != -1, "Packet test sockets must bind"):
 		return
 	var id := "AB12CD"
-	var data := {"protocol": receiver.protocol, "instance": "fixture", "type": "announcement", "id": id, "port": 32100}
+	var data := {"protocol": receiver.protocol, "instance": "fixture", "type": "announcement", "id": id, "port": 32100, "username": "BraveMoose", "players": 1}
 	sender.set_dest_address("127.0.0.1", receiver.bound_port)
 	sender.put_packet(JSON.stringify(data).to_utf8_buffer())
 	await create_timer(0.1).timeout
-	if not check(receiver.games.size() == 1 and receiver.games[id]["address"] == "127.0.0.1", "Loopback announcement must create one listing"):
+	if not check(receiver.games.size() == 1 and receiver.games[id]["address"] == "127.0.0.1" and receiver.games[id]["username"] == "BraveMoose", "Loopback announcement must create one listing"):
 		return
 	# Deterministic address-policy check; this does not prove LAN delivery.
 	var lan_address := "192.0.2.10"
-	receiver.remember_game(id, lan_address, 32100)
+	receiver.remember_game(id, lan_address, 32100, "BraveMoose")
 	if not check(receiver.games[id]["address"] == lan_address, "LAN address must replace loopback"):
 		return
 	var prior_seen: int = receiver.games[id]["seen"]
 	data["port"] = 32101
+	data["username"] = "LuckyOtter"
+	data["players"] = 2
 	sender.set_dest_address("127.0.0.1", receiver.bound_port)
 	for index in range(3):
 		sender.put_packet(JSON.stringify(data).to_utf8_buffer())
 	await create_timer(0.1).timeout
-	if not check(receiver.games.size() == 1 and int(receiver.games[id]["port"]) == 32101 and int(receiver.games[id]["seen"]) > prior_seen, "Duplicate announcements must refresh endpoint and liveness without duplicates"):
+	if not check(receiver.games.size() == 1 and int(receiver.games[id]["port"]) == 32101 and receiver.games[id]["username"] == "LuckyOtter" and receiver.games[id]["players"] == 2 and int(receiver.games[id]["seen"]) > prior_seen, "Duplicate announcements must refresh endpoint and liveness without duplicates"):
 		return
 	if not check(receiver.games[id]["address"] == lan_address, "Loopback must not replace a known LAN address"):
 		return
+	data.erase("username")
+	sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+	await create_timer(0.1).timeout
+	if not check(receiver.games[id]["username"] == "UnknownHost", "Legacy announcements need a fallback name"):
+		return
+	for invalid_name in [123, "Bad\nName", "A".repeat(33)]:
+		data["username"] = invalid_name
+		sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+		await create_timer(0.1).timeout
+		if not check(receiver.games[id]["username"] == "UnknownHost", "Invalid names need a safe fallback"):
+			return
+	data.erase("players")
+	sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+	await create_timer(0.1).timeout
+	if not check(receiver.games[id]["players"] == 0, "Legacy count must remain unknown"):
+		return
+	for invalid_count in [-1, 0, 3, 1.5, true, "2"]:
+		data["players"] = invalid_count
+		sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+		await create_timer(0.1).timeout
+		if not check(receiver.games[id]["players"] == 0, "Invalid count must remain unknown"):
+			return
 	sender.close()
 	receiver.queue_free()
 	await process_frame

@@ -1,48 +1,55 @@
-# Running the alpha
+# Lobby networking and usernames
 
-The lobby follows `MoozeTanks/LobbyImage.jpeg`: Host, Join, and Exit are stacked on the left, beside a large List of Games panel on the right. Game-ID lookup sits beneath the list; session feedback and LAN lookup remain below the main layout. The page scrolls vertically when needed. Join and Exit remain disabled for alpha.
+This branch includes the Join flow ported from local `main` commit `99fe2479f4ed0eaa717139f56e3c775d5db6cf6e`, authorized on October 27, 2026. This extends the original hosting-only alpha. The later P034 request changes Exit to actually disconnect. Root README.md and AGENTS.md now document the approved disconnecting Exit behavior. Original alpha source requirements are retained as historical context.
 
-Import `project.godot` in **Godot 4.7.2** and run the main scene (F6 runs the open scene; F5 runs the project). Use two separate project runs, either from two editor instances or the editor's multiple-instance run setting. Both lists initially contain no entries when no host is running. Press Host in one window: it launches an ENet session endpoint and displays its game ID. The other window should show that same ID within about one second.
+Use **Godot 4.7.2** and GDScript. Import `project.godot`, then run the project (F5). Each launch assigns a name using 30 adjectives and 30 animal nouns in `usernames.gd` (900 combinations). Names can repeat and remain fixed for the running lobby. Game-list rows show the host's game ID, username and player count, for example `AB12CD | BraveMoose | 1/2 players`. The count includes the host, becomes 2/2 when a client connects, and returns to 1/2 when the client disconnects. Missing/invalid advertised counts show `?/2 players`. Both users see the host's game ID and username in the game list; IP:port stays internal and in the host status for diagnostics. Missing/invalid advertised names use `UnknownHost`.
 
-Select the entry or type its ID to identify it. This only explains the intended joining flow; Join is disabled until WP2. Exit means leaving the hosted session, as clarified by the user on October 19, 2026; it is disabled because leaving is incomplete for alpha. Close the window using the operating system to stop this demonstration process. Its listing expires in about four seconds. No gameplay or actual joining is implemented.
+## Host, Join and Exit
 
-Discovery uses UDP broadcast and loopback on ports 49140–49155, with one port per local instance (maximum 16). The hosted ENet endpoint uses an operating-system-assigned UDP port and refuses connections in alpha. These are implementation choices, not source requirements. For two devices, use the same local broadcast network and permit Godot UDP traffic through the firewall. Broadcast may be blocked by Wi-Fi isolation, VPNs, or routers. Discovery is unauthenticated and intended for a trusted classroom LAN. Same-computer discovery is tested; two-device discovery and visual layout remain unverified.
+1. Open two instances with no host running; both lists start empty.
+2. Press Host in one instance. It creates one ENet endpoint accepting one remote player. The other instance discovers its ID and username.
+3. Select the entry or enter its game ID (case-insensitive). Join enables for a remote target. Press Join to show ?Joining Game...? and attempt a real connection.
+4. On success, the Joining page stays visible with connection confirmation. Back returns to the original lobby without disconnecting. Host and Join stay disabled during the session. Host feedback shows the player count.
+5. A failed connection shows Retry and Back after timeout. Retry starts a fresh attempt; Back restores the lobby. Host departure clears the client connection and shows the failure screen.
+6. Exit disconnects the player and keeps the application open on "Exiting game...". A client Exit leaves the host running and reduces its count to 1/2. A host Exit disconnects its client, closes the server and stops advertising; remote listings expire after about four seconds. Main-screen routing remains unimplemented.
+
+No game start, gameplay, reset, or main-menu return is implemented. Full-room listing availability is not yet implemented. Usernames are display names, not accounts or authenticated identities.
 
 ## Two laptops on the same network
 
-1. Run this project with Godot 4.7.2 on both laptops, connected to the same local Wi-Fi or Ethernet network. Avoid guest networks that isolate devices.
-2. Allow the Godot executable through each laptop's firewall on the trusted local network (Private profile on Windows). If using port rules, allow inbound UDP 49140–49155 from the local subnet on both laptops. No router port forwarding is needed. The project does not change firewall settings.
-3. With no existing hosts, both lists should be empty. Press Host on laptop A. Laptop B should show the same game ID and server port shortly afterward. Compare B's displayed IP:port with the matching LAN endpoint in A's host status. If A has multiple network interfaces, use the endpoint for the network shared by both devices. Also open B after A is already hosting and confirm discovery still works.
-4. If nothing appears, read A's IPv4 address from its lobby. Enter that address into B's network-address field and press Enter. If several addresses are shown, use the one for the shared Wi-Fi/Ethernet network. This requests a real listing; it neither fabricates an entry nor joins a session. Clear the field and press Enter to stop manual lookup.
-5. Select the entry or type its ID into the separate game-ID field. Join and Exit remain disabled. Close A's window and confirm its entry disappears on B after about four seconds. Repeat with laptop roles reversed.
+Run this project on both laptops on the same trusted Wi-Fi/Ethernet network. Allow Godot UDP through each firewall. Discovery binds IPv4 on UDP 49140?49155; the ENet session uses an operating-system-assigned UDP port. Each local discovery instance uses one slot (maximum 16). No router port forwarding is required. Wi-Fi isolation, VPNs and firewall rules can block traffic.
 
-Discovery now binds explicitly to IPv4 on all interfaces. Direct-IP queries repeat every 0.75 seconds and hosting lobbies reply directly to the requesting address and port. This bypasses broadcast restrictions but cannot bypass firewalls, Wi-Fi client isolation, or blocked device-to-device traffic. Send errors appear in the lobby; a successful send alone does not prove reception. Physical two-laptop acceptance remains unverified until this walkthrough is performed on the target network.
-
-Automatic LAN queries and host announcements also repeat every 0.75 seconds. Each game ID produces one listing, with fresh replies updating its endpoint and expiry; a known LAN address takes precedence over loopback. Host creates one server per instance and advertises its actual port only after successful creation. Listings identify that same hosted endpoint across devices; discovery does not connect players to it. The protocol remains `moooze-alpha-1` with the existing announcement fields unchanged.
+If automatic discovery fails, enter the host's displayed IPv4 into the network field and press Enter. Queries repeat every 0.75 seconds; this retrieves a listing and does not itself join. Select the game and press Join separately. Clear the address and press Enter to stop manual lookup. Missing hosts expire after about four seconds. Announcements and queries use `moooze-alpha-1`, including ID, actual port, optional username and optional `players` count. The host derives the count from actual ENet peers and refreshes announcements on connection events. One listing is kept per ID; LAN addresses take preference over loopback. Physical two-device acceptance and visual review remain unverified.
 
 ## Automated checks
 
-From the repository root, run these in two terminals, observer first, then host within ten seconds. Replace `godot` with the path to your Godot 4.7.2 console executable if it is not on PATH:
+Run from the repository root. Replace `godot` with the full path to your Godot 4.7.2 executable when necessary.
+
+Start host and client in separate terminals within ten seconds:
 
 ```powershell
-godot --headless --path Godot --script res://tests/alpha_smoke.gd -- observer
+godot --headless --path Godot --script res://tests/join_smoke.gd -- host
 ```
 
 ```powershell
-godot --headless --path Godot --script res://tests/alpha_smoke.gd -- host
+godot --headless --path Godot --script res://tests/join_smoke.gd
 ```
 
-Both must print PASS and exit successfully. Tests instantiate the actual lobby scene, activate its Host signal, and check empty lists, disabled controls, remote ID visibility, selection, typed IDs, unknown IDs, and removal after host shutdown. This is a same-computer two-process test, not two-device or final networking acceptance.
+These tests use mouse input to verify selection, real joining, the host username in the client's list, persistence beyond ten seconds, connected Back behavior, Exit disconnecting while the application remains open, and host feedback/counts after client Exit. Add `typed` to the client command to join using a lowercase typed ID instead of list selection. Add `disconnect` to both commands to test host departure and client recovery.
 
-Repeat both commands with `unicast` appended after `observer` / `host` to test direct-IP request/reply. This disables automatic announcements on both processes and enters `127.0.0.1` through the UI signal, so discovery requires a real query/reply. Invalid IPv4 feedback is also checked. Tests use a separate protocol identifier so running demonstration lobbies do not affect initial-empty/expiry assertions; run only one test pair at a time.
-
-For discovery of an already-running host, append `late` to both commands and start **host first**, then observer within a few seconds. The test host suppresses unsolicited announcements, so discovery requires the observer's automatic query. Host and observer print their game ID and port; both values must match. Repeated Host calls must retain the same server and duplicate packets must retain one listing.
-
-Run these single-process checks as well:
+Single-process checks:
 
 ```powershell
-godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure
+godot --headless --path Godot --script res://tests/join_smoke.gd -- initial
+godot --headless --path Godot --script res://tests/join_smoke.gd -- failure
 godot --headless --path Godot --script res://tests/alpha_smoke.gd -- packets
+godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure
 ```
 
-The failure check injects a server-creation error and verifies that no session is advertised and retry remains available. The packet check uses real loopback UDP for duplicate/endpoint/liveness refresh and controlled LAN-address metadata for deterministic address-preference checks. It does not establish physical LAN delivery.
+Discovery regression: run `alpha_smoke.gd -- observer` first, then `alpha_smoke.gd -- host` within ten seconds. Append `unicast` to both for broadcast-disabled direct-IP discovery. For query-only late discovery append `late` to both and start host first. These check discovery and ID selection, not joining. All tests must print PASS and exit 0; separate protocol identifiers isolate discovery and join test groups.
+
+October 27, 2026: Godot 4.7.2 actual host/client, timeout/retry/back, initial state, host-disconnect, packet and discovery regression checks passed. User-log writing and root-certificate-store errors were reported without GDScript errors. These checks use processes on one computer; they do not verify two-device LAN behavior.
+
+Player-count check: start `join_smoke.gd -- counts`, then `join_smoke.gd -- host`, then the regular `join_smoke.gd` client after about two seconds (use the same executable/flags shown above). The extra observer never joins and must report `1/2 -> 2/2 -> 1/2` as the client connects and clicks Exit while its process remains open. October 27, 2026: all three processes passed, as did packet tests for refreshed, missing and malformed counts. The earlier display-only Exit behavior was superseded by P034; Exit now disconnects and reduces the count.
+
+P034 validation: same-computer tests cover client Exit with the app still open, host Exit with an active client, listing expiry, repeated Exit safety, no-session Exit and pending-Join cancellation. One early host-label assertion ran before a deferred update; the test now waits for that update. Physical two-device and visual review remain unverified.
