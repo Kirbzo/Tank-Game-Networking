@@ -57,7 +57,7 @@ func _process(delta: float) -> void:
 			continue
 		if not valid_session_id(id):
 			continue
-		remember_game(id, address, port, clean_username(data.get("username", "")))
+		remember_game(id, address, port, clean_username(data.get("username", "")), clean_players(data.get("players")))
 	var expired: Array = []
 	for id in games:
 		if Time.get_ticks_msec() - int(games[id]["seen"]) > EXPIRY_MS:
@@ -89,13 +89,21 @@ func clean_username(value: Variant) -> String:
 			return "UnknownHost"
 	return name
 
-func remember_game(id: String, address: String, port: int, username: String = "UnknownHost") -> void:
+func clean_players(value: Variant) -> int:
+	# Zero means unknown for older hosts or malformed announcements.
+	if not (value is int or value is float):
+		return 0
+	if value != 1 and value != 2:
+		return 0
+	return int(value)
+
+func remember_game(id: String, address: String, port: int, username: String = "UnknownHost", players: int = 0) -> void:
 	# Announcements and replies describe one session; prefer LAN to loopback.
 	var previous: Dictionary = games.get(id, {})
 	if address.begins_with("127.") and not previous.is_empty() and not str(previous["address"]).begins_with("127."):
 		address = previous["address"]
-	var changed: bool = previous.is_empty() or previous["address"] != address or int(previous["port"]) != port or previous.get("username", "UnknownHost") != username
-	games[id] = {"username": username, "id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
+	var changed: bool = previous.is_empty() or previous["address"] != address or int(previous["port"]) != port or previous.get("username", "UnknownHost") != username or int(previous.get("players", 0)) != players
+	games[id] = {"players": players, "username": username, "id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
 	if changed:
 		games_changed.emit()
 

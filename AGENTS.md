@@ -20,7 +20,7 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 
 The user authorized real joining on `malik-other-branch`, extending the original hosting-only alpha. Players can join a discovered session by selecting its listing or entering its game ID. Listings display the game ID and host's randomly assigned username. Join includes loading, connection confirmation, timeout, Retry, and Back behavior.
 
-Exit displays "Exiting game..." and intentionally keeps the application and connection alive. Actual leaving and routing to a future main screen remain unimplemented.
+Exit disconnects the player from the hosted session and displays "Exiting game..." while keeping the application open. When a client exits, the host remains active and its player count decreases. When the host exits, the hosted session closes, its client disconnects, and the game listing expires. Exit also cancels any pending connection attempt. Routing to a future main screen remains unimplemented.
 
 ## Original alpha scope ? October 20, 2026
 
@@ -28,9 +28,9 @@ The original alpha baseline below is preserved for source traceability. The Octo
 
 - Follow AR1?AR5. Implement only alpha behavior when alpha implementation is requested; consider FR1?FR12 without adding non-alpha functionality (AR5).
 - Show Host, Join, Exit, and a game list. Two users initially see an empty list. Host must launch a game whose identifiable entry and game ID are visible to the other user.
-- Preserve the authorized Join flow. Disable Join when no valid target is available, during a connection attempt, or while already in a session. Keep Exit as the display-only screen described above until further implementation is requested.
+- Preserve the authorized Join flow. Disable Join when no valid target is available, during a connection attempt, or while already in a session. Preserve Exit's disconnect behavior. Do not restore the earlier behavior that kept players connected after Exit. Keep the "Exiting game..." screen until main-screen routing is requested.
 - AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Preserve the source distinction: joining was simulated/deferred in the original alpha; the October 27 update authorizes real Join. Label any remaining simulations clearly and do not claim they satisfy final networking acceptance.
-- Exit means leaving the hosted session. Retain the Exit label for the authorized display-only screen; it does not yet perform the intended leave action.
+- Exit means leaving the hosted session. Retain the Exit label for the authorized disconnect action and exit screen.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
 - You are authorized to do two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not establish a connection; real joining is separately authorized by the October 27 update.
 - The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance; apply the authorized Join/Exit behavior above and do not imply discovery establishes a player connection.

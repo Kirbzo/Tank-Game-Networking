@@ -6,7 +6,7 @@ A student two-player networking framework built in Godot, with visual placeholde
 
 Updated October 16, 2026 from [Requirements Document.docx](MoozeTanks/Requirements%20Document.docx), titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. Source documents are read-only. The current requirements document is available at `MoozeTanks/Requirements Document.docx`, relative to the repository root. Project documentation links are relative to the repository root (the folder containing this README.md and AGENTS.md).
 
-This checkout contains the Godot lobby project in [Godot/](Godot/README.md): hosting, discovery, game IDs, and a lobby interface. Real joining is authorized and implemented; Exit is a display-only screen and actual leaving remains incomplete. Same-computer two-process runtime checks passed on Godot 4.7.2; visual review and two-device LAN verification remain outstanding. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
+This checkout contains the Godot lobby project in [Godot/](Godot/README.md): hosting, discovery, game IDs, and a lobby interface. Real joining and Exit disconnection are implemented; the application stays open on "Exiting game..." and main-screen routing remains unimplemented. Same-computer two-process runtime checks passed on Godot 4.7.2; visual review and two-device LAN verification remain outstanding. See [status.md](status.md) for all completion statuses and [prompt_log.md](prompt_log.md) for prompt history and results.
 
 ## Technology baseline
 
@@ -16,7 +16,7 @@ Retain **Godot 4.7.2** and **GDScript** from the existing project instructions. 
 
 The user authorized real joining on `malik-other-branch`, extending the original hosting-only alpha. Players can join a discovered session by selecting its listing or entering its game ID. Listings display the game ID and host's randomly assigned username. Join includes loading, connection confirmation, timeout, Retry, and Back behavior.
 
-Exit displays "Exiting game..." and intentionally keeps the application and connection alive. Actual leaving and routing to a future main screen remain unimplemented.
+Exit disconnects the player from the hosted session and displays "Exiting game..." while keeping the application open. When a client exits, the host remains active and its player count decreases. When the host exits, the hosted session closes, its client disconnects, and the game listing expires. Exit also cancels any pending connection attempt. Routing to a future main screen remains unimplemented.
 
 ## Original alpha demonstration ? October 20, 2026
 
@@ -70,7 +70,7 @@ FR1?FR12 describe the overall framework. The original alpha implemented only the
 - Exact start permissions and agreed game-start flow (FR6).
 - Movement limits and legal action rules before testing input validation (FR9).
 - Match-end trigger before reset testing (FR11).
-- Exit originally meant leave the hosted session (October 19 clarification). The October 27 clarification explicitly retains the display-only "Exiting game..." screen until future main-screen routing; actual leaving remains incomplete. AR3 selection/ID lookup now supports real joining.
+- Exit originally meant leave the hosted session (October 19 clarification). The later October 27 request supersedes the display-only placeholder: Exit now disconnects and retains "Exiting game..." until future main-screen routing. AR3 selection/ID lookup now supports real joining.
 
 Transport, ports, game-discovery mechanism, controls, and entry scenes are not specified. Document actual choices when implementation is authorized.
 
@@ -78,15 +78,15 @@ Transport, ports, game-discovery mechanism, controls, and entry scenes are not s
 
 The lobby follows the supplied `MoozeTanks/LobbyImage.jpeg` layout, with Host, Join, and Exit stacked to the left of the game list. Game-ID identification and LAN lookup remain available.
 
-For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join connects to a selected or typed remote game ID. Exit displays "Exiting game..." while keeping the session alive. Physical two-laptop acceptance remains unverified.
+For two laptops, see the [LAN setup and direct-IP fallback](Godot/README.md). Discovery listens on IPv4 UDP 49140–49155; the lobby displays local addresses and supports requesting a host's listing by IPv4 when broadcast is unavailable. Permit Godot on the trusted local network on both devices. Join connects to a selected or typed remote game ID. Exit disconnects and displays "Exiting game..." while keeping the application open. Physical two-laptop acceptance remains unverified.
 
-Listings show each session's game ID and the host's assigned username, for example `AB12CD | BraveMoose`. The host's username is shared through LAN discovery after Host is clicked. IP addresses and ports remain available internally, and the host's server endpoint appears in its status information for troubleshooting. Automatic queries find already-running hosts, and repeated announcements refresh one listing per game ID. Usernames may repeat; game IDs identify sessions. Discovery alone does not establish a player connection; pressing Join does. Exit retains the existing connection.
+Listings show each session's game ID and the host's assigned username, for example `AB12CD | BraveMoose`. The host's username is shared through LAN discovery after Host is clicked. IP addresses and ports remain available internally, and the host's server endpoint appears in its status information for troubleshooting. Automatic queries find already-running hosts, and repeated announcements refresh one listing per game ID. Usernames may repeat; game IDs identify sessions. Discovery alone does not establish a player connection; pressing Join does. Exit closes the player connection; a host Exit also closes its hosted session.
 
 Earlier Godot 4.7.2 process tests verified ID and endpoint discovery, refresh, expiry, and hosting failure. On October 23, 2026, updated username listings passed the packet and same-computer host/observer tests on Godot 4.7.2. Visual and physical two-device verification remain outstanding.
 
 See [Godot/README.md](Godot/README.md) for import instructions, implementation choices, and reproducible two-process tests. Godot 4.7.2 imported the project and passed the actual host/observer headless test. Environment errors concerned user log storage and the certificate store; no GDScript parse/runtime errors were reported. Visual layout and separate-device LAN behavior still require review.
 
-Godot 4.7.2 same-computer tests recorded on October 27 passed for joining by selection and ID, username listings, connection persistence, timeout/retry/back, host-disconnect recovery, and display-only Exit. Visual review and physical two-device LAN verification remain outstanding. These are prior recorded results, not new runtime checks for this wording update. Check AR5 against the explicitly expanded scope; actual leaving remains incomplete. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
+Godot 4.7.2 same-computer tests recorded on October 27 passed for joining by selection and ID, username listings, connection persistence, timeout/retry/back, host-disconnect recovery, and the earlier display-only Exit. Later P034 tests verified client Exit disconnection, host Exit closure and listing expiry, pending-Join cancellation, and no-session Exit. Visual review and physical two-device LAN verification remain outstanding. These are prior recorded results, not new runtime checks for this wording update. Check AR5 against the explicitly expanded scope; main-screen routing remains incomplete. Later framework verification must cover the applicable acceptance criteria, including invalid IDs, room lifecycle, disconnections, server authority, hit reconciliation, and reset.
 
 ## Documentation
 

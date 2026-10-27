@@ -1,5 +1,84 @@
 # Prompt log
 
+## P036 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:35:58 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> your good to apply them
+
+Result: applied P035 approved wording to README.md and AGENTS.md. Exit documentation now covers disconnection, host session closure/client disconnect/listing expiry, pending connection cancellation and retained Exiting game... screen. Agent instructions preserve disconnect behavior and defer main-screen routing. Aligned Godot/README.md and status.md; FR15 documentation consistency complete. Prior changes and implementation preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-05. Proposal P035; implemented behavior P034.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Validation: Python via PowerShell `python -` checked all 20 IDs, local links, status/log revision references, unique descending prompt IDs, historical log preservation, unchanged original source requirement tables, unchanged source DOCX checksum and five-document change boundary. Bundled Git `diff --check` passed. No gameplay tests needed or run; runtime claims remain prior P034 evidence. No remaining wording approval items. Main-screen routing, visual and physical two-device checks remain outstanding.
+
+## P035 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P036.
+
+Actual request:
+
+> whats the wording your looking for?
+
+Result: proposed replacing display-only Exit wording with actual disconnect/host-close semantics and agent instructions to preserve the behavior while retaining the exit screen until main-screen routing is requested. No edits in that turn. Approved and applied by P036.
+
+Associated status.md: [status.md](status.md), prior snapshot S-2026-10-27-04; approval result S-2026-10-27-05.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+## P034 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:24:22 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Lets change that and make it so the player leaving will be disconnected from the hosted game
+
+Result: Exit now cancels pending join/timeout, clears connected game and retry target, removes hosted publication, detaches/closes ENet and shows the existing Exiting game... screen. Client Exit disconnects while leaving the host active; its count returns to 1/2. Host Exit closes the room, disconnects its client and stops discovery publication so its listing expires. Repeated Exit is safe and prevents hidden reconnect/host actions. Updated lobby, exit-screen comment, join smoke tests, Godot/README.md, status.md and this log. Root README.md/AGENTS.md remain unchanged pending approval for replacement of their stale display-only Exit text. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-04. Supersedes P029's display-only Exit clarification; P033 records the explanatory follow-up.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/join_smoke.gd` with `-- counts`, `-- host`, and no user arguments in separate processes (client prefixed by `Start-Sleep -Seconds 2`). Initial run verified disconnect and remote counts but the host assertion ran before deferred label refresh; changed the test to wait for the label. Final rerun: all three PASS, session 6TVLSH/64586, observer 1/2 -> 2/2 -> 1/2; host confirms client Exit while client process stays open and then host Exit closes the server. Also ran the same prefix with `-- host disconnect`, `-- disconnect`, `-- initial`, and `-- failure`: PASS for host Exit with active client, cleanup and listing expiry, no-session Exit and cancellation during pending Join. Version output confirmed Godot 4.7.2; log-writing/root-certificate errors persisted without GDScript errors. No physical two-device or visual checks, import, gameplay, direct-IP/late or packet regression reruns. Prior evidence is separate from these current tests. Python via `python -` checked all 20 IDs, links, log history/revisions, source checksum and six-file boundary; bundled `git diff --check` passed.
+
+## P033 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P034.
+
+Actual request:
+
+> Ok so earlier when you mentioned the exit, did you mean that it would still keep them inside the hosted game?
+
+Result: explained the then-current display-only Exit kept the connection and count unchanged, and that closing the application disconnected. No edits or new runtime tests in that turn. The subsequent P034 request explicitly changes that behavior.
+
+Associated status.md: [status.md](status.md), prior snapshot S-2026-10-27-03; implementation result S-2026-10-27-04.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+## P032 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:16:29 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets add the amount of players connected to the host inside the list of games. Right beside the username
+
+Result: added host-derived `players` to discovery announcements and direct replies. Counts come from the host plus actual ENet peers and refresh on connect/disconnect. Local and remote rows now show `GAMEID | Username | 1/2 players` or `2/2 players`; missing/invalid counts remain unknown (`?/2`) instead of inventing occupancy. Updated lobby/discovery, existing smoke tests, Godot/README.md, status.md and this log. Display-only Exit still retains the connection and count. Root README.md/AGENTS.md and unrelated user changes preserved; no staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-03. Requirement statuses unchanged.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Validation: invoked PowerShell `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/join_smoke.gd` with `-- counts`, `-- host`, and no user arguments in three processes. The client invocation was prefixed with `Start-Sleep -Seconds 2` to let the observer see the initial count. Also ran the same executable with `--headless --path Godot --script res://tests/alpha_smoke.gd -- packets`. All four exited 0 and printed PASS. Session ER4SDD/59359: observer received 1/2, 2/2, then 1/2 without joining; host/client checked 2/2 rows, connection persistence, Back and display-only Exit. Host checked its row returned to 1/2 after client shutdown. Packet checks covered unknown legacy counts and negative, zero, excessive, fractional, boolean and string values. Godot log-writing and certificate-store errors remain; no script errors reported. No visual or physical two-device checks, direct-IP/late-mode reruns or gameplay tests. These are current checks, separate from prior entries. Python via `python -` checked all 20 IDs, links, status/log references, historical log preservation, source checksum and seven-file boundary; bundled `git diff --check` passed.
+
 ## P031 - October 27, 2026
 
 Receipt time: **Unavailable** (not supplied by chat metadata).

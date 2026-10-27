@@ -23,6 +23,7 @@ var join_target: Dictionary = {}
 var connected_game_id := ""
 var join_attempt := 0
 var exit_screen: Control
+var exiting := false
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -57,7 +58,7 @@ func _ready() -> void:
 	join_button.tooltip_text = "Select a game or enter its ID to join."
 	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
-	exit_button.tooltip_text = "Show the exit screen. Leaving the session is not implemented yet."
+	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
 	exit_button.pressed.connect(show_exit_screen)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -99,7 +100,15 @@ func _ready() -> void:
 
 func session_peers_changed(_peer_id: int) -> void:
 	# Read the peer list after Godot finishes processing the connection event.
-	update_session_feedback.call_deferred()
+	refresh_session_players.call_deferred()
+
+func refresh_session_players() -> void:
+	if exiting:
+		return
+	if session != null and not discovery.hosted_game.is_empty():
+		discovery.hosted_game["players"] = 1 + multiplayer.get_peers().size()
+		discovery.advertise()
+	refresh_games()
 
 func update_session_feedback() -> bool:
 	if session == null or joining:
@@ -117,10 +126,34 @@ func update_session_feedback() -> bool:
 func show_exit_screen() -> void:
 	if exit_screen != null:
 		return
+	exiting = true
+	leave_game()
 	exit_screen = preload("res://exit_screen.gd").new()
 	get_parent().add_child(exit_screen)
-	# Keep the session alive; this step only replaces the visible screen.
+	# Keep the application open for the future main-screen destination.
 	hide()
+
+func leave_game() -> void:
+	# Cancel a pending join before its deferred frame or timeout can resume it.
+	joining = false
+	join_attempt += 1
+	connected_game_id = ""
+	join_target.clear()
+	if joining_screen != null:
+		joining_screen.timeout.stop()
+		joining_screen.hide()
+	# Clearing the listing stops announcements and direct-query replies.
+	if not discovery.hosted_game.is_empty():
+		discovery.games.erase(discovery.hosted_game["id"])
+	discovery.hosted_game.clear()
+	var leaving_session := session
+	session = null
+	multiplayer.multiplayer_peer = null
+	if leaving_session != null:
+		leaving_session.close()
+	hosted.text = "No session hosted."
+	host_button.disabled = true
+	refresh_games()
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
@@ -139,7 +172,7 @@ func add_button(parent: Node, text: String) -> Button:
 
 func host_game() -> void:
 	# Guard the action as well as the button: one server per hosting instance.
-	if session != null:
+	if exiting or session != null:
 		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
@@ -151,7 +184,7 @@ func host_game() -> void:
 		session = null
 		return
 	var id := generate_session_id()
-	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username}
+	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username, "players": 1}
 	# Joining requires the existing host endpoint to accept and poll peers.
 	multiplayer.multiplayer_peer = session
 	discovery.advertise()
@@ -181,12 +214,14 @@ func refresh_games() -> void:
 	var entries := discovery.games.duplicate()
 	if not discovery.hosted_game.is_empty():
 		var own_id: String = discovery.hosted_game["id"]
-		entries[own_id] = {"username": username, "id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
+		entries[own_id] = {"players": discovery.hosted_game["players"], "username": username, "id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
 	var ids: Array = entries.keys()
 	ids.sort()
 	for id in ids:
 		listed_ids.append(str(id))
-		game_list.add_item("%s  |  %s" % [id, entries[id].get("username", "UnknownHost")])
+		var players: int = entries[id].get("players", 0)
+		var count := "%d/2 players" % players if players > 0 else "?/2 players"
+		game_list.add_item("%s  |  %s  |  %s" % [id, entries[id].get("username", "UnknownHost"), count])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
 	if entries.is_empty():
@@ -216,7 +251,7 @@ func identify_game(value: String) -> void:
 	update_join_button()
 
 func update_join_button() -> void:
-	join_button.disabled = joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+	join_button.disabled = exiting or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
 
 func available_join_target() -> Dictionary:
 	var id := game_id.text.strip_edges().to_upper()
@@ -229,7 +264,7 @@ func available_join_target() -> Dictionary:
 	return {}
 
 func join_game() -> void:
-	if joining or session != null:
+	if exiting or joining or session != null:
 		return
 	var target := available_join_target()
 	if target.is_empty():
@@ -240,7 +275,7 @@ func join_game() -> void:
 	start_join()
 
 func start_join() -> void:
-	if joining or session != null:
+	if exiting or joining or session != null:
 		return
 	joining = true
 	join_attempt += 1
@@ -291,6 +326,8 @@ func join_failed() -> void:
 	joining_screen.show_failure()
 
 func join_back() -> void:
+	if exiting:
+		return
 	joining_screen.timeout.stop()
 	joining_screen.hide()
 	get_child(0).show()
@@ -299,6 +336,8 @@ func join_back() -> void:
 	join_button.grab_focus()
 
 func join_server_disconnected() -> void:
+	if exiting:
+		return
 	if connected_game_id.is_empty():
 		join_failed()
 		return
