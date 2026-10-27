@@ -77,7 +77,7 @@ func run() -> void:
 			return
 		if not check(lobby.session == original_session and int(lobby.discovery.hosted_game["port"]) == port, "Repeated Host must keep one server and stable endpoint"):
 			return
-		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % original_id, "Host status must retain port; game row must show host username"):
+		if not check(lobby.hosted.text == "HOSTED SESSION  |  %s" % original_id and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % original_id, "Host status must show only session ID; game row must retain username and player count"):
 			return
 		print("HOST_STARTED %s %d" % [lobby.discovery.hosted_game["id"], port])
 		await create_timer(4.0).timeout

@@ -2,6 +2,7 @@ extends Control
 
 const Discovery = preload("res://discovery.gd")
 const Usernames = preload("res://usernames.gd")
+const LanAddress = preload("res://lan_address.gd")
 var username: String = Usernames.generate()
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
@@ -17,6 +18,7 @@ var network_status: Label
 var network_address: LineEdit
 var listed_ids: Array[String] = []
 var local_addresses: Array[String] = []
+var ipv4_label: Label
 var joining_screen: Control
 var joining := false
 var join_target: Dictionary = {}
@@ -77,18 +79,19 @@ func _ready() -> void:
 	games_column.add_child(game_id)
 	feedback = add_label(column, "No games available. Ask another user to press Host.")
 	hosted = add_label(column, "No session hosted.")
-	for address in IP.get_local_addresses():
-		if address.is_valid_ip_address() and not address.contains(":") and not address.begins_with("127."):
-			local_addresses.append(address)
-	add_label(column, "This laptop's IPv4: " + (", ".join(local_addresses) if not local_addresses.is_empty() else "No LAN IPv4 address found"))
+	var address := LanAddress.detect()
+	if not address.is_empty():
+		local_addresses.append(address)
+	ipv4_label = add_label(column, "IPv4: " + (address if not address.is_empty() else "No unambiguous LAN address found"))
 	network_address = LineEdit.new()
 	network_address.placeholder_text = "If no game appears: enter the host laptop's IPv4 and press Enter"
 	network_address.text_submitted.connect(set_network_address)
 	column.add_child(network_address)
-	network_status = add_label(column, "LAN discovery active. Both laptops must allow Godot on the local network.")
+	network_status = add_label(column, "")
+	network_status.hide()
 	discovery.games_changed.connect(refresh_games)
 	discovery.discovery_failed.connect(discovery_error)
-	discovery.network_warning.connect(func(message: String): network_status.text = message)
+	discovery.network_warning.connect(show_network_status)
 	refresh_games()
 	add_child(discovery)
 	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
@@ -189,12 +192,7 @@ func host_game() -> void:
 	multiplayer.multiplayer_peer = session
 	discovery.advertise()
 	host_button.disabled = true
-	var endpoints: Array[String] = []
-	for address in local_addresses:
-		endpoints.append("%s:%d" % [address, discovery.hosted_game["port"]])
-	if endpoints.is_empty():
-		endpoints.append("127.0.0.1:%d (no LAN address found)" % discovery.hosted_game["port"])
-	hosted.text = "HOSTED SESSION  |  %s\nServer: %s" % [id, ", ".join(endpoints)]
+	hosted.text = "HOSTED SESSION  |  %s" % id
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
 
@@ -351,15 +349,20 @@ func join_server_disconnected() -> void:
 func discovery_error(message: String) -> void:
 	host_button.disabled = true
 	feedback.text = message
+	show_network_status(message)
+
+func show_network_status(message: String) -> void:
 	network_status.text = message
+	network_status.visible = not message.is_empty()
 
 func set_network_address(value: String) -> void:
 	if not discovery.set_direct_address(value):
-		network_status.text = "Enter a valid IPv4 address, such as 192.168.1.25 (not a game ID)."
+		show_network_status("Enter a valid IPv4 address, such as 192.168.1.25 (not a game ID).")
 	elif discovery.direct_address.is_empty():
-		network_status.text = "Automatic LAN discovery active. Manual host lookup cleared."
+		network_status.text = ""
+		network_status.hide()
 	else:
-		network_status.text = "Looking for hosted games at %s. If none appear, check both firewalls and Wi-Fi isolation." % discovery.direct_address
+		show_network_status("Looking for hosted games at %s. If none appear, check both firewalls and Wi-Fi isolation." % discovery.direct_address)
 
 func _exit_tree() -> void:
 	if session != null:
