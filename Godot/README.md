@@ -2,7 +2,7 @@
 
 This branch includes the Join flow ported from local `main` commit `99fe2479f4ed0eaa717139f56e3c775d5db6cf6e`, authorized on October 27, 2026. This extends the original hosting-only alpha. The later P034 request changes Exit to actually disconnect. Root README.md and AGENTS.md now document the approved disconnecting Exit behavior. Original alpha source requirements are retained as historical context.
 
-Use **Godot 4.7.2** and GDScript. Import `project.godot`, then run the project (F5). Each launch assigns a name using 30 adjectives and 30 animal nouns in `usernames.gd` (900 combinations). Names can repeat and remain fixed for the running lobby. Game-list rows show the host's game ID, username and player count, for example `AB12CD | BraveMoose | 1/2 players`. The count includes the host, becomes 2/2 when a client connects, and returns to 1/2 when the client disconnects. Missing/invalid advertised counts show `?/2 players`. Both users see the host's game ID and username in the game list; IP:port stays internal and in the host status for diagnostics. Missing/invalid advertised names use `UnknownHost`.
+Use **Godot 4.7.2** and GDScript. Import `project.godot`, then run the project (F5). Each launch assigns a name using 30 adjectives and 30 animal nouns in `usernames.gd` (900 combinations). Names can repeat and remain fixed for the running lobby. Game-list rows show the host's game ID, username and player count, for example `AB12CD | BraveMoose | 1/2 players`. The count includes the host, becomes 2/2 when a client connects, and returns to 1/2 when the client disconnects. Missing/invalid advertised counts show `?/2 players`. Both users see the host's game ID and username in the game list; IP:port stays internal for discovery and connections; host status shows only the game ID. Missing/invalid advertised names use `UnknownHost`.
 
 ## Host, Join and Exit
 
@@ -53,3 +53,17 @@ October 27, 2026: Godot 4.7.2 actual host/client, timeout/retry/back, initial st
 Player-count check: start `join_smoke.gd -- counts`, then `join_smoke.gd -- host`, then the regular `join_smoke.gd` client after about two seconds (use the same executable/flags shown above). The extra observer never joins and must report `1/2 -> 2/2 -> 1/2` as the client connects and clicks Exit while its process remains open. October 27, 2026: all three processes passed, as did packet tests for refreshed, missing and malformed counts. The earlier display-only Exit behavior was superseded by P034; Exit now disconnects and reduces the count.
 
 P034 validation: same-computer tests cover client Exit with the app still open, host Exit with an active client, listing expiry, repeated Exit safety, no-session Exit and pending-Join cancellation. One early host-label assertion ran before a deferred update; the test now waits for that update. Physical two-device and visual review remain unverified.
+
+## Simplified network display
+
+The lobby hides routine "LAN discovery active" text. Invalid addresses, send errors and explicit manual lookups still show feedback; clearing manual lookup hides that feedback again. It displays one `IPv4:` address separately. The hosted-session status shows the game ID without a Server IP:port line. This is a display choice only: discovery and ENet still accept traffic on all IPv4 interfaces.
+
+Before choosing, `lan_address.gd` filters IPv6, loopback, unspecified, multicast/reserved and 169.254.x.x link-local addresses. On Windows, a read-only hidden PowerShell query ranks connected IPv4 default routes by route metric plus interface metric, then obtains preferred source addresses for the best route(s). One matching local address is selected. Equal-priority distinct addresses are considered ambiguous. If route metadata is unavailable (including restricted execution or other operating systems), a single remaining local candidate is accepted; multiple candidates display "No unambiguous LAN address found" rather than choosing arbitrarily. Addresses are detected at launch; none is hardcoded. This does not establish that another laptop can reach the chosen address, especially with VPNs, isolated Wi-Fi or multiple networks.
+
+Address/UI check:
+
+```powershell
+godot --headless --path Godot --script res://tests/network_ui_smoke.gd
+```
+
+October 27, 2026: deterministic route-choice cases and actual UI feedback tests passed. Restricted execution could not read route metadata and correctly reported ambiguity. A check with route access selected this machine's Wi-Fi IPv4; it did not select the other adapter or link-local address. Broadcast-disabled host/observer discovery also passed. No physical two-device or visual acceptance is claimed.

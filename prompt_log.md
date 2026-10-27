@@ -1,5 +1,87 @@
 # Prompt log
 
+## P041 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:56:50 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> make the change
+
+Result: applied the exact P040 approved replacement in README.md, documenting internal endpoints, the separately selected IPv4 address and game-ID-only host status. Updated status.md and prompt_log.md; FR15 consistency complete. Implementation and unrelated changes preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-09. Proposal P040; UI change P039.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: Python via PowerShell `python -` checked the exact single-sentence replacement, all 20 requirement IDs, local links, unique descending prompt IDs and historical log preservation, status/log references, unchanged source DOCX checksum and three-document boundary. Bundled `git diff --check` passed. No gameplay tests needed or run; earlier runtime results were not rerun. Visual/two-device verification remains unverified. No remaining approval item for this correction.
+
+## P040 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P041.
+
+Actual request:
+
+> whats the outdated diagnostic and what do you want to replace it with
+
+Result: quoted the outdated README claim that host status displays its endpoint and proposed replacing it with internal-endpoint, separate IPv4 and game-ID-only host status wording. No edits in that turn. Approved and applied by P041.
+
+Associated status.md: [status.md](status.md), prior snapshot S-2026-10-27-08; correction result S-2026-10-27-09.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+## P039 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:54:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets do your recommendation
+
+Result: implemented P038's recommendation by removing the Server IP:port line from host status. Kept HOSTED SESSION/game ID, concise host feedback, list username/player count and separate IPv4 label. Discovery and connection endpoint metadata unchanged. Removed unused display formatting, updated the existing host UI assertion and Godot/README.md, and maintained status/log tracking. Protected root README.md/AGENTS.md preserved; root README still has a stale endpoint-in-status sentence requiring approval to correct. No new debug view or unrelated changes. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-08. Planning/explanation P038, revision S-2026-10-27-07.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/alpha_smoke.gd -- observer` and `-- host` in separate processes. Both PASS, matching ID 1M95UV and port 63791; host assertion verifies the label only shows hosted ID, while endpoint data remains correct internally. Discovery, username/count listing, selection and expiry verified. Prior log-writing/certificate-store errors remain without GDScript errors. No visual/two-device, full Join/Exit or route-selection reruns. Python via `python -` checked all 20 IDs, local links, prompt/status references/history, source checksum and five-file boundary; bundled `git diff --check` passed. These current checks are separate from prior evidence.
+
+## P038 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:52:45 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Can you also explain the reasoning behind displaying the server after hosting? Afterwhich we will decide whether we should remove it from the lobby screen
+
+Result: inspected host creation, selected IPv4/endpoint formatting, discovery metadata and game-list display. Explained that HOSTED SESSION/game ID and Server IP:port provide hosting confirmation and diagnostics; the port is OS-assigned. The server label is not a source requirement and networking does not read its text. Existing list, IPv4 label and hosting feedback overlap this information. Suggested removing/hiding the Server line from the everyday lobby while retaining useful player-facing identity/status, pending the user's decision. No implementation or lobby changes.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-07. Requirement statuses unchanged.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: `rg -n` and PowerShell source reads confirmed actual port lookup, host status formatting and separate discovery metadata. Python via `python -` checked all 20 IDs, local links, log history/revisions, unchanged source checksum and two-file boundary; bundled `git diff --check` passed. No runtime tests needed or run; prior runtime evidence was not rerun. Physical two-device and visual review remain unverified. No root protected-file changes, staging, commit or push. Decision to remove the display remains pending.
+
+## P037 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:44:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Lets start trying to clean up the screen. Remove the LAN discovery active line and simplify the IPv4 Address into 1 address usable by the players. Can you also report what its logic does before commiting to the IP address
+
+Result: inspected existing enumeration (all non-loopback IPv4) and reported adapter/default-route reasoning before changing selection. Added Godot/lan_address.gd: filter nonusable addresses, read Windows connected default routes with combined route/interface metric, choose one matching source address, fall back only if a single candidate remains, otherwise report ambiguity. No hardcoded display address or network-setting changes. Actual route-access check selected Wi-Fi rather than other-adapter/link-local addresses. Lobby now shows one IPv4 and at most one host diagnostic endpoint; routine discovery label starts hidden, errors/manual lookup feedback remain, clearing lookup hides status. No socket binding, Join, Exit or discovery protocol changes. Added Godot/tests/network_ui_smoke.gd and documented logic in Godot/README.md. Protected root files preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-06. Requirement statuses unchanged.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: `Get-NetIPConfiguration | Select-Object InterfaceAlias,IPv4Address,IPv4DefaultGateway` was initially denied by the sandbox, then passed with approved read access. It showed Wi-Fi with a gateway, another adapter without a gateway, and a link-local address. A Windows rg glob attempt failed and was replaced by direct file/source inspection. Godot 4.7.2 UI check: PowerShell `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/network_ui_smoke.gd` passed deterministic selection and error/status tests; restricted metadata access produced the safe ambiguity fallback. Approved route-access runs used the same executable with an explicit absolute project path and project-local absolute `--log-file` path; the first relative-log attempt failed to open its log. The final log recorded Wi-Fi selection and PASS. Temporary validation log removed after reading. Existing user processes were not stopped. Also ran `--headless --path Godot --script res://tests/alpha_smoke.gd -- observer unicast` and `-- host unicast` in separate processes; PASS and matched 4JUUJF/55500. Restricted runs reported prior log-writing/certificate-store errors without script errors. No two-device LAN/visual acceptance or Join/Exit reruns. Python via `python -` checked all 20 IDs, links, log history/revisions, source checksum and six-file boundary; bundled `git diff --check` passed. Official Godot IP/PacketPeerUDP API documentation was consulted to confirm that address enumeration lacks routing metadata; selection policy is a project implementation choice.
+
 ## P036 - October 27, 2026
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
