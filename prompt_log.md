@@ -1,5 +1,106 @@
 # Prompt log
 
+## P031 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:09:59 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> alright the changes are approved. Do not commit anything as I will do it myself
+
+Result: applied P030 wording to README.md and AGENTS.md: dated authorization for real Join and random host-name listings, loading/confirmation/timeout/Retry/Back behavior, and display-only Exit retaining the application and connection until future main-screen routing. Original alpha requirements retained and historical sections labelled. Aligned Godot/README.md and status.md; FR15 documentation consistency complete. Implementation and prior user changes preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-02. Proposal: P030; implementation context P029.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Validation: Python via PowerShell `python -` checked all 20 requirement IDs, local links, prompt/status references, descending unique prompt IDs, preservation of historical log entries and source requirement tables, unchanged DOCX checksum and five-document boundary. Bundled Git `diff --check` passed. No gameplay tests needed or run; October 27 runtime tests described in README are prior P029 evidence. Visual/two-device testing and actual leaving/main-screen routing remain outstanding. No remaining approval item for this wording update.
+
+## P030 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P031.
+
+Actual request:
+
+> what do you want to change the wording too?
+
+Result: proposed a dated scope clarification for README.md and AGENTS.md, preservation of the original alpha requirements, active Join enable/disable guidance, display-only Exit behavior and a prior verification note. No files changed in that turn. Approved and applied by P031.
+
+Associated status.md: [status.md](status.md), prior snapshot S-2026-10-27-01; approval result S-2026-10-27-02.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+## P029 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:02:20 AM (America/Regina; UTC clock converted to UTC-06:00 during inspection).
+
+Actual request:
+
+> Can you look in main and see the join and leave button functionality and implement it into the malik-other-branch files while adding the random usernames?
+
+Clarification asked:
+
+> I found that main has real joining, but Exit only shows ?Exiting game...? and keeps the connection alive. Should I implement real leaving (disconnect and return to the lobby), or copy main?s display-only Exit behavior?
+
+Actual user answer:
+
+> Id like to leave it as the exiting game as later on we will implement a main screen for the exit to be rerouted too
+
+Result: read local main at 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e using GitHub Desktop's bundled Git. Ported Join, loading/connected/error screen, display-only Exit and tests into the existing malik-other-branch checkout, preserving its username/discovery implementation. Random names stay stable per launch; host names are advertised and shown beside game IDs. Join connects by selection or typed ID with timeout, Retry, Back and host-disconnect recovery. Exit intentionally retains the session on ?Exiting game...?; no main-screen routing or actual leave implemented. Updated Godot/README.md, status.md and this log. No branch switch, commit, push or protected root-document changes. Root README.md/AGENTS.md consistency updates remain pending approval. P029 explicitly authorizes real Join beyond original alpha scope.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-01. Earlier branch inquiries P027/P028 are backfilled below.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated/actual charges: **Unavailable** because reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+Current verification: Godot `--version` reported 4.7.2.stable.official.ed1daf0bf. All test processes exited 0 and printed PASS. Selection-join pair matched B4WWIU/55098; typed-ID pair matched 6HJ8WE/64932. Tests verify host name BraveMoose while the client keeps LuckyOtter, real two-player connections beyond ten seconds, Back preserving connection, Exit screen retaining connection, host player counts after client departure, timeout cleanup, Retry/Back, and host-disconnect recovery. Discovery regression matched NHMZDW/55530; packet checks included username refresh and invalid/legacy fallback.
+
+Exact invocation pattern: PowerShell `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe'` followed by each argument sequence below (pairs ran in separate processes):
+
+- `--version`
+- `--headless --path Godot --script res://tests/join_smoke.gd -- host`
+- `--headless --path Godot --script res://tests/join_smoke.gd`
+- `--headless --path Godot --script res://tests/join_smoke.gd -- typed` (with a fresh host pair)
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure`
+- `--headless --path Godot --script res://tests/join_smoke.gd -- initial`
+- `--headless --path Godot --script res://tests/join_smoke.gd -- host disconnect`
+- `--headless --path Godot --script res://tests/join_smoke.gd -- disconnect`
+- `--headless --path Godot --script res://tests/alpha_smoke.gd -- packets`
+- `--headless --path Godot --script res://tests/alpha_smoke.gd -- observer`
+- `--headless --path Godot --script res://tests/alpha_smoke.gd -- host`
+- `--headless --path Godot --script res://tests/alpha_smoke.gd -- failure`
+
+Godot reported log-file writing and root-certificate-store errors, with no GDScript errors. Physical two-device LAN, visual review, full-room availability, gameplay and real leaving remain unverified/incomplete. Direct-IP/late modes were not rerun. Prior evidence is retained separately in earlier entries. `git diff --check` (via bundled Git) passed. Python via PowerShell `python -` checked all 20 IDs, links, prompt order/status references, source checksum and file boundaries; usernames.gd, discovery.gd, main ref and protected documents preserved. No system settings changed.
+
+## P028 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not recorded). Timezone: America/Regina. Backfilled from visible conversation during P029.
+
+Actual request:
+
+> can you also see the other branches?
+
+Result: Inspected local branch and remote-tracking refs. Listed main, Allen, Jaden, TestBranch1, malik-other-branch and remote-only rica; current branch malik-other-branch. No fetch, file edits or implementation in that turn.
+
+Associated status.md: [status.md](status.md), snapshot S-2026-10-23-07 at inquiry time; backfill revision S-2026-10-27-01.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated/actual charges: **Unavailable** because reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
+## P027 - October 27, 2026
+
+Time: **Unavailable** (historical timestamp not recorded). Timezone: America/Regina. Backfilled from visible conversation during P029.
+
+Actual request:
+
+> can you see the git repository on my github desktop app? the Tank-Game-Networking
+
+Result: Read local Git configuration and confirmed origin Kirbzo/Tank-Game-Networking. Explained filesystem access does not provide direct visibility into the GitHub Desktop window. No implementation changes in that turn.
+
+Associated status.md: [status.md](status.md), snapshot S-2026-10-23-07 at inquiry time; backfill revision S-2026-10-27-01.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record, estimated/actual charges: **Unavailable** because reliable per-request telemetry/billing records are not exposed. Usage source, currency, rates, pricing source and rate date: unavailable.
+
 ## P026 - October 23, 2026
 
 Receipt time: **Unavailable** (not supplied by chat metadata).

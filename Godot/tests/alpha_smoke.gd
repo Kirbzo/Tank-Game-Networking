@@ -30,7 +30,7 @@ func run() -> void:
 		failing.host_game()
 		if not check(failing.session == null and failing.discovery.hosted_game.is_empty() and failing.listed_ids.is_empty(), "Failed hosting must not advertise or list a game"):
 			return
-		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep joining/leaving disabled"):
+		if not check(failing.feedback.text.contains("Hosting failed") and not failing.host_button.disabled and failing.join_button.disabled and not failing.exit_button.disabled, "Hosting failure must explain error, allow retry, and keep Join disabled without a selection"):
 			return
 		failing.queue_free()
 		await process_frame
@@ -59,7 +59,7 @@ func run() -> void:
 				return
 	if not args.has("late") and not check(lobby.listed_ids.is_empty(), "Initial game list must be empty"):
 		return
-	if not check(lobby.join_button.disabled and lobby.exit_button.disabled, "Join and leaving must be disabled"):
+	if not check(lobby.join_button.disabled and not lobby.exit_button.disabled, "Join needs a target; Exit opens the session screen"):
 		return
 	if OS.get_cmdline_user_args().has("host"):
 		lobby.host_button.pressed.emit()
@@ -77,7 +77,7 @@ func run() -> void:
 			return
 		if not check(lobby.session == original_session and int(lobby.discovery.hosted_game["port"]) == port, "Repeated Host must keep one server and stable endpoint"):
 			return
-		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  discovery only" % original_id, "Host status must retain port; game row must show host username"):
+		if not check(lobby.hosted.text.contains(":%d" % port) and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose" % original_id, "Host status must retain port; game row must show host username"):
 			return
 		print("HOST_STARTED %s %d" % [lobby.discovery.hosted_game["id"], port])
 		await create_timer(4.0).timeout
@@ -91,10 +91,10 @@ func run() -> void:
 		return
 	var id: String = lobby.listed_ids[0]
 	var port: int = lobby.discovery.games[id]["port"]
-	if not check(lobby.discovery.games[id]["username"] == "BraveMoose" and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  discovery only" % id, "Observer must show advertised host username instead of endpoint"):
+	if not check(lobby.discovery.games[id]["username"] == "BraveMoose" and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose" % id, "Observer must show advertised host username instead of endpoint"):
 		return
 	lobby.game_list.item_selected.emit(0)
-	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("No connection was made"), "Selection must identify without joining"):
+	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("Select Join") and not lobby.join_button.disabled, "Selection must identify without joining"):
 		return
 	lobby.game_id.text_changed.emit(id.to_lower())
 	if not check(lobby.feedback.text.contains("Identified"), "Typed ID must identify host"):
@@ -109,7 +109,7 @@ func run() -> void:
 	await create_timer(9.0).timeout
 	if not check(lobby.listed_ids.is_empty(), "Closed host listing must expire"):
 		return
-	print("PASS observer: remote visibility, IDs, disabled controls, expiry")
+	print("PASS observer: remote visibility, IDs, selection, expiry")
 	quit()
 
 func packet_checks() -> void:
