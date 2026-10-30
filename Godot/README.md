@@ -67,3 +67,37 @@ godot --headless --path Godot --script res://tests/network_ui_smoke.gd
 ```
 
 October 27, 2026: deterministic route-choice cases and actual UI feedback tests passed. Restricted execution could not read route metadata and correctly reported ambiguity. A check with route access selected this machine's Wi-Fi IPv4; it did not select the other adapter or link-local address. Broadcast-disabled host/observer discovery also passed. No physical two-device or visual acceptance is claimed.
+
+## Standalone game-room preview
+
+Run the project normally with **F5**, then click the temporary **Test Game Room** button beneath Exit in the lobby. It opens the local room preview; Leave Room or Escape returns to the lobby. The test button is unavailable while joining, hosting or connected, so it cannot interrupt an existing session. Host remains unchanged and is not linked to the room yet. You can also open `game_room.tscn` and press **F6** (Run Current Scene). Alternatively, run from the repository root:
+
+```powershell
+godot --path Godot res://game_room.tscn
+```
+
+Move the rectangle with **WASD or the arrow keys**. Movement stays inside the bordered room, uses the same speed diagonally, and clamps to the room after resizing. The **top-left back arrow** or **Escape** returns to the existing lobby. The app remains open and no session is automatically hosted or joined.
+
+This is a local movement placeholder only. The 220-pixel/second preview speed is an implementation choice for testing, not an agreed FR9 gameplay rule. There is no network synchronization, authoritative state, combat or match start. Future Host integration must route room departure through the existing session cleanup; this standalone scene owns no network session. Game-room visual review remains outstanding.
+
+Checks:
+
+```powershell
+godot --headless --path Godot --script res://tests/game_room_smoke.gd
+godot --headless --path Godot --script res://tests/game_room_smoke.gd -- escape
+```
+
+Both commands passed on October 30, 2026 using Godot 4.7.2. They exercise keyboard movement, normalized diagonals, opposite inputs, walls, resizing, duplicate leave protection, and actual scene return to a lobby with no session. Existing environment user-log/certificate errors remain; no script errors were reported. Existing lobby networking tests were not rerun for this isolated scene addition.
+
+Temporary-button check: `godot --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`. Passed on October 30, 2026: lobby button visibility, pending-Join guard, actual lobby-to-room transition, room movement/bounds and leave-to-lobby behavior.
+
+## Game-room layout reference
+
+The room follows [GameRoomImage.jpeg](../MoozeTanks/GameRoomImage.jpeg). The two lower sketches represent layers composed into the top full-screen view, not side-by-side panels:
+
+- The room/player is drawn in the base canvas. The rectangle marked P is the local player.
+- A separate `HUD` CanvasLayer above the world holds the fixed top-left back arrow, top-right settings gear, and bottom-center game ID. Player movement does not move the HUD.
+- The preview displays **Game ID: PREVIEW**, not a real hosted session ID. The room's exported `game_id` is ready to receive a real ID when Host integration is implemented later.
+- The gear opens a **Game Settings** placeholder screen with **Back to Room**. No settings are implemented. Movement is blocked while this screen is open; Escape closes settings first and leaves the room only when settings are closed.
+
+The temporary lobby Test Game Room button remains the entry point; real Host/Join and networking are unchanged. Updated from-lobby and Escape smoke checks passed on October 30, 2026 for layer ordering, opposite-corner controls, fixed HUD during player motion, preview ID, settings/back/Escape behavior, movement/bounds/resize and return to lobby. No graphical/reference-image visual acceptance or physical-device networking test is claimed by these headless checks.

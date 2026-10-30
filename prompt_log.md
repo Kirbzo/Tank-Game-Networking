@@ -2,13 +2,91 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest local request is P043 and the next local request is **P044**. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P048 and the next request is **P049**. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# October 30, 2026
+
+**Recorded times - newest first (America/Regina)**
+
+## P048 - October 30, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:09:43 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Look inside the MoozeTanks folder and view the GameRoomImage. the top box will be our end goal for our game room creation and looks. We need two seperate spaces inside our room. The first one to the left should be the overlay thats permanantly within the player's screen. The right box is the player itself which should be on the bottom layer. Each of the items inside the box are described below the 3 boxes. If there is something you cant read or arn't 100% confident in then ask me.
+
+Clarification questions and actual answers:
+
+- Asked whether the lower drawings are layers composing one screen rather than visible side-by-side panels. Answer: "Yes?world beneath a fixed overlay (recommended)".
+- Asked what the gear should do initially. Answer: "Right now the game settings shouldn't do anything. Have it display a screen that you can leave as a temporary placeholder".
+- Asked whether preview back returns to lobby and the ID is clearly a preview until Host is linked. Answer: "Yes?return to lobby; show preview ID (recommended)".
+
+Result: opened GameRoomImage.jpeg and read the legend (Leave Lobby arrow, Game Settings gear, Code = Game ID, P = Player/User). After clarification, implemented one composed room with a base world/player drawing and fixed HUD CanvasLayer above it. Top-left back arrow returns to lobby, top-right gear opens a settings placeholder with Back to Room, and bottom-center ID reads Game ID: PREVIEW. Settings does not change game rules; it blocks local movement, and Escape closes settings before it can leave the room. Player is marked P and stays below the HUD. Added an exported preview game_id for later integration, without linking Host or networking now. Updated existing room tests and Godot/README.md. Reference image, requirements, audit and pre-existing user changes preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-30-04. Requirement statuses unchanged; no new runtime completion evidence.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: PowerShell filename/source inspection and local view_image read the original reference without edits. An initial combined patch was rejected for targeting the scene twice; no change was applied by that failed patch. Applied the corrected edits and ran `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` and the same command with `-- escape`; both printed PASS and exited 0. Checked separate fixed HUD layer and positions, preview ID, settings screen open/Back/Escape and movement blocking, unchanged controls during player motion, local movement/bounds/resize and actual leave to lobby. Existing log-writing/certificate-store errors remained without GDScript errors. Headless tests do not verify graphical appearance; no Host/network integration, two-device or existing multiplayer regression tests rerun. Python via python - checked all 20 requirement IDs, active local links, prompt/revision references, source/image/audit checksums and six-file task boundary. Protected root docs, lobby code, project settings and pre-existing files unchanged. No pending clarification answers remain for this layout.
+
+## P047 - October 30, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:28:28 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> can you add a temporary button inside the lobby screen for me to test instead?
+
+Result: added Test Game Room beneath Exit in the lobby. It opens the standalone room and leaves Host behavior unchanged. Guarded the action/button during pending Join, hosting, active connection, exit or duplicate transition, so preview cannot silently replace a session. Room Leave/Escape returns to lobby. Extended the existing room smoke test with from-lobby coverage; updated Godot/README.md and project tracking. Protected root documents and prior changes preserved. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-30-03. Room implementation P046; actual Host/network integration remains deferred.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` printed PASS and exited 0. Checked visible/enabled preview button, pending-Join guard, actual button-signal transition to game_room.tscn, movement/diagonals/bounds/resize, duplicate leave and actual return to lobby with no session. Existing log-writing/certificate-store errors remain without script errors. No graphical review, existing multiplayer regression or two-device checks rerun. Python via `python -` checked all 20 IDs, active local links, log history/revision, source checksum and five-file task boundary. No Host routing, protected documents, project settings, requirements or pre-existing UID-file changes.
+
+## P046 - October 30, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:21:08 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> ill keep it for now, but were starting to move on to the functionalliy of a game room. When you press host we want the game to transfer you into a game room so lets create a simple space where you can move and leave the game room. Lets create it first then we can link it upto the host later
+
+Result: created Godot/game_room.tscn and game_room.gd as a standalone bounded local room. A rectangle player moves with WASD/arrows; diagonal speed is normalized and movement remains inside the room after resizing. Leave Room or Escape returns to the existing lobby without starting a session. Repeated leave is guarded and movement stops during transition. Added game_room_smoke.gd and documented direct/F6 launch in Godot/README.md. Host/lobby code and project main scene deliberately unchanged; future Host/session integration deferred. Local speed/controls are preview implementation choices, not agreed gameplay rules. Kept audit JSON and existing user changes, including pre-existing untracked UID files. No staging, commit or push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-30-02. FR12 partial for local movement placeholder; other framework networking/start requirements are not completed by this scene.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd`, then the same command with `-- escape`. Both printed PASS and exited 0. Checked actual key input, straight/diagonal motion, cancelling opposite directions, WASD/arrows, top/left and bottom/right bounds, resize containment, duplicate leave and actual scene transition to lobby with null session. Engine reported existing user-log and certificate-store errors without GDScript errors. No graphical review, two-device, Host integration, movement synchronization or existing lobby regression reruns; this scene is isolated from Host. Python via `python -` checked all 20 requirement IDs, local links, historical log preservation, P046/next P047, source/audit checksums and six-file task boundary; bundled git diff --check passed. Source requirements, protected root docs, project.godot, lobby code and pre-existing files preserved.
+
+## P045 - October 30, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 09:50:53 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> is the json file here required for our project
+
+Result: identified prompt_log_merge_audit.json as the only project JSON file outside Godot cache. It contains original branch log snapshots, IDs/checksums and consolidation mappings from P042. Game scripts do not load it; JSON use in discovery/address logic parses network/command data instead. The requirements mandate prompt/status logs but not this audit file. Recommended keeping it for provenance or intentionally archiving it and correcting references if removed. No removal or code changes. P044 was already used for the earlier main transfer, so this request receives P045 without reusing that ID.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-30-01. Requirement statuses unchanged.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: rg filename/reference searches and source/requirements review; Python via PowerShell python - verified all 20 requirement rows, active local links, new unique P045/time placement, unchanged audit/source checksum and two-file boundary. No gameplay tests needed or run. No source document, root protected file or implementation edits; no staging, commit or push.
 
 # October 27, 2026
 

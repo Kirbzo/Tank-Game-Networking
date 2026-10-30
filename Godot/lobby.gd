@@ -10,6 +10,8 @@ var session: ENetMultiplayerPeer
 var host_button: Button
 var join_button: Button
 var exit_button: Button
+var test_room_button: Button
+var opening_test_room := false
 var game_list: ItemList
 var game_id: LineEdit
 var feedback: Label
@@ -62,6 +64,10 @@ func _ready() -> void:
 	exit_button = add_button(controls, "Exit")
 	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
 	exit_button.pressed.connect(show_exit_screen)
+	test_room_button = add_button(controls, "Test Game Room")
+	test_room_button.add_theme_font_size_override("font_size", 20)
+	test_room_button.tooltip_text = "Temporary local preview; available outside a hosted or joined session."
+	test_room_button.pressed.connect(open_test_room)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
@@ -158,6 +164,17 @@ func leave_game() -> void:
 	host_button.disabled = true
 	refresh_games()
 
+func open_test_room() -> void:
+	if exiting or joining or session != null or opening_test_room:
+		return
+	opening_test_room = true
+	update_join_button()
+	var result := get_tree().change_scene_to_file("res://game_room.tscn")
+	if result != OK:
+		opening_test_room = false
+		update_join_button()
+		feedback.text = "Could not open the test game room. Try again."
+
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
 	label.text = text
@@ -175,7 +192,7 @@ func add_button(parent: Node, text: String) -> Button:
 
 func host_game() -> void:
 	# Guard the action as well as the button: one server per hosting instance.
-	if exiting or session != null:
+	if exiting or opening_test_room or session != null:
 		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
@@ -249,7 +266,8 @@ func identify_game(value: String) -> void:
 	update_join_button()
 
 func update_join_button() -> void:
-	join_button.disabled = exiting or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+	test_room_button.disabled = exiting or joining or session != null or opening_test_room
+	join_button.disabled = exiting or opening_test_room or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
 
 func available_join_target() -> Dictionary:
 	var id := game_id.text.strip_edges().to_upper()
@@ -262,7 +280,7 @@ func available_join_target() -> Dictionary:
 	return {}
 
 func join_game() -> void:
-	if exiting or joining or session != null:
+	if exiting or opening_test_room or joining or session != null:
 		return
 	var target := available_join_target()
 	if target.is_empty():
@@ -273,7 +291,7 @@ func join_game() -> void:
 	start_join()
 
 func start_join() -> void:
-	if exiting or joining or session != null:
+	if exiting or opening_test_room or joining or session != null:
 		return
 	joining = true
 	join_attempt += 1
@@ -282,6 +300,7 @@ func start_join() -> void:
 	if discovery.games.has(join_target["id"]):
 		join_target = discovery.games[join_target["id"]].duplicate()
 	join_button.disabled = true
+	test_room_button.disabled = true
 	if joining_screen == null:
 		joining_screen = preload("res://joining_screen.gd").new()
 		add_child(joining_screen)
