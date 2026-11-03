@@ -2,13 +2,49 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest local request is P044 and the next local request is **P045**. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest local request is P046 and the next local request is **P047**. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 3, 2026
+
+## P046 - November 3, 2026
+
+Receipt time: **Unavailable** (not supplied).
+Time: 11:18:58 AM (recording time; America/Regina).
+
+Actual request:
+
+> Restore the lobby button and function for the test game room
+
+Result: restored Godot/lobby.gd preview changes from malik-other-branch, resolving P045's finding. Test Game Room appears beneath Exit and calls open_test_room(); pending Join, active sessions, Exit and duplicate transitions are guarded. The existing local preview returns to the lobby; no networking integration added. Preserved previous status/log edits and all other implementation files. Protected README.md and AGENTS.md unchanged.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-02; implements investigation P045 / S-2026-11-03-01.
+
+Validation: executable C:/Users/ricaa/Downloads/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe with --version reported 4.7.2.stable.official.ed1daf0bf. Ran that executable with --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby: PASS, exit 0. Covers button visibility, pending-Join guard, actual scene transition, HUD/settings, movement/bounds/resize and return to lobby. User-log write and root-certificate-store environment errors remain; no script errors reported. git diff --check and source equivalence checked; 20 requirement rows and status/log revision retained. Source DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. No visual, two-device or full networking regression tests run. Historical missing test-report links from P045 remain unresolved; new links resolve. No commit/push.
+
+Input tokens, cached input tokens, output tokens, cache inclusion, model usage and usage source: **Unavailable** (reliable all-call per-request telemetry unavailable). Estimated cost and actual charges: **Unavailable** (usage and applicable billing rates unavailable).
+
+## P045 - November 3, 2026
+
+Receipt time: **Unavailable** (not supplied).
+Time: 11:16:29 AM (recording time; America/Regina).
+
+Actual request:
+
+> Can you check which branch has the test game room because I already merged with malik-other-branch and main and still can't see it
+
+Result: investigated clean current branch rica using local branches and existing remote-tracking refs (no fetch). Commit 30ce1c0, Game Room test w/Image (No connection), is contained in malik-other-branch and rica and their origin refs, but not main. Scene/script/test assets remain in rica. Merge 83a8814 retained the lobby entry; subsequent main merge 77bb90a removed Test Game Room, open_test_room(), and associated guards from Godot/lobby.gd. Project still starts lobby.tscn. Open Godot/game_room.tscn and use Run Current Scene (F6) for the standalone preview; runtime not checked. Re-merging an already-contained commit does not restore the removed code. No implementation changes or branch operations performed.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-01. Only status.md and prompt_log.md updated. Existing README claims and omitted preview documentation are stale; protected documentation left unchanged pending a separately authorized correction.
+
+Validation commands: git status --short; git branch -a; git branch -a --contains 30ce1c0; git show --stat 30ce1c0; git show 30ce1c0 -- Godot/lobby.gd; git diff malik-other-branch rica -- Godot/lobby.gd; git log -m -p -2 -- Godot/lobby.gd. These identify the branch and exact merge removing access. Source DOCX read using ZIP/XML and SHA256 checked unchanged at 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A. Documentation checks cover 20 IDs, local links, revision consistency and changed-file boundaries. No Godot/runtime or physical-device tests run; previous branch test reports are historical only.
+
+Input tokens, cached input tokens, output tokens, cache inclusion, model usage and usage source: **Unavailable** (reliable all-call per-request telemetry unavailable). Estimated cost and actual charges: **Unavailable** (usage and applicable billing rates unavailable).
 
 # October 27, 2026
 
