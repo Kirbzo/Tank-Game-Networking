@@ -47,6 +47,7 @@ func run() -> void:
 	probe.name = "WorldProbe"
 	root.add_child(probe)
 	var lobby = load("res://lobby.tscn").instantiate()
+	lobby.username = "BraveMoose" if hosting else "LuckyOtter"
 	root.add_child(lobby)
 	current_scene = lobby
 	lobby.discovery.protocol = "moooze-world-sync-test"
@@ -61,6 +62,8 @@ func run() -> void:
 				break
 			await create_timer(0.05).timeout
 		if not check(room.world.positions.size() == 2, "Ready handshake spawns second player"):
+			return
+		if not check(room.player_names.get(1) == "BraveMoose" and room.player_names.values().has("LuckyOtter") and room.host_label.text == "Host: BraveMoose", "Host displays both assigned usernames and host header"):
 			return
 		key(KEY_W, true)
 		await create_timer(0.4).timeout
@@ -80,7 +83,7 @@ func run() -> void:
 			if room.world.positions.size() == 1:
 				break
 			await create_timer(0.05).timeout
-		if not check(room.world.positions.size() == 1 and room.world_positions.size() == 1, "Disconnected player removed from shared state"):
+		if not check(room.world.positions.size() == 1 and room.world_positions.size() == 1 and room.player_names.size() == 1, "Disconnected player removed from shared state"):
 			return
 		room.leave_room()
 	else:
@@ -94,12 +97,21 @@ func run() -> void:
 		lobby.game_id.text = lobby.discovery.games.keys()[0]
 		lobby.join_game()
 		for i in range(300):
-			if is_instance_valid(lobby.active_room) and lobby.active_room.world_positions.size() == 2:
+			if is_instance_valid(lobby.active_room) and lobby.active_room.world_positions.size() == 2 and lobby.active_room.player_names.size() == 2:
 				break
 			await create_timer(0.05).timeout
 		if not check(is_instance_valid(lobby.active_room) and lobby.active_room.world_positions.size() == 2, "Late join receives both players"):
 			return
 		var room = lobby.active_room
+		if not check(room.player_names.get(1) == "BraveMoose" and room.player_names.get(lobby.multiplayer.get_unique_id()) == "LuckyOtter" and room.host_label.text == "Host: BraveMoose", "Client receives both assigned usernames and matching host header"):
+			return
+		if not check(room.NAME_COLOR == Color.WHITE and room.host_label.get_theme_color("font_color") == Color.WHITE, "Names and host header use white text"):
+			return
+		var font := ThemeDB.fallback_font
+		for position in [room.arena.position, room.arena.get_center(), room.arena.end - room.PLAYER_SIZE]:
+			var baseline: Vector2 = room.name_baseline(position, "BraveMoose")
+			if not check(baseline.y + font.get_descent(room.NAME_FONT_SIZE) <= position.y and baseline.y - font.get_ascent(room.NAME_FONT_SIZE) >= 0, "Username stays above player and visible at walls"):
+				return
 		var original_host_x: float = World.BOUNDS.position.x + World.BOUNDS.size.x * 0.35 - World.PLAYER_SIZE.x / 2
 		if not check(room.world_positions[1].x > original_host_x + 30, "Late join receives host's prior movement"):
 			return

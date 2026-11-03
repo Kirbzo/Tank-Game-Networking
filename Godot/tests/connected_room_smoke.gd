@@ -69,8 +69,20 @@ func run() -> void:
 					break
 				await create_timer(0.05).timeout
 			await create_timer(1.0).timeout
-			if not check(lobby.feedback.text.contains("host disconnected"), "Persistent host departure explanation"):
+			var notice = lobby.disconnected_screen
+			if not check(is_instance_valid(notice) and notice.is_visible_in_tree() and notice.title.text == "Disconnected" and notice.explanation.text.contains("host disconnected"), "Separate host departure screen visible"):
 				return
+			if not check(lobby.session == null and not lobby.joining and not lobby.get_child(0).visible and notice.return_button.has_focus(), "Notice blocks lobby after cleaning up connection"):
+				return
+			lobby.join_server_disconnected()
+			if not check(lobby.disconnected_screen == notice, "Repeated disconnect keeps one notice"):
+				return
+			lobby.join_connected()
+			if not check(not is_instance_valid(lobby.active_room), "Late connected callback cannot reopen room"):
+				return
+			notice.return_button.pressed.emit()
+			notice.return_button.pressed.emit()
+			lobby.join_server_disconnected()
 		else:
 			await create_timer(2.0).timeout
 			if not check(lobby.session != null and lobby.active_room.status_message.text.contains("2/2"), "Connection persists in room"):

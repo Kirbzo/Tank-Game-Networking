@@ -5,7 +5,7 @@ signal back_requested
 signal timed_out
 signal cancel_requested
 
-const JOIN_TIMEOUT_SECONDS := 30.0
+const JOIN_TIMEOUT_SECONDS := 10.0
 
 var title: Label
 var status: Label
@@ -82,12 +82,12 @@ func show_connected(game_id: String) -> void:
 	back_button.show()
 	back_button.grab_focus()
 
-func show_failure() -> void:
+func show_failure(message := "Could not connect to the room.\nRetry or go Back to choose another room.") -> void:
 	timeout.stop()
 	cancel_button.hide()
 	countdown.hide()
 	title.text = "Unable to join the game."
-	status.text = "Please try again."
+	status.text = message
 	indicator.hide()
 	retry_button.show()
 	back_button.show()

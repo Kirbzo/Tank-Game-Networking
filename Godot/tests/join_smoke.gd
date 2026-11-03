@@ -202,7 +202,7 @@ func failure_checks() -> void:
 	if not require(screen.indicator.visible and screen.indicator.value > 0 and screen.countdown.visible and screen.cancel_button.visible and not screen.retry_button.visible and not screen.back_button.visible, "Timed loading must show progress and Cancel while hiding Retry/Back"):
 		return
 	await create_timer(0.6).timeout
-	if not require(not lobby.joining and lobby.session == null and screen.title.text == "Unable to join the game." and screen.status.text == "Please try again." and screen.retry_button.visible and screen.back_button.visible, "Timeout must clean up and expose exact failure text, Retry and Back"):
+	if not require(not lobby.joining and lobby.session == null and screen.title.text == "Unable to join the game." and screen.status.text.contains("timed out") and screen.retry_button.visible and screen.back_button.visible, "Timeout must clean up and explain timeout with Retry and Back"):
 		return
 	await click(screen.retry_button)
 	screen.timeout.start(0.2)
