@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P055 and the next request is **P056**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P056 and the next request is **P057**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -13,6 +13,29 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 # November 3, 2026
 
 **Recorded times - newest first (America/Regina)**
+
+## P056 - November 3, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:34:09 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets now try to match the world states in both clients with the connection. Read the WP2 Requirements i added manually
+
+Result: read manually restored WP2 Word document and original framework requirements. Implemented host-authoritative room positions for two player rectangles, ready handshake, sender-bound direction-only input RPCs, 20 Hz ticked snapshots, fixed shared world fitted to each viewport, guest cleanup, input validation and stale-input timeout. Client renders host state without prediction/interpolation. Existing preview controls/speed retained as provisional rules; final FR9 team confirmation still needed. Host/Player 2 labels and You marker distinguish players; username roster/Start/combat/reset remain deferred. Changed lobby.gd/game_room.gd, added room_world.gd and world synchronization test/helper, updated status/log. No protected docs/source edits or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-05. Reviewed [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx), SHA256 f622dc1114974edd927b5d50df6483f8e8d5dd64181b24dc7d8e1f009b0f647c. Original DOCX SHA256 346a523b6f256666d798d44498277ac61d44c25cb93d633708c6e35c7621e48a unchanged.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual monetary cost: **Unavailable**; reliable per-request usage/billing telemetry not exposed.
+
+Validation: from repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0. Initial movement test passed; expanded to simultaneous inputs and rerun after final drawing change, both PASS. Model checks run at start in both processes. Covers late join, both players moving, exact settled equality confirmed by host, viewport-size independence, settings pause, oversized network direction, stale snapshot and world-member removal.
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with command without host: both PASS/exit 0.
+- Same connected-room script with `host host-leaves` paired with `host-leaves`: both PASS/exit 0.
+- `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` and `-- escape`: both PASS/exit 0.
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: PASS/exit 0.
+Existing user-log/certificate errors remain without script errors. No visual/physical two-device/packet-loss/high-latency acceptance. Python checked 20 original plus 13 supplemental IDs, local links, source checksums/protected docs preservation and log/status revision; Git diff --check/status checked boundaries. Protected docs still need approved wording updates; no staging/commit/push.
 
 ## P055 - November 3, 2026
 

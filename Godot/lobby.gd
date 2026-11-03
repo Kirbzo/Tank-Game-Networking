@@ -122,6 +122,7 @@ func refresh_session_players() -> void:
 	refresh_games()
 	if is_instance_valid(active_room):
 		active_room.update_connection_status()
+		active_room.refresh_world_members()
 
 func update_session_feedback() -> bool:
 	if session == null or joining:
@@ -188,6 +189,26 @@ func open_connected_room() -> void:
 	active_room.session_lobby = self
 	get_child(0).hide()
 	add_child(active_room)
+	if not multiplayer.is_server():
+		room_ready.rpc_id(1)
+
+# RPCs live on the stable lobby path; a joining room must be ready first.
+@rpc("any_peer", "call_remote", "reliable")
+func room_ready() -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
+		active_room.add_world_player(sender)
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
+func room_input(direction: Vector2) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
+		active_room.world.accept_input(sender, direction, Time.get_ticks_msec())
+
+@rpc("authority", "call_remote", "unreliable_ordered", 2)
+func room_snapshot(id: String, tick: int, positions: Dictionary) -> void:
+	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
+		active_room.receive_world(tick, positions)
 
 func return_from_room(message := "You left the room.") -> void:
 	if not is_instance_valid(active_room):

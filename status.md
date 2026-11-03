@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: November 3, 2026. Revision: S-2026-11-03-04. Prompt: P055 (restore connected game room).
+Updated: November 3, 2026. Revision: S-2026-11-03-05. Prompt: P056 (shared room world state).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: P029 explicitly authorizes real joining beyond the original alpha. Ported local main commit 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e into malik-other-branch without switching branches. Godot 4.7.2 same-computer host/client tests verify real Join, persistent connection, host-name listings, timeout/retry/back and host-disconnect recovery. P034 supersedes P029 display-only Exit: client Exit disconnects; host Exit closes the session and stops advertising; the application remains on Exiting game.... Visual and physical two-device checks remain unverified. Historical disabled-Join evidence below is prior-state evidence, superseded where noted by P029. P031 applies the approved root documentation updates; original alpha source requirements remain preserved.
@@ -19,14 +19,14 @@ Evidence: P029 explicitly authorizes real joining beyond the original alpha. Por
 | FR5 | The system shall create, join, leave, and close game rooms. | Partial | Host creates, client joins, client Exit leaves, host Exit closes the server and stops advertising. Actual process tests passed; physical LAN and full lifecycle acceptance remain unverified. |
 | FR6 | The system shall support selecting and starting a game from the lobby flow. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Partial | Timeout, retry/back, host Exit recovery, client Exit and count updates tested. Broader error/reporting and physical-device acceptance remain. |
-| FR8 | The server shall receive player inputs, update the shared world state, and send authoritative position updates. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR9 | The server shall validate inputs to prevent impossible movement and illegal actions according to agreed game rules. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
+| FR8 | The server shall receive player inputs, update the shared world state, and send authoritative position updates. | Partial | P056 host owns both player positions and accepts sender-bound directional inputs; 20 Hz authoritative snapshots draw both rectangles on client. Actual two-process simultaneous movement, late join and exact settled-state equality passed. Physical two-device/latency acceptance remains unverified. |
+| FR9 | The server shall validate inputs to prevent impossible movement and illegal actions according to agreed game rules. | Partial | P056 rejects unknown peers, non-finite and oversized vectors; normalizes diagonals, clamps host bounds and expires stale input after 250 ms. Validation tests passed. Uses provisional existing preview controls/speed; agreed movement/action rules and broader illegal-action coverage remain outstanding. |
 | FR10 | The server shall determine hits and communicate the resulting state so clients can reconcile with the server. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
 | FR11 | The server shall reset the game state after a match and prepare the lobby for the next round. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR12 | The project shall include basic placeholders for connection and gameplay testing. | Partial | P046 adds a standalone bounded room with a locally movable rectangle; P048 adds a fixed HUD, back arrow, preview ID and nonfunctional settings screen; keyboard, diagonal speed, bounds, resize and leave tests passed on Godot 4.7.2. Host integration, synchronized movement, bullets, health/damage, moose hazard and interpolation placeholders remain incomplete. |
+| FR12 | The project shall include basic placeholders for connection and gameplay testing. | Partial | P056 adds shared bounded player rectangles and authoritative movement; prior HUD/settings/preview retained. Current network and preview regressions pass. Bullets, health/damage, moose hazard and interpolation markers remain incomplete. |
 | FR13 | Generate a status.md file that logs the completion status of these requirements. | Complete | This file tracks all 20 requirements with status and evidence. |
 | FR14 | Add a prompt log that captures the prompt Id, prompt, the date, the status.md | Complete | P042 consolidates all local/fetched branch-tip logs into 60 dated prompt records, retaining local P001-P042 and 18 branch-qualified imports. Next local ID P043. Original source snapshots, variants and mappings are retained in prompt_log_merge_audit.json; no dates/times or usage figures invented. |
-| FR15 | Create a README.md and AGENTS.md file based off of these requirements. | Complete | P041 approved and applied the README correction: endpoints remain internal, one IPv4 is shown separately, and host status shows the game ID without an endpoint. Documentation matches current behavior. |
+| FR15 | Create a README.md and AGENTS.md file based off of these requirements. | Partial | README/AGENTS exist but successful-Join/standalone-room descriptions now lag connected and synchronized behavior. Protected documentation updates require user approval; left unchanged. Prior P041 completion was for that earlier project state. |
 
 ## Scope and open issues
 
@@ -111,3 +111,27 @@ Current Godot 4.7.2 evidence: separate host/client processes passed connected-ro
 Original framework DOCX re-read and unchanged; WP2 Word/PDF absent again in current checkout. Prior reviewed requirements constrain restored scope; restore WP2 Word source for future source reviews. README/AGENTS and unrelated files unchanged; protected docs still need approved updates to describe connected-room entry. No staging, commit or push. This checkout's records ended at P048; P049-P054 remain reserved for requests already recorded earlier in this conversation, without fabricating missing historical records.
 
 - S-2026-11-03-04 (P055): restored missing connected-room integration and automated test; current checks above passed.
+
+## P056 ? shared player world
+
+Re-read [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx) and original DOCX. WP2 source is present again; earlier missing-source observations are historical. WP2 covers room lifecycle/membership; authoritative movement derives from FR8 and this request. Existing WASD/arrows and 220 units/second are provisional preview choices, not team-approved final FR9 rules. Connected world uses fixed logical bounds (24,24,952,672), scaled to each viewport, and 32x32 rectangles. Host handles inputs/positions; client sends direction only and renders host snapshots, without prediction or interpolation. Opening settings/focus loss stops local input while host simulation continues. Ready handshake supplies late-join state; departure removes the guest. No combat, start, roster or match reset added.
+
+| ID | Source mapping | Status | Evidence / remaining work |
+| --- | --- | --- | --- |
+| LR1 | AR1 | Partial | Buttons/list retained; Host opens connected room. Visual and physical-device acceptance pending. |
+| LR2 | AR2 | Partial | Advertised ID/host username/count preserved; process discovery works with host in room. Physical LAN pending. |
+| LR3 | AR3 | Partial | Selection/typed-ID Join retained; matching-room connection tests provide prior and current evidence. Full error acceptance pending. |
+| LR4 | AR4 | Partial | Connected host/join/leave plus movement work in process tests; complete reviewer walkthrough pending. |
+| LR5 | None listed | Partial | Listings hide endpoints using usernames. Manual host-IP fallback interpretation remains open; no new IP display added. |
+| GR1 | FR1, FR4-FR7 | Partial | Create/join/leave/close retained; shared movement added. Start absent. |
+| GR2 | FR1, FR5 | Partial | Host creates server and enters room as first player; process tests pass. Visual/two-device pending. |
+| GR3 | FR1, FR4, FR5 | Partial | Host plus one guest, matching room; specific full/closed/unavailable explanations remain missing. |
+| GR4 | FR1, FR5, FR7 | Partial | Real ID, role/count and both labeled player rectangles reflect shared positions. Username roster/explicit host username still absent. |
+| GR5 | FR5, FR7 | Partial | Client leave returns to lobby; host count and world remove guest. Username player list still absent. |
+| GR6 | FR3, FR5, FR7 | Partial | Host leave returns both with client explanation; advertisement stops and listings expire. Current tests do not assert observer listing expiry. |
+| GR7 | FR3, FR5, FR7 | Partial | Client disconnect removes world player/count; host departure recovery passes. Explicit client disconnect message/roster and abrupt-loss acceptance remain incomplete. |
+| GR8 | FR6 | Not implemented | No Start transition. Host-only/two-connected condition remains proposed and requires confirmation. |
+
+Current validation: Godot 4.7.2 separate host/client world-sync tests PASS for late join after host movement, simultaneous host/guest movement, exact authoritative state convergence, resized viewport retaining same bounds, settings suppressing input, invalid network vector rejection, stale snapshot rejection and guest removal on leave. Movement-model checks cover unknown/non-finite/oversized input, normalized diagonals, bounds and stale-input timeout. Existing connected-room host/client leave and host-close recovery, standalone from-lobby/Escape, and Join failure/retry/back pass. No GDScript errors; existing user-log/certificate-store errors remain. Physical two-device, visual, packet-loss/high-latency and abrupt-process-loss tests not run. No hit reconciliation/reset tests apply to this scope; features remain unimplemented.
+
+- S-2026-11-03-05 (P056): host-authoritative shared rectangle movement, sender-bound RPC inputs and ticked snapshots; FR8/FR9 partial with evidence and final-rule caveats. FR15 partial because protected docs now stale; approval needed for their update. Source documents and protected docs unchanged; no staging/commit/push.
