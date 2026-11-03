@@ -306,6 +306,7 @@ func start_join() -> void:
 		add_child(joining_screen)
 		joining_screen.retry_requested.connect(start_join)
 		joining_screen.back_requested.connect(join_back)
+		joining_screen.cancel_requested.connect(cancel_join)
 		joining_screen.timed_out.connect(join_failed)
 	# Hiding the previous UI also removes its mouse/keyboard focus targets.
 	get_child(0).hide()
@@ -341,6 +342,14 @@ func join_failed() -> void:
 		session.close()
 		session = null
 	joining_screen.show_failure()
+
+func cancel_join() -> void:
+	if exiting or not joining:
+		return
+	# Invalidate deferred connection work and close any pending peer.
+	join_failed()
+	join_back()
+	feedback.text = "Connection attempt cancelled."
 
 func join_back() -> void:
 	if exiting:

@@ -3,9 +3,14 @@ extends Control
 signal retry_requested
 signal back_requested
 signal timed_out
+signal cancel_requested
+
+const JOIN_TIMEOUT_SECONDS := 15.0
 
 var title: Label
 var status: Label
+var countdown: Label
+var cancel_button: Button
 var indicator: ProgressBar
 var retry_button: Button
 var back_button: Button
@@ -28,7 +33,11 @@ func _ready() -> void:
 	status = Label.new()
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(status)
+	countdown = Label.new()
+	countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(countdown)
 	indicator = ProgressBar.new()
+	indicator.step = 0.01
 	indicator.custom_minimum_size = Vector2(400, 20)
 	indicator.show_percentage = false
 	column.add_child(indicator)
@@ -40,8 +49,12 @@ func _ready() -> void:
 	back_button.text = "Back"
 	back_button.pressed.connect(func(): back_requested.emit())
 	column.add_child(back_button)
+	cancel_button = Button.new()
+	cancel_button.text = "Cancel"
+	cancel_button.pressed.connect(func(): cancel_requested.emit())
+	column.add_child(cancel_button)
 	timeout.one_shot = true
-	timeout.wait_time = 10.0
+	timeout.wait_time = JOIN_TIMEOUT_SECONDS
 	timeout.timeout.connect(func(): timed_out.emit())
 	add_child(timeout)
 
@@ -51,12 +64,17 @@ func begin() -> void:
 	status.text = "Please wait while we connect you to the game server..."
 	indicator.value = 0
 	indicator.show()
+	countdown.show()
+	cancel_button.show()
 	retry_button.hide()
 	back_button.hide()
-	timeout.start()
+	timeout.start(JOIN_TIMEOUT_SECONDS)
+	update_progress()
 
 func show_connected(game_id: String) -> void:
 	timeout.stop()
+	countdown.hide()
+	cancel_button.hide()
 	status.text = "Connected to game %s. Back returns to the lobby without disconnecting." % game_id
 	indicator.hide()
 	retry_button.hide()
@@ -65,6 +83,8 @@ func show_connected(game_id: String) -> void:
 
 func show_failure() -> void:
 	timeout.stop()
+	countdown.hide()
+	cancel_button.hide()
 	title.text = "Unable to join the game."
 	status.text = "Please try again."
 	indicator.hide()
@@ -72,6 +92,11 @@ func show_failure() -> void:
 	back_button.show()
 	retry_button.grab_focus()
 
-func _process(delta: float) -> void:
+func update_progress() -> void:
+	var remaining := timeout.time_left
+	indicator.value = 100.0 * (1.0 - remaining / JOIN_TIMEOUT_SECONDS)
+	countdown.text = "Connecting: %d seconds remaining" % int(ceil(remaining))
+
+func _process(_delta: float) -> void:
 	if visible and indicator.visible:
-		indicator.value = fmod(indicator.value + delta * 60.0, 100.0)
+		update_progress()
