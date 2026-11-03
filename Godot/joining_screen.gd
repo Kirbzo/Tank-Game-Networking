@@ -35,6 +35,7 @@ func _ready() -> void:
 	countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(countdown)
 	indicator = ProgressBar.new()
+	indicator.step = 0.01
 	indicator.custom_minimum_size = Vector2(400, 20)
 	indicator.show_percentage = false
 	column.add_child(indicator)
@@ -65,6 +66,15 @@ func begin() -> void:
 	back_button.hide()
 	timeout.start()
 	update_progress()
+
+func show_connected(game_id: String) -> void:
+	timeout.stop()
+	countdown.hide()
+	status.text = "Connected to game %s. Back returns to the lobby without disconnecting." % game_id
+	indicator.hide()
+	retry_button.hide()
+	back_button.show()
+	back_button.grab_focus()
 
 func show_failure() -> void:
 	timeout.stop()
