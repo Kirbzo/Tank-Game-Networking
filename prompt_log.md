@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P052 and the next request is **P053**. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P048 and the next request is **P049**. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -10,81 +10,9 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
 
-# November 3, 2026
-
-**Recorded times - newest first (America/Regina)**
-
-## P052 - November 3, 2026
-
-Receipt time: **Unavailable** (not supplied by chat metadata).
-Recording time: 10:01:07 AM (America/Regina; UTC clock converted to UTC-06:00).
-
-Actual request:
-
-> try to read the WP2 Requirements word docs inside the MoozeTanks folder and tell me if thats better than trying to read a pdf
-
-Result: successfully extracted WP2 Requirements.docx with Python standard-library zipfile and xml.etree.ElementTree. Both structured tables and all five LR/eight GR rows are readable; GR4 remains continuous across the former PDF page boundary. Easier for text/table analysis than the previous PDF, which required a temporary reader download. Substantive requirements match the prior PDF review; the PDF is absent from this checkout, so no fresh byte/text comparison was possible. Minor split-run spacing and replacement characters in LR5 do not obscure its meaning. DOCX is preferable for ongoing requirement-text reviews; PDF remains useful for fixed visual layout. No implementation, source document, README or AGENTS changes or commits.
-
-Associated status.md: [status.md](status.md), revision S-2026-11-03-01. Reviewed source: [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx), SHA256 f622dc1114974edd927b5d50df6483f8e8d5dd64181b24dc7d8e1f009b0f647c.
-
-Token usage (input, cached input, output), model usage record, cache inclusion and estimated/actual cost: **Unavailable**; reliable per-request usage and billing telemetry are not exposed.
-
-Validation: `python -` using zipfile/ElementTree successfully read both requirements documents. Checked all 20 original and 13 supplemental status IDs, source checksums, revision/log consistency, and two-file change boundary. Active local-link check reports the prior PDF link is now missing; preserved that historical reference and reported the missing source rather than editing protected documents or restoring it. No gameplay tests needed or run.
-
 # October 30, 2026
 
 **Recorded times - newest first (America/Regina)**
-
-## P051 - October 30, 2026
-
-Receipt time: **Unavailable** (not supplied by chat metadata).
-Recording time: 11:41:52 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
-
-Actual request:
-
-> I have added a second docs that you should refer to for the game room. Read it and report back what you understand
-
-Result: found and read both pages of MoozeTanks/WP2 Requirements.pdf (WP2 Requirement). Treated it as a supplemental room/lobby source alongside the retained framework DOCX and GameRoomImage. It defines LR1-LR5 and GR1-GR8, including usernames hiding player IPs; room creation/entry through Host/Join; two-player capacity and useful errors; shared ID/member names/host indicator/count; client leave, host close and disconnect routing to lobby; and start into a shared game/placeholder. Host-only start with two connected players is explicitly proposed, not confirmed. Reported current integration gaps and open LR5 manual-IP interpretation. Added separate source-ID status rows without renumbering original requirements or marking new acceptance complete. No scene, code, README or AGENTS edits. No staging, commit or push.
-
-Associated status.md: [status.md](status.md), revision S-2026-10-30-07. Source: [WP2 Requirements.pdf](MoozeTanks/WP2%20Requirements.pdf), SHA256 55F744A40D7BF164BDECB197DC95C38A9920F9433031A4EE0BCA5A031BDA40BF.
-
-Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
-
-Validation: no local PDF reader package or pdftotext/mutool command was available. `python -m pip download --no-deps --dest .pdf_read_tools pypdf` failed under restricted network access, then succeeded with approved download access. Imported the temporary wheel directly (no project dependency/global installation) and extracted both pages in layout mode with PdfReader. Document stayed local and unchanged. Temporary wheel removed after use. The empty .pdf_read_tools directory remains because Windows denied its removal, including an approved retry. Python via python - checked original 20 IDs plus all 13 separate LR/GR IDs, local links, prompt/status revision, DOCX/PDF/image/audit preservation and two-file task boundary. No gameplay tests needed or run; prior test results remain historical evidence. Visual/two-device verification and room-network integration remain unverified/incomplete.
-
-## P050 - October 30, 2026
-
-Receipt time: **Unavailable** (not supplied by chat metadata).
-Recording time: 11:25:04 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
-
-Actual request:
-
-> which information overlaps?
-
-Result: compared complete README.md and Godot/README.md. Identified repeated technology baseline, hosting/joining/leaving behavior, IDs/usernames and endpoint distinction, LAN discovery/direct-IP/ports/firewall setup, prior verification results and outstanding visual/two-device/main-screen work. Identified root-only requirement tables/source/team decisions and Godot-only concrete commands, address selection and standalone room/HUD details. Explained that most duplication is the root Running and verification section repeating the Godot guide's operational content. Neither README nor implementation changed; only required logs updated. No staging, commit or push.
-
-Associated status.md: [status.md](status.md), revision S-2026-10-30-06. Requirement statuses unchanged.
-
-Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
-
-Validation: full source comparison of both README files; Python via python - checked all 20 requirement IDs, active local links, unique new P050/status references, unchanged requirements checksum and two-file boundary. No runtime tests needed or run; prior test claims were read as historical evidence. Protected documents, code, source images and unrelated changes preserved.
-
-## P049 - October 30, 2026
-
-Receipt time: **Unavailable** (not supplied by chat metadata).
-Recording time: 11:20:07 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
-
-Actual request:
-
-> ok so i just noticed there are 2 different README.md files. Do you know why there are 2 different README.md's? Check the prompt_log if needed.
-
-Result: inspected both files, historical P001/P002/P004 and Git file-add history. Root README.md documents the whole project's requirements/scope/status and links to Godot/README.md. Godot/README.md was introduced with the initial lobby and contains implementation-specific import/run, networking, tests and room-preview instructions. Two files are an organizational choice, not a requirement or two Godot entry points. No README, implementation or source edits; only required tracking updated. No staging, commit or push.
-
-Associated status.md: [status.md](status.md), revision S-2026-10-30-05. Requirement statuses unchanged.
-
-Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
-
-Validation: rg filename/reference searches, source reads, P001/P002/P004 review and bundled Git `log --diff-filter=A --format=%h %s -- Godot/README.md README.md` confirmed root first-documentation commit 894ae96 and Godot guide initial-lobby commit e23eeb7. Python via python - checked all 20 IDs, active local links, source checksum and two-file boundary. No runtime tests needed or run; no current runtime success inferred from documentation. Existing README contents and user changes preserved.
 
 ## P048 - October 30, 2026
 
