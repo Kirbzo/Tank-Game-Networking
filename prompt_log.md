@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P056 and the next request is **P057**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P057 and the next request is **P058**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -13,6 +13,28 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 # November 3, 2026
 
 **Recorded times - newest first (America/Regina)**
+
+## P057 - November 3, 2026
+
+Receipt time: **Unavailable** (chat metadata does not provide it).
+Recording time: 11:46:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Now lets look at the Allen branch in the repository. I want to add the connection's screen logic such as the timer and cancel button to my current project. Use the current file as the file of truth for this situation.
+
+Result: inspected Allen and origin/Allen at bb1871c using git show/diff; no branch switch/fetch/merge. Adapted 30-second countdown, time-based progress and Cancel into current screen. Current-project behavior prevails: Cancel stops/closes pending connection and returns to lobby; timeout retains Retry/Back; success enters existing synchronized room. No application quit or automatic retries imported. Timer resets on each Join/Retry; late/deferred completion guarded. Updated connected-status wording to current room destination. Changed joining_screen.gd/lobby.gd, added join_cancel_smoke.gd, updated existing failure test and status/log. No protected docs, sources or shared-world implementation changes; no commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-06.
+
+Token usage (input, cached input, output), model usage record, cache inclusion and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation (repository root; executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`):
+- `--headless --path Godot --script res://tests/join_cancel_smoke.gd`: final PASS/exit 0 for default countdown, automatic timed progress, immediate/active/repeated Cancel, late completion/timeout, selected-target retention, usable lobby and timeout/Retry reset.
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: final PASS/exit 0; test adjusted for visible Cancel and elapsed-progress processing order, with accelerated timeout.
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
+Initial new fixture omitted seen timestamp and assumed offline peer instead of null; corrected. Existing progress assertion ran before a subsequent process update; widened accelerated deadline and waited frames, rerun passed. Temporary diagnostic prints removed. Final runs retain existing user-log/certificate errors without script errors. No visual/two-device/full 30-second wall-clock test. Python checked 33 requirement IDs, links, source/protected hashes and revision consistency; Git diff --check/status checked boundaries. Documentation updates remain pending approval; no staging/commit/push.
 
 ## P056 - November 3, 2026
 

@@ -192,14 +192,16 @@ func failure_checks() -> void:
 	lobby.game_id.text_changed.emit("ABC123")
 	await click(lobby.join_button)
 	var screen: Control = lobby.joining_screen
-	screen.timeout.start(0.2)
+	screen.timeout.start(0.6)
 	lobby.join_button.pressed.emit()
 	if not require(lobby.joining_screen == screen, "Repeated clicks must not create another loading screen"):
 		return
 	await create_timer(0.1).timeout
-	if not require(screen.indicator.visible and screen.indicator.value > 0 and not screen.retry_button.visible and not screen.back_button.visible, "Loading must animate without interactive buttons"):
+	await process_frame
+	await process_frame
+	if not require(screen.indicator.visible and screen.indicator.value > 0 and screen.countdown.visible and screen.cancel_button.visible and not screen.retry_button.visible and not screen.back_button.visible, "Timed loading must show progress and Cancel while hiding Retry/Back"):
 		return
-	await create_timer(0.2).timeout
+	await create_timer(0.6).timeout
 	if not require(not lobby.joining and lobby.session == null and screen.title.text == "Unable to join the game." and screen.status.text == "Please try again." and screen.retry_button.visible and screen.back_button.visible, "Timeout must clean up and expose exact failure text, Retry and Back"):
 		return
 	await click(screen.retry_button)
