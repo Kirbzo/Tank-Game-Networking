@@ -1,11 +1,12 @@
 extends Control
-## Standalone local movement preview; Host integration and networking come later.
+## Local movement view; a connected lobby retains ownership of its session.
 
 const PLAYER_SIZE := Vector2(32, 32)
 const MOVE_SPEED := 220.0
 const LOBBY_SCENE := "res://lobby.tscn"
 
 @export var game_id := "PREVIEW"
+var session_lobby: Node
 var arena := Rect2()
 var player_position := Vector2.ZERO
 var leaving := false
@@ -23,9 +24,18 @@ func _ready() -> void:
 	settings_button.pressed.connect(show_settings)
 	settings_back_button.pressed.connect(close_settings)
 	game_id_label.text = "Game ID: " + game_id
+	update_connection_status()
 	resized.connect(layout_room)
 	layout_room()
 	grab_focus()
+
+func update_connection_status() -> void:
+	if session_lobby == null:
+		return
+	var hosting: bool = not session_lobby.discovery.hosted_game.is_empty()
+	var count := 1 + multiplayer.get_peers().size()
+	status_message.text = "%s | %d/2 players connected" % ["Hosting" if hosting else "Connected", count]
+	status_message.show()
 
 func layout_room() -> void:
 	arena = Rect2(Vector2(24, 24), Vector2(maxf(size.x - 48, PLAYER_SIZE.x), maxf(size.y - 48, PLAYER_SIZE.y)))
@@ -84,8 +94,10 @@ func leave_room() -> void:
 		return
 	leaving = true
 	set_physics_process(false)
-	# This scene is launched directly and owns no hosted/joined session.
-	# Future Host integration must connect room departure to session cleanup.
+	if session_lobby != null:
+		session_lobby.return_from_room()
+		return
+	# Standalone preview has no session to close.
 	var result := get_tree().change_scene_to_file(LOBBY_SCENE)
 	if result != OK:
 		leaving = false

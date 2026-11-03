@@ -2,13 +2,39 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P048 and the next request is **P049**. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P055 and the next request is **P056**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 3, 2026
+
+**Recorded times - newest first (America/Regina)**
+
+## P055 - November 3, 2026
+
+Receipt time: **Unavailable** (chat metadata does not provide it).
+Recording time: 11:26:44 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> can you recheck the game room implementation you added and see if its still here? If not, readd the changes
+
+Result: standalone room still present; Host/Join integration and connected_room_smoke.gd missing. Restored connected-room entry, real ID/role/count, retained lobby discovery/session ownership, room disconnect-to-lobby and host-loss explanation. Preview preserved. Movement remains local; no roster/synchronization/Start added. Original DOCX read; WP2 Word/PDF absent in checkout, reported. Changed lobby.gd/game_room.gd, restored test, updated status/log. No protected docs/source changes, staging, commit or push. Earlier P049-P054 conversation IDs reserved despite missing checkout records.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-04.
+
+Token usage (input, cached input, output), model usage record, cache inclusion and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry not exposed.
+
+Validation (repository root; executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`):
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with same command without host: both PASS/exit 0 (client leaves; host stays).
+- Same test with `host host-leaves` paired with `host-leaves`: both PASS/exit 0 (host closes; client returns with explanation).
+- `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`: PASS/exit 0.
+- `--headless --path Godot --script res://tests/join_smoke.gd -- initial` and `-- failure`: both PASS/exit 0.
+Runtime reports prior user-log/certificate-store errors, no script errors. Python checked original 20 requirement IDs, local links, source checksum and status/log revision. Git diff --check/status checked whitespace and boundaries. No visual or physical two-device acceptance; protected documentation update remains pending approval.
 
 # October 30, 2026
 

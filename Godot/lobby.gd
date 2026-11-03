@@ -28,6 +28,8 @@ var connected_game_id := ""
 var join_attempt := 0
 var exit_screen: Control
 var exiting := false
+var active_room: Control
+var room_return_message := ""
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -118,6 +120,8 @@ func refresh_session_players() -> void:
 		discovery.hosted_game["players"] = 1 + multiplayer.get_peers().size()
 		discovery.advertise()
 	refresh_games()
+	if is_instance_valid(active_room):
+		active_room.update_connection_status()
 
 func update_session_feedback() -> bool:
 	if session == null or joining:
@@ -175,6 +179,30 @@ func open_test_room() -> void:
 		update_join_button()
 		feedback.text = "Could not open the test game room. Try again."
 
+# The lobby retains session/discovery ownership while displaying its room.
+func open_connected_room() -> void:
+	if is_instance_valid(active_room) or session == null:
+		return
+	active_room = preload("res://game_room.tscn").instantiate()
+	active_room.game_id = str(discovery.hosted_game["id"]) if not discovery.hosted_game.is_empty() else connected_game_id
+	active_room.session_lobby = self
+	get_child(0).hide()
+	add_child(active_room)
+
+func return_from_room(message := "You left the room.") -> void:
+	if not is_instance_valid(active_room):
+		return
+	active_room.hide()
+	active_room.set_physics_process(false)
+	active_room.queue_free()
+	active_room = null
+	leave_game()
+	get_child(0).show()
+	host_button.disabled = discovery.bound_port == -1
+	update_join_button()
+	room_return_message = message
+	feedback.text = message
+
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
 	label.text = text
@@ -203,6 +231,7 @@ func host_game() -> void:
 		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
 		session = null
 		return
+	room_return_message = ""
 	var id := generate_session_id()
 	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username, "players": 1}
 	# Joining requires the existing host endpoint to accept and poll peers.
@@ -212,6 +241,7 @@ func host_game() -> void:
 	hosted.text = "HOSTED SESSION  |  %s" % id
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
+	open_connected_room()
 
 func create_host_session() -> Error:
 	return session.create_server(0, 1)
@@ -246,6 +276,8 @@ func refresh_games() -> void:
 	else:
 		feedback.text = "%d hosted session(s) found. Select one to see its game ID." % entries.size()
 	update_session_feedback()
+	if not room_return_message.is_empty() and session == null:
+		feedback.text = room_return_message
 	update_join_button()
 
 func select_game(index: int) -> void:
@@ -287,6 +319,7 @@ func join_game() -> void:
 		feedback.text = "Select an available game or enter its game ID before joining."
 		update_join_button()
 		return
+	room_return_message = ""
 	join_target = target.duplicate()
 	start_join()
 
@@ -327,6 +360,8 @@ func join_connected() -> void:
 	joining = false
 	connected_game_id = join_target["id"]
 	joining_screen.show_connected(connected_game_id)
+	joining_screen.hide()
+	open_connected_room()
 	host_button.disabled = true
 	update_session_feedback()
 	update_join_button()
@@ -353,6 +388,9 @@ func join_back() -> void:
 	join_button.grab_focus()
 
 func join_server_disconnected() -> void:
+	if is_instance_valid(active_room):
+		return_from_room("The host disconnected or closed the room.")
+		return
 	if exiting:
 		return
 	if connected_game_id.is_empty():
