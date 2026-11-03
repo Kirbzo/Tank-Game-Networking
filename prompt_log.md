@@ -357,3 +357,19 @@ Prompt:
 Result: created README.md, AGENTS.md, and documentation_rationale.txt based on the earlier PDF. The prior task recorded an unchanged PDF checksum. These files are now located in the COMP214 subfolder.
 
 Associated status.md: none existed at that time; requirement tracking was introduced by the updated DOCX. Historical snapshot: documentation created; no game implementation verified.
+
+## P021 - November 03, 2026
+
+Date: 2026-11-03.
+Time: 10:54:58 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> the game allows only 2 plays to connect and if third person tries its showing just loading insted of that loading please add timer of 30 seconds which synchronise with loading bar and eventually once that 30 second timer get over and still 2 players are connected in game then the third player game should auto exit once that timer gets over
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-01.
+
+Result: changed Godot/joining_screen.gd to a 30-second countdown and synchronized elapsed progress. Godot/lobby.gd retries early ENet connection failures within the same deadline and closes the unconnected application at expiry; success stops the timer. Two-player host capacity unchanged. Since the transport does not report room occupancy, this deadline applies to every still-unconnected attempt, including unreachable hosts. Immediate local setup errors and post-connection disconnection retain the existing error/Retry/Back flow. Updated Godot/tests/join_smoke.gd for explicit errors and a real-duration timeout check. No scene, discovery, README.md or AGENTS.md changes.
+
+Validation: attempted `godot --version` and `godot --headless --path Godot --script res://tests/join_smoke.gd -- timeout`; both unavailable because godot is not on PATH. `git diff --check` passed. Runtime host/client/failure/timeout, three-process full-capacity, vacancy-before-deadline, visual and physical-device checks not run. Earlier passing runtime evidence is historical. Existing conflict markers and duplicate historical prompt IDs in status/log were observed and preserved, not repaired. Reliable telemetry for all model calls (input, cached input, output, cache inclusion, model and usage source) and estimated/actual costs: **Unavailable**; no attributable usage/billing records are exposed.

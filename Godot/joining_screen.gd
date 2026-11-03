@@ -4,8 +4,11 @@ signal retry_requested
 signal back_requested
 signal timed_out
 
+const JOIN_TIMEOUT_SECONDS := 30.0
+
 var title: Label
 var status: Label
+var countdown: Label
 var indicator: ProgressBar
 var retry_button: Button
 var back_button: Button
@@ -28,6 +31,9 @@ func _ready() -> void:
 	status = Label.new()
 	status.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(status)
+	countdown = Label.new()
+	countdown.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	column.add_child(countdown)
 	indicator = ProgressBar.new()
 	indicator.custom_minimum_size = Vector2(400, 20)
 	indicator.show_percentage = false
@@ -41,8 +47,11 @@ func _ready() -> void:
 	back_button.pressed.connect(func(): back_requested.emit())
 	column.add_child(back_button)
 	timeout.one_shot = true
-	timeout.wait_time = 10.0
-	timeout.timeout.connect(func(): timed_out.emit())
+	timeout.wait_time = JOIN_TIMEOUT_SECONDS
+	timeout.timeout.connect(func():
+		update_progress()
+		timed_out.emit()
+	)
 	add_child(timeout)
 
 func begin() -> void:
@@ -51,19 +60,27 @@ func begin() -> void:
 	status.text = "Please wait while we connect you to the game server..."
 	indicator.value = 0
 	indicator.show()
+	countdown.show()
 	retry_button.hide()
 	back_button.hide()
 	timeout.start()
+	update_progress()
 
 func show_failure() -> void:
 	timeout.stop()
 	title.text = "Unable to join the game."
 	status.text = "Please try again."
 	indicator.hide()
+	countdown.hide()
 	retry_button.show()
 	back_button.show()
 	retry_button.grab_focus()
 
-func _process(delta: float) -> void:
+func update_progress() -> void:
+	var remaining := timeout.time_left
+	indicator.value = 100.0 * (1.0 - remaining / JOIN_TIMEOUT_SECONDS)
+	countdown.text = "Connecting: %d seconds remaining (closes if unable to connect)" % int(ceil(remaining))
+
+func _process(_delta: float) -> void:
 	if visible and indicator.visible:
-		indicator.value = fmod(indicator.value + delta * 60.0, 100.0)
+		update_progress()

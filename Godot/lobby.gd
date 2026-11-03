@@ -87,7 +87,7 @@ func _ready() -> void:
 	add_child(discovery)
 	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
 	multiplayer.connected_to_server.connect(join_connected)
-	multiplayer.connection_failed.connect(join_failed)
+	multiplayer.connection_failed.connect(join_attempt_failed)
 	multiplayer.server_disconnected.connect(join_server_disconnected)
 
 func add_label(parent: Node, text: String) -> Label:
@@ -204,7 +204,7 @@ func start_join() -> void:
 		add_child(joining_screen)
 		joining_screen.retry_requested.connect(start_join)
 		joining_screen.back_requested.connect(join_back)
-		joining_screen.timed_out.connect(join_failed)
+		joining_screen.timed_out.connect(join_timed_out)
 	# Hiding the previous UI also removes its mouse/keyboard focus targets.
 	get_child(0).hide()
 	joining_screen.begin()
@@ -212,12 +212,38 @@ func start_join() -> void:
 	await get_tree().process_frame
 	if not joining or not is_inside_tree():
 		return
+	connect_join_target()
+
+func connect_join_target() -> void:
 	session = ENetMultiplayerPeer.new()
 	var result := session.create_client(join_target["address"], int(join_target["port"]))
 	if result != OK:
 		join_failed()
 		return
 	multiplayer.multiplayer_peer = session
+
+func join_attempt_failed() -> void:
+	if not joining:
+		return
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	# A full host can reject us before the UI deadline. Keep waiting for a slot
+	# without restarting the countdown or its progress bar.
+	await get_tree().create_timer(1.0).timeout
+	if joining and not joining_screen.timeout.is_stopped():
+		connect_join_target()
+
+func join_timed_out() -> void:
+	if not joining:
+		return
+	joining = false
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	get_tree().quit()
 
 func join_connected() -> void:
 	if not joining:
