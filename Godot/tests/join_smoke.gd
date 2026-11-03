@@ -130,6 +130,9 @@ func run() -> void:
 	if OS.get_cmdline_user_args().has("timeout"):
 		await timeout_checks()
 		return
+	if OS.get_cmdline_user_args().has("cancel"):
+		await cancel_checks()
+		return
 	var deadline := Time.get_ticks_msec() + 10000
 	while lobby.discovery.games.is_empty() and Time.get_ticks_msec() < deadline:
 		await process_frame
@@ -267,3 +270,22 @@ func timeout_checks() -> void:
 	await create_timer(32.0).timeout
 	silent_server.close()
 	require(false, "Unconnected game must exit automatically")
+
+func cancel_checks() -> void:
+	var silent_server := PacketPeerUDP.new()
+	if not require(silent_server.bind(0, "127.0.0.1") == OK, "Silent endpoint must bind"):
+		return
+	lobby.discovery.remember_game("ABC123", "127.0.0.1", silent_server.get_local_port())
+	lobby.game_id.text = "ABC123"
+	lobby.join_game()
+	await process_frame
+	var screen: Control = lobby.joining_screen
+	if not require(screen.cancel_button.visible and not screen.timeout.is_stopped(), "Cancel must be available during countdown"):
+		return
+	await click(screen.cancel_button)
+	if not require(not lobby.joining and lobby.session == null and screen.timeout.is_stopped() and screen.timeout.time_left < 30.0, "Cancel must stop countdown and clean up the connection immediately"):
+		return
+	print("PASS Cancel click requests immediate application exit before deadline")
+	# No explicit quit here: the production Cancel handler must close this tree.
+	await create_timer(2.0).timeout
+	require(false, "Cancel must quit the application")

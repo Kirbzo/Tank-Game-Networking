@@ -3,6 +3,7 @@ extends Control
 signal retry_requested
 signal back_requested
 signal timed_out
+signal cancel_requested
 
 const JOIN_TIMEOUT_SECONDS := 30.0
 
@@ -12,6 +13,7 @@ var countdown: Label
 var indicator: ProgressBar
 var retry_button: Button
 var back_button: Button
+var cancel_button: Button
 var timeout := Timer.new()
 
 func _ready() -> void:
@@ -39,6 +41,10 @@ func _ready() -> void:
 	indicator.custom_minimum_size = Vector2(400, 20)
 	indicator.show_percentage = false
 	column.add_child(indicator)
+	cancel_button = Button.new()
+	cancel_button.text = "Cancel"
+	cancel_button.pressed.connect(func(): cancel_requested.emit())
+	column.add_child(cancel_button)
 	retry_button = Button.new()
 	retry_button.text = "Retry"
 	retry_button.pressed.connect(func(): retry_requested.emit())
@@ -62,6 +68,7 @@ func begin() -> void:
 	indicator.value = 0
 	indicator.show()
 	countdown.show()
+	cancel_button.show()
 	retry_button.hide()
 	back_button.hide()
 	timeout.start()
@@ -69,6 +76,7 @@ func begin() -> void:
 
 func show_connected(game_id: String) -> void:
 	timeout.stop()
+	cancel_button.hide()
 	countdown.hide()
 	status.text = "Connected to game %s. Back returns to the lobby without disconnecting." % game_id
 	indicator.hide()
@@ -78,6 +86,7 @@ func show_connected(game_id: String) -> void:
 
 func show_failure() -> void:
 	timeout.stop()
+	cancel_button.hide()
 	title.text = "Unable to join the game."
 	status.text = "Please try again."
 	indicator.hide()

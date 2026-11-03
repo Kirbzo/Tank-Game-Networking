@@ -1460,3 +1460,21 @@ Result: fetched origin and merged origin/main c06ecd4 (Lobby Clutter Update w/ B
 Validation: using C:/Users/hkp14/OneDrive/Desktop/Pictures/Screenshots/COMP-214/Godot_v4.7.2-stable_win64.exe, ran `--headless --path Godot --script res://tests/join_smoke.gd -- timeout`, `-- failure`, and concurrent `-- host` / no-argument client. Final runs printed PASS for 30-second exit/progress/cleanup, explicit error/retry/back and pending-Join cancellation, real connection, persistent session, host/client count, client Exit, and host Exit. First error test needed progress precision and post-timer frame synchronization; a sequentially launched host/client pair missed its startup window, then concurrent runs passed. Environment user-log and certificate-store errors persist. Python validation unavailable (py reports no installed Python); PowerShell used instead. Physical LAN, visual, full-capacity third-player and vacancy-before-deadline scenarios remain unverified. Requirements DOCX checksum unchanged. Git whitespace/conflict/status checks performed; all 20 requirement rows retained. Existing source-version blocks in main's consolidated log remain historical evidence.
 
 Token usage (input, cached input, output, cache-inclusion breakdown, model and usage source) and estimated/actual monetary cost: **Unavailable**, because attributable per-request telemetry/billing records are not exposed.
+
+## P046 - November 03, 2026
+
+Date: 2026-11-03.
+Time: 11:26:39 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> please add the cancle button for the third player who is there and dont want to wait for the timer to complete and then exit insted of that please add a cancle button so which the player can exit the game befor 30 second timer gets completed
+
+Associated status.md: [status.md](status.md), revision S-2026-11-03-03.
+
+Result: added Cancel to the Join loading screen in Godot/joining_screen.gd. It is visible during pending connections (including full-room waits), and hidden for success/error states. Godot/lobby.gd shares cleanup between Cancel and timeout: cancel pending attempts, stop the countdown, close the peer, and quit the application. Added mouse-click cancellation coverage to Godot/tests/join_smoke.gd. README.md, AGENTS.md, discovery and scenes unchanged.
+
+Validation: with Godot 4.7.2 executable C:/Users/hkp14/OneDrive/Desktop/Pictures/Screenshots/COMP-214/Godot_v4.7.2-stable_win64.exe, ran `--headless --path Godot --script res://tests/join_smoke.gd -- cancel` and `--headless --path Godot --script res://tests/join_smoke.gd -- failure`. Both printed PASS: real mouse-click Cancel closed the process before the deadline with timer/peer cleanup; error, Retry, Back and pending-Join Exit passed. User-log/certificate-store environment errors persist; no script errors reported. `git diff --check` passed; source requirements checksum unchanged; all 20 requirement rows retained. Tests use an actual silent UDP endpoint; full-room three-device and visual acceptance not run. Prior timeout/host-client results in P045 remain historical for this request.
+
+Token usage (input, cached input, output, cache inclusion, model, usage source) and estimated/actual cost: **Unavailable**; reliable attributable per-request telemetry and billing are not exposed.

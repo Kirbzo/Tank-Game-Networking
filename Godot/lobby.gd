@@ -288,6 +288,7 @@ func start_join() -> void:
 		joining_screen.retry_requested.connect(start_join)
 		joining_screen.back_requested.connect(join_back)
 		joining_screen.timed_out.connect(join_timed_out)
+		joining_screen.cancel_requested.connect(join_cancelled)
 	# Hiding the previous UI also removes its mouse/keyboard focus targets.
 	get_child(0).hide()
 	joining_screen.begin()
@@ -320,9 +321,14 @@ func join_attempt_failed() -> void:
 		connect_join_target()
 
 func join_timed_out() -> void:
+	join_cancelled()
+
+func join_cancelled() -> void:
 	if not joining:
 		return
 	joining = false
+	join_attempt += 1
+	joining_screen.timeout.stop()
 	multiplayer.multiplayer_peer = null
 	if session != null:
 		session.close()
