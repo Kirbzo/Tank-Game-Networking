@@ -4,6 +4,7 @@ const Discovery = preload("res://discovery.gd")
 const Usernames = preload("res://usernames.gd")
 const LanAddress = preload("res://lan_address.gd")
 var username: String = Usernames.generate()
+const JOIN_DELAY_SECONDS := 0.5
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
@@ -28,6 +29,9 @@ var connected_game_id := ""
 var join_attempt := 0
 var exit_screen: Control
 var exiting := false
+var active_room: Control
+var room_return_message := ""
+var disconnected_screen: Control
 
 func _ready() -> void:
 	var margin := MarginContainer.new()
@@ -118,6 +122,9 @@ func refresh_session_players() -> void:
 		discovery.hosted_game["players"] = 1 + multiplayer.get_peers().size()
 		discovery.advertise()
 	refresh_games()
+	if is_instance_valid(active_room):
+		active_room.update_connection_status()
+		active_room.refresh_world_members()
 
 func update_session_feedback() -> bool:
 	if session == null or joining:
@@ -165,7 +172,7 @@ func leave_game() -> void:
 	refresh_games()
 
 func open_test_room() -> void:
-	if exiting or joining or session != null or opening_test_room:
+	if exiting or is_instance_valid(disconnected_screen) or joining or session != null or opening_test_room:
 		return
 	opening_test_room = true
 	update_join_button()
@@ -174,6 +181,55 @@ func open_test_room() -> void:
 		opening_test_room = false
 		update_join_button()
 		feedback.text = "Could not open the test game room. Try again."
+
+# The lobby retains session/discovery ownership while displaying its room.
+func open_connected_room() -> void:
+	if is_instance_valid(active_room) or session == null:
+		return
+	active_room = preload("res://game_room.tscn").instantiate()
+	active_room.game_id = str(discovery.hosted_game["id"]) if not discovery.hosted_game.is_empty() else connected_game_id
+	active_room.session_lobby = self
+	get_child(0).hide()
+	add_child(active_room)
+	if not multiplayer.is_server():
+		room_ready.rpc_id(1, username)
+
+# RPCs live on the stable lobby path; a joining room must be ready first.
+@rpc("any_peer", "call_remote", "reliable")
+func room_ready(player_name: String) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
+		active_room.add_world_player(sender, discovery.clean_username(player_name))
+
+@rpc("authority", "call_remote", "reliable")
+func room_names(id: String, names: Dictionary) -> void:
+	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
+		active_room.receive_names(names)
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
+func room_input(direction: Vector2) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
+		active_room.world.accept_input(sender, direction, Time.get_ticks_msec())
+
+@rpc("authority", "call_remote", "unreliable_ordered", 2)
+func room_snapshot(id: String, tick: int, positions: Dictionary) -> void:
+	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
+		active_room.receive_world(tick, positions)
+
+func return_from_room(message := "You left the room.") -> void:
+	if not is_instance_valid(active_room):
+		return
+	active_room.hide()
+	active_room.set_physics_process(false)
+	active_room.queue_free()
+	active_room = null
+	leave_game()
+	get_child(0).show()
+	host_button.disabled = discovery.bound_port == -1
+	update_join_button()
+	room_return_message = message
+	feedback.text = message
 
 func add_label(parent: Node, text: String) -> Label:
 	var label := Label.new()
@@ -192,7 +248,7 @@ func add_button(parent: Node, text: String) -> Button:
 
 func host_game() -> void:
 	# Guard the action as well as the button: one server per hosting instance.
-	if exiting or opening_test_room or session != null:
+	if exiting or is_instance_valid(disconnected_screen) or opening_test_room or session != null:
 		return
 	if discovery.bound_port == -1:
 		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
@@ -203,6 +259,7 @@ func host_game() -> void:
 		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
 		session = null
 		return
+	room_return_message = ""
 	var id := generate_session_id()
 	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username, "players": 1}
 	# Joining requires the existing host endpoint to accept and poll peers.
@@ -212,6 +269,7 @@ func host_game() -> void:
 	hosted.text = "HOSTED SESSION  |  %s" % id
 	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
 	refresh_games()
+	open_connected_room()
 
 func create_host_session() -> Error:
 	return session.create_server(0, 1)
@@ -246,7 +304,13 @@ func refresh_games() -> void:
 	else:
 		feedback.text = "%d hosted session(s) found. Select one to see its game ID." % entries.size()
 	update_session_feedback()
+	if not room_return_message.is_empty() and session == null:
+		feedback.text = room_return_message
 	update_join_button()
+	# A live 2/2 update can include this connecting player: wait for success/failure.
+	if not joining and session == null and joining_screen != null and joining_screen.visible:
+		if room_is_full():
+			show_room_full()
 
 func select_game(index: int) -> void:
 	game_id.text = listed_ids[index]
@@ -266,8 +330,8 @@ func identify_game(value: String) -> void:
 	update_join_button()
 
 func update_join_button() -> void:
-	test_room_button.disabled = exiting or joining or session != null or opening_test_room
-	join_button.disabled = exiting or opening_test_room or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+	test_room_button.disabled = is_instance_valid(disconnected_screen) or exiting or joining or session != null or opening_test_room
+	join_button.disabled = is_instance_valid(disconnected_screen) or exiting or opening_test_room or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
 
 func available_join_target() -> Dictionary:
 	var id := game_id.text.strip_edges().to_upper()
@@ -280,25 +344,31 @@ func available_join_target() -> Dictionary:
 	return {}
 
 func join_game() -> void:
-	if exiting or opening_test_room or joining or session != null:
+	if exiting or is_instance_valid(disconnected_screen) or opening_test_room or joining or session != null:
 		return
 	var target := available_join_target()
 	if target.is_empty():
 		feedback.text = "Select an available game or enter its game ID before joining."
 		update_join_button()
 		return
+	room_return_message = ""
 	join_target = target.duplicate()
 	start_join()
 
+# Retry is already implemented: joining_screen.retry_requested reconnects here.
+# Keep transient-error Retry/Back; only fresh full-room information uses Room Full.
 func start_join() -> void:
-	if exiting or opening_test_room or joining or session != null:
+	if exiting or is_instance_valid(disconnected_screen) or opening_test_room or joining or session != null:
+		return
+	# Prefer fresh discovery data if the endpoint changed before Retry.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
+	if room_is_full():
+		show_room_full()
 		return
 	joining = true
 	join_attempt += 1
 	var attempt := join_attempt
-	# Prefer fresh discovery data if the endpoint changed before Retry.
-	if discovery.games.has(join_target["id"]):
-		join_target = discovery.games[join_target["id"]].duplicate()
 	join_button.disabled = true
 	test_room_button.disabled = true
 	if joining_screen == null:
@@ -306,14 +376,21 @@ func start_join() -> void:
 		add_child(joining_screen)
 		joining_screen.retry_requested.connect(start_join)
 		joining_screen.back_requested.connect(join_back)
-		joining_screen.cancel_requested.connect(cancel_join)
-		joining_screen.timed_out.connect(join_failed)
+		joining_screen.timed_out.connect(join_timed_out)
+		joining_screen.cancel_requested.connect(join_cancelled)
 	# Hiding the previous UI also removes its mouse/keyboard focus targets.
 	get_child(0).hide()
 	joining_screen.begin()
-	# Show the screen immediately; start the network attempt on the next frame.
-	await get_tree().process_frame
+	# Join and Retry share this delay; UI/Cancel remain responsive.
+	# The delay is part of the existing ten-second attempt deadline.
+	await get_tree().create_timer(JOIN_DELAY_SECONDS).timeout
 	if not joining or attempt != join_attempt or not is_inside_tree():
+		return
+	# Capacity/endpoint can change during the delay, before we have a peer.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
+	if room_is_full():
+		show_room_full()
 		return
 	session = ENetMultiplayerPeer.new()
 	var result := session.create_client(join_target["address"], int(join_target["port"]))
@@ -328,12 +405,20 @@ func join_connected() -> void:
 	joining = false
 	connected_game_id = join_target["id"]
 	joining_screen.show_connected(connected_game_id)
+	joining_screen.hide()
+	open_connected_room()
 	host_button.disabled = true
 	update_session_feedback()
 	update_join_button()
 
-func join_failed() -> void:
+func join_timed_out() -> void:
+	join_failed("The connection timed out before you could enter the room.\nThe host may have left or disconnected, or the network may be unavailable.\nChoose Retry to reconnect or Back to return to the lobby.")
+
+func join_failed(message := "Could not finish joining the room.\nThe host may have left or disconnected, or the room may be full or unavailable.\nChoose Retry to reconnect or Back to return to the lobby.") -> void:
 	if not joining:
+		return
+	if room_is_full():
+		show_room_full()
 		return
 	joining = false
 	join_attempt += 1
@@ -341,15 +426,21 @@ func join_failed() -> void:
 	if session != null:
 		session.close()
 		session = null
-	joining_screen.show_failure()
+	joining_screen.show_failure(message)
 
-func cancel_join() -> void:
+func join_cancelled() -> void:
 	if exiting or not joining:
 		return
-	# Invalidate deferred connection work and close any pending peer.
-	join_failed()
+	# Invalidate the deferred connect and timeout before releasing the peer.
+	joining = false
+	join_attempt += 1
+	joining_screen.timeout.stop()
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
 	join_back()
-	feedback.text = "Connection attempt cancelled."
+	feedback.text = "Connection cancelled."
 
 func join_back() -> void:
 	if exiting:
@@ -362,17 +453,58 @@ func join_back() -> void:
 	join_button.grab_focus()
 
 func join_server_disconnected() -> void:
-	if exiting:
+	if exiting or is_instance_valid(disconnected_screen):
 		return
-	if connected_game_id.is_empty():
-		join_failed()
+	if is_instance_valid(active_room) or not connected_game_id.is_empty():
+		show_disconnected()
+	elif joining:
+		join_failed("The connection to the host was lost before you could enter the room.\nYour connection attempt has stopped.\nChoose Retry to reconnect or Back to return to the lobby.")
+
+func room_is_full() -> bool:
+	# A cached retry target alone cannot prove that a room is still full.
+	var listing: Dictionary = discovery.games.get(join_target.get("id", ""), {})
+	return not listing.is_empty() and listing.get("players", 0) == 2 and Time.get_ticks_msec() - int(listing.get("seen", -Discovery.EXPIRY_MS - 1)) <= Discovery.EXPIRY_MS
+
+func show_room_full() -> void:
+	# A successful connection takes precedence over a late discovery update.
+	if is_instance_valid(active_room) or not connected_game_id.is_empty():
 		return
-	connected_game_id = ""
-	joining = true
+	if session != null and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		return
+	show_connection_notice("Room Full", "This room already has two players.", "Return to the lobby to choose another room.")
+
+func show_disconnected() -> void:
+	show_connection_notice("Disconnected", "The host disconnected or closed the room.", "Return to the lobby to join another room.")
+
+func show_connection_notice(heading: String, message: String, hint: String) -> void:
+	if exiting or is_instance_valid(disconnected_screen):
+		return
+	# Release transport, timers and world before presenting the notice.
+	if is_instance_valid(active_room):
+		return_from_room(message)
+	else:
+		leave_game()
+	room_return_message = message
+	disconnected_screen = preload("res://disconnected_screen.gd").new()
+	disconnected_screen.heading = heading
+	disconnected_screen.message = message
+	disconnected_screen.hint = hint
+	disconnected_screen.lobby_requested.connect(disconnected_back)
 	get_child(0).hide()
-	joining_screen.show()
-	join_failed()
+	add_child(disconnected_screen)
+	host_button.disabled = true
+	update_join_button()
+
+func disconnected_back() -> void:
+	if not is_instance_valid(disconnected_screen):
+		return
+	disconnected_screen.hide()
+	disconnected_screen.queue_free()
+	disconnected_screen = null
+	get_child(0).show()
 	host_button.disabled = discovery.bound_port == -1
+	refresh_games()
+	host_button.grab_focus()
 
 func discovery_error(message: String) -> void:
 	host_button.disabled = true
