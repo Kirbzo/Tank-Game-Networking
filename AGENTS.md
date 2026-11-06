@@ -5,7 +5,7 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 ## Scope and source
 
 - Keep all changes inside the project repository root (`.`), defined as the folder containing this AGENTS.md and README.md. Resolve project file paths relative to that root, regardless of the checkout location or operating system.
-- Read `MoozeTanks/Requirements Document.docx` relative to the repository root as the current requirements source. If it is unavailable in another checkout, ask for its location. Never edit, replace, move, or delete source requirements documents, including the earlier PDF if present.
+- Read `MoozeTanks/Requirements Document.docx` as the framework requirements source and `MoozeTanks/WP2 Requirements.docx` as the supplemental lobby/game-room source, relative to the repository root. If either is unavailable in another checkout, ask for its location. Never edit, replace, move, or delete source requirements documents, including the earlier PDF if present.
 - Preserve unrelated files and user changes. Preserve documentation_rationale.txt as the historical October 13 record, while allowing path references to be made portable.
 - Retain Godot **4.7.2** and **GDScript** from the prior instructions. The updated DOCX does not restate these constraints. Do not silently substitute another version or language.
 - Do not add, remove, or change anything in the AGENTS.md and README.md without approval. Explain why these changes are suggested.
@@ -18,9 +18,13 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 
 ## Current scope
 
-The lobby supports hosting and real joining. Players can join a discovered session by selecting its listing or entering its game ID. Listings display the game ID and host's randomly assigned username. Join includes loading, connection confirmation, timeout, Retry, and Back behavior.
+Host creates a two-player room and enters it. Players join by selecting a discovered listing or entering its game ID. Join and Retry show loading immediately and wait 500 ms before opening the connection, within the ten-second deadline. Cancel stops the attempt and returns to the lobby. A recent full-room listing shows Room Full with Return to Lobby; other failures/timeouts retain Retry and Back with an explanation.
 
-Exit disconnects the player from the hosted session and displays "Exiting game..." while keeping the application open. When a client exits, the host remains active and its player count decreases. When the host exits, the hosted session closes, its client disconnects, and the game listing expires. Exit also cancels any pending connection attempt. Routing to a future main screen remains unimplemented.
+The host remains authoritative for movement and input validation. Clients interpolate remote movement and predict their own movement, reconciling it against host acknowledgements. Connected players show assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username, player count and a top-left FPS counter. Movement rules remain provisional.
+
+Listings show the game ID, host username and player count. Client departure updates the host's players/count and displays the departed username. Host departure shows the connected player a Disconnected notice, followed by Return to Lobby. Room Back/Escape voluntarily disconnects and returns to the lobby. Lobby Exit disconnects any session, cancels pending Join and retains "Exiting game..." while keeping the application open. Future main-screen routing remains unimplemented. Hosted listings expire after approximately four seconds. The temporary lobby Test Game Room button has been removed.
+
+Start, combat, hit reconciliation and match reset remain unimplemented. Final movement and Start permissions need team confirmation. Manual host-IP lookup and named-player presentation remain source-interpretation items. Physical two-device and graphical performance acceptance remain unverified.
 
 ## Original alpha scope ? October 20, 2026
 
@@ -28,9 +32,9 @@ The original alpha baseline below is preserved for source traceability. The curr
 
 - Follow AR1?AR5. Implement only alpha behavior when alpha implementation is requested; consider FR1?FR12 without adding non-alpha functionality (AR5).
 - Show Host, Join, Exit, and a game list. Two users initially see an empty list. Host must launch a game whose identifiable entry and game ID are visible to the other user.
-- Preserve the existing Join flow. Disable Join when no valid target is available, during a connection attempt, or while already in a session. Preserve Exit's disconnect behavior. Do not restore the earlier behavior that kept players connected after Exit. Keep the "Exiting game..." screen until main-screen routing is requested.
+- Preserve the existing Join flow. Disable Join when no valid target is available, during a connection attempt, or while already in a session. Preserve Exit's disconnect behavior. Do not restore the earlier behavior that kept players connected after Exit. Retain "Exiting game..." for lobby Exit; room Back/Escape follows the current return-to-lobby behavior above.
 - AR3 permits simulated joining and AR4 describes a hosting/joining/leaving sequence. Preserve the source distinction: joining was simulated/deferred in the original alpha; the current scope includes real Join. Label any remaining simulations clearly and do not claim they satisfy final networking acceptance.
-- Exit means leaving the hosted session. Retain the Exit label for the disconnect action and exit screen.
+- Lobby Exit disconnects and retains the Exit label/exit screen. The room uses a back arrow/Escape to disconnect and return to the lobby.
 - Verify actual two-user hosting and list visibility before marking those requirements complete. A mock list alone is insufficient.
 - Support two-laptop LAN discovery improvements, including direct-IP listing lookup. Keep physical two-laptop acceptance unverified until tested on two devices; manual discovery does not establish a connection; real joining is handled by the Join flow described above.
 - The consistent-listings request defines “same server” as the same advertised host game ID and endpoint on the local network. Keep one server per hosting instance; apply the current Join/Exit behavior above and do not imply discovery establishes a player connection.
@@ -39,7 +43,7 @@ The original alpha baseline below is preserved for source traceability. The curr
 
 Preserve FR1?FR12 as the longer-term requirements: locally hosted two-player sessions; a hosting/joining lobby; accurate available-game listings; joining by selection or ID with understandable errors; create/join/leave/close lifecycle; agreed game selection/start; disconnect and connection-event reporting; server-authoritative state and positions; input validation; server hit determination and client reconciliation; match reset; and rectangles, movement, bullets, health/damage, moose-hazard, and interpolation test placeholders.
 
-Team confirmation is needed for start permissions (FR6), movement/action rules (FR9), and match-end trigger (FR11). Do not invent transport, port, discovery, scene names, or verified run commands as requirements.
+Team confirmation is needed for start permissions (FR6/GR8), movement/action rules (FR9), and match-end trigger (FR11). GR8 host-only start with two connected players is proposed, not confirmed. LR5 interpretation remains open for the existing manual host-IPv4 lookup. Do not invent transport, port, discovery, scene names, or verified run commands as requirements.
 
 ## Required documentation and logging
 
@@ -53,7 +57,7 @@ Team confirmation is needed for start permissions (FR6), movement/action rules (
 - Preserve historical entries. Backfill usage or cost only when reliable records can be matched to the original prompt ID.
 - Log planning requests and their clarifications too. A subsequent implementation request receives its own prompt ID while linking the planning entry and the resulting status revision.
 - FR15: keep README.md and AGENTS.md consistent with the current requirements and observed project state.
-- Preserve source IDs exactly. Alpha IDs and framework IDs are separate sets.
+- Preserve source IDs exactly. Alpha AR1-AR5, framework FR1-FR15, and supplemental WP2 LR1-LR5/GR1-GR8 are separate sets; retain their source mappings and track WP2 status alongside the original 20 IDs.
 - Keep source ambiguities visible until resolved by the team or a later user instruction.
 
 ## Validation and reporting
