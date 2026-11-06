@@ -1,5 +1,15 @@
 # Requirements status
 
+Latest planning snapshot: S-2026-11-06-01 (P047), November 06, 2026.
+Reviewed the client integration approach in [client_integration_plan.txt](client_integration_plan.txt).
+Local source review confirms session ownership must survive leaving the lobby;
+FR6 and FR8-FR12 remain unimplemented. Remote client source retrieval failed,
+so compatibility and exact client scene/file mapping remain unverified.
+All 20 requirement statuses below are retained; no implementation or runtime
+acceptance is claimed. FR13/FR14 updated for this planning request.
+Existing Godot/README.md timeout wording conflict reported without changing
+protected documentation. Current timer behavior follows the November 03 note.
+
 Updated: October 27, 2026. Revision: S-2026-10-27-12. Prompt: P044 (combined lobby/documentation cherry-pick to main).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
@@ -41,6 +51,12 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-11-06-01 (P047): planning only; documented staged client integration,
+  persistent session ownership, host authority, team decisions and acceptance
+  gates in client_integration_plan.txt. Client GitHub page/API/raw access failed;
+  no client source reviewed. No gameplay tests run; prior runtime evidence and
+  all requirement statuses retained. Protected files and source DOCX preserved.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 

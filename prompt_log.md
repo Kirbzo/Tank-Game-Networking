@@ -1,5 +1,52 @@
 # Prompt log
 
+# November 06, 2026
+
+## P047 - November 06, 2026
+
+Date: 2026-11-06.
+Time: 11:27:09 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> Client https://github.com/AnnMaxine/Moooze-Tanks-Repository
+> how will it integrate this client side to my server but do not implement anything yet just come up with the best process and explain!
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-01.
+Planning artifact: [client_integration_plan.txt](client_integration_plan.txt).
+
+Result: reviewed local requirements and current lobby/connection/discovery code.
+Proposed one integrated Godot 4.7.2/GDScript playable project with a persistent
+session owner, coordinated scene loading, authoritative input/state/combat and
+staged acceptance gates. FR6/FR9/FR11 team decisions remain pending. GitHub
+page/raw/API retrieval failed; client compatibility and file mapping are
+explicitly unverified. No implementation, protected README/AGENTS edits,
+commit or push. Reported existing timeout wording inconsistency without repair.
+
+Validation: git status --short was clean before changes. Read DOCX using
+PowerShell ZipFile/XML after Python extraction could not launch (python not
+available on PATH). Web fetches returned cache/access failures;
+Invoke-RestMethod failed with an underlying-connection error; curl.exe -L
+--max-time 25 against GitHub's main tree API failed with
+SEC_E_NO_CREDENTIALS. No inference that the repository is private or absent.
+Documentation checks cover all 20 requirement rows, local links, snapshot/ID
+consistency, git diff --check, changed-file boundaries and unchanged DOCX SHA256
+346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+No gameplay tests needed or run; previous runtime results are historical only.
+Results: all 20 requirement rows retained; P047 is unique and its snapshot
+matches the plan/status. git diff --check passed (line-ending notices only).
+Only the two tracking files and new plan changed; source checksum matched.
+Link scan found two existing historical missing targets:
+Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json.
+They remain unchanged; new plan/status links resolve.
+
+Token usage: input tokens, cached input tokens, output tokens, cache-inclusion
+breakdown, model and usage source: **Unavailable**; reliable attributable
+per-request records covering all model/tool continuations are not exposed.
+Estimated monetary cost and actual billed charges: **Unavailable**; attributable
+usage/model/rates are not reliably known. No figures invented.
+
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
 - **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest local request is P045 and the next local request is **P046**. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
