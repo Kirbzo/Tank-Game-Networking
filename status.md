@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: November 3, 2026. Revision: S-2026-11-03-14. Prompt: P065 (four-document code alignment review).
+Updated: November 6, 2026. Revision: S-2026-11-06-04. Prompt: P069 (full WP2 acceptance review).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement). Supplemental source: [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx).
 
 Evidence: P029 explicitly authorizes real joining beyond the original alpha. Ported local main commit 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e into malik-other-branch without switching branches. Godot 4.7.2 same-computer host/client tests verify real Join, persistent connection, host-name listings, timeout/retry/back and host-disconnect recovery. P034 supersedes P029 display-only Exit: client Exit disconnects; host Exit closes the session and stops advertising; the application remains on Exiting game.... Visual and physical two-device checks remain unverified. Historical disabled-Join evidence below is prior-state evidence, superseded where noted by P029. P031 applies the approved root documentation updates; original alpha source requirements remain preserved.
@@ -9,7 +9,7 @@ Evidence: P029 explicitly authorizes real joining beyond the original alpha. Por
 
 **Retry is already implemented. Reuse it; do not rebuild it or add automatic retry loops.**
 
-- [joining_screen.gd](Godot/joining_screen.gd): `show_failure(message)` displays Retry/Back; Retry emits `retry_requested`. `begin()` resets the 10-second timer, countdown, progress and Cancel.
+- [joining_screen.gd](Godot/joining_screen.gd): `show_failure(message)` displays Retry/Back; Retry emits `retry_requested`. `begin()` resets the 10-second timer, countdown, progress and Cancel. P066 adds a 500 ms asynchronous delay in the shared `start_join()` path before opening the peer; the delay counts toward the ten-second deadline.
 - [lobby.gd](Godot/lobby.gd): `retry_requested` is connected to `start_join()`, which refreshes the selected target from discovery and starts a fresh guarded connection attempt. `join_failed()`/`join_timed_out()` clean up and show failure. `join_cancelled()` and attempt IDs prevent late/deferred callbacks from restarting a cancelled attempt.
 - P064 `room_is_full()`/`show_room_full()` route a fresh advertised 2/2 room to **Room Full / This room already has two players / Return to Lobby**, with no Retry in that notice. Checks apply before Join/Retry, after failure/timeout, and to new full listings while failure UI is open. A pending 2/2 announcement can include the joining player; wait for the connection outcome before classifying it as rejected/full.
 - Unknown/expired counts and generic failures keep Retry/Back. Cached retry-target count alone is not fresh full-room evidence. Discovery reports recent host state and can lag real membership changes; no claim of atomic capacity confirmation or a full-room reason from ENet alone.
@@ -28,7 +28,7 @@ Evidence: P029 explicitly authorizes real joining beyond the original alpha. Por
 | FR4 | The system shall allow a player to join a specific game by selecting it from the available-games list or entering its game ID. | Partial | Selection and lowercase typed ID establish a real connection. Unknown ID feedback and timeout/retry/back tested; broader errors and physical LAN acceptance remain. |
 | FR5 | The system shall create, join, leave, and close game rooms. | Partial | Host creates, client joins, client Exit leaves, host Exit closes the server and stops advertising. Actual process tests passed; physical LAN and full lifecycle acceptance remain unverified. |
 | FR6 | The system shall support selecting and starting a game from the lobby flow. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
-| FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Partial | Timeout, retry/back, host Exit recovery, client Exit and count updates tested. Broader error/reporting and physical-device acceptance remain. |
+| FR7 | The server shall detect disconnections and communicate connection errors, join/leave events, and host disconnection events. | Partial | P068 adds named client-disconnect HUD message while host remains active; current actual host/client leave test verifies message, player/count cleanup and persistence across discovery/session refresh. Prior pending failures and established host-loss notice remain. Abrupt-loss, physical-device and graphical acceptance outstanding. |
 | FR8 | The server shall receive player inputs, update the shared world state, and send authoritative position updates. | Partial | P056 host owns both player positions and accepts sender-bound directional inputs; 20 Hz authoritative snapshots draw both rectangles on client. Actual two-process simultaneous movement, late join and exact settled-state equality passed. Physical two-device/latency acceptance remains unverified. |
 | FR9 | The server shall validate inputs to prevent impossible movement and illegal actions according to agreed game rules. | Partial | P056 rejects unknown peers, non-finite and oversized vectors; normalizes diagonals, clamps host bounds and expires stale input after 250 ms. Validation tests passed. Uses provisional existing preview controls/speed; agreed movement/action rules and broader illegal-action coverage remain outstanding. |
 | FR10 | The server shall determine hits and communicate the resulting state so clients can reconcile with the server. | Not implemented | Deferred beyond alpha; this full framework acceptance criterion is not implemented or verified. |
@@ -128,19 +128,19 @@ Re-read [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx) and original
 
 | ID | Source mapping | Status | Evidence / remaining work |
 | --- | --- | --- | --- |
-| LR1 | AR1 | Partial | Buttons/list retained; Host opens connected room. Visual and physical-device acceptance pending. |
-| LR2 | AR2 | Partial | Advertised ID/host username/count preserved; process discovery works with host in room. Physical LAN pending. |
-| LR3 | AR3 | Partial | Selection/typed-ID Join retained; matching-room connection tests provide prior and current evidence. Full error acceptance pending. |
-| LR4 | AR4 | Partial | Connected host/join/leave plus movement work in process tests; complete reviewer walkthrough pending. |
-| LR5 | None listed | Partial | Listings hide endpoints using usernames. Manual host-IP fallback interpretation remains open; no new IP display added. |
-| GR1 | FR1, FR4-FR7 | Partial | Create/join/leave/close retained; shared movement added. Start absent. |
-| GR2 | FR1, FR5 | Partial | Host creates server and enters room as first player; process tests pass. Visual/two-device pending. |
-| GR3 | FR1, FR4, FR5 | Partial | Host plus one guest, matching room; specific full/closed/unavailable explanations remain missing. |
-| GR4 | FR1, FR5, FR7 | Partial | P058 shows synchronized assigned usernames above both player rectangles in white, plus a fixed top Host: username label. Real ID/count and shared positions retained; headless network/name tests pass, graphical and physical-device acceptance pending. |
-| GR5 | FR5, FR7 | Partial | Client leave returns to lobby; host count, world rectangle and synchronized name map remove guest in current process tests. Physical-device/visual acceptance pending. |
-| GR6 | FR3, FR5, FR7 | Partial | Host leave returns both with client explanation; advertisement stops and listings expire. Current tests do not assert observer listing expiry. |
-| GR7 | FR3, FR5, FR7 | Partial | Client disconnect removes world player/count; host departure recovery passes. Explicit client disconnect message/roster and abrupt-loss acceptance remain incomplete. |
-| GR8 | FR6 | Not implemented | No Start transition. Host-only/two-connected condition remains proposed and requires confirmation. |
+| LR1 | AR1 | Partial | P069 initial lobby/Exit and host room entry checks pass; Host/Join/Exit/list present. Reviewer identification and graphical/physical-device acceptance pending. |
+| LR2 | AR2 | Partial | P069 actual host/observer verifies identifiable ID/username/count listing, stable refresh and expiry. Physical two-device availability/visual review pending. |
+| LR3 | AR3 | Partial | P069 observer tests listing selection and lowercase/invalid ID feedback; current connected-room tests use lowercase typed ID and actual ENet Join. No simulated Join claimed. Visual/two-device acceptance pending. |
+| LR4 | AR4 | Partial | P069 host/join/client leave/host close and failure/cancel/retry paths pass in actual processes. Full reviewer walkthrough/physical-device demonstration pending. |
+| LR5 | None listed | Partial | Listings and room show usernames rather than endpoints. Own IPv4 plus manual host-IP field/status remain; literal no-other-player-IP acceptance requires interpretation before changing authorized fallback. |
+| GR1 | FR1, FR4-FR7 | Partial | P069 create/join/leave/close work in actual processes; shared room exists. Start missing, so overall room lifecycle requirement incomplete. |
+| GR2 | FR1, FR5 | Partial | P069 Host creates actual server, opens real-ID room as first member. Current process checks pass; graphical/two-device acceptance pending. |
+| GR3 | FR1, FR4, FR5 | Partial | P069 three-process host/guest/third-player checks enforce host plus one and show Room Full/Return to Lobby from fresh 2/2 listing. Unknown/stale capacity uses meaningful failure Retry/Back; no authoritative server rejection reason. Physical/race acceptance pending. |
+| GR4 | FR1, FR5, FR7 | Partial | P069 actual world/room tests verify matching real ID, both assigned names, host identity/count, shared positions and membership cleanup. Names displayed above rectangles; separate roster panel absent, presentation acceptance/visual/two-device review pending. |
+| GR5 | FR5, FR7 | Partial | P069 client room leave returns to usable lobby; host remains and name/world/count update to 1/2 with named departure notice. Physical/visual acceptance pending. |
+| GR6 | FR3, FR5, FR7 | Partial | P069 host-close pair passes client cleanup, Disconnected explanation, Return to Lobby and host lobby recovery; observer test verifies expired closed-host listing. User acknowledgement is required before visible lobby return. Physical/visual acceptance and acknowledgement-flow interpretation pending. |
+| GR7 | FR3, FR5, FR7 | Partial | P069 graceful client departure updates host name/world/count and visible named message; host departure gives separate notice/return; pending host loss has meaningful timeout. Abrupt process/network-loss latency, visual and physical LAN acceptance not tested. |
+| GR8 | FR6 | Not implemented | No Start button/agreed shared game or placeholder transition. Host-only start with two connected players remains explicitly proposed in source and requires confirmation before implementation. |
 
 Current validation: Godot 4.7.2 separate host/client world-sync tests PASS for late join after host movement, simultaneous host/guest movement, exact authoritative state convergence, resized viewport retaining same bounds, settings suppressing input, invalid network vector rejection, stale snapshot rejection and guest removal on leave. Movement-model checks cover unknown/non-finite/oversized input, normalized diagonals, bounds and stale-input timeout. Existing connected-room host/client leave and host-close recovery, standalone from-lobby/Escape, and Join failure/retry/back pass. No GDScript errors; existing user-log/certificate-store errors remain. Physical two-device, visual, packet-loss/high-latency and abrupt-process-loss tests not run. No hit reconciliation/reset tests apply to this scope; features remain unimplemented.
 
@@ -275,3 +275,54 @@ WP2 source comparison and code suggestions:
 Prioritized suggestions: update operational docs for actual three UI outcomes; add explicit host-side client-disconnect message; improve authoritative admission error reporting; confirm roster/IP/Start decisions; separately authorize Start. Requirements sources remain read-only. FR15 stays partial until protected docs updated. No implementation/protected docs/source changes, staging, commit or push. Documentation checks cover all 33 IDs, active links, source checksums, status/log revision and two-file task boundary.
 
 - S-2026-11-03-14 (P065): four-document alignment audit; new notice/Retry documentation mismatches and remaining WP2 code gaps recorded, with existing Retry handoff retained.
+
+## P066 ? delayed connection using existing Retry path
+
+Added JOIN_DELAY_SECONDS = 0.5 and asynchronous SceneTree timer in lobby.start_join(), shared by initial Join and the already implemented retry_requested handler. Loading UI/Cancel appears immediately, before the wait. Existing attempt ID/joining guards prevent Cancel, timeout, Exit or replacement attempts from resuming an old connection. After the wait, refresh endpoint/capacity from discovery and route a newly full room to existing notice before creating a peer. Delay is within existing ten-second countdown, not an additional deadline or automatic retry loop. Existing Retry handoff updated above.
+
+Current Godot 4.7.2 checks: join_delay_smoke PASS, measured initial Join 512 ms and Retry 502 ms before peer creation; covers cancelled older delay versus newer attempt, cancellation/timeout during wait and capacity change. join_cancel and join_smoke failure PASS after timing assumptions adjusted for intentional delay; world_sync host/client both PASS. room_full host/occupant/third-player all PASS. pending_host_loss host/client both PASS (actual ten-second pending timeout). Updated existing asynchronous tests only where they assumed a peer after one frame. No script errors; existing user-log/certificate-store errors remain. Visual/physical LAN acceptance not run. No additional testing after all applicable checks passed.
+
+Original framework DOCX re-read and checksum preserved. WP2 Word source exists but Windows denied read access, including approved read-only escalated retry; used prior reviewed requirements and current status instead. Could not freshly verify its contents/checksum; no source edit attempted. Protected docs and pre-existing user changes preserved. FR15 pending wording updates from earlier requests remain outstanding; no new protected edits. Status/log and applicable test changes recorded; no staging/commit/push.
+
+- S-2026-11-06-01 (P066): nonblocking 500 ms Join/Retry delay, refreshed target/capacity after wait and cancellation/race tests; current evidence above.
+
+## P067 ? clearer disconnection messages while joining
+
+User clarified to keep Retry/Back with a clearer message. Updated pending failure/timeout text to explain that the host may have left/disconnected or the network/room may be unavailable, with explicit Retry-to-reconnect and Back-to-lobby actions. The server_disconnected event while joining states that connection to host was lost before entry and the attempt stopped. Timeout remains explicitly labeled timed out, without claiming an established session or definite host departure. Established-room Disconnected and fresh Room Full notices retain their distinct flows. Existing ten-second deadline and 500 ms shared Join/Retry delay remain; no automatic retries added.
+
+Current Godot 4.7.2 checks: join_smoke failure PASS; join_delay PASS includes pending server-loss callback, peer cleanup, visible clearer Retry/Back, no separate Disconnected notice and successful delayed Retry (505/500 ms); pending_host_loss actual host/client fixture PASS for host closure during delayed handshake, actual ten-second timeout explanation and Back-to-lobby recovery. All exit 0; existing user-log/certificate-store errors remain without script errors. No visual/two-device checks; established-room/world/Room Full logic unchanged and not unnecessarily retested.
+
+Both Word sources re-read successfully this request; earlier P066 access denial is historical and source is available again. Both SHA256 values unchanged from prior review. Modified lobby text and existing related test assertions plus logs/handoff; protected docs and other working changes preserved. Earlier protected wording updates remain pending as already recorded, no new approval flow introduced. No staging/commit/push.
+
+- S-2026-11-06-02 (P067): pending-connection disconnection/timeout explanations with user-selected Retry/Back, source/hash and applicable runtime evidence above.
+
+## P068 ? host message when a joined player disconnects
+
+Implements GR7 named departure feedback. Existing peer-disconnected signal schedules refresh_world_members; before removing the departed peer/name, capture its assigned username and show <username> disconnected from the room. in a dedicated white ConnectionEvent HUD label below top status. Host stays active with 1/2 players and can continue moving; no blocking Disconnected screen for this client-departure event. Message survives recurring session/discovery/count refreshes, clears when a new named player joins, and ends with room destruction. Callback cleanup stays idempotent because removed world members are not reported twice. Host-loss and pending Join/Retry notices retain their separate behavior.
+
+Current Godot 4.7.2 actual connected_room_smoke host/client pair PASS: guest name registered; guest leaves via existing room action; host sees exact named message, count 1/2, removed world/name, and message survives another refresh. world_sync pair PASS for retained shared movement/names; standalone preview from-lobby PASS. All exit 0; existing user-log/certificate-store errors remain without script errors. Abrupt process termination/network cable loss and graphical/physical two-device acceptance not tested; message occurs after ENet reports departure. GR7/FR7 remain partial rather than claiming those unverified criteria complete.
+
+Modified game_room.gd/game_room.tscn, extended existing connected-room test and updated logs. Both requirements sources re-read and hashes unchanged. Protected AGENTS/README statements saying no client-disconnect event message are now outdated and need approved wording follow-up along with earlier pending updates; left unchanged in this implementation request. Other user working changes preserved. No staging/commit/push.
+
+- S-2026-11-06-03 (P068): named nonblocking host HUD event for client departure; current process evidence above, prior source/history retained.
+
+## P069 ? full WP2 requirements review
+
+Re-read entire WP2 Requirements.docx and original framework DOCX, reviewed current lobby/discovery/room/world/screens and available acceptance tests. Audit covers all five LR and eight GR IDs; canonical rows above refreshed with current P069 evidence. Source-only assumptions and prior evidence are not represented as current runtime checks. Implementation/protected documents unchanged.
+
+Conclusion: current game implements the core lobby/connected two-player-room behavior but is not fully WP2 complete. GR8 Start and the Start portion of GR1 are missing. Other implemented requirements retain Partial status because physical two-device/graphical/reviewer or source-interpretation acceptance remains outstanding. The original framework's combat/hits/reset are separate broader gaps and are not silently added to the eight WP2 room rows.
+
+Current actual Godot 4.7.2 checks (16 headless processes, all PASS/exit 0): connected_room_smoke host/client for client departure and named host message; second host host-leaves/client host-leaves pair for separate host-loss notice and lobby recovery; world_sync host/client for late join, matching states/names/host identity, simultaneous movement, input validation, resize/cleanup; room_full host/occupant/third-player group for actual two-player occupancy and blocked third player, existing Retry/fresh-count/expired-count cases; pending_host_loss host/client fixture for a real closing host with deliberately delayed handshake and actual ten-second pending timeout/Back; alpha_smoke observer/host for empty initial list, discovery, ID selection/invalid ID feedback, stable listing and expiry; join_smoke failure and initial; join_cancel_smoke. All final outputs PASS, no GDScript errors; existing user-log/certificate-store errors persist. Alpha host launch was delayed 700 ms in shell to let observer initialize as documented, with no test-source edits. No physical two-device, actual graphical window inspection, reviewer demonstration, abrupt process termination, cable loss, latency/packet-loss or Start acceptance performed.
+
+Remaining decisions/suggestions:
+- Confirm GR8 proposed host-only/two-connected Start rule, then separately implement Start into same game/placeholder. Opening the room or moving rectangles is not Start acceptance.
+- Confirm LR5 permits manual host-IP lookup; if strict no-other-player-IP is intended, revise that authorized fallback/display flow. Names already replace listings/room endpoints; do not claim IP secrecy beyond UI.
+- Confirm GR4 named rectangles count as connected-player list or separately authorize roster panel.
+- Confirm GR6/GR7 acknowledgement notice plus Return to Lobby satisfies requested return; retain approved visible explanation and document it.
+- Improve host-side admission/rejection reasons if definitive full/closed/unavailable diagnosis is required; current full detection uses recent advertisements, with safe unknown/expired fallback and own-join-count guard.
+- Run visual/two-device LAN and abrupt-loss checks before final acceptance/completion claims. These remain testing gaps, not automatic evidence that working behavior is broken.
+- Protected README/AGENTS still lag Room Full, Disconnected acknowledgement, shared 500 ms delay and implemented host client-departure message. Approved follow-up wording needed; source requirements remain read-only. Existing Retry implementation/handoff remains valid and preserved.
+
+Original 20 AR/FR statuses retained. Sources preserve original SHA256 values; all 33 IDs/local links/status-log references and two-file task boundary verified. No code, test, source or protected documentation edits; no staging/commit/push.
+
+- S-2026-11-06-04 (P069): comprehensive WP2 matrix refreshed with current process results and explicit missing/partial/unverified distinctions.

@@ -99,6 +99,20 @@ horizontal_alignment = 1
 autowrap_mode = 3
 mouse_filter = 2
 
+[node name="ConnectionEvent" type="Label" parent="HUD/Overlay"]
+visible = false
+layout_mode = 1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 84.0
+offset_right = 250.0
+offset_bottom = 124.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+mouse_filter = 2
+
 [node name="SettingsScreen" type="Panel" parent="HUD"]
 visible = false
 layout_mode = 3

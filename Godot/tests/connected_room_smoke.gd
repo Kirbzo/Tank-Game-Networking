@@ -36,6 +36,10 @@ func run() -> void:
 		if not check(lobby.active_room.status_message.text.contains("2/2"), "Host count"):
 			return
 		if not host_leaves:
+			var guest_id: int = lobby.multiplayer.get_peers()[0]
+			var guest_name: String = lobby.active_room.player_names.get(guest_id, "")
+			if not check(not guest_name.is_empty(), "Guest assigned name registered before leave"):
+				return
 			for i in range(200):
 				if lobby.multiplayer.get_peers().is_empty():
 					break
@@ -43,6 +47,12 @@ func run() -> void:
 			await process_frame
 			await process_frame
 			if not check(lobby.multiplayer.get_peers().is_empty() and lobby.active_room.status_message.text.contains("1/2"), "Host remains after client leave"):
+				return
+			var event = lobby.active_room.connection_event
+			if not check(event.is_visible_in_tree() and event.text == guest_name + " disconnected from the room.", "Host sees assigned player departure message"):
+				return
+			lobby.refresh_session_players()
+			if not check(event.visible and event.text.contains(guest_name) and lobby.active_room.player_names.size() == 1 and lobby.active_room.world.positions.size() == 1, "Departure notice survives refresh with player state removed"):
 				return
 		lobby.active_room.leave_button.pressed.emit()
 	else:

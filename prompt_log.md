@@ -2,13 +2,116 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P065 and the next request is **P066**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P069 and the next request is **P070**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 6, 2026
+
+**Recorded times - newest first (America/Regina)**
+
+## P069 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:43:21 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> check the full game against our WP2 Requirements and see if they meet those requirements
+
+Result: read both Word requirements and inspected full current project lobby/discovery/rooms/screens/shared state. Reviewed every LR1-LR5 and GR1-GR8; refreshed status matrix using current runtime evidence. Core two-player room flow implemented and tests pass, but WP2 not fully complete: Start missing (GR8 and part GR1), LR5 manual-IP and GR4 player-list presentation need confirmation, GR6/GR7 require notice acknowledgement before visible lobby, and physical/visual/reviewer/abrupt-loss acceptance remains unverified. Capacity notices rely on recent advertisements rather than definitive rejection reason. Existing Retry handoff preserved. Only status/log changed; no implementation/protected-source edits or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-04; full 13-row WP2 assessment plus remaining work.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`, all 16 processes PASS/exit 0:
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with same command without host; and a separate pair with `host host-leaves` / `host-leaves`.
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host.
+- `--headless --path Godot --script res://tests/room_full_smoke.gd -- host`, `-- occupant`, and command without arguments.
+- `--headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host` paired with command without host (delayed-handshake fixture).
+- `--headless --path Godot --script res://tests/alpha_smoke.gd -- observer` paired with `-- host`; shell delayed host start 700 ms to initialize observer. Current observer PASS covers visibility, IDs, selection and expiry.
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure` and `-- initial`.
+- `--headless --path Godot --script res://tests/join_cancel_smoke.gd`.
+Existing user-log/certificate-store errors persist without GDScript errors. No physical two-device/graphical/reviewer/abrupt-loss/Start acceptance. Python checks all 33 IDs, source checksums, active links, status/log consistency and two-file audit boundary. Git diff --check used; all existing user changes preserved, no staging/commit/push.
+
+## P068 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:31:43 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> now lets do a disconnection message when a player disconnects from the lobby like you suggested in GR7
+
+Result: added dedicated white ConnectionEvent HUD label in host's connected room, showing assigned username disconnected from the room when a joined peer leaves/disconnects. Captured name before world/name cleanup in existing refresh_world_members path; host remains active and count updates. Notice survives status/discovery refresh, clears when a new named player joins. No blocking screen or changed host-loss/Retry behavior. Changed game_room.gd/game_room.tscn, extended connected_room_smoke.gd and updated required logs/status; sources and protected docs untouched. Protected old no-client-message wording needs later approved correction. No commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-03; GR7/FR7 partial evidence updated.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with same command without host: both PASS/exit 0 for actual guest departure, named message, host continuation/count/name/world cleanup and refresh persistence.
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
+- `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`: PASS/exit 0.
+Existing user-log/certificate-store errors remain without script errors. No graphical/physical two-device/abrupt network-loss acceptance. Python checks 33 IDs, links, both source checksums and status/log revision; Git diff --check/status checks boundaries. Existing unrelated changes preserved; no staging/commit/push.
+
+## P067 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:26:23 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets now add a disconnection message for players attempting to join
+
+Clarification asked:
+
+> For a player still trying to join, should a failed connection show the separate Disconnected screen with Return to Lobby, or keep Retry/Back with a clearer message?
+
+Actual answer:
+
+> Keep Retry/Back with a clearer message
+
+Result: pending failure/timeout now clearly mentions possible host departure/disconnection and gives explicit Retry-to-reconnect/Back-to-lobby instructions. Pending server-loss callback states connection was lost before room entry and attempt stopped. Preserved existing Retry implementation, 500 ms delay, ten-second timer, separate established Disconnected and fresh Room Full notice. Changed lobby.gd message strings and existing join_smoke.gd/join_delay_smoke.gd/pending_host_loss_smoke.gd assertions; status/log updated. WP2 readable again; both requirements sources re-read and unchanged. No protected docs/source changes or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-02.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: PASS/exit 0, including clearer timeout/disconnection text and Retry/Back recovery.
+- `--headless --path Godot --script res://tests/join_delay_smoke.gd`: PASS/exit 0, including pending server-loss text/cleanup with Retry/Back retained; Join/Retry delay 505/500 ms.
+- `--headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host` paired with same command without host: both PASS/exit 0, full real ten-second pending timeout after host closure with explanation/Back recovery.
+Existing user-log/certificate-store errors remain without script errors. No graphical/physical two-device checks. Python validates 33 IDs, links, both source hashes and status/log revision; Git diff --check/status verifies boundaries. Protected files/prior working changes preserved; no staging/commit/push.
+
+## P066 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:20:11 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> can we make it so the game actually delays the joining process by about 500ms using the retry implementation?
+
+Result: added asynchronous 0.5-second delay to existing shared lobby.start_join() for Join and Retry. UI/Cancel immediate; guard old/cancelled/timed-out attempts; refresh endpoint/capacity after delay before peer creation. Delay is part of ten-second deadline; no automatic retry loop. Updated Retry handoff in status.md, added join_delay_smoke.gd and adapted timing assumptions in join_cancel_smoke.gd/join_smoke.gd/room_full_smoke.gd/pending_host_loss_smoke.gd. Protected docs and other user changes preserved. Original requirements read; WP2 read denied by Windows both normally and after approved read-only escalation, so fresh source verification unavailable; prior reviewed source context used. No source changes or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-01.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/join_delay_smoke.gd`: PASS/exit 0, measured Join 512 ms and Retry 502 ms; tests no early peer, cancelled/replaced delays, timeout and refreshed capacity.
+- `--headless --path Godot --script res://tests/join_cancel_smoke.gd`: PASS/exit 0.
+- `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: PASS/exit 0.
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
+- `--headless --path Godot --script res://tests/room_full_smoke.gd -- host`, `-- occupant`, and without arguments: all PASS/exit 0.
+- `--headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
+Existing user-log/certificate-store errors remain without script errors. No graphical/physical-device acceptance. Python verifies 33 IDs, links, original DOCX checksum and log/status revision. WP2 fresh checksum unavailable because read access denied. Git diff --check/status verifies boundaries; no staging/commit/push.
 
 # November 3, 2026
 

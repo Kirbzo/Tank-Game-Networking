@@ -36,8 +36,7 @@ func run() -> void:
 		return
 	lobby.game_id.text = lobby.discovery.games.keys()[0]
 	lobby.join_game()
-	await process_frame
-	await process_frame
+	await create_timer(0.6).timeout
 	if not check(lobby.joining and lobby.session != null and not is_instance_valid(lobby.active_room), "Client pending while host handshake delayed"):
 		return
 	for i in range(240):
@@ -45,7 +44,7 @@ func run() -> void:
 			break
 		await create_timer(0.05).timeout
 	var screen = lobby.joining_screen
-	if not check(lobby.session == null and screen.is_visible_in_tree() and screen.status.text.contains("timed out") and screen.retry_button.visible and screen.back_button.visible and screen.timeout.is_stopped(), "Pending host loss cleans peer and explains timeout with Retry/Back"):
+	if not check(lobby.session == null and screen.is_visible_in_tree() and screen.status.text.contains("timed out") and screen.status.text.contains("host may have left or disconnected") and screen.retry_button.visible and screen.back_button.visible and screen.timeout.is_stopped(), "Pending host loss cleans peer and explains timeout with Retry/Back"):
 		return
 	if not check(not is_instance_valid(lobby.disconnected_screen), "Pending connection does not claim an established disconnection"):
 		return

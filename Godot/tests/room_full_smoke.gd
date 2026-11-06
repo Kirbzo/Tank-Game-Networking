@@ -75,8 +75,7 @@ func run() -> void:
 	lobby.discovery.set_process(false)
 	lobby.discovery.games[id]["players"] = 0
 	lobby.join_game()
-	await process_frame
-	await process_frame
+	await create_timer(0.6).timeout
 	lobby.join_failed()
 	if not check(lobby.joining_screen.retry_button.visible and not is_instance_valid(lobby.disconnected_screen), "Unknown availability preserves existing Retry flow"):
 		return
@@ -88,8 +87,7 @@ func run() -> void:
 	lobby.disconnected_screen.return_button.pressed.emit()
 	lobby.discovery.games[id]["players"] = 0
 	lobby.join_game()
-	await process_frame
-	await process_frame
+	await create_timer(0.6).timeout
 	lobby.discovery.games[id]["players"] = 2
 	lobby.discovery.games[id]["seen"] = Time.get_ticks_msec()
 	lobby.refresh_games()

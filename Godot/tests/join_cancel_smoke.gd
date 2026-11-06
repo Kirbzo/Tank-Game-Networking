@@ -30,8 +30,7 @@ func run() -> void:
 	var first_attempt: int = lobby.join_attempt
 	screen.cancel_button.pressed.emit()
 	screen.cancel_button.pressed.emit()
-	await process_frame
-	await process_frame
+	await create_timer(0.6).timeout
 	if not check(not lobby.joining and lobby.session == null and lobby.join_attempt == first_attempt + 1 and lobby.get_child(0).visible and not screen.visible, "Immediate Cancel blocks deferred connection and is idempotent"):
 		return
 	lobby.join_connected()
@@ -39,11 +38,10 @@ func run() -> void:
 	if not check(not is_instance_valid(lobby.active_room) and lobby.session == null and not screen.visible, "Late completion/timeout cannot reopen cancelled attempt"):
 		return
 	lobby.join_game()
-	await process_frame
-	await process_frame
+	await create_timer(0.6).timeout
 	if not check(lobby.session != null and lobby.joining, "New attempt opens a real client peer"):
 		return
-	await create_timer(1.1).timeout
+	await create_timer(0.5).timeout
 	await process_frame
 	await process_frame
 	if not check(screen.indicator.value > 0 and screen.countdown.text.contains("9 seconds"), "Countdown and progress follow remaining time"):

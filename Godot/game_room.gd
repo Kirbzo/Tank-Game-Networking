@@ -27,6 +27,7 @@ var spawned := false
 @onready var settings_back_button: Button = $HUD/SettingsScreen/Center/Panel/Content/BackButton
 @onready var status_message: Label = $HUD/Overlay/StatusMessage
 @onready var host_label: Label = $HUD/Overlay/HostName
+@onready var connection_event: Label = $HUD/Overlay/ConnectionEvent
 
 func _ready() -> void:
 	leave_button.pressed.connect(leave_room)
@@ -101,6 +102,7 @@ func process_world(delta: float) -> void:
 func add_world_player(peer: int, player_name: String) -> void:
 	if not player_names.has(peer):
 		player_names[peer] = player_name
+		connection_event.hide()
 	world.add_player(peer)
 	broadcast_names()
 	world_positions = world.positions.duplicate()
@@ -111,8 +113,11 @@ func refresh_world_members() -> void:
 		return
 	for peer in world.positions.keys():
 		if peer != 1 and not multiplayer.get_peers().has(peer):
+			var departed_name: String = player_names.get(peer, "Player")
 			world.remove_player(peer)
 			player_names.erase(peer)
+			connection_event.text = departed_name + " disconnected from the room."
+			connection_event.show()
 	world_positions = world.positions.duplicate()
 	broadcast_names()
 	broadcast_world()

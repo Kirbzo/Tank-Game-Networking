@@ -4,6 +4,7 @@ const Discovery = preload("res://discovery.gd")
 const Usernames = preload("res://usernames.gd")
 const LanAddress = preload("res://lan_address.gd")
 var username: String = Usernames.generate()
+const JOIN_DELAY_SECONDS := 0.5
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
@@ -380,9 +381,16 @@ func start_join() -> void:
 	# Hiding the previous UI also removes its mouse/keyboard focus targets.
 	get_child(0).hide()
 	joining_screen.begin()
-	# Show the screen immediately; start the network attempt on the next frame.
-	await get_tree().process_frame
+	# Join and Retry share this delay; UI/Cancel remain responsive.
+	# The delay is part of the existing ten-second attempt deadline.
+	await get_tree().create_timer(JOIN_DELAY_SECONDS).timeout
 	if not joining or attempt != join_attempt or not is_inside_tree():
+		return
+	# Capacity/endpoint can change during the delay, before we have a peer.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
+	if room_is_full():
+		show_room_full()
 		return
 	session = ENetMultiplayerPeer.new()
 	var result := session.create_client(join_target["address"], int(join_target["port"]))
@@ -404,9 +412,9 @@ func join_connected() -> void:
 	update_join_button()
 
 func join_timed_out() -> void:
-	join_failed("The connection timed out.\nThe room may be closed or unavailable. Retry or go Back.")
+	join_failed("The connection timed out before you could enter the room.\nThe host may have left or disconnected, or the network may be unavailable.\nChoose Retry to reconnect or Back to return to the lobby.")
 
-func join_failed(message := "Could not connect to the room.\nThe room may be closed, full or unavailable. Retry or go Back.") -> void:
+func join_failed(message := "Could not finish joining the room.\nThe host may have left or disconnected, or the room may be full or unavailable.\nChoose Retry to reconnect or Back to return to the lobby.") -> void:
 	if not joining:
 		return
 	if room_is_full():
@@ -450,7 +458,7 @@ func join_server_disconnected() -> void:
 	if is_instance_valid(active_room) or not connected_game_id.is_empty():
 		show_disconnected()
 	elif joining:
-		join_failed("The server disconnected before you entered the room.\nRetry or go Back to choose another room.")
+		join_failed("The connection to the host was lost before you could enter the room.\nYour connection attempt has stopped.\nChoose Retry to reconnect or Back to return to the lobby.")
 
 func room_is_full() -> bool:
 	# A cached retry target alone cannot prove that a room is still full.
