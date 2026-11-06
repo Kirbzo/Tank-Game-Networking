@@ -83,6 +83,9 @@ func run() -> void:
 		await count_checks()
 		return
 	if OS.get_cmdline_user_args().has("initial"):
+		for button in lobby.find_children("*", "Button", true, false):
+			if not require(button.text != "Test Game Room", "Temporary Test Game Room button must be absent"):
+				return
 		await click(lobby.join_button)
 		await create_timer(1.0).timeout
 		trace_state("initial Join click, no selection")

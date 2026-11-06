@@ -6,9 +6,9 @@ A student two-player networking framework built in Godot, with visual placeholde
 
 Framework baseline: [Requirements Document.docx](MoozeTanks/Requirements%20Document.docx), titled **Server Requirement**. This supersedes the earlier PDF as the current requirements source. [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx) supplements it with LR1-LR5 lobby and GR1-GR8 room requirements. Source documents are read-only. The current requirements document is available at `MoozeTanks/Requirements Document.docx`, relative to the repository root. Project documentation links are relative to the repository root (the folder containing this README.md and AGENTS.md).
 
-Moooze Tanks is a Godot 4.7.2/GDScript two-player LAN framework with a connected game-room prototype. Players can host a room or join by selecting its listing or entering its game ID. The room synchronizes player movement through the host and displays white usernames above players, the host's name, game ID and player count. Joining includes a 10-second countdown, Cancel, and Retry/Back on failure. Leaving the room disconnects and returns to the lobby.
+Moooze Tanks is a Godot 4.7.2/GDScript two-player LAN framework. Host creates a room; Join connects to a selected game or game ID. Players see assigned usernames, host identity, game ID and connected-player count. The host validates movement, while clients use interpolation and local prediction with reconciliation for smoother display. A top-left FPS counter reports each instance's current frame rate.
 
-Same-computer process tests have passed. Graphical review and physical two-device LAN acceptance remain outstanding. See [status.md](status.md) for requirement evidence, [prompt_log.md](prompt_log.md) for request history, and [Godot/README.md](Godot/README.md) for current run/test instructions.
+Joining includes a 500 ms startup delay within a ten-second countdown, Cancel, and Retry/Back for connection failures. Recent full-room listings show Room Full; established host loss shows Disconnected. These notices provide Return to Lobby. The host receives a named message when a player disconnects. Prior same-computer automated checks have passed; physical LAN and graphical acceptance remain outstanding. See [status.md](status.md) for requirement evidence, [prompt_log.md](prompt_log.md) for request history, and [Godot/README.md](Godot/README.md) for current run/test instructions.
 
 ## Technology baseline
 
@@ -16,13 +16,13 @@ Retain **Godot 4.7.2** and **GDScript** from the existing project instructions. 
 
 ## Current scope
 
-The project supports a locally hosted two-player room. Host creates the server and opens the room; successful Join opens the matching room by selecting a discovered listing or entering its game ID. Listings show the game ID, host username and player count. Joining displays a 10-second countdown, progress bar and Cancel button. Cancel stops the attempt and returns to the lobby; failure or timeout offers Retry and Back.
+Host creates a two-player room and enters it. Players join by selecting a discovered listing or entering its game ID. Join and Retry show loading immediately and wait 500 ms before opening the connection, within the ten-second deadline. Cancel stops the attempt and returns to the lobby. A recent full-room listing shows Room Full with Return to Lobby; other failures/timeouts retain Retry and Back with an explanation.
 
-The host owns player positions, validates directional inputs and sends shared world updates. Connected players display their assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username and connected-player count. Movement controls and speed remain provisional test settings.
+The host remains authoritative for movement and input validation. Clients interpolate remote movement and predict their own movement, reconciling it against host acknowledgements. Connected players show assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username, player count and a top-left FPS counter. Movement rules remain provisional.
 
-Room Back/Escape disconnects and returns to the lobby. Client departure leaves the host active and updates its player display and count; host departure closes the room and returns the other player to the lobby with an explanation. Remote listings expire after approximately four seconds. Lobby Exit retains the separate "Exiting game..." screen, disconnects any session and cancels pending Join; future main-screen routing remains unimplemented.
+Listings show the game ID, host username and player count. Client departure updates the host's players/count and displays the departed username. Host departure shows the connected player a Disconnected notice, followed by Return to Lobby. Room Back/Escape voluntarily disconnects and returns to the lobby. Lobby Exit disconnects any session, cancels pending Join and retains "Exiting game..." while keeping the application open. Future main-screen routing remains unimplemented. Hosted listings expire after approximately four seconds. The temporary lobby Test Game Room button has been removed.
 
-Game start, combat, hit reconciliation and match reset remain unimplemented. Room failures currently use generic feedback, and the host has no explicit client-disconnect event message. Final movement rules and proposed host-only/two-player start permissions require team confirmation. Player membership is displayed through named rectangles rather than a separate roster panel. Graphical and physical two-device acceptance remain unverified.
+Start, combat, hit reconciliation and match reset remain unimplemented. Final movement and Start permissions need team confirmation. Manual host-IP lookup and named-player presentation remain source-interpretation items. Physical two-device and graphical performance acceptance remain unverified.
 
 ## Original alpha demonstration ? October 20, 2026
 

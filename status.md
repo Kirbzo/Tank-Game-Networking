@@ -1,19 +1,9 @@
 # Requirements status
 
-Updated: November 6, 2026. Revision: S-2026-11-06-06. Prompt: P071 (client smoothing, prediction and FPS).
+Updated: November 6, 2026. Revision: S-2026-11-06-09. Prompt: P074 (apply approved documentation wording).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement). Supplemental source: [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx).
 
 Evidence: P029 explicitly authorizes real joining beyond the original alpha. Ported local main commit 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e into malik-other-branch without switching branches. Godot 4.7.2 same-computer host/client tests verify real Join, persistent connection, host-name listings, timeout/retry/back and host-disconnect recovery. P034 supersedes P029 display-only Exit: client Exit disconnects; host Exit closes the session and stops advertising; the application remains on Exiting game.... Visual and physical two-device checks remain unverified. Historical disabled-Join evidence below is prior-state evidence, superseded where noted by P029. P031 applies the approved root documentation updates; original alpha source requirements remain preserved.
-
-## Agent handoff: existing Retry flow
-
-**Retry is already implemented. Reuse it; do not rebuild it or add automatic retry loops.**
-
-- [joining_screen.gd](Godot/joining_screen.gd): `show_failure(message)` displays Retry/Back; Retry emits `retry_requested`. `begin()` resets the 10-second timer, countdown, progress and Cancel. P066 adds a 500 ms asynchronous delay in the shared `start_join()` path before opening the peer; the delay counts toward the ten-second deadline.
-- [lobby.gd](Godot/lobby.gd): `retry_requested` is connected to `start_join()`, which refreshes the selected target from discovery and starts a fresh guarded connection attempt. `join_failed()`/`join_timed_out()` clean up and show failure. `join_cancelled()` and attempt IDs prevent late/deferred callbacks from restarting a cancelled attempt.
-- P064 `room_is_full()`/`show_room_full()` route a fresh advertised 2/2 room to **Room Full / This room already has two players / Return to Lobby**, with no Retry in that notice. Checks apply before Join/Retry, after failure/timeout, and to new full listings while failure UI is open. A pending 2/2 announcement can include the joining player; wait for the connection outcome before classifying it as rejected/full.
-- Unknown/expired counts and generic failures keep Retry/Back. Cached retry-target count alone is not fresh full-room evidence. Discovery reports recent host state and can lag real membership changes; no claim of atomic capacity confirmation or a full-room reason from ENet alone.
-- [disconnected_screen.gd](Godot/disconnected_screen.gd) is the shared configurable notice for Room Full and established-host Disconnected, with Return to Lobby. Tests: [room_full_smoke.gd](Godot/tests/room_full_smoke.gd), [join_cancel_smoke.gd](Godot/tests/join_cancel_smoke.gd), and `join_smoke.gd -- failure`. Room Full test uses host, occupant and third-player processes.
 
 | ID | Requirement summary | Status | Evidence / remaining work |
 | --- | --- | --- | --- |
@@ -36,7 +26,7 @@ Evidence: P029 explicitly authorizes real joining beyond the original alpha. Por
 | FR12 | The project shall include basic placeholders for connection and gameplay testing. | Partial | P071 adds interpolated/predicted rectangle display and fixed FPS HUD; existing preview, shared movement, names/settings retained. Bullets, health/damage, moose hazard and dedicated interpolation comparison markers remain incomplete. |
 | FR13 | Generate a status.md file that logs the completion status of these requirements. | Complete | This file tracks all 20 requirements with status and evidence. |
 | FR14 | Add a prompt log that captures the prompt Id, prompt, the date, the status.md | Complete | P042 consolidates all local/fetched branch-tip logs into 60 dated prompt records, retaining local P001-P042 and 18 branch-qualified imports. Next local ID P043. Original source snapshots, variants and mappings are retained in prompt_log_merge_audit.json; no dates/times or usage figures invented. |
-| FR15 | Create a README.md and AGENTS.md file based off of these requirements. | Partial | P061 aligned protected docs for prior lobby-return behavior. P063 adds an intermediate Disconnected notice with Return to Lobby and clearer pending errors; its operational wording update requires separate approval. Protected docs unchanged by P063; source/history preserved. |
+| FR15 | Create a README.md and AGENTS.md file based off of these requirements. | Complete | P074 applies P073 approved wording to AGENTS.md and both READMEs, preserving source requirements and alpha history. Current connection notices, movement smoothing, FPS, preview removal and applicable test commands align with inspected code. Documentation consistency only; gameplay acceptance remains separately tracked. |
 
 ## Scope and open issues
 
@@ -361,3 +351,66 @@ Current Godot 4.7.2 evidence:
 Changed room/world/lobby scripts and room scene, added room_view.gd/test, expanded existing world/preview checks and logs. Sources and protected docs unchanged; source hashes/33 IDs/links verified. Earlier wording approval remains outstanding for README/AGENTS, especially old no-prediction/interpolation sentence; do not claim docs now fully aligned. FR8/FR9/FR12 remain partial; combat/hits/reset/Start unchanged. No staging/commit/push.
 
 - S-2026-11-06-06 (P071): display smoothing and client prediction with server authority retained; fixed top-left FPS; current runtime/model evidence above, visual/two-device acceptance pending.
+
+## P072 ? removed lobby preview button and audited protected docs
+
+Removed Test Game Room action, button variable, opening-preview flag, unused open_test_room handler and its guards from lobby.gd. Host/Join remain normal room entry. Shared game_room.tscn/gd and direct standalone preview remain intact. Removed obsolete preview-button test path; game_room_smoke now accepts only direct preview/default or escape, and reports an unsupported-option error for retired from-lobby. Initial lobby test asserts no temporary button; Cancel test no longer references removed button.
+
+Current Godot 4.7.2 checks: join_smoke initial PASS verifies absent button, initial controls and no-session Exit; join_cancel PASS verifies usable Host/Join after cancellation; game_room_smoke default PASS for direct preview/HUD/FPS/settings/movement/return; connected_room host/client pair PASS for real Host/Join, named client departure and clean lobby recovery. All exit 0; existing user-log/certificate-store errors remain without script errors. Source scan finds no test_room_button/open_test_room/opening_test_room identifiers in active GDScript. Visual/physical-device acceptance not repeated. Current change does not modify smoothing/world behavior; P071 evidence remains prior evidence.
+
+Protected-file suggestions, not applied:
+- AGENTS.md Current scope: add shared 500 ms Join/Retry delay within ten-second deadline; specify full-room fresh 2/2 notice versus Retry/Back for other failures; explain established Disconnected notice with Return to Lobby; replace no-client-disconnect-message claim with implemented named event. Add client interpolation/prediction/server acknowledgement reconciliation and fixed top-left FPS counter. Keep host authority, provisional rules, source IDs/alpha history and unverified two-device/visual criteria. Link existing Retry handoff in status.md to prevent reimplementation.
+- Root README current overview/scope: same functional updates (delay, differentiated notices, named departure, smoothing/reconciliation/FPS) and current implementation evidence/limitations. Source/framework rows and historical alpha retain original wording; newer implemented behavior belongs in Current scope rather than rewriting source history. Generic-feedback-only and host-has-no-explicit-message claims now false.
+- Godot/README.md flow: remove Test Game Room as a current lobby action; connected entry via Host/Join, standalone preview through F6/direct scene only. Replace Clients render host updates without prediction or interpolation with Clients interpolate remote snapshots and predict local input, then reconcile with host acknowledgements. Document nominal 20 Hz snapshots versus rendering FPS; smoothing is visual and host remains authoritative. Add FPS location (top left above back arrow), refresh semantics and restart both instances after updated RPC format. Describe 500 ms delay, full/unknown failure distinction, named host departure event and Disconnected acknowledgement.
+- Godot/README automated checks: retire active from-lobby recommendation; preserve October 30 results as explicitly historical. Current preview commands use game_room_smoke.gd default or escape. Add room_view_smoke (interpolation/prediction validation), join_delay_smoke, room_full_smoke host/occupant/third-player group and pending_host_loss_smoke pair, with known fixture limitations. Current connected_room/world_sync/join_cancel commands remain applicable. Preserve prior recorded results separately from new checks.
+- Keep correct known gaps: Start/combat/hit/reset absent; proposed Start permissions, final movement rules and manual-IP/roster interpretation unresolved; dedicated interpolation debug markers/physical latency-loss/visual acceptance incomplete. Existing named disconnect feedback and client prediction must no longer be listed as missing.
+
+Proposed short shared addition: Join and Retry show loading immediately, wait 500 ms before connecting, and share a ten-second deadline. Fresh advertised full rooms show Room Full with Return to Lobby; other failures retain existing Retry/Back. Established host loss shows Disconnected before lobby return. The host receives a named message when its guest leaves. Clients interpolate remote movement and predict/reconcile their own movement against host state; the top-left FPS counter reports this instance's frame rate. Lobby preview button has been removed.
+
+FR15 remains partial pending approval for AGENTS/both README wording; this request authorized removal and suggestions only. Sources/protected docs and other user changes preserved. Source hashes, original 20 plus supplemental 13 IDs, active links and revision consistency checked. No staging/commit/push.
+
+- S-2026-11-06-07 (P072): removed temporary entry action/unused logic, updated applicable tests, recorded concrete protected-document changes suggested against current code.
+
+## P073 ? removed active Retry handoff; protected-doc wording proposal
+
+Removed active Retry handoff section from the top of this file and obsolete agent-directed already-implemented comment near lobby.start_join. Functional retry_requested/start_join behavior and descriptive error-routing comment retained; no Retry logic removed. Earlier prompt/status history mentioning handoff is retained as historical evidence under FR14, superseded by this request. No new handoff replacement proposed. Protected docs unchanged; user requested proposed wording, not application.
+
+AGENTS.md proposed Current scope replacement:
+
+> Host creates a two-player room and enters it. Players join by selecting a discovered listing or entering its game ID. Join and Retry show loading immediately and wait 500 ms before opening the connection, within the ten-second deadline. Cancel stops the attempt and returns to the lobby. A recent full-room listing shows Room Full with Return to Lobby; other failures/timeouts retain Retry and Back with an explanation.
+>
+> The host remains authoritative for movement and input validation. Clients interpolate remote movement and predict their own movement, reconciling it against host acknowledgements. Connected players show assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username, player count and a top-left FPS counter. Movement rules remain provisional.
+>
+> Client departure updates the host's players/count and displays the departed username. Host departure shows the connected player a Disconnected notice, followed by Return to Lobby. Room Back/Escape voluntarily disconnects and returns to the lobby. Lobby Exit retains Exiting game... while keeping the application open. Hosted listings expire after approximately four seconds. The temporary lobby Test Game Room button has been removed.
+>
+> Start, combat, hit reconciliation and match reset remain unimplemented. Final movement and Start permissions need team confirmation. Manual host-IP lookup and named-player presentation remain source-interpretation items. Physical two-device and graphical performance acceptance remain unverified.
+
+Root README.md proposed current overview:
+
+> Moooze Tanks is a Godot 4.7.2/GDScript two-player LAN framework. Host creates a room; Join connects to a selected game or game ID. Players see assigned usernames, host identity, game ID and connected-player count. The host validates movement, while clients use interpolation and local prediction with reconciliation for smoother display. A top-left FPS counter reports each instance's current frame rate.
+>
+> Joining includes a 500 ms startup delay within a ten-second countdown, Cancel, and Retry/Back for connection failures. Recent full-room listings show Room Full; established host loss shows Disconnected. These notices provide Return to Lobby. The host receives a named message when a player disconnects. Same-computer automated checks pass; physical LAN and graphical acceptance remain outstanding.
+
+Root Current scope should use the same precise behavior as AGENTS proposed scope, keeping Godot baseline, source IDs, original alpha history and incomplete feature statements intact. Do not erase historical requirement tables.
+
+Godot/README.md proposed operational replacement/additions:
+
+> Run with F5. Press Host to create and enter a room. In another instance, select its listing or enter its game ID and press Join. The loading screen appears immediately; the connection begins after 500 ms. The ten-second countdown includes that delay. Cancel restores the lobby. Retry restarts the same flow after an ordinary connection failure. A recent 2/2 listing displays Room Full with Return to Lobby.
+>
+> Move using WASD or the arrow keys. Remote player movement is interpolated; your own movement is predicted locally and reconciled to the host. The host remains authoritative. The FPS counter above the back arrow reports local frame rate; it is separate from the nominal 20 Hz snapshot rate. Usernames appear above players in white, and the top-center label identifies the host. The settings gear opens a placeholder and suppresses local movement input while open.
+>
+> The back arrow or Escape leaves the room and returns to the lobby. The host sees a named departure message when its guest leaves. Losing the host shows Disconnected with Return to Lobby. Lobby Exit shows Exiting game... and keeps the application open. The lobby Test Game Room button has been removed; direct standalone scene testing remains available through F6 or a direct scene command.
+
+Godot README test changes proposed: remove current -- from-lobby instructions (unsupported after P072); standalone game_room_smoke uses no arguments or escape. Add room_view_smoke, join_delay_smoke, room_full_smoke host/occupant/third-player group, and pending_host_loss_smoke host/client pair. Keep connected_room/world_sync/join_cancel/initial/failure tests and preserve dated historical results explicitly as historical. Mention both instances need matching updated code after RPC changes. Avoid claiming visual stutter resolved or physical LAN acceptance without current graphical/two-device tests.
+
+Documentation-only/code-comment validation: all 33 requirement IDs, local links, both source SHA256 values, protected-file preservation and revision consistency checked. No gameplay tests needed/run for note/comment changes; P072 runtime evidence remains prior. No protected edits, staging, commit or push. Applying proposed wording later receives a separate prompt ID/approval.
+
+- S-2026-11-06-08 (P073): active handoff removed as authorized, historical records preserved; concrete documentation replacements drafted, no behavioral Retry changes.
+
+## P074 - approved current documentation applied
+
+Applied the P073 proposals with user approval to AGENTS.md, README.md and Godot/README.md. Current scope now describes the 500 ms Join/Retry delay within ten seconds, full-room versus ordinary failures, established Disconnected notice, named guest departure, authoritative movement with client interpolation/prediction/reconciliation, FPS and removed lobby preview button. Operational commands cover current preview, room-view, join-delay, capacity and pending-host-loss checks; retired from-lobby instructions remain historical. No active Retry handoff added and functional Retry retained. Original alpha/source tables and historical evidence preserved.
+
+Validation: Python documentation audit checked all 20 original and 13 supplemental IDs, local links, referenced test paths, source SHA256 values and prompt/status revision consistency. File-boundary audit confirms only these three approved documents plus status.md and prompt_log.md changed for P074; pre-existing implementation/test changes preserved. Git diff --check passed using the bundled Git executable; bare git was unavailable on PATH. No gameplay tests run for documentation only. Physical LAN, graphical/performance acceptance and source interpretations remain outstanding. No staging, commit or push.
+
+- S-2026-11-06-09 (P074): approved P073 wording applied; FR15 documentation consistency complete, gameplay statuses unchanged.

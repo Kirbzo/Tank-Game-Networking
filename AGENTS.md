@@ -18,13 +18,13 @@ This is a student server-side framework for Moooze Tanks. Work only on the reque
 
 ## Current scope
 
-The project supports a locally hosted two-player room. Host creates the server and opens the room; successful Join opens the matching room by selecting a discovered listing or entering its game ID. Listings show the game ID, host username and player count. Joining displays a 10-second countdown, progress bar and Cancel button. Cancel stops the attempt and returns to the lobby; failure or timeout offers Retry and Back.
+Host creates a two-player room and enters it. Players join by selecting a discovered listing or entering its game ID. Join and Retry show loading immediately and wait 500 ms before opening the connection, within the ten-second deadline. Cancel stops the attempt and returns to the lobby. A recent full-room listing shows Room Full with Return to Lobby; other failures/timeouts retain Retry and Back with an explanation.
 
-The host owns player positions, validates directional inputs and sends shared world updates. Connected players display their assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username and connected-player count. Movement controls and speed remain provisional test settings.
+The host remains authoritative for movement and input validation. Clients interpolate remote movement and predict their own movement, reconciling it against host acknowledgements. Connected players show assigned usernames above their rectangles in white. The fixed HUD shows the game ID, host username, player count and a top-left FPS counter. Movement rules remain provisional.
 
-Room Back/Escape disconnects and returns to the lobby. Client departure leaves the host active and updates its player display and count; host departure closes the room and returns the other player to the lobby with an explanation. Remote listings expire after approximately four seconds. Lobby Exit retains the separate "Exiting game..." screen, disconnects any session and cancels pending Join; future main-screen routing remains unimplemented.
+Listings show the game ID, host username and player count. Client departure updates the host's players/count and displays the departed username. Host departure shows the connected player a Disconnected notice, followed by Return to Lobby. Room Back/Escape voluntarily disconnects and returns to the lobby. Lobby Exit disconnects any session, cancels pending Join and retains "Exiting game..." while keeping the application open. Future main-screen routing remains unimplemented. Hosted listings expire after approximately four seconds. The temporary lobby Test Game Room button has been removed.
 
-Game start, combat, hit reconciliation and match reset remain unimplemented. Room failures currently use generic feedback, and the host has no explicit client-disconnect event message. Final movement rules and proposed host-only/two-player start permissions require team confirmation. Player membership is displayed through named rectangles rather than a separate roster panel. Graphical and physical two-device acceptance remain unverified.
+Start, combat, hit reconciliation and match reset remain unimplemented. Final movement and Start permissions need team confirmation. Manual host-IP lookup and named-player presentation remain source-interpretation items. Physical two-device and graphical performance acceptance remain unverified.
 
 ## Original alpha scope ? October 20, 2026
 
