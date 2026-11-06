@@ -44,6 +44,9 @@ func run() -> void:
 		root.add_child(room)
 		current_scene = room
 		await process_frame
+	await create_timer(0.3).timeout
+	if not check(room.fps_label.is_visible_in_tree() and room.fps_label.text.begins_with("FPS: ") and room.fps_label.get_global_rect().end.y <= room.leave_button.get_global_rect().position.y, "FPS counter updates above back arrow"):
+		return
 	room.set_physics_process(false)
 	var hud_rect: Rect2 = room.leave_button.get_global_rect()
 	var settings_rect: Rect2 = room.settings_button.get_global_rect()

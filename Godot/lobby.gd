@@ -207,21 +207,22 @@ func room_names(id: String, names: Dictionary) -> void:
 		active_room.receive_names(names)
 
 @rpc("any_peer", "call_remote", "unreliable_ordered", 1)
-func room_input(direction: Vector2) -> void:
+func room_input(direction: Vector2, sequence: int = 0) -> void:
 	var sender := multiplayer.get_remote_sender_id()
-	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
-		active_room.world.accept_input(sender, direction, Time.get_ticks_msec())
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender) and sequence > 0:
+		active_room.world.accept_input(sender, direction, Time.get_ticks_msec(), sequence)
 
 @rpc("authority", "call_remote", "unreliable_ordered", 2)
-func room_snapshot(id: String, tick: int, positions: Dictionary) -> void:
+func room_snapshot(id: String, tick: int, positions: Dictionary, acknowledgements: Dictionary = {}) -> void:
 	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
-		active_room.receive_world(tick, positions)
+		active_room.receive_world(tick, positions, acknowledgements)
 
 func return_from_room(message := "You left the room.") -> void:
 	if not is_instance_valid(active_room):
 		return
 	active_room.hide()
 	active_room.set_physics_process(false)
+	active_room.set_process(false)
 	active_room.queue_free()
 	active_room = null
 	leave_game()

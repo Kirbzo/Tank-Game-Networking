@@ -1,5 +1,5 @@
 extends Control
-## Connected views draw host state; standalone preview keeps local movement.
+## Host-authoritative state with a smoothed/predicted client display.
 
 const PLAYER_SIZE := Vector2(32, 32)
 const MOVE_SPEED := 220.0
@@ -8,7 +8,11 @@ const LOBBY_SCENE := "res://lobby.tscn"
 @export var game_id := "PREVIEW"
 var session_lobby: Node
 const World = preload("res://room_world.gd")
+const View = preload("res://room_view.gd")
 var world := World.new()
+var client_view := View.new()
+var display_positions: Dictionary = {}
+var fps_elapsed := 0.0
 var world_positions: Dictionary = {}
 var player_names: Dictionary = {}
 const NAME_FONT_SIZE := 16
@@ -28,6 +32,7 @@ var spawned := false
 @onready var status_message: Label = $HUD/Overlay/StatusMessage
 @onready var host_label: Label = $HUD/Overlay/HostName
 @onready var connection_event: Label = $HUD/Overlay/ConnectionEvent
+@onready var fps_label: Label = $HUD/FpsCounter
 
 func _ready() -> void:
 	leave_button.pressed.connect(leave_room)
@@ -45,6 +50,15 @@ func _ready() -> void:
 		world.add_player(1)
 		world_positions = world.positions.duplicate()
 	grab_focus()
+
+func _process(delta: float) -> void:
+	fps_elapsed += delta
+	if fps_elapsed >= 0.25:
+		fps_elapsed = fmod(fps_elapsed, 0.25)
+		fps_label.text = "FPS: %d" % Engine.get_frames_per_second()
+	if not leaving and session_lobby != null and session_lobby.session != null and not multiplayer.is_server():
+		display_positions = client_view.advance(delta, Engine.get_physics_interpolation_fraction())
+		queue_redraw()
 
 func update_connection_status() -> void:
 	if session_lobby == null:
@@ -93,10 +107,12 @@ func process_world(delta: float) -> void:
 		world_tick = world.tick
 		snapshot_elapsed += delta
 		if snapshot_elapsed >= 0.05:
-			snapshot_elapsed = 0.0
+			snapshot_elapsed = fmod(snapshot_elapsed, 0.05)
 			broadcast_world()
 	else:
-		session_lobby.room_input.rpc_id(1, direction)
+		var sequence := client_view.predict(direction, delta)
+		if sequence > 0:
+			session_lobby.room_input.rpc_id(1, direction, sequence)
 	queue_redraw()
 
 func add_world_player(peer: int, player_name: String) -> void:
@@ -139,9 +155,9 @@ func update_host_label() -> void:
 func broadcast_world() -> void:
 	for peer in world.positions:
 		if peer != 1 and multiplayer.get_peers().has(peer):
-			session_lobby.room_snapshot.rpc_id(peer, game_id, world.tick, world.positions)
+			session_lobby.room_snapshot.rpc_id(peer, game_id, world.tick, world.positions, world.processed_sequences)
 
-func receive_world(tick: int, positions: Dictionary) -> void:
+func receive_world(tick: int, positions: Dictionary, acknowledgements: Dictionary = {}) -> void:
 	if tick <= world_tick or positions.size() > 2:
 		return
 	for peer in positions:
@@ -149,6 +165,7 @@ func receive_world(tick: int, positions: Dictionary) -> void:
 			return
 	world_tick = tick
 	world_positions = positions.duplicate()
+	client_view.receive(tick, positions, acknowledgements, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
 	queue_redraw()
 
 func clamp_player() -> void:
@@ -156,6 +173,8 @@ func clamp_player() -> void:
 	player_position.y = clampf(player_position.y, arena.position.y, arena.end.y - PLAYER_SIZE.y)
 
 func _draw() -> void:
+	if session_lobby != null and session_lobby.session == null:
+		return
 	if session_lobby != null:
 		# Fit the common logical world into this viewport, preserving aspect ratio.
 		var scale_factor := minf(size.x / 1000.0, size.y / 720.0)
@@ -168,8 +187,9 @@ func _draw() -> void:
 		draw_line(Vector2(arena.position.x, y), Vector2(arena.end.x, y), grid_color)
 	draw_rect(arena, Color(0.3, 0.45, 0.55), false, 2.0)
 	if session_lobby != null:
-		for peer in world_positions:
-			draw_player(world_positions[peer], peer == multiplayer.get_unique_id(), str(player_names.get(peer, "")), peer == 1)
+		var visible_positions: Dictionary = world_positions if multiplayer.is_server() else display_positions
+		for peer in visible_positions:
+			draw_player(visible_positions[peer], peer == multiplayer.get_unique_id(), str(player_names.get(peer, "")), peer == 1)
 		draw_set_transform(Vector2.ZERO)
 		return
 	draw_player(player_position, true, "P")

@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P069 and the next request is **P070**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P071 and the next request is **P072**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -13,6 +13,63 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 # November 6, 2026
 
 **Recorded times - newest first (America/Regina)**
+
+## P071 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:18:06 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets start doing your recommendations, and lets also add a fps counter of your current fps at the top left of the screen
+
+Result: implemented P070 smoothing/prediction recommendations while retaining nominal 20 Hz snapshots initially. Added bounded client snapshot interpolation, local physics prediction, input sequences/host post-simulation acknowledgements, replay/reconciliation and correction smoothing. Host still owns movement; display and authoritative dictionaries separate. Added top-left FPS above back arrow, refreshed using engine FPS and visible above settings. Shared world move rule extracted; cleanup stops render callbacks. Changed game_room.gd/game_room.tscn/lobby.gd/room_world.gd, added room_view.gd and room_view_smoke.gd, expanded existing world_sync/game_room tests and required logs. No source/protected-doc edits or commit. Both game instances need restart on updated packet format; visual/LAN performance still to be assessed.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-06; implements P070 proposal. FR8/FR9/FR12 partial evidence updated.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/room_view_smoke.gd`: PASS/exit 0 (interpolation, prediction/replay, host correction, missing/stale snapshots, bounds/queue, acknowledgement and invalid/duplicate input guards).
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0; live client 58 remote interpolated frames and 32 local prediction steps between snapshots, authoritative equality retained, acknowledgement queue bounded, FPS label present.
+- `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` and `-- escape`: both PASS/exit 0, FPS placement/updates and preview regression.
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with command without host; separate pair with `host host-leaves` / `host-leaves`: all final PASS/exit 0. Initial new render callback queried peer after cleanup; added lifecycle guards/stopped render process and reran successfully.
+- `--headless --path Godot --script res://tests/room_full_smoke.gd -- host`, `-- occupant`, and without arguments: all PASS/exit 0.
+- `--headless --path Godot --script res://tests/join_delay_smoke.gd`: PASS/exit 0 (512/501 ms Join/Retry).
+Existing user-log/certificate-store errors remain; final cleanup checks without script errors. No graphical/two-device/high-latency/physical packet-loss acceptance. Python checked sources/checksums, 33 IDs, local links and revision consistency; Git diff --check/status checked boundaries. Protected wording edits remain pending as previously recorded; no staging/commit/push.
+
+## P070 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:08:48 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> so from the player side, the game stutters and runs at an extremly low fps but the host's side is completly clear. check why that is and suggest some ideas to deal with this issue
+
+Clarification asked:
+
+> Where are the host and joined player running?
+
+Actual answer:
+
+> its both the same computer in 2 instances and seperate computers
+
+Clarification asked:
+
+> What looks slow on the joined player?
+
+Actual answer:
+
+> Player movement stutters, but buttons/UI stay responsive
+
+Result: code shows host physics-rate positions, nominal 20 Hz snapshots and direct client state replacement without interpolation/prediction. Current isolated same-computer headless timing probe measured host 59.969 world updates/s versus client 19.992, with client update median/max 48.451/55.340 ms; both physics ~60 Hz and main loop ~145 Hz. This supports movement cadence as likely cause, not a measured graphical FPS collapse. Recommended buffered per-render network interpolation first, local prediction/server reconciliation for responsiveness, optional higher snapshot rate after measurement, and actual graphical/LAN profiling. 500 ms Join delay is startup-only. Temporary probe removed; only status/log retained, no gameplay/protected-doc edits or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-05, contains full measurements and ranked proposals. Any subsequent implementation gets its own prompt ID.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing records are not exposed.
+
+Validation: repository root, `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe --headless --path Godot --script res://tests/_motion_probe.gd -- host` paired with same command without host: both exit 0 and output MOTION_DIAGNOSTIC timing JSON. Probe sampled process frames/world tick changes four seconds after connected warmup. Temporary probe removed after inspection; path cannot be rerun unless recreated. No GUI/physical-device FPS, RTT or packet-loss capture. Existing user-log/certificate errors remain without script errors. Read official Godot interpolation/jitter/networking docs, local code and both requirements sources. Python checked 33 IDs, links, source checksums, revision consistency and two-file retained change boundary. Git diff --check/status checked boundaries; no staging/commit/push.
 
 ## P069 - November 6, 2026
 
