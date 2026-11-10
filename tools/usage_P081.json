@@ -1,0 +1,52 @@
+{
+  "prompt_id": "P081",
+  "session_id": "01a1c640-44f3-7a60-bfa0-d7ac010c234a",
+  "turn_id": "01a1c667-2809-71d1-ad2c-c14478bb9a83",
+  "root_turn_ids": [
+    "01a1c667-2809-71d1-ad2c-c14478bb9a83"
+  ],
+  "receipt_utc": "2026-11-10T17:00:11.720Z",
+  "receipt_America_Regina": "2026-11-10 11:00:11 AM",
+  "cutoff_utc": "2026-11-10T17:03:24.900Z",
+  "response_count": 5,
+  "response_ids": [
+    "resp_071e9e193857adc1016af34d9be19c87d0b41360088fbbffdf",
+    "resp_071e9e193857adc1016af34da353b487d0894811e14146b309",
+    "resp_071e9e193857adc1016af34dbf9b0487d09a79dfbcb1c001bd",
+    "resp_071e9e193857adc1016af34e10265487d0ba91624718474a8a",
+    "resp_071e9e193857adc1016af34e58081487d099812a84cb590ccd"
+  ],
+  "usage": {
+    "input_tokens": 555309,
+    "cached_input_tokens": 545664,
+    "output_tokens": 8363,
+    "total_tokens": 563672,
+    "reasoning_output_tokens": 1201,
+    "cache_write_input_tokens": 0
+  },
+  "by_model": {
+    "gpt-6.1-sol": {
+      "input_tokens": 555309,
+      "cached_input_tokens": 545664,
+      "output_tokens": 8363,
+      "total_tokens": 563672,
+      "reasoning_output_tokens": 1201,
+      "cache_write_input_tokens": 0
+    }
+  },
+  "cached_input_included_in_input": true,
+  "reasoning_is_separately_exposed_not_added_to_output": true,
+  "completeness": "Partial",
+  "final_total": "Unavailable",
+  "method": "Sum unique (session, response_id) payload.usage; cumulative cross-check only",
+  "coverage": "One exactly matched project turn; external/unlogged calls cannot be established",
+  "sources": {
+    "~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl": {
+      "sha256_at_read": "29728d4e5ce19ff7529a9b76c54746a2605c9f00e00056851ec291e17fc0c77f",
+      "issues": []
+    }
+  },
+  "warnings": [],
+  "estimated_cost": "Unavailable",
+  "billed_cost": "Unavailable"
+}

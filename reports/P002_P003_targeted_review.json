@@ -1,0 +1,93 @@
+{
+  "review_id": "P087",
+  "recorded_at_utc": "2026-11-10T19:02:15.778426+00:00",
+  "git_scope": "Only malik-other-branch and its reachable history; no other branch refs reviewed",
+  "session_scope": "User-approved targeted P002/P003 review in the historical parent-workspace session",
+  "limitations": [
+    "Historical active branch cannot be proven from session metadata.",
+    "Commit ancestry, original prompt wording, target project folder and status revisions corroborate task identity.",
+    "No generic checker rules relaxed. Prior P084 audit, graph and README remain unchanged dated snapshots.",
+    "No dollar costs calculated."
+  ],
+  "prompts": [
+    {
+      "prompt_id": "P002",
+      "status": "Verified completed recorded turn; manually corroborated",
+      "commit_in_malik_other_branch": "14375de904c4ce5131ce06f4c58900b110b54647",
+      "prompt_matches_original_commit_log": true,
+      "receipt_utc": "2026-10-16T17:46:21.079Z",
+      "receipt_America_Regina": "2026-10-16 11:46:21 AM",
+      "session_id": "01a13655-44c7-7e90-8a2c-aee298316197",
+      "turn_id": "01a145d2-6cc7-7462-8b5f-f09bcb46dc7f",
+      "root_turn_ids": [
+        "01a145d2-6cc7-7462-8b5f-f09bcb46dc7f"
+      ],
+      "model": "gpt-6.1-sol",
+      "response_ids": [
+        "resp_0e47abe38fa96842016ad262edbf5c819bbc6a5e43c3e10356",
+        "resp_0e47abe38fa96842016ad262fa5dd0819b8788365b79cb9286",
+        "resp_0e47abe38fa96842016ad263040e18819baf44094db7776cbb",
+        "resp_0e47abe38fa96842016ad263084fc8819bb558a232f5d4e9c9",
+        "resp_0e47abe38fa96842016ad26351ab64819bb94e0c3fba4ba9e0"
+      ],
+      "response_count": 5,
+      "usage": {
+        "input_tokens": 337844,
+        "cached_input_tokens": 270592,
+        "output_tokens": 4249,
+        "total_tokens": 342093,
+        "reasoning_output_tokens": 23,
+        "cache_write_input_tokens": 0
+      },
+      "usage_cutoff_utc": "2026-10-16T17:48:05.755Z",
+      "completion_utc": "2026-10-16T17:48:05.779Z",
+      "source_path": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-35-20-01a13655-44c7-7e90-8a2c-aee298316197.jsonl",
+      "source_sha256": "43a108300493575cdd48679944f3a75c8eb3136e16aa848528661f5520450b01",
+      "context_difference": "Session cwd is the parent workspace; tool records target Codex for COMP214 and the expected status revision.",
+      "active_branch_in_historical_session": "Unavailable; not recorded",
+      "reason_original_checker_excluded": "P002 prompt text was normalized by commit 402545c, and parent workspace fails strict cwd matching.",
+      "cached_input_included_in_input": true,
+      "reasoning_included_in_output": true
+    },
+    {
+      "prompt_id": "P003",
+      "status": "Verified completed recorded turn; manually corroborated",
+      "commit_in_malik_other_branch": "402545c8befbe3d8afcd47077f7bd6aa914b7319",
+      "prompt_matches_original_commit_log": true,
+      "receipt_utc": "2026-10-16T18:01:12.214Z",
+      "receipt_America_Regina": "2026-10-16 12:01:12 PM",
+      "session_id": "01a13655-44c7-7e90-8a2c-aee298316197",
+      "turn_id": "01a145e0-06e2-70f0-aebf-28f40c710a6c",
+      "root_turn_ids": [
+        "01a145e0-06e2-70f0-aebf-28f40c710a6c"
+      ],
+      "model": "gpt-6.1-sol",
+      "response_ids": [
+        "resp_0e47abe38fa96842016ad2666844ac819b9859072784a4a08a",
+        "resp_0e47abe38fa96842016ad2666d9cfc819bb244204c3fabc530",
+        "resp_0e47abe38fa96842016ad266712108819b85ab3a7693d706bb",
+        "resp_0e47abe38fa96842016ad26687a2c8819bb2bdf18374406c5e",
+        "resp_0e47abe38fa96842016ad2668eb440819ba5065b62b788ffc6",
+        "resp_0e47abe38fa96842016ad2669a317c819ba246e76e5825abfc"
+      ],
+      "response_count": 6,
+      "usage": {
+        "input_tokens": 463440,
+        "cached_input_tokens": 456448,
+        "output_tokens": 2475,
+        "total_tokens": 465915,
+        "reasoning_output_tokens": 44,
+        "cache_write_input_tokens": 0
+      },
+      "usage_cutoff_utc": "2026-10-16T18:02:04.374Z",
+      "completion_utc": "2026-10-16T18:02:04.383Z",
+      "source_path": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-35-20-01a13655-44c7-7e90-8a2c-aee298316197.jsonl",
+      "source_sha256": "43a108300493575cdd48679944f3a75c8eb3136e16aa848528661f5520450b01",
+      "context_difference": "Session cwd is the parent workspace; tool records target Codex for COMP214 and the expected status revision.",
+      "active_branch_in_historical_session": "Unavailable; not recorded",
+      "reason_original_checker_excluded": "Exact text exists, but parent workspace fails strict cwd matching.",
+      "cached_input_included_in_input": true,
+      "reasoning_included_in_output": true
+    }
+  ]
+}

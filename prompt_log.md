@@ -1,5 +1,116 @@
 # Prompt log
 
+## P089 - November 10, 2026 (README token-coverage note)
+
+Receipt time: 01:12:06 PM (America/Regina; matched user timestamp 2026-11-10T19:12:06.599Z).
+Recording time: 01:12:14 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> lets create a note inside the README.md where usage is and state why some tokens wouldnt be included or missed entirly.
+
+Result: added the requested root README explanation next to token usage, outside the generated snapshot markers so future authorized refreshes preserve it. Covers absent/inaccessible/incomplete records, changed prompt paths/workspaces, later inputs and interrupted/resumed/delegated work, partial cutoffs, unlogged/out-of-scope/later prompts and delayed manual recoveries. Distinguishes unknown from zero, partial from completed, and missing timestamps from failed identity matching. Links P002/P003 recovery and P004 search evidence; existing subtotal unchanged. No AGENTS.md, source-session, requirements, tool, graph or gameplay changes. Next local ID P090.
+
+Associated status.md: S-2026-11-10-14. Documentation-only, no gameplay tests needed/run.
+
+Usage: **Partial as of 2026-11-10T19:12:46.790Z (01:12:46 PM America/Regina)**. Input 533,100; cached input 530,304 included in input; output 1,528; total 534,628; reasoning output 111 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6df-ed70-7c11-8634-e05a668096b5. Two unique response payload usages summed and cross-checked to turn snapshot by the single-prompt checker restricted to this session, exit 0. Later checks/final reply excluded; final total and estimated/billed cost **Unavailable**. No verified rates/billing; sessions read-only.
+
+## P088 - November 10, 2026 (targeted P004 token search)
+
+Receipt time: 01:06:28 PM (America/Regina; matched user timestamp 2026-11-10T19:06:28.393Z).
+Recording time: 01:06:37 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> can you try and run it for P004 and record what happens?
+
+Scope clarification: user explicitly answered "Allow targeted P004 session search" after being told that candidate sessions have no branch metadata. Reviewed only malik-other-branch Git ancestry and searched available sessions for P004-specific prompt/clarification candidates; no other branch refs reviewed.
+
+Result: branch ancestor e23eeb7 records P004 with unchanged original wording. Searched nine protected session snapshots for original/normalized user prompt, the exact Leave the hosted session clarification and distinctive alpha/lobby/Godot phrases. No matching user records found. Generic `python -B tools/token_usage.py --prompt-id P004` also refused attribution. P004 remains Unavailable; commit history does not establish token counts. Recorded [targeted evidence](reports/P004_targeted_review.json) and a dated P004 annotation. Initial historical blob UTF-8 decode failed; read that blob in memory as CP1252, source unchanged. No matcher implementation, README, graph or historical audit edits. Next local ID P089.
+
+Associated status.md: S-2026-11-10-13. Current-request input/cached input/output/model/total and estimated/billed costs **Unavailable** for the original prompt alone until unambiguous attribution; current turn includes a later scope-approval reply. Session evidence read-only. No gameplay tests needed/run.
+
+## P087 - November 10, 2026 (P002/P003 branch-scoped verification test)
+
+Receipt time: 12:59:02 PM (America/Regina; matched user timestamp 2026-11-10T18:59:02.723Z).
+Recording time: 12:59:11 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> Lets run your idea with P002 and P003 as a test. Only look into the malik-other-branch and make a request if you need to review outside of that branch
+
+Scope clarification: requested permission before reviewing the historical parent-workspace session because it has no branch metadata. User explicitly answered "Allow targeted session review". Only P002/P003-related records from that session were inspected; no other branch refs/history reviewed.
+
+Result: recovered P002's original Downloads-path wording from malik-other-branch ancestor 14375de and its normalization in ancestor 402545c. P003 text unchanged. Targeted session prompt text, project folder references, status revisions and result descriptions corroborate both branch-owned tasks. Five P002 response usages total 342,093; six P003 responses total 465,915; deduplicated per-response sums exactly match cumulative turn snapshots and have completion events. Recorded dated manual annotations at those entries with the explicit limitation that the historical active branch is not recorded. No generic matching rules relaxed and no README, graph or old audit refresh. Evidence in [targeted review](reports/P002_P003_targeted_review.json). Next local ID P088.
+
+Associated status.md: S-2026-11-10-12. Investigation/documentation only; no gameplay tests needed/run.
+
+Current-request token usage: input, cached input, output, total, model attribution and final complete total **Unavailable** for the original prompt alone. `python -B tools/token_usage.py --prompt-id P087 --session <current November 10 session>` refused attribution because this turn contains later user input (the scope-approval reply); its whole-turn usage must not be silently assigned only to the first prompt. Source is ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl, read-only. Cached-input inclusion for an assigned per-prompt total **Unavailable**; estimated/billed costs **Unavailable**. This current-request limitation does not affect the independently checked P002/P003 turns, which contain no later user input and have matching root-turn IDs.
+
+## P086 - November 10, 2026 (prompt versus token line graph)
+
+Receipt time: 12:35:58 PM (America/Regina; matched user timestamp 2026-11-10T18:35:58.993Z).
+Recording time: 12:36:07 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> lets also create a graph of token usage. plot them with prompt vs token and show a plotted line
+
+Result: added a reproducible matplotlib plotting script and standalone PNG/SVG/CSV artifacts from the saved P084 audit snapshot. Graph plots prompt ID versus total input+output tokens as a line with markers; unavailable records break the line and partial observations are amber diamonds. Separate local/imported prompt panels avoid mixing ID sequences and explicitly disclose independent y-axis ranges. Existing audit/source records, README, AGENTS.md and gameplay preserved; no new audit/backfill performed. Next local ID P087.
+
+Associated status.md: S-2026-11-10-11. Current request usage is partial, separate from the older plotted snapshot. No gameplay tests needed/run.
+
+Usage: **Partial as of 2026-11-10T18:37:43.503Z (12:37:43 PM America/Regina)**. Input 607,758; cached input 604,160 included in input; output 4,460; total 612,218; reasoning output 1,032 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6be-da37-7573-9cec-131943a0b938. Three unique response payload usages summed and cross-checked to turn snapshot by `python -B tools/token_usage.py --prompt-id P086`, exit 0; no cumulative duplication. Later checks/final response excluded; final total and estimated/billed costs **Unavailable**. No verified rates/billing; sessions read-only.
+
+## P085 - November 10, 2026 (plain-text agent handoff)
+
+Receipt time: 12:32:21 PM (America/Regina; matched user timestamp 2026-11-10T18:32:21.057Z).
+Recording time: 12:32:28 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> can you create a text docs for another agent to do the same proccess?
+
+Result: created TOKEN_USAGE_AGENT_HANDOFF.txt explaining the authorized token audit/backfill process, read-only session access, prompt matching, deduplication, partial/unavailable evidence, root README snapshots, exact tool commands, approval boundaries and validation. Historical P084 figures explicitly labelled as old reference values. No audit refresh, AGENTS.md/README edits or implementation changes. Existing user edits and historical conflicts preserved. Next local ID P086.
+
+Associated status.md: S-2026-11-10-10. Current request usage recorded separately as partial; no gameplay tests needed/run.
+
+Usage: **Partial as of 2026-11-10T18:33:37.288Z (12:33:37 PM America/Regina)**. Input 383,109; cached input 377,344 included in input; output 3,277; total 386,386; reasoning output 269 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6bb-8719-71d0-b2e8-27637965667b. Two unique payload.usage records summed, deduplicated and cross-checked to cumulative turn evidence by `python -B tools/token_usage.py --prompt-id P085` (exit 0). Response IDs resp_071e9e193857adc1016af36335ce5c87d0a66f74fa1dcb74a3 and resp_071e9e193857adc1016af3633d54f087d0844f829bd7c1acfa. Later continuations/final reply excluded. Final complete total and estimated/billed cost **Unavailable**; live turn unfinished and no verified rates/billing. Protected sessions read-only.
+
+## P084 - November 10, 2026 (verified token backfill and root README subtotal)
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Partial**. Input 694,318; cached input 682,880 (included in input); output 6,740; total 701,058. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-11-10T18:28:04.306Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c6b5-3b10-7070-bc64-c782289e086b. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: Unavailable.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
+Receipt time: 12:25:28 PM (America/Regina; matched session user timestamp 2026-11-10T18:25:28.435Z).
+Recording time: 12:25:36 PM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> Lets do that, and can you check through each prompt and add the credits where verifiable. Also can we add a running total of tokens inside the README.md thats outside the godot folder
+
+Result: authorized token-only historical audit and dated per-prompt annotations, preserving all earlier prompt text and usage/unavailable snapshots. Added root README token subtotal with completed/partial/unavailable coverage and global response deduplication. Credits here means recorded tokens, not subscription/account credits or dollars. Reproducible batch utility and JSON audit retain provenance and exclusion reasons. No AGENTS.md, session source, requirements or gameplay changes. Existing conflict text and unrelated user changes preserved. Next local ID P085.
+
+Associated status.md: S-2026-11-10-09. Audit evidence and current request partial usage are in its dated token annotation; final live-turn total unavailable until later completion review.
+
+## P083 - November 10, 2026 (token checker cost verification)
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 802,270; cached input 795,520 (included in input); output 1,841; total 804,111. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-10T18:19:55.707Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c6af-1092-7c83-a305-971fb0e19e96. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 804111.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
+Receipt time: 12:18:44 PM (America/Regina; matched user timestamp 2026-11-10T18:18:44.316Z).
+Recording time: 12:19:23 PM (America/Regina; inspection clock).
+
+Actual request:
+
+> can you run your python token checker and see if it gets the prompt cost?
+
+Result: ran `python -B tools/token_usage.py --prompt-id P081`, exit 0. Complete recorded turn: 10 responses; input 1,174,518, cached input 1,161,088 (included in input), output 13,045 and total 1,187,563. Model gpt-6.1-sol. Both estimated_cost and billed_cost are Unavailable. Source inspection confirms these values are literal Unavailable fields: no pricing lookup/cost calculation is implemented. No cost inferred or implementation changed. Session evidence read-only. Existing user changes and historical conflicts preserved. P082 was reserved by an earlier branch investigation and is not reused. Next local ID P084.
+
+Associated status.md: S-2026-11-10-08. Current request usage and receipt timestamp checked separately from the P081 result; final current-turn total cannot be available while this request is running.
+
+Current request usage: **Partial as of 2026-11-10T18:19:22.764Z (12:19:22 PM America/Regina)**. Input 475,219; cached input 470,400 included in input; output 1,087; total 476,306; reasoning output 143 separately exposed and included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6af-1092-7c83-a305-971fb0e19e96. Three deduplicated response records summed and cross-checked to turn snapshot by `python -B tools/token_usage.py --prompt-id P083`, exit 0. Later continuations and final reply excluded; final total, estimated cost and actual billing **Unavailable**. No verified applicable rates or billing records.
+
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
 <<<<<<< Updated upstream
@@ -16,7 +127,30 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 
 # November 10, 2026
 
+## P081 - November 10, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,174,518; cached input 1,161,088 (included in input); output 13,045; total 1,187,563. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-11-10T17:05:32.813Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c667-2809-71d1-ad2c-c14478bb9a83. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1187563.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
+Receipt time: 11:00:11 AM (America/Regina; matched user response_item timestamp 2026-11-10T17:00:11.720Z).
+Recording time: 11:00:19 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> let's start doing a implementation of token usage. base it on the new rules we added to AGENTS.md.
+
+Result: implemented repository-local tools/token_usage.py with usage instructions and synthetic tests. Reads protected session JSONL snapshots with no write access, matches actual logged prompt plus project/turn context, deduplicates response usage, separates model totals and cross-checks cumulative snapshots. Produces JSON with provenance, receipt/cutoff timestamps and explicit partial/final coverage. Refuses ambiguous/conflicting evidence and overwriting existing output. Does not auto-edit history, AGENTS.md, README.md, source requirements or gameplay. Existing merge conflicts retained. No broad historical backfill. Next local ID P082; conflicting historical sequence preamble preserved.
+
+Associated [status.md](status.md): S-2026-11-10-06. Current usage snapshot and validation recorded after execution; final live-turn usage remains partial.
+
+Token usage: **Partial as of 2026-11-10T17:03:24.900Z (11:03:24 AM America/Regina)**. Input: 555,309; cached input: 545,664 (included in input); output: 8,363; total: 563,672; separately exposed reasoning output: 1,201 (included in output); cache-write input: 0. Model: gpt-6.1-sol. Source and reproducible response IDs/hash in [usage_P081.json](tools/usage_P081.json). Session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c667-2809-71d1-ad2c-c14478bb9a83. Sum of five unique structured response usages, cross-checked against the turn snapshot. Later continuations/final response excluded; final total **Unavailable** until completion is checked later. Estimated cost and actual billed charges **Unavailable** without verified rates/billing. Protected sessions read-only.
+
+Validation: `python -B -m unittest discover -s tools -p 'test_token_usage.py' -v` passed all 16 tests. `python -B tools/token_usage.py --prompt-id P081 --output tools/usage_P081.json` created the partial evidence report. Real-session CLI checks for P081 and P080 succeeded; P080 reports six responses and 590,095 total tokens for its completed recorded turn, without rewriting that historical entry. CLI rechecked after attribution/resumption hardening. No gameplay tests needed/run. Legacy-only, delegated cross-session and resumed-turn aggregation intentionally remain unsupported rather than guessed; unknown external usage cannot be certified.
+
 ## P080 - November 10, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 586,449; cached input 577,408 (included in input); output 3,646; total 590,095. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-11-10T16:53:18.935Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c65f-697c-70e1-b586-9730b304ce73. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 590095.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: 10:51:44 AM (America/Regina; matched user response_item timestamp 2026-11-10T16:51:44.193Z).
 Recording time: 10:51:51 AM (America/Regina; initial inspection clock).
@@ -35,6 +169,9 @@ Sequence note: P079 records the preceding draft below, P080 is its distinct impl
 
 ## P079 - November 10, 2026 (preceding authorization draft)
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 90,033; cached input 89,856 (included in input); output 258; total 90,291. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-11-10T16:49:25.994Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c65d-2821-7170-ab05-c1f2f97ce7cb. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 90291.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** in this entry; source timestamp not yet matched.
 Recording time: 10:51:51 AM (America/Regina; backfilled during P080 from visible conversation, not the draft's receipt time).
 
@@ -47,6 +184,9 @@ Result: presented five authorization rules in chat only; no files changed in tha
 Token usage, model and complete total: **Unavailable** in this entry because this earlier turn's response IDs/usage have not been reliably matched during the current scoped implementation. Current session accounting above pertains only to P080. Cached-input inclusion and usage-source record association **Unavailable** for P079; estimated cost and actual billed charges **Unavailable** without matched usage/rates. This preserves the evidence gap rather than attributing current-turn totals to the draft.
 
 ## P078 - November 10, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 682,317; cached input 674,432 (included in input); output 4,926; total 687,243. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-10T16:39:32.110Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c652-2579-7550-972c-f3670241b004. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 687243.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: 10:37:14 AM (America/Regina; matched user response_item timestamp 2026-11-10T16:37:14.824Z).
 Recording time: 10:37:20 AM (America/Regina; initial inspection clock).
@@ -62,6 +202,9 @@ Associated [status.md](status.md): S-2026-11-10-03 (current request addendum abo
 Token usage: **Partial as of 2026-11-10T16:38:28.359Z (10:38:28 AM America/Regina)**. Input: 329,881; cached input: 323,712; output: 2,597; total: 332,478; separately recorded reasoning output: 197; cache-write input: 0. Model: gpt-6.1-sol, from matched turn_context. Cached input is included in input, and reasoning output is included in output; neither is added again. Source: ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c652-2579-7550-972c-f3670241b004. Sum of payload.usage from four unique response IDs; matched actual prompt in user response_item and adjacent turn context. Sum equals the latest observed turn_token_usage; no cumulative or token_count records added. Later tool continuations and final response are excluded by cutoff. Final complete total: **Unavailable** until the turn completes and is reviewed later. Estimated cost and actual billed charges: **Unavailable**; applicable verified pricing/billing records were not obtained. All session access read-only.
 
 ## P077 - November 10, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 436,878; cached input 409,216 (included in input); output 5,672; total 442,550. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-10T16:26:15.459Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c645-988e-7402-8905-a1f711f62256. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 442550.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:24:00 AM (America/Regina; recording clock).
@@ -79,6 +222,9 @@ Validation: exact movement unit command/result in security_review.txt; PASS, exi
 Token usage: input, cached input, output, model usage record and usage source **Unavailable**; reliable per-request telemetry covering all calls is not exposed. Cached-input inclusion **Unavailable**. Estimated cost and actual billed charge **Unavailable** because reliable usage and applicable rates are unavailable.
 
 ## P076 - November 10, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 302,925; cached input 270,208 (included in input); output 2,561; total 305,486. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-11-10T16:20:20.576Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c641-4b01-7523-a883-b98182ff5e45. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 305486.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:19:03 AM (America/Regina; recording clock).
@@ -99,6 +245,9 @@ Token usage: **Unavailable** for input, cached input, output, model usage record
 
 ## P074 - November 6, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,176,149; cached input 1,138,816 (included in input); output 9,663; total 1,185,812. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-11-06T17:49:29.278Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1f7-5bd1-7ef2-8c08-3cef302572a2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1185812.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:47:51 AM (America/Regina; UTC clock converted to UTC-06:00).
 
@@ -113,6 +262,9 @@ Validation: Python documentation audit (33 IDs, links, test paths, original sour
 Token usage: **Unavailable** for input, cached input, output and model; reliable per-request usage/model records covering all calls and continuations are not exposed. Whether cached input is included in input totals is unavailable. Usage source: unavailable telemetry. Estimated monetary cost: **Unavailable** because reliable model, rates and usage breakdown are unavailable; no billed charge claimed.
 
 ## P073 - November 6, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,328,307; cached input 1,325,440 (included in input); output 3,528; total 1,331,835. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-11-06T17:41:53.928Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1f2-3000-7222-b29c-72f0099bbdff. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1331835.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:40:35 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -130,6 +282,9 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 Validation: `python -` read both source Word documents; verified 33 IDs, active links, unchanged source hashes/protected docs and status/log revision. Git diff --check/status for boundaries. No gameplay tests needed or run for note/comment removal and proposals; prior runtime results remain historical. No staging/commit/push.
 
 ## P072 - November 6, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,167,374; cached input 2,155,904 (included in input); output 5,170; total 2,172,544. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-06T17:37:18.231Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1ed-9216-7e73-8e09-ebfd6528f4d2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2172544.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:35:10 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -152,6 +307,9 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 `rg -n 'test_room_button|opening_test_room|open_test_room' Godot --glob '*.gd'` returns no matches (exit 1 expected). Existing user-log/certificate-store errors remain without script errors. No graphical/two-device verification. Python checked 33 IDs, source hashes, active links, protected docs preservation and status/log references; Git diff --check/status for boundaries. Protected updates await approval; no staging/commit/push.
 
 ## P071 - November 6, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 4,519,425; cached input 4,501,504 (included in input); output 16,193; total 4,535,618. Model(s): gpt-6.1-sol. 11 unique responses; cutoff 2026-11-06T17:26:43.278Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1dd-f730-78a1-a744-d46f1151c378. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 4535618.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:18:06 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -176,6 +334,9 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 Existing user-log/certificate-store errors remain; final cleanup checks without script errors. No graphical/two-device/high-latency/physical packet-loss acceptance. Python checked sources/checksums, 33 IDs, local links and revision consistency; Git diff --check/status checked boundaries. Protected wording edits remain pending as previously recorded; no staging/commit/push.
 
 ## P070 - November 6, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:08:48 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -210,6 +371,9 @@ Validation: repository root, `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stabl
 
 ## P069 - November 6, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,835,898; cached input 2,815,872 (included in input); output 6,966; total 2,842,864. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-06T16:46:46.209Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1be-1c41-76e2-a03b-4d5963141b55. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2842864.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:43:21 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -235,6 +399,9 @@ Existing user-log/certificate-store errors persist without GDScript errors. No p
 
 ## P068 - November 6, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,340,474; cached input 1,334,400 (included in input); output 4,059; total 1,344,533. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-11-06T16:33:19.152Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1b3-7aae-72d0-9ead-462aacd28d61. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1344533.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:31:43 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -255,6 +422,9 @@ Validation: repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-
 Existing user-log/certificate-store errors remain without script errors. No graphical/physical two-device/abrupt network-loss acceptance. Python checks 33 IDs, links, both source checksums and status/log revision; Git diff --check/status checks boundaries. Existing unrelated changes preserved; no staging/commit/push.
 
 ## P067 - November 6, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:26:23 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -285,6 +455,9 @@ Existing user-log/certificate-store errors remain without script errors. No grap
 
 ## P066 - November 6, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,470,806; cached input 2,160,256 (included in input); output 5,955; total 2,476,761. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-06T16:23:19.315Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1a8-8c68-70d2-af9a-e7b1b58f195b. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2476761.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:20:11 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -313,6 +486,9 @@ Existing user-log/certificate-store errors remain without script errors. No grap
 
 ## P065 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,734,148; cached input 1,718,528 (included in input); output 4,463; total 1,738,611. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-11-03T18:41:04.446Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2b5-70e2-7ad3-9f63-a43bba50779a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1738611.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:39:35 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -329,6 +505,9 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 Validation: `python -` read both Word sources, checked all 20 original plus 13 supplemental requirement IDs, source hashes, local links, revision references and two-file review boundary. Git diff --check for whitespace. No runtime tests repeated; P063-P064 process results remain prior evidence. Physical/visual/abrupt-loss acceptance outstanding. Source/protected docs/code and user working changes preserved; no staging/commit/push.
 
 ## P064 - November 3, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,152,123; cached input 2,142,208 (included in input); output 9,279; total 2,161,402. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-03T18:35:44.721Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2af-153b-7261-938c-2f170036a25f. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2161402.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:32:32 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -353,6 +532,9 @@ Existing user-log/certificate errors remain, no script errors. Full-screen class
 
 ## P063 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,772,106; cached input 1,765,504 (included in input); output 7,842; total 1,779,948. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-03T18:24:51.485Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2a5-8813-7ea3-9f5b-6a0f2871c458. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1779948.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:22:06 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -375,6 +557,9 @@ Validation: repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-
 Existing user-log/certificate-store errors remain without script errors. No graphical/two-device/abrupt process or cable-loss acceptance. Python checks 33 IDs, local links, both source checksums and status/log revision; Git diff --check/status checks boundaries. Protected docs unchanged pending operational wording approval; no staging/commit/push.
 
 ## P062 - November 3, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:20:01 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -404,6 +589,9 @@ Existing user-log/certificate-store errors remain; no script errors. No graphica
 
 ## P061 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,780,242; cached input 1,762,944 (included in input); output 8,441; total 1,788,683. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-03T18:16:27.311Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a29e-1256-7683-b74b-ad7adbff6539. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1788683.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:13:55 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -426,6 +614,9 @@ Existing user-log/certificate-store errors remain without script errors. No visu
 
 ## P060 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 614,535; cached input 611,840 (included in input); output 3,421; total 617,956. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-11-03T18:11:17.517Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a29a-be3e-7431-82f8-b0dd2ce5c42a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 617956.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:10:25 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -443,6 +634,9 @@ Validation: `python -` read both Word sources and verified 33 original/supplemen
 
 ## P059 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 966,107; cached input 947,584 (included in input); output 3,855; total 969,962. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-03T18:07:56.896Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a297-6fd2-7f40-9d86-089b13c75ee2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 969962.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:06:48 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -459,6 +653,9 @@ Token usage (input, cached input, output), model usage record, cache inclusion a
 Validation: `python -` read Word document XML; checked original 20 plus supplemental 13 requirement IDs, local links, source checksums, status/log revision and two-file task boundary. Git diff --check and status used for whitespace/boundaries. No gameplay tests repeated for documentation audit; earlier process checks remain historical. AGENTS/both READMEs/source docs/code untouched; no staging/commit/push.
 
 ## P058 - November 3, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,735,740; cached input 1,543,552 (included in input); output 7,406; total 1,743,146. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-11-03T18:02:18.495Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a290-978f-7613-b4f2-877121e39598. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1743146.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:59:25 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -480,6 +677,9 @@ Validation: from repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.
 Existing user-log/certificate errors persist; final runs without script errors. No visual/two-device acceptance. Python verifies 33 IDs, local links, original/Word source checksums and log/status revision; Git diff --check/status verifies boundaries. Protected documentation wording approval remains outstanding; no staging/commit/push.
 
 ## P057 - November 3, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,924,430; cached input 1,897,344 (included in input); output 8,064; total 1,932,494. Model(s): gpt-6.1-sol. 13 unique responses; cutoff 2026-11-03T17:49:18.606Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a284-b61c-7cb3-b498-9028b7e37260. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1932494.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (chat metadata does not provide it).
 Recording time: 11:46:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -503,6 +703,9 @@ Initial new fixture omitted seen timestamp and assumed offline peer instead of n
 
 ## P056 - November 3, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,262,209; cached input 1,241,856 (included in input); output 11,353; total 1,273,562. Model(s): gpt-6.1-sol. 11 unique responses; cutoff 2026-11-03T17:37:36.757Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a279-605d-7ea1-a4d2-3d143506659c. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1273562.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:34:09 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -525,6 +728,9 @@ Validation: from repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.
 Existing user-log/certificate errors remain without script errors. No visual/physical two-device/packet-loss/high-latency acceptance. Python checked 20 original plus 13 supplemental IDs, local links, source checksums/protected docs preservation and log/status revision; Git diff --check/status checked boundaries. Protected docs still need approved wording updates; no staging/commit/push.
 
 ## P055 - November 3, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 633,254; cached input 618,368 (included in input); output 4,435; total 637,689. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-03T17:28:00.334Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a272-6f82-70f3-8e7b-89c9cb0a4d3c. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 637689.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (chat metadata does not provide it).
 Recording time: 11:26:44 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -552,6 +758,9 @@ Runtime reports prior user-log/certificate-store errors, no script errors. Pytho
 
 ## P048 - October 30, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:09:43 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -575,6 +784,9 @@ Validation: PowerShell filename/source inspection and local view_image read the 
 
 ## P047 - October 30, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,616,046; cached input 1,612,288 (included in input); output 4,198; total 1,620,244. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-30T16:29:52.013Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18da4-16bc-7c93-85aa-aaafe8012602. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1620244.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:28:28 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -592,6 +804,9 @@ Validation: `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' -
 
 ## P046 - October 30, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,967,278; cached input 1,956,992 (included in input); output 8,371; total 1,975,649. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-30T16:24:11.939Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18d9d-562e-7723-bd58-18c33674cfc9. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1975649.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 10:21:08 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -608,6 +823,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd`, then the same command with `-- escape`. Both printed PASS and exited 0. Checked actual key input, straight/diagonal motion, cancelling opposite directions, WASD/arrows, top/left and bottom/right bounds, resize containment, duplicate leave and actual scene transition to lobby with null session. Engine reported existing user-log and certificate-store errors without GDScript errors. No graphical review, two-device, Host integration, movement synchronization or existing lobby regression reruns; this scene is isolated from Host. Python via `python -` checked all 20 requirement IDs, local links, historical log preservation, P046/next P047, source/audit checksums and six-file task boundary; bundled git diff --check passed. Source requirements, protected root docs, project.godot, lobby code and pre-existing files preserved.
 
 ## P045 - October 30, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,521,030; cached input 1,152,512 (included in input); output 2,161; total 1,523,191. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-30T15:51:34.840Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18d81-5fff-7761-a73f-e063a05895c1. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1523191.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 09:50:53 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -630,6 +848,9 @@ Validation: rg filename/reference searches and source/requirements review; Pytho
 
 ## P043 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,020,058; cached input 1,014,656 (included in input); output 2,725; total 1,022,783. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T18:26:11.537Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e9c-1466-7d62-9011-62889c020952. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1022783.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:25:28 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -646,6 +867,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 Validation: Python via PowerShell `python -` checked the general scope wording, all 20 requirement IDs, local links, continuing local IDs and imported-ID preservation, existing-entry history and date/time placement, status/log references, unchanged source DOCX/merge-audit checksums and three-file boundary. Bundled `git diff --check` passed. No gameplay tests needed or run; prior runtime evidence was not rerun. Visual/two-device checks and main-screen routing remain outstanding; no new approval items.
 
 ## P042 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 12:10:18 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -669,6 +893,9 @@ Validation: fetched origin using bundled Git after sandbox FETCH_HEAD access fai
 
 ## P041 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 856,907; cached input 849,152 (included in input); output 1,980; total 858,887. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T17:57:18.282Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e81-e556-7b13-81f8-0419a398a186. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 858887.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:56:50 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -687,6 +914,9 @@ Validation: Python via PowerShell `python -` checked the exact single-sentence r
 Merge provenance: `P041`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P039 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,104,500; cached input 1,095,936 (included in input); output 2,645; total 1,107,145. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-27T17:55:23.792Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e7f-bb63-7680-abf6-cc0cba853817. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1107145.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:54:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -707,6 +937,9 @@ Merge provenance: `P039`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P038 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 801,009; cached input 796,800 (included in input); output 1,908; total 802,917. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T17:53:17.462Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e7e-1381-7271-a959-a34d7122f447. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 802917.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:52:45 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -725,6 +958,9 @@ Validation: `rg -n` and PowerShell source reads confirmed actual port lookup, ho
 Merge provenance: `P038`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P037 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 3,056,819; cached input 3,036,544 (included in input); output 10,584; total 3,067,403. Model(s): gpt-6.1-sol. 12 unique responses; cutoff 2026-10-27T17:49:20.585Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e75-f5c6-7911-af7d-f85c948f71e7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 3067403.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:44:31 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -745,6 +981,9 @@ Merge provenance: `P037`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P036 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,157,823; cached input 1,148,672 (included in input); output 2,638; total 1,160,461. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-27T17:36:42.780Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e6e-cddf-7d52-83c8-1adc0ed2bf89. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1160461.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:35:58 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -763,6 +1002,9 @@ Validation: Python via PowerShell `python -` checked all 20 IDs, local links, st
 Merge provenance: `P036`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P034 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,158,295; cached input 2,138,240 (included in input); output 7,383; total 2,165,678. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-10-27T17:27:28.123Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e64-2db6-7650-b657-1ce650158020. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2165678.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:24:22 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
@@ -783,6 +1025,9 @@ Merge provenance: `P034`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P032 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,523,157; cached input 1,502,592 (included in input); output 5,524; total 1,528,681. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-10-27T17:18:19.777Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e5c-f58d-70a1-906f-5a630c9d7fce. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1528681.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:16:29 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -802,6 +1047,9 @@ Merge provenance: `P032`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P031 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 846,516; cached input 838,656 (included in input); output 3,419; total 849,935. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-27T17:10:59.918Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e57-0496-7612-9d7b-743aef2a2922. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 849935.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:09:59 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
 
@@ -820,6 +1068,9 @@ Validation: Python via PowerShell `python -` checked all 20 requirement IDs, loc
 Merge provenance: `P031`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P029 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:02:20 AM (America/Regina; UTC clock converted to UTC-06:00 during inspection).
@@ -867,6 +1118,9 @@ Merge provenance: `P029`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P040 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 279,987; cached input 279,808 (included in input); output 93; total 280,080. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:56:20.836Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e81-7752-72a0-ada7-2e1c6977d8f7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 280080.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P041.
 
 Actual request:
@@ -882,6 +1136,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 Merge provenance: `P040`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P035 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 223,990; cached input 223,744 (included in input); output 170; total 224,160. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:35:27.440Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e6e-4bd6-7353-81be-5d5a9257e5d3. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 224160.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P036.
 
@@ -899,6 +1156,9 @@ Merge provenance: `P035`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P033 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 198,121; cached input 197,888 (included in input); output 62; total 198,183. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:23:33.289Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e63-69eb-7d92-acc8-14016c9468d5. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 198183.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P034.
 
 Actual request:
@@ -914,6 +1174,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 Merge provenance: `P033`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P030 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 162,550; cached input 162,176 (included in input); output 257; total 162,807. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:07:46.153Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e54-e82d-7bd1-9d8c-49396f441401. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 162807.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Time: **Unavailable** (historical timestamp not captured). Timezone: America/Regina. Backfilled during P031.
 
@@ -931,6 +1194,9 @@ Merge provenance: `P030`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P028 - October 27, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 248,557; cached input 247,808 (included in input); output 268; total 248,825. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-27T16:13:32.557Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e23-3dbc-72a0-96d5-36bf091e8d89. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 248825.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not recorded). Timezone: America/Regina. Backfilled from visible conversation during P029.
 
 Actual request:
@@ -946,6 +1212,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 Merge provenance: `P028`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P027 - October 27, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 246,848; cached input 135,424 (included in input); output 269; total 247,117. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-27T16:13:06.548Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e22-9b00-77e2-a03a-f52ecacdfdb2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 247117.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Time: **Unavailable** (historical timestamp not recorded). Timezone: America/Regina. Backfilled from visible conversation during P029.
 
@@ -966,6 +1235,9 @@ Merge provenance: `P027`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 **Time unavailable — date known; exact time/order across branches unknown**
 
 ## MAIN-P021 - October 26, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P021`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -990,6 +1262,9 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 Merge provenance: `MAIN-P021`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
 ## MAIN-P020 - October 26, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P020`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -1019,6 +1294,9 @@ Merge provenance: `MAIN-P020`; recorded in `refs/heads/main`, `refs/remotes/orig
 
 ## MAIN-P019 - October 26, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P019`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1043,6 +1321,9 @@ Merge provenance: `MAIN-P019`; recorded in `refs/heads/main`, `refs/remotes/orig
 
 ## MAIN-P018 - October 26, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P018`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1061,6 +1342,9 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 Merge provenance: `MAIN-P018`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
 ## MAIN-P017 - October 26, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P017`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -1087,6 +1371,9 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 Merge provenance: `MAIN-P017`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
 ## MAIN-P016 - October 26, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P016`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -1118,6 +1405,9 @@ Merge provenance: `MAIN-P016`; recorded in `refs/heads/main`, `refs/remotes/orig
 
 ## MAIN-P015-1 - October 26, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P015`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1144,6 +1434,9 @@ Merge provenance: `MAIN-P015-1`; recorded in `refs/heads/main`, `refs/remotes/or
 
 ## MAIN-P015-2 - October 26, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P015`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1165,6 +1458,9 @@ Validation: Godot 4.7.2 headless check passed exact exit text, hidden lobby, dup
 Merge provenance: `MAIN-P015-2`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
 ## MAIN-P014 - October 26, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P014`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -1292,6 +1588,9 @@ Validation: Godot 4.7.2 separate host/client processes passed a real connection 
 
 ## P026 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 812,207; cached input 801,408 (included in input); output 2,985; total 815,192. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-10-23T17:57:21.231Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e7-a95a-79c0-a63c-bd11b282e3e2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 815192.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:55:59 AM (America/Regina; task inspection UTC clock converted to UTC-06:00).
 
@@ -1311,6 +1610,9 @@ Merge provenance: `P026`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P025 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 613,877; cached input 590,336 (included in input); output 4,631; total 618,508. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:55:09.553Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e5-837d-7332-9c58-d8b07fb064d3. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 618508.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Receipt time: **Unavailable** (not supplied by chat metadata).
 Recording time: 11:53:37 AM (America/Regina; task inspection UTC clock converted to UTC-06:00).
 
@@ -1329,6 +1631,9 @@ Validation: attempted `godot --headless --path Godot --script res://tests/alpha_
 Merge provenance: `P025`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P020 - October 23, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 261,467; cached input 248,832 (included in input); output 1,955; total 263,422. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-23T17:26:56.702Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169cc-771e-7131-a64a-019f81fd3a8a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 263422.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Receipt time: **Unavailable** (not provided by chat metadata).
 Recording time: 11:26:26 AM (America/Regina; current UTC clock converted to UTC-06:00).
@@ -1351,6 +1656,9 @@ Merge provenance: `P020`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 ## P024 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 347,506; cached input 346,112 (included in input); output 232; total 347,738. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:51:30.414Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e3-5bbc-7700-a1df-53ac75b8971e. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 347738.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
 
 Actual request:
@@ -1366,6 +1674,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 Merge provenance: `P024`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P023 - October 23, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 86,396; cached input 86,144 (included in input); output 176; total 86,572. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:48:27.490Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e0-8e65-7e61-9bda-01edbbe54a94. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 86572.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
 
@@ -1383,6 +1694,9 @@ Merge provenance: `P023`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P022 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 485,210; cached input 466,816 (included in input); output 3,482; total 488,692. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:41:43.470Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169d9-9825-7ea3-93d2-523787d72b2f. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 488692.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
 
 Actual request:
@@ -1399,6 +1713,9 @@ Merge provenance: `P022`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 ## P021 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 452,993; cached input 439,296 (included in input); output 2,965; total 455,958. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-10-23T17:35:00.957Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169d3-67ad-7c20-b2cb-c5835da19327. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 455958.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Time: **Unavailable** (historical timestamp not recorded in this checkout). Timezone: America/Regina. Backfilled from visible conversation during P025.
 
 Actual request:
@@ -1414,6 +1731,9 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 Merge provenance: `P021`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P019 - October 23, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 44,694; cached input 44,288 (included in input); output 135; total 44,829. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:25:34.562Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169cb-daec-7ef0-9203-4fe7b74f7772. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 44829.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Time: **Unavailable** (historical receipt/recording time was not captured).
 Timezone: America/Regina.
@@ -1432,6 +1752,9 @@ Merge provenance: `P019`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 ## P018 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 245,749; cached input 231,808 (included in input); output 2,710; total 248,459. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:22:37.016Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c8-419e-77a3-96c0-ca71b9599840. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 248459.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > The suggestion is approved, also suggest what we should update to make the prompt log include a time in the format hh/mm/ss (Hour/Minute/Seconds)
@@ -1448,6 +1771,9 @@ Merge provenance: `P018`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 ## P017 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 31,535; cached input 31,232 (included in input); output 236; total 31,771. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:17:29.600Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c4-6a00-7582-b135-3eac0edce4e8. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 31771.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > how would you add this to AGENTS.md?
@@ -1461,6 +1787,9 @@ Token usage: **Unavailable** (input, cached input, output, and cache-inclusion b
 Merge provenance: `P017`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P016 - October 23, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 103,474; cached input 92,672 (included in input); output 333; total 103,807. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:15:15.665Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c2-3f25-7a93-a38b-c479216e82a1. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 103807.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Actual request:
 
@@ -1476,6 +1805,9 @@ Merge provenance: `P016`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 ## P015 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 39,070; cached input 17,536 (included in input); output 461; total 39,531. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-23T17:05:42.964Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169b9-82ba-7f71-801c-0d7f80d4837a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 39531.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Read the AGENTS.md and README.md. Explain what you understand
@@ -1490,6 +1822,9 @@ Merge provenance: `P015`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 ## P014 - October 23, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 161,750; cached input 122,624 (included in input); output 2,468; total 164,218. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:00:26.423Z. Session 01a15a51-b1d6-73c2-b33e-f08badc7180d; turn 01a169b3-d8cd-7992-a1b9-cd3eb5dc656e. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 164218.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Implement S01, S05, S07, and S09 into the AGETNS.md file within COMP214
@@ -1503,6 +1838,9 @@ Validation: PowerShell invoked a Python documentation check through `python -`; 
 Merge provenance: `P014`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## MAIN-P013 - October 23, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P013`. Source: [refs/heads/main](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/99fe2479f4ed0eaa717139f56e3c775d5db6cf6e/status.md).
 
@@ -1521,6 +1859,9 @@ Merge provenance: `MAIN-P013`; recorded in `refs/heads/Allen`, `refs/heads/main`
 **Time unavailable — date known; exact time/order across branches unknown**
 
 ## P013 - October 20, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 151,259; cached input 125,184 (included in input); output 4,145; total 155,404. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-20T17:19:30.820Z. Session 01a15a51-b1d6-73c2-b33e-f08badc7180d; turn 01a15a51-b4a9-7af2-a319-8fe4ee8086ef. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 155404.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Actual request:
 
@@ -1560,6 +1901,9 @@ Validation: checked all 20 requirement IDs, local documentation links, prompt/st
 
 ## P012 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Look at the COMP214 and read README.md and AGENTS.md. Do not change the README.md and AGENTS.md. Update the prompt_log.md, and do not delete anything inside the prompt_log.md.
@@ -1576,6 +1920,9 @@ Merge provenance: `P012`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 ## P011 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Reorder the prompts on the prompt_log to be in descending order of the prompt number.
@@ -1589,6 +1936,9 @@ Validation: verified unique IDs in descending order, preservation of existing en
 Merge provenance: `P011`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P010 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Actual request:
 
@@ -1604,6 +1954,9 @@ Merge provenance: `P010`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 ## P009 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Can you update the lobby to use the same layout as the LobbyImage.jpeg in the MoozeTanks folder?
@@ -1618,6 +1971,9 @@ Merge provenance: `P009`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 ## P008 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual request:
 
 > Describe the functionality of the hosting, and how each device on the network can connect to the game to see the available games when the host button is clicked. Also remember to update the prompt_log whenever there is a prompt.
@@ -1629,6 +1985,9 @@ Associated status.md: [status.md](status.md), snapshot S-2026-10-19-02 inspected
 Merge provenance: `P008`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P007 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Actual implementation request (including the supplied plan):
 
@@ -1675,6 +2034,9 @@ Merge provenance: `P007`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 ## P006 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Actual planning request:
 
 > With the hosting functionality with the lobby. Enable the host game to be available on any devices on the game and ensure that the game is on the same server. Make sure to update the promt_log whenever there is a new prompt.
@@ -1692,6 +2054,9 @@ Merge provenance: `P006`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 ## P005 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Prompt:
 
 > Enable the lobby to work on two separate laptops on the same network.
@@ -1707,6 +2072,11 @@ Dates use America/Regina. IDs are assigned in conversation order. Historical ent
 Merge provenance: `P005`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P004 - October 19, 2026
+
+Targeted review (November 10, 2026, P088): **Unavailable remains correct for the available evidence**. Original wording matches malik-other-branch ancestor e23eeb7. User-authorized targeted search of nine protected session files found no exact/normalized prompt, exact "Leave the hosted session" reply or tested distinctive-phrase candidate among user records. No tokens assigned and no totals changed. This does not prove the original session never existed or that no differently worded record could exist. Search criteria, source snapshot hashes and limitations: [P088 targeted evidence](reports/P004_targeted_review.json). Prior audit/README/graph preserved.
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Prompt:
 
@@ -1729,6 +2099,9 @@ Validation: Godot 4.7.2 import and actual host/observer headless process tests p
 Merge provenance: `P004`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## TESTBRANCH1-P014 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,498,704; cached input 1,476,736 (included in input); output 9,960; total 1,508,664. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-19T19:21:24.784Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15599-29bd-7b20-9758-3b7c538866c2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1508664.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P014`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
@@ -1774,6 +2147,9 @@ Validation: Godot 4.7.2 check-only parsed the manual helper without script error
 
 ## TESTBRANCH1-P013 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,169,523; cached input 1,163,648 (included in input); output 2,944; total 1,172,467. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-19T19:16:25.628Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15596-b1aa-76d1-872e-1cedb5ae59ba. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1172467.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P013`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1791,6 +2167,9 @@ Validation: remote password update and exact-value verification passed. Checked 
 Merge provenance: `TESTBRANCH1-P013`; recorded in `refs/heads/TestBranch1`. See audit for commit/blob IDs.
 
 ## TESTBRANCH1-P011 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 19,020,762; cached input 18,862,208 (included in input); output 63,707; total 19,084,469. Model(s): gpt-6.1-sol. 116 unique responses; cutoff 2026-10-19T18:27:00.892Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a1553f-d147-7bd3-950d-70c6582191f7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 19084469.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P011`. Source: [refs/remotes/origin/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/833019b6651468af06bc6499272b5b6f9c29e841/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/833019b6651468af06bc6499272b5b6f9c29e841/status.md).
 
@@ -1839,6 +2218,9 @@ Associated status.md: none existed at that time; requirement tracking was introd
 
 ## TESTBRANCH1-P010 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,245,452; cached input 2,208,000 (included in input); output 8,330; total 2,253,782. Model(s): gpt-6.1-sol. 28 unique responses; cutoff 2026-10-19T17:38:51.620Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15534-79b9-7c10-b308-f2cb4540dd55. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2253782.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P010`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1857,6 +2239,9 @@ Merge provenance: `TESTBRANCH1-P010`; recorded in `refs/heads/TestBranch1`, `ref
 
 ## TESTBRANCH1-P009 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 338,789; cached input 336,512 (included in input); output 608; total 339,397. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-19T17:26:50.004Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15532-6e3d-7520-aec1-55d2d8931772. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 339397.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P009`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1872,6 +2257,9 @@ Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking
 Merge provenance: `TESTBRANCH1-P009`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
 ## TESTBRANCH1-P008 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 424,427; cached input 409,984 (included in input); output 4,743; total 429,170. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-10-19T17:18:09.482Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15529-bf3b-71b3-bb88-a93265c4a89d. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 429170.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P008`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
@@ -1891,6 +2279,9 @@ Merge provenance: `TESTBRANCH1-P008`; recorded in `refs/heads/TestBranch1`, `ref
 
 ## TESTBRANCH1-P007 - October 19, 2026
 
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 38,550; cached input 38,144 (included in input); output 108; total 38,658. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-19T17:15:00.660Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15528-bc15-7760-990a-0f7fd73ab483. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 38658.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Original prompt ID: `P007`. Source: [refs/heads/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/9a0c3909bf9a4e6390b02d04a1625c13c241108c/status.md).
 
 **Historical import:** results and status revisions below belong to that source snapshot and do not establish this branch's current behavior. Narrative source links resolve to the source commit. Original text is preserved in the audit.
@@ -1906,6 +2297,9 @@ Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking
 Merge provenance: `TESTBRANCH1-P007`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
 ## TESTBRANCH1-P006 - October 19, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Original prompt ID: `P006`. Source: [refs/remotes/origin/TestBranch1](https://github.com/Kirbzo/Tank-Game-Networking/blob/833019b6651468af06bc6499272b5b6f9c29e841/prompt_log.md). Source status snapshot: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/833019b6651468af06bc6499272b5b6f9c29e841/status.md).
 
@@ -1969,6 +2363,11 @@ Validation: Godot 4.7.2 imported without script errors. Actual lobby host/observ
 
 ## P003 - October 16, 2026
 
+Targeted verification (November 10, 2026, P087): recovered **465,915 tokens** from the completed recorded turn: input 463,440; cached input 456,448 included in input; output 2,475; reasoning output 44 included in output; cache-write input 0. Receipt date October 16, 2026; time 12:01:12 PM America/Regina. Model gpt-6.1-sol; six unique responses; cumulative cross-check passed. Exact prompt text, project-folder tool evidence and status revision S-2026-10-16-02 match commit 402545c in malik-other-branch ancestry. Historical session cwd is the parent workspace; its active Git branch is not recorded. This manually corroborated attribution supersedes the earlier unavailable conclusion for this prompt while preserving that historical snapshot. Source path/hash, session/turn IDs, response IDs and completion/cutoff timestamps: [P087 targeted evidence](reports/P002_P003_targeted_review.json). Dollar costs not calculated; original README/graph/P084 audit unchanged.
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
 Prompt:
 
 > update any places that spesifies a filepath on my local machine and change it to make it possible on any machine
@@ -1982,6 +2381,11 @@ Validation: scanned project files (excluding Git metadata) for machine-specific 
 Merge provenance: `P003`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
 ## P002 ? October 16, 2026
+
+Targeted verification (November 10, 2026, P087): recovered **342,093 tokens** from the completed recorded turn: input 337,844; cached input 270,592 included in input; output 4,249; reasoning output 23 included in output; cache-write input 0. Receipt date October 16, 2026; time 11:46:21 AM America/Regina. Model gpt-6.1-sol; five unique responses; cumulative cross-check passed. Original prompt in branch ancestor 14375de contains Downloads-path wording removed by branch ancestor 402545c; targeted session matches the original text, project-folder tool evidence and status revision S-2026-10-16-01. Historical session cwd is the parent workspace; its active Git branch is not recorded. This manually corroborated attribution supersedes the earlier unavailable conclusion for this prompt while preserving that historical snapshot. Source path/hash, session/turn IDs, response IDs and completion/cutoff timestamps: [P087 targeted evidence](reports/P002_P003_targeted_review.json). Dollar costs not calculated; original README/graph/P084 audit unchanged.
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Prompt:
 
@@ -2000,6 +2404,9 @@ Merge provenance: `P002`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 **Time unavailable — date known; exact time/order across branches unknown**
 
 ## P001 ? October 13, 2026
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
 
 Prompt:
 

@@ -1,0 +1,88 @@
+{
+  "review_id": "P088",
+  "prompt_id": "P004",
+  "recorded_at_utc": "2026-11-10T19:08:53.142198+00:00",
+  "status": "Unavailable",
+  "reason": "No matching original or normalized user prompt, exact clarification or tested distinctive phrase candidate found in available session records.",
+  "branch_scope": "Only malik-other-branch and its reachable history; no other Git branch reviewed",
+  "session_scope": "User approved targeted P004 search across available protected session files; inspected no unrelated prompt text in outputs.",
+  "branch_commit": "e23eeb7f70ee01cbe60074a77f880800a0edde78",
+  "commit_log_encoding": "cp1252",
+  "original_prompt_sha256": "5dbaa74d7de87c296781066b6412b4021be3832cfa049fa386cc6409210062ea",
+  "current_prompt_matches_original_commit": true,
+  "searches": [
+    "Exact original user prompt",
+    "Case/punctuation/whitespace normalized prompt",
+    "Exact normalized Leave the hosted session clarification",
+    "follow the alpha requirements phrase",
+    "create the lobby together with godot"
+  ],
+  "sources": [
+    {
+      "path": "~/.codex/sessions/2026/10/02/rollout-2026-10-02T08-56-17-01a0fd1d-b54c-7831-b9e1-bc3fb0706911.jsonl",
+      "sha256_at_read": "7df1f6d2efcdb6b931be3407986a86c6d26297a47cfc0976ef0f4ac216d8c577",
+      "parse_issues": [],
+      "user_records_searched": 11
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/02/rollout-2026-10-02T09-20-05-01a0fd33-7f3b-7862-bc22-cb975b9e85dc.jsonl",
+      "sha256_at_read": "1f95c40deb96c743d78588857630313d843af835d762e2fd241fcb6b21512846",
+      "parse_issues": [],
+      "user_records_searched": 4
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/02/rollout-2026-10-02T10-14-01-01a0fd64-e00b-7340-8e33-0d3dc52b6caf.jsonl",
+      "sha256_at_read": "fdb10d7bdb3aed16d06715b91cfd66bb526276e9955d6ee24721c8434c084dbb",
+      "parse_issues": [],
+      "user_records_searched": 10
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/13/rollout-2026-10-13T11-35-20-01a13655-44c7-7e90-8a2c-aee298316197.jsonl",
+      "sha256_at_read": "43a108300493575cdd48679944f3a75c8eb3136e16aa848528661f5520450b01",
+      "parse_issues": [],
+      "user_records_searched": 7
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/19/rollout-2026-10-19T11-05-04-01a1551f-b818-7b43-a773-c4155f57cff3.jsonl",
+      "sha256_at_read": "32e54a22387c2dbb46f466ff0a75fa247f63040662b06e1045b35c881105ef24",
+      "parse_issues": [],
+      "user_records_searched": 15
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/19/rollout-2026-10-19T12-35-00-01a15572-0f12-7de0-900d-fea0a2929098.jsonl",
+      "sha256_at_read": "ccb71d18eab5d2661286ed32b685ea92e375ebc6c4bea847d9ab2555dcc45bbd",
+      "parse_issues": [],
+      "user_records_searched": 3
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/20/rollout-2026-10-20T11-17-45-01a15a51-b1d6-73c2-b33e-f08badc7180d.jsonl",
+      "sha256_at_read": "ccc8a1d45c8e0c77fc12a1ae11023101976af13d681c14e96f42528b8b8197a0",
+      "parse_issues": [],
+      "user_records_searched": 7
+    },
+    {
+      "path": "~/.codex/sessions/2026/10/23/rollout-2026-10-23T11-04-00-01a169b8-2ebb-79e2-8957-bbebad22347a.jsonl",
+      "sha256_at_read": "35ee3283ac10d114911e73a74c086fb08d7e0f9e0058b2b0470f4ce342ec3af7",
+      "parse_issues": [],
+      "user_records_searched": 87
+    },
+    {
+      "path": "~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl",
+      "sha256_at_read": "aa31cdd55d5582ee966d2952ce8cc900e63130d81f0b0db4138fb7c75139f453",
+      "parse_issues": [],
+      "user_records_searched": 37
+    }
+  ],
+  "matching_user_records": [],
+  "input_tokens": "Unavailable",
+  "cached_input_tokens": "Unavailable",
+  "output_tokens": "Unavailable",
+  "total_tokens": "Unavailable",
+  "cost": "Unavailable",
+  "limitations": [
+    "Commit history proves the recorded implementation, not model usage.",
+    "This result does not prove the original session never existed; it may be unavailable locally or differ beyond tested search patterns.",
+    "No full transcript/publication, source modification, branch switching or inference from commit timing.",
+    "README, graph, old audit and generic checker remain unchanged."
+  ]
+}

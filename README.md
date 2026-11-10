@@ -101,3 +101,34 @@ Godot 4.7.2 same-computer tests recorded on October 27 passed for joining by sel
 - [status.md](status.md): completion status and evidence for AR1-AR5, FR1-FR15, LR1-LR5 and GR1-GR8.
 - [prompt_log.md](prompt_log.md): prompt IDs, prompts, dates, and status results.
 - [documentation_rationale.txt](documentation_rationale.txt): historical rationale for the October 13 documentation task; it describes the earlier PDF and is not the current requirements baseline.
+
+<!-- TOKEN-USAGE-SNAPSHOT:START -->
+## Recorded token usage
+
+Running verified subtotal: **82,375,613 tokens** across 63 completed prompt records, as of November 10, 2026, 12:28:08 PM (America/Regina).
+
+| Token category | Verified completed usage |
+| --- | ---: |
+| Input | 82,051,602 |
+| Cached input (included in input) | 80,189,056 |
+| Output | 324,011 |
+| Total (input + output) | 82,375,613 |
+
+An additional **701,058 observed tokens** belong to 1 partial prompt records and are excluded from the verified subtotal. **29 prompt records remain unavailable**; missing usage is not zero. All 93 logged prompt records were checked. Shared responses are counted once across prompt IDs; cached input and reasoning tokens are not added twice. This covers matched recorded calls, not all historical or unlogged project usage. No dollar costs or account credits are inferred from tokens.
+
+See the [per-prompt audit](tools/token_usage_audit_P084.json) and [prompt log](prompt_log.md) for evidence and exclusions. This is a dated snapshot, not an automatically updating counter. Refresh it with the authorized audit workflow after later prompts complete.
+<!-- TOKEN-USAGE-SNAPSHOT:END -->
+
+### Why some token usage is excluded or missing
+
+The subtotal above is a dated evidence snapshot, not the project's lifetime usage. Tokens can be excluded when:
+
+- The original session records are missing, inaccessible or incomplete. Git commits and changed files do not establish how many tokens were used.
+- Logged prompt wording was edited, paths were normalized, or a session used a different workspace. These can prevent an exact match; a targeted review may recover usage when other evidence corroborates the task.
+- A turn contains later user messages, or work was interrupted, resumed or delegated. The current checker may be unable to separate each prompt's usage or establish complete coverage.
+- A request was still running at the audit cutoff. Its observed usage is partial, and later tool calls, checks and the final response are not yet included.
+- A prompt was not logged, was outside the reviewed scope, or occurred after this snapshot. Later recoveries are not automatically added to an older subtotal.
+
+Unavailable usage is **unknown, not zero**. Partial usage is kept separate from the verified completed subtotal. Cached input is already included in input, and repeated response records are counted only once. Missing receipt times alone do not prevent verification when other identifying evidence is sufficient.
+
+For example, [the targeted P002/P003 review](reports/P002_P003_targeted_review.json) recovered recorded usage after the P084 snapshot; those tokens are not included in the subtotal above. [P004's targeted search](reports/P004_targeted_review.json) found no matching user records in the available sessions, so its usage remains unavailable. Consult the dated prompt-log annotations and evidence reports for the current findings.
