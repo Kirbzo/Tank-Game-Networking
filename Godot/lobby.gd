@@ -100,7 +100,7 @@ func _ready() -> void:
 	add_child(discovery)
 	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
 	multiplayer.connected_to_server.connect(join_connected)
-	multiplayer.connection_failed.connect(join_failed)
+	multiplayer.connection_failed.connect(join_attempt_failed)
 	multiplayer.server_disconnected.connect(join_server_disconnected)
 	multiplayer.peer_connected.connect(session_peers_changed)
 	multiplayer.peer_disconnected.connect(session_peers_changed)
@@ -367,18 +367,53 @@ func start_join() -> void:
 	await get_tree().create_timer(JOIN_DELAY_SECONDS).timeout
 	if not joining or attempt != join_attempt or not is_inside_tree():
 		return
+<<<<<<< HEAD
+	connect_join_target()
+
+func connect_join_target() -> void:
+=======
 	# Capacity/endpoint can change during the delay, before we have a peer.
 	if discovery.games.has(join_target["id"]):
 		join_target = discovery.games[join_target["id"]].duplicate()
 	if room_is_full():
 		show_room_full()
 		return
+>>>>>>> main
 	session = ENetMultiplayerPeer.new()
 	var result := session.create_client(join_target["address"], int(join_target["port"]))
 	if result != OK:
 		join_failed()
 		return
 	multiplayer.multiplayer_peer = session
+
+func join_attempt_failed() -> void:
+	if not joining:
+		return
+	var attempt := join_attempt
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	# A full host can reject us before the UI deadline. Keep waiting for a slot
+	# without restarting the countdown or its progress bar.
+	await get_tree().create_timer(1.0).timeout
+	if joining and not exiting and attempt == join_attempt and not joining_screen.timeout.is_stopped():
+		connect_join_target()
+
+func join_timed_out() -> void:
+	join_cancelled()
+
+func join_cancelled() -> void:
+	if not joining:
+		return
+	joining = false
+	join_attempt += 1
+	joining_screen.timeout.stop()
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	get_tree().quit()
 
 func join_connected() -> void:
 	if not joining:

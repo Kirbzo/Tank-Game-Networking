@@ -115,6 +115,9 @@ godot --headless --path Godot --script res://tests/network_ui_smoke.gd
 
 October 27, 2026: deterministic route-choice cases and actual UI feedback tests passed. Restricted execution could not read route metadata and correctly reported ambiguity. A check with route access selected this machine's Wi-Fi IPv4; it did not select the other adapter or link-local address. Broadcast-disabled host/observer discovery also passed. No physical two-device or visual acceptance is claimed.
 
+<<<<<<< HEAD
+November 03, 2026 (Allen integration): Join uses a synchronized 30-second countdown/progress bar. Unconnected attempts retry early transport failures within that deadline and automatically close the application at expiry, including full or unreachable hosts. Success stops and hides the countdown and retains the connected confirmation page. Local setup errors and established-session disconnects retain Retry/Back.
+=======
 ## Standalone game-room preview
 
 The temporary lobby **Test Game Room** button has been removed. For the standalone local preview, open `game_room.tscn` and press **F6** (Run Current Scene), or run from the repository root:
@@ -148,3 +151,4 @@ The room follows [GameRoomImage.jpeg](../MoozeTanks/GameRoomImage.jpeg). The two
 - The gear opens a **Game Settings** placeholder screen with **Back to Room**. No settings are implemented. Local movement input is blocked while this screen is open; connected world updates continue; Escape closes settings first and leaves the room only when settings are closed.
 
 Historical preview validation: updated from-lobby and Escape smoke checks passed on October 30, 2026 for layer ordering, opposite-corner controls, fixed HUD during player motion, preview ID, settings/back/Escape behavior, movement/bounds/resize and return to lobby. No graphical/reference-image visual acceptance or physical-device networking test is claimed by these headless checks.
+>>>>>>> main

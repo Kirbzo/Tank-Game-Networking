@@ -1,7 +1,22 @@
 # Requirements status
 
+<<<<<<< HEAD
+Latest planning snapshot: S-2026-11-06-01 (P047), November 06, 2026.
+Reviewed the client integration approach in [client_integration_plan.txt](client_integration_plan.txt).
+Local source review confirms session ownership must survive leaving the lobby;
+FR6 and FR8-FR12 remain unimplemented. Remote client source retrieval failed,
+so compatibility and exact client scene/file mapping remain unverified.
+All 20 requirement statuses below are retained; no implementation or runtime
+acceptance is claimed. FR13/FR14 updated for this planning request.
+Existing Godot/README.md timeout wording conflict reported without changing
+protected documentation. Current timer behavior follows the November 03 note.
+
+Updated: October 27, 2026. Revision: S-2026-10-27-12. Prompt: P044 (combined lobby/documentation cherry-pick to main).
+Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
+=======
 Updated: November 6, 2026. Revision: S-2026-11-06-10. Prompt: P075 (single-commit integration into main).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement). Supplemental source: [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx).
+>>>>>>> main
 
 Evidence: P029 explicitly authorizes real joining beyond the original alpha. Ported local main commit 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e into malik-other-branch without switching branches. Godot 4.7.2 same-computer host/client tests verify real Join, persistent connection, host-name listings, timeout/retry/back and host-disconnect recovery. P034 supersedes P029 display-only Exit: client Exit disconnects; host Exit closes the session and stops advertising; the application remains on Exiting game.... Visual and physical two-device checks remain unverified. Historical disabled-Join evidence below is prior-state evidence, superseded where noted by P029. P031 applies the approved root documentation updates; original alpha source requirements remain preserved.
 
@@ -41,6 +56,12 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-11-06-01 (P047): planning only; documented staged client integration,
+  persistent session ownership, host authority, team decisions and acceptance
+  gates in client_integration_plan.txt. Client GitHub page/API/raw access failed;
+  no client source reviewed. No gameplay tests run; prior runtime evidence and
+  all requirement statuses retained. Protected files and source DOCX preserved.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 
@@ -421,6 +442,32 @@ Validation: Python documentation audit checked all 20 original and 13 supplement
 
 P044 validation note: aggregate staged whitespace warnings are inherited from source historical prompt/comparison records and were preserved rather than silently rewritten. Current runtime checks passed; no new script errors reported.
 
+<<<<<<< HEAD
+
+## S-2026-11-03-01 - P021 - 30-second Join deadline
+
+Current extension (November 03, 2026): supersedes the historical 10-second timeout above. Joining now shows a numeric 30-second countdown and a progress bar computed from the same timer. Still-unconnected instances close automatically at expiry. Early transport failures retry without resetting the deadline, allowing another attempt if capacity becomes available; successful connections stop the deadline. The host retains its one-client limit (two players including host). Occupancy is not advertised, so automatic exit applies to any attempt still unconnected at 30 seconds, including unreachable hosts. Local setup errors and established-session disconnects retain Retry/Back.
+
+Status: implemented in source; runtime unverified. AR3/AR4 and FR1/FR2/FR4/FR5/FR7 remain Partial; all 20 requirement statuses above otherwise unchanged. FR15 documentation consistency remains Partial pending approval to update the protected READMEs, which still describe the old 10-second behavior. AGENTS.md unchanged. Source DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+Changed implementation: Godot/joining_screen.gd and Godot/lobby.gd; updated Godot/tests/join_smoke.gd with timeout and error-path checks. `godot --version` and `godot --headless --path Godot --script res://tests/join_smoke.gd -- timeout` attempted: executable not on PATH. `git diff --check` passed. No runtime success claimed for this request. Three-instance full-capacity, successful Join, vacancy-before-deadline, errors/retry/back, visual and physical-device acceptance remain unverified. Existing status/log merge-conflict markers and historical duplicate prompt IDs were reported and preserved.
+
+## S-2026-11-03-02 - P045 - Main integrated into Allen
+
+Current status supersedes earlier branch-specific scope descriptions: integrated fetched origin/main c06ecd4 and retained Allen 43eebcf (today's timer). Host usernames, player counts, LAN UI, connected confirmation and disconnecting Exit coexist with a synchronized 30-second Join countdown and automatic application exit if still unconnected. Main's consolidated prompt history retained; today's timer log is ALLEN-P021 to avoid a source-ID collision. Protected documentation changes are part of the requested branch integration and clarify the timer behavior.
+
+Current-request evidence: Godot 4.7.2 full-path join_smoke.gd timeout, failure and concurrent host/client checks printed PASS. Verified actual ENet membership, persistence, displayed counts, connected Back, client/host Exit, countdown and automatic quit. Initial test timing failures were corrected before final passing runs. Environment log/certificate errors persist; no script errors in final runs. Physical LAN, visual, third-player-full-room and vacancy-before-deadline acceptance remain unverified. All 20 requirement statuses above remain unchanged; no new framework completion claims. FR13/FR14 maintained; FR15 current behavior documented. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+Changes include main's lobby/discovery/usernames/LAN/Exit code, regression checks, documentation and original audit artifact; integration changes are limited to timer compatibility, attempt cancellation, progress precision and regression/log updates. User editor/cache/UID changes preserved independently. Local merge commit only; not pushed.
+
+## S-2026-11-03-03 - P046 - Cancel waiting Join
+
+Added a Cancel button during the 30-second pending Join countdown, allowing a third/waiting player to close the application immediately. Cancel stops the timer, invalidates pending retries, closes the ENet peer and quits. Success/error states hide Cancel. Host capacity and existing lobby/Exit behavior unchanged. Applies to any pending Join, including full or unreachable hosts.
+
+Current verification: Godot 4.7.2 join_smoke.gd -- cancel passed actual mouse-click Cancel, stopped-timer/closed-peer assertions and automatic process exit before deadline. join_smoke.gd -- failure passed error/Retry/Back and pending-Join Exit. Environment user-log and certificate-store errors persist; no GDScript errors reported. git diff --check passed. Full-room three-device/physical LAN and visual checks not run. P045 timeout and host/client evidence is historical, not rerun here. All 20 requirement completion statuses retained; AR3/AR4 and FR4/FR5/FR7 remain Partial. FR13/FR14 maintained. Source DOCX SHA256 remains 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+
+Changed: Godot/joining_screen.gd, Godot/lobby.gd, Godot/tests/join_smoke.gd, status.md and prompt_log.md. Protected README.md/AGENTS.md and source requirements unchanged. No commit or push requested.
+=======
 ## P075 - beta integration into main
 
 Compared clean main c06ecd4 with malik-other-branch 3738b97 and applied git merge --squash malik-other-branch. Resolved 12 overlapping files to the selected source versions; retained main P044 prompt and status history and main-only generated metadata. Transfers connected room/HUD, authoritative shared movement, client prediction/interpolation/reconciliation, connection delay/countdown/Cancel/Retry, Room Full/Disconnected feedback, named departures, username changes, current tests and approved documentation. Source branch remains unchanged. Single requested commit title: Beta Network Mooze Tanks Game v1.0. No remote push.
@@ -430,3 +477,4 @@ Current validation: Godot 4.7.2 executable C:\Users\broth\OneDrive\Desktop\Godot
 Documentation checks: all 33 canonical requirement IDs, local links, source SHA256 preservation, source-code equivalence and revision/log consistency. Git metadata write initially failed in the sandbox; approved escalation allowed squash merge/staging/commit. Historical whitespace warnings are retained rather than rewriting old evidence.
 
 - S-2026-11-06-10 (P075): one squash integration commit on main; current validation recorded, source branch retained.
+>>>>>>> main

@@ -130,6 +130,12 @@ func run() -> void:
 	if OS.get_cmdline_user_args().has("failure"):
 		await failure_checks()
 		return
+	if OS.get_cmdline_user_args().has("timeout"):
+		await timeout_checks()
+		return
+	if OS.get_cmdline_user_args().has("cancel"):
+		await cancel_checks()
+		return
 	var deadline := Time.get_ticks_msec() + 10000
 	while lobby.discovery.games.is_empty() and Time.get_ticks_msec() < deadline:
 		await process_frame
@@ -195,13 +201,28 @@ func failure_checks() -> void:
 	lobby.game_id.text_changed.emit("ABC123")
 	await click(lobby.join_button)
 	var screen: Control = lobby.joining_screen
+<<<<<<< HEAD
+=======
 	screen.timeout.start(1.0)
+>>>>>>> main
 	lobby.join_button.pressed.emit()
 	if not require(lobby.joining_screen == screen, "Repeated clicks must not create another loading screen"):
 		return
 	await create_timer(0.1).timeout
 	await process_frame
 	await process_frame
+<<<<<<< HEAD
+	if not require(screen.indicator.visible and screen.indicator.value > 0 and not screen.retry_button.visible and not screen.back_button.visible, "Loading must animate without interactive buttons"):
+		return
+	lobby.join_failed()
+	if not require(not lobby.joining and lobby.session == null and screen.title.text == "Unable to join the game." and screen.status.text == "Please try again." and screen.retry_button.visible and screen.back_button.visible, "Error must clean up and expose exact failure text, Retry and Back"):
+		return
+	await click(screen.retry_button)
+	await process_frame
+	if not require(lobby.joining and lobby.session != null and screen.title.text == "Joining Game...", "Retry must start a fresh connection"):
+		return
+	lobby.join_failed()
+=======
 	if not require(screen.indicator.visible and screen.indicator.value > 0 and screen.countdown.visible and screen.cancel_button.visible and not screen.retry_button.visible and not screen.back_button.visible, "Timed loading must show progress and Cancel while hiding Retry/Back"):
 		return
 	await create_timer(1.0).timeout
@@ -213,6 +234,7 @@ func failure_checks() -> void:
 	if not require(lobby.joining and lobby.session != null and screen.title.text == "Joining Game...", "Retry must start a fresh connection"):
 		return
 	await create_timer(0.6).timeout
+>>>>>>> main
 	await click(screen.back_button)
 	if not require(not screen.visible and lobby.get_child(0).visible and not lobby.join_button.disabled and lobby.session == null, "Back must restore the original menu and re-enable Join"):
 		return
@@ -222,7 +244,7 @@ func failure_checks() -> void:
 	if not require(lobby.session == null and not lobby.joining and lobby.exit_screen.visible and screen.timeout.is_stopped(), "Exit during pending Join must cancel the attempt and timeout"):
 		return
 	silent_server.close()
-	print("PASS timeout, loading animation, duplicate-click guard, retry and back")
+	print("PASS error cleanup, loading progress, duplicate-click guard, retry and back")
 	quit()
 
 func count_checks() -> void:
@@ -243,3 +265,48 @@ func count_checks() -> void:
 					return
 		await process_frame
 	require(false, "Observer must see host alone, connected client, and client departure")
+
+func timeout_checks() -> void:
+	var silent_server := PacketPeerUDP.new()
+	if not require(silent_server.bind(0, "127.0.0.1") == OK, "Silent endpoint must bind"):
+		return
+	lobby.discovery.remember_game("ABC123", "127.0.0.1", silent_server.get_local_port())
+	lobby.game_id.text = "ABC123"
+	lobby.join_game()
+	var screen: Control = lobby.joining_screen
+	if not require(screen.timeout.wait_time == 30.0, "Join deadline must be 30 seconds"):
+		return
+	await create_timer(15.0).timeout
+	if not require(lobby.joining and screen.indicator.value > 45.0 and screen.indicator.value < 55.0, "Progress must reach halfway after 15 seconds, including transport failures"):
+		return
+	var started := Time.get_ticks_msec() - 15000
+	root.tree_exiting.connect(func():
+		var elapsed := Time.get_ticks_msec() - started
+		if elapsed >= 29500 and elapsed < 32000 and not lobby.joining and lobby.session == null and screen.indicator.value == 100.0:
+			print("PASS 30-second synchronized countdown and automatic exit")
+		else:
+			printerr("FAIL timeout timing, progress or cleanup")
+	)
+	# Keep the silent endpoint alive until the production timeout quits this tree.
+	await create_timer(32.0).timeout
+	silent_server.close()
+	require(false, "Unconnected game must exit automatically")
+
+func cancel_checks() -> void:
+	var silent_server := PacketPeerUDP.new()
+	if not require(silent_server.bind(0, "127.0.0.1") == OK, "Silent endpoint must bind"):
+		return
+	lobby.discovery.remember_game("ABC123", "127.0.0.1", silent_server.get_local_port())
+	lobby.game_id.text = "ABC123"
+	lobby.join_game()
+	await process_frame
+	var screen: Control = lobby.joining_screen
+	if not require(screen.cancel_button.visible and not screen.timeout.is_stopped(), "Cancel must be available during countdown"):
+		return
+	await click(screen.cancel_button)
+	if not require(not lobby.joining and lobby.session == null and screen.timeout.is_stopped() and screen.timeout.time_left < 30.0, "Cancel must stop countdown and clean up the connection immediately"):
+		return
+	print("PASS Cancel click requests immediate application exit before deadline")
+	# No explicit quit here: the production Cancel handler must close this tree.
+	await create_timer(2.0).timeout
+	require(false, "Cancel must quit the application")

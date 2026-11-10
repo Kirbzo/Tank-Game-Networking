@@ -1,0 +1,135 @@
+Client/server integration plan - P047
+Date: 2026-11-06. Status snapshot: S-2026-11-06-01.
+Planning only. No implementation authorized or performed.
+
+Evidence and limits
+Reviewed the local requirements DOCX, AGENTS.md, both READMEs, status.md,
+prompt_log.md, project.godot, lobby.gd, discovery.gd and joining_screen.gd.
+Client reference: https://github.com/AnnMaxine/Moooze-Tanks-Repository
+Client source could not be retrieved: web page/raw/API fetches failed;
+PowerShell HTTPS failed and curl reported SEC_E_NO_CREDENTIALS. This does
+not establish that the repository is private or missing. Its engine,
+branches, scene structure and existing networking remain unverified.
+The process below is a recommendation grounded in the local server,
+pending an actual client source review. No client compatibility claim.
+
+Recommended architecture
+Use one integrated Godot 4.7.2/GDScript playable project, run on each
+player's device. Host mode runs the authoritative simulation plus a local
+player view; joining mode sends input and renders authoritative results.
+This fits FR1's locally hosted two-player session. Keep the original client
+repository/history intact; use a separate integration branch when authorized.
+Do not merge entire repositories blindly or run two competing session owners.
+If client review reveals a different engine, stop to agree an explicit
+compatibility strategy; do not silently replace the required server baseline.
+
+Existing foundation
+Godot/lobby.gd creates ENet with create_server(0, 1): an OS-assigned UDP
+port and one remote player in addition to the host. Discovery maps game ID
+to the advertised host endpoint. UDP 49140-49155 is for discovery, not a
+fixed gameplay port. Direct-IP lookup retrieves a listing; Join connects.
+The lobby owns the peer, connection signals and teardown. Its _exit_tree()
+closes the session, so replacing the lobby with gameplay directly would
+disconnect the players. No gameplay RPC/state protocol is present there.
+FR6 and FR8-FR12 remain not implemented in the current requirement table.
+
+Process and acceptance gates
+1. Inspect and pin both sources before integration.
+   Record branch/commit, engine version, project settings, autoloads, input
+   actions, assets, scene references, player controllers and any networking.
+   Map local movement, shooting, collisions, damage, hazards and reset to
+   their future authority owner. Verify imports and res:// paths. Inspect
+   existing client behavior rather than assuming it is already network-safe.
+   Deliverable: concrete file/scene mapping and compatibility gaps.
+
+2. Agree the multiplayer contract with the client team.
+   Define peer-to-player ownership, protocol/build version, message fields,
+   authority, scene/entity identity, ordering and acceptable update rates.
+   Proposed messages: session compatibility/roster, ready/load acknowledgement,
+   start preparation, input command, world snapshot, authoritative combat
+   result, match end and reset. Names and fields are proposals, not source
+   requirements. Include match/round ID, input sequence, server tick and
+   last processed input acknowledgement where applicable. Client-provided
+   identity is not trusted; derive the sender from the connection.
+   Confirm FR6 start permissions, FR9 movement/action limits and FR11 match
+   end trigger before implementing dependent rules. Agree arena/spawn data.
+
+3. Separate session lifetime from screen lifetime.
+   Proposed persistent session service owns ENet, discovery, roster and
+   connection events; lobby and gameplay subscribe to it. It survives scene
+   changes and explicitly handles leave/host close. Avoid leaving cleanup
+   in a departing lobby that closes the transferred peer. Keep one transport
+   and one owner, with a stable RPC node path/configuration on both peers
+   if Godot high-level RPCs are chosen. Reuse existing discovery and Join.
+   Gate: connect, enter a placeholder scene on both peers, and remain connected.
+
+4. Implement coordinated scene entry as the first gameplay milestone.
+   Connection success alone does not start gameplay. Preserve connected
+   confirmation/Back until the agreed Start flow is deliberately implemented.
+   After the agreed start request, host validates membership/readiness and
+   selects the shared scene and round. Both peers acknowledge loading;
+   host initializes/spawns the same entity IDs and begins only when ready.
+   Handle load failure/disconnection without leaving one peer playing alone.
+   Gate: both instances show the same arena and two stationary placeholders.
+
+5. Add authoritative movement before combat.
+   Only the local player's controls generate input commands. The host
+   validates sender ownership, sequence freshness, numeric bounds and agreed
+   action limits, then advances both players on its simulation tick. Route
+   host-local input through the same validation/simulation path. Clients do
+   not decide final positions. Send snapshots; interpolate remote entities.
+   Start without local prediction; add prediction/reconciliation only after
+   authoritative movement is stable, using acknowledged input sequences.
+   Gate: both screens agree; forged positions, duplicate/stale inputs and
+   excessive movement cannot change authoritative state illegally.
+
+6. Move combat and hazards under host authority.
+   Client requests fire; host validates and creates authoritative projectiles,
+   resolves collisions/hits, updates health and sends results. Client effects
+   display those results without independently applying duplicate damage.
+   Run hazard outcomes on the host. Agree whether aiming/projectile visuals
+   need prediction; do not promise lag compensation as an existing feature.
+   Gate: both peers agree on hits, health and hazard outcomes under latency.
+
+7. Complete lifecycle and reset.
+   Preserve the 30-second pending-Join countdown/early retry/automatic quit,
+   Cancel-to-quit, established-disconnect Retry/Back, and Exit disconnecting
+   to the retained Exiting game... screen. Main-screen routing is separate.
+   Host Exit closes the session and listings expire; client Exit leaves the
+   host active with reduced membership. Define match interruption behavior
+   with the team. On agreed match end clear entities, pending commands and
+   round-specific state, and prepare the next round/lobby. Use round IDs to
+   reject delayed prior-round messages. Advertise availability consistently
+   with capacity and agreed in-match join policy. No host migration assumed.
+
+8. Validate incrementally, then on two physical devices.
+   When implementation is authorized, rerun applicable documented regressions:
+   godot --headless --path Godot --script res://tests/join_smoke.gd -- host
+   godot --headless --path Godot --script res://tests/join_smoke.gd
+   (Run host/client concurrently as documented; use actual Godot 4.7.2 path.)
+   Also cover typed ID, initial, failure, disconnect, discovery packets and
+   network UI modes documented in Godot/README.md; timeout and cancel modes
+   are recorded in recent status/log evidence. Add integration checks for
+   scene load synchronization, identity/ownership, movement, invalid inputs,
+   combat reconciliation and repeat-round reset as those features arrive.
+   Test stale/unknown IDs, full room and a vacancy before the deadline,
+   unreachable host, Cancel, client/host Exit and disconnect during load/play.
+   Use actual two-device LAN tests for broadcast/direct-IP discovery and play.
+   Test latency/loss before declaring reconciliation reliable. Separate
+   placeholder visuals from actual network acceptance. Do not mark completion
+   based solely on same-computer tests or client animations.
+
+Scope boundaries and reporting
+All changes for this request are this plan, status.md and prompt_log.md.
+No runtime tests run: this is planning only. Prior logged Godot results are
+historical evidence, not current verification. Physical LAN remains unverified.
+Outstanding: obtain readable client source; confirm FR6/FR9/FR11 decisions;
+authorize a separate implementation request before applying this process.
+Observed existing documentation issue: Godot/README.md step 5 describes
+Retry/Back after timeout, while its later November note and code specify
+automatic quit for an unconnected 30-second expiry. Reported, not repaired;
+README edits require approval. Historical status header/log sequence text
+also predates appended requests; history was preserved.
+Documentation link scan also found historical links to missing
+Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json.
+These existing issues were reported and preserved; new links resolve.

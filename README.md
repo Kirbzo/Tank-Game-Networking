@@ -101,3 +101,5 @@ Godot 4.7.2 same-computer tests recorded on October 27 passed for joining by sel
 - [status.md](status.md): completion status and evidence for AR1-AR5, FR1-FR15, LR1-LR5 and GR1-GR8.
 - [prompt_log.md](prompt_log.md): prompt IDs, prompts, dates, and status results.
 - [documentation_rationale.txt](documentation_rationale.txt): historical rationale for the October 13 documentation task; it describes the earlier PDF and is not the current requirements baseline.
+
+November 03, 2026 (Allen integration): Join uses a synchronized 30-second countdown/progress bar. Unconnected attempts retry early transport failures within that deadline and automatically close the application at expiry, including full or unreachable hosts. Success stops and hides the countdown and retains the connected confirmation page. Local setup errors and established-session disconnects retain Retry/Back.

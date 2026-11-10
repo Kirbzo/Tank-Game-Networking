@@ -69,3 +69,5 @@ For documentation tasks, check all 20 requirement IDs, local links, status/log c
 For authorized implementation, test the applicable acceptance criteria with actual user instances where necessary. For future framework work, cover errors, room availability, disconnect handling, authoritative movement, invalid-input rejection, hit reconciliation, and reset as relevant.
 
 Report changed files, why they changed, validation commands and results, checks not run, outstanding approval items, and remaining simulated or unverified behavior. Separate prior recorded evidence from checks performed for the current request. Do not claim runtime success from documentation review.
+
+November 03, 2026 (Allen integration): Join uses a synchronized 30-second countdown/progress bar. Unconnected attempts retry early transport failures within that deadline and automatically close the application at expiry, including full or unreachable hosts. Success stops and hides the countdown and retains the connected confirmation page. Local setup errors and established-session disconnects retain Retry/Back.

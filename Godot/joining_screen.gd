@@ -5,7 +5,11 @@ signal back_requested
 signal timed_out
 signal cancel_requested
 
+<<<<<<< HEAD
+const JOIN_TIMEOUT_SECONDS := 30.0
+=======
 const JOIN_TIMEOUT_SECONDS := 10.0
+>>>>>>> main
 
 var title: Label
 var status: Label
@@ -55,7 +59,14 @@ func _ready() -> void:
 	column.add_child(back_button)
 	timeout.one_shot = true
 	timeout.wait_time = JOIN_TIMEOUT_SECONDS
+<<<<<<< HEAD
+	timeout.timeout.connect(func():
+		update_progress()
+		timed_out.emit()
+	)
+=======
 	timeout.timeout.connect(func(): timed_out.emit())
+>>>>>>> main
 	add_child(timeout)
 
 func begin() -> void:
@@ -68,15 +79,24 @@ func begin() -> void:
 	cancel_button.show()
 	retry_button.hide()
 	back_button.hide()
+<<<<<<< HEAD
+	timeout.start()
+	update_progress()
+=======
 	timeout.start(JOIN_TIMEOUT_SECONDS)
 	update_progress()
 	cancel_button.grab_focus()
+>>>>>>> main
 
 func show_connected(game_id: String) -> void:
 	timeout.stop()
 	cancel_button.hide()
 	countdown.hide()
+<<<<<<< HEAD
+	status.text = "Connected to game %s. Back returns to the lobby without disconnecting." % game_id
+=======
 	status.text = "Connected to game %s. Opening room..." % game_id
+>>>>>>> main
 	indicator.hide()
 	retry_button.hide()
 	back_button.show()
@@ -85,18 +105,27 @@ func show_connected(game_id: String) -> void:
 func show_failure(message := "Could not connect to the room.\nRetry or go Back to choose another room.") -> void:
 	timeout.stop()
 	cancel_button.hide()
+<<<<<<< HEAD
+=======
 	countdown.hide()
+>>>>>>> main
 	title.text = "Unable to join the game."
 	status.text = message
 	indicator.hide()
+	countdown.hide()
 	retry_button.show()
 	back_button.show()
 	retry_button.grab_focus()
 
 func update_progress() -> void:
 	var remaining := timeout.time_left
+<<<<<<< HEAD
+	indicator.value = 100.0 * (1.0 - remaining / JOIN_TIMEOUT_SECONDS)
+	countdown.text = "Connecting: %d seconds remaining (closes if unable to connect)" % int(ceil(remaining))
+=======
 	indicator.value = 100.0 * (1.0 - remaining / timeout.wait_time)
 	countdown.text = "Connecting: %d seconds remaining" % int(ceil(remaining))
+>>>>>>> main
 
 func _process(_delta: float) -> void:
 	if visible and indicator.visible:
