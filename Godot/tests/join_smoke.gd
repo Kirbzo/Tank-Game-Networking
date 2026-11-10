@@ -83,6 +83,9 @@ func run() -> void:
 		await count_checks()
 		return
 	if OS.get_cmdline_user_args().has("initial"):
+		for button in lobby.find_children("*", "Button", true, false):
+			if not require(button.text != "Test Game Room", "Temporary Test Game Room button must be absent"):
+				return
 		await click(lobby.join_button)
 		await create_timer(1.0).timeout
 		trace_state("initial Join click, no selection")
@@ -198,12 +201,17 @@ func failure_checks() -> void:
 	lobby.game_id.text_changed.emit("ABC123")
 	await click(lobby.join_button)
 	var screen: Control = lobby.joining_screen
+<<<<<<< HEAD
+=======
+	screen.timeout.start(1.0)
+>>>>>>> main
 	lobby.join_button.pressed.emit()
 	if not require(lobby.joining_screen == screen, "Repeated clicks must not create another loading screen"):
 		return
 	await create_timer(0.1).timeout
 	await process_frame
 	await process_frame
+<<<<<<< HEAD
 	if not require(screen.indicator.visible and screen.indicator.value > 0 and not screen.retry_button.visible and not screen.back_button.visible, "Loading must animate without interactive buttons"):
 		return
 	lobby.join_failed()
@@ -214,6 +222,19 @@ func failure_checks() -> void:
 	if not require(lobby.joining and lobby.session != null and screen.title.text == "Joining Game...", "Retry must start a fresh connection"):
 		return
 	lobby.join_failed()
+=======
+	if not require(screen.indicator.visible and screen.indicator.value > 0 and screen.countdown.visible and screen.cancel_button.visible and not screen.retry_button.visible and not screen.back_button.visible, "Timed loading must show progress and Cancel while hiding Retry/Back"):
+		return
+	await create_timer(1.0).timeout
+	if not require(not lobby.joining and lobby.session == null and screen.title.text == "Unable to join the game." and screen.status.text.contains("timed out") and screen.status.text.contains("host may have left or disconnected") and screen.retry_button.visible and screen.back_button.visible, "Timeout must clean up and explain timeout with Retry and Back"):
+		return
+	await click(screen.retry_button)
+	screen.timeout.start(1.0)
+	await create_timer(0.6).timeout
+	if not require(lobby.joining and lobby.session != null and screen.title.text == "Joining Game...", "Retry must start a fresh connection"):
+		return
+	await create_timer(0.6).timeout
+>>>>>>> main
 	await click(screen.back_button)
 	if not require(not screen.visible and lobby.get_child(0).visible and not lobby.join_button.disabled and lobby.session == null, "Back must restore the original menu and re-enable Join"):
 		return
