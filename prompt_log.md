@@ -2,13 +2,96 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
+<<<<<<< Updated upstream
 - **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P074 and the next request is **P075**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+=======
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P077 and the next request is **P078**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+>>>>>>> Stashed changes
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 10, 2026
+
+## P080 - November 10, 2026
+
+Receipt time: 10:51:44 AM (America/Regina; matched user response_item timestamp 2026-11-10T16:51:44.193Z).
+Recording time: 10:51:51 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> approved. go ahead and make the changes
+
+Result: applied exactly the five approved authorization rules from P079 as a new AGENTS.md section. Separate explicit "approved" authorization is required for identified AGENTS.md edits; proposal/review requests remain read-only except required tracking, implementation authorization stays scoped, and session/requirements sources remain read-only. Existing README approval rule retained. No additional policy changes or implementation edits. Existing merge conflicts preserved without staging/resolution.
+
+Associated [status.md](status.md): S-2026-11-10-05; links P079 draft snapshot S-2026-11-10-04. Only AGENTS.md, status.md and prompt_log.md edited for this request. Requirement statuses unchanged. No gameplay tests needed/run.
+
+Token usage: **Partial as of 2026-11-10T16:52:10.732Z (10:52:10 AM America/Regina)**. Input: 186,529; cached input: 180,480; output: 975; total: 187,504; separately exposed reasoning output: 45; cache-write input: 0. Cached input is included in input and reasoning output in output, not added again. Model: gpt-6.1-sol from matched turn_context. Source: ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c65f-697c-70e1-b586-9730b304ce73. Actual prompt matched; summed payload.usage for two unique response IDs and cross-checked equal turn_token_usage. No cumulative/token_count double counting. Subsequent continuations and final response excluded by cutoff; final total **Unavailable** until completed and checked later. Estimated cost and actual billed charges **Unavailable**; verified applicable rates/billing not obtained. Session evidence read-only.
+
+Sequence note: P079 records the preceding draft below, P080 is its distinct implementation request; next local ID P081. Conflicting historical sequence preamble preserved.
+
+## P079 - November 10, 2026 (preceding authorization draft)
+
+Receipt time: **Unavailable** in this entry; source timestamp not yet matched.
+Recording time: 10:51:51 AM (America/Regina; backfilled during P080 from visible conversation, not the draft's receipt time).
+
+Actual request:
+
+> Then lets suggest or draft the autherization of writing files. AGENTS.md is the most important file besides protected files and should never be written to without an explicit "approved" message.
+
+Result: presented five authorization rules in chat only; no files changed in that turn. User subsequently approved in P080. Draft snapshot S-2026-11-10-04: requirement statuses unchanged, policy proposed but unapplied; documented retrospectively in the S-2026-11-10-05 addendum. No historical source files changed.
+
+Token usage, model and complete total: **Unavailable** in this entry because this earlier turn's response IDs/usage have not been reliably matched during the current scoped implementation. Current session accounting above pertains only to P080. Cached-input inclusion and usage-source record association **Unavailable** for P079; estimated cost and actual billed charges **Unavailable** without matched usage/rates. This preserves the evidence gap rather than attributing current-turn totals to the draft.
+
+## P078 - November 10, 2026
+
+Receipt time: 10:37:14 AM (America/Regina; matched user response_item timestamp 2026-11-10T16:37:14.824Z).
+Recording time: 10:37:20 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> Lets write some rules for the AGENTS.md to read ~\.codex\sessions and grab each token amount. Consider the current rules for implementing token amounts per prompt
+
+Result: user-authorized AGENTS.md subsection adds a read-only exception for home-relative session evidence, strict protection against modifying session files, limited/private inspection, prompt/turn matching, response deduplication, cumulative-total cross-checks, model attribution, cached/reasoning subset handling, provenance, timestamp conversion, partial live-turn coverage and careful historical backfills. Existing cost rules retained. No broad historical backfill performed. Existing merge conflicts in this file and status.md remain untouched; this standalone entry uses P078 and reserves P079 as the next local ID without resolving the conflicting sequence preamble.
+
+Associated [status.md](status.md): S-2026-11-10-03 (current request addendum above existing conflicts). Requirement statuses unchanged. Changed AGENTS.md, status.md and prompt_log.md only for this request; README.md, implementation and protected sources preserved. Documentation checks cover IDs, links, source checksums, change boundaries and revision consistency. No gameplay tests needed/run. Pre-existing missing historical links and unmerged status/log files are reported separately from this change.
+
+Token usage: **Partial as of 2026-11-10T16:38:28.359Z (10:38:28 AM America/Regina)**. Input: 329,881; cached input: 323,712; output: 2,597; total: 332,478; separately recorded reasoning output: 197; cache-write input: 0. Model: gpt-6.1-sol, from matched turn_context. Cached input is included in input, and reasoning output is included in output; neither is added again. Source: ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c652-2579-7550-972c-f3670241b004. Sum of payload.usage from four unique response IDs; matched actual prompt in user response_item and adjacent turn context. Sum equals the latest observed turn_token_usage; no cumulative or token_count records added. Later tool continuations and final response are excluded by cutoff. Final complete total: **Unavailable** until the turn completes and is reviewed later. Estimated cost and actual billed charges: **Unavailable**; applicable verified pricing/billing records were not obtained. All session access read-only.
+
+## P077 - November 10, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:24:00 AM (America/Regina; recording clock).
+
+Actual request:
+
+> can you look at the code and check against standard cybersecurity network practices. our goal is to find any vunarabilities when connecting to another game whether its same IP or different IP
+
+Result: source-reviewed discovery, connection lifecycle, RPCs, authoritative movement, client payload processing, interface selection and project configuration. Created security_review.txt with seven prioritized findings, evidence, same-computer/LAN/NAT/different-network distinctions, mitigations and future acceptance tests. Compared against official OWASP and Godot references. No implementation fixes or protected-document changes. Preserved prior P076 changes to these logs.
+
+Associated [status.md](status.md): S-2026-11-10-02. Requirement completion statuses unchanged; existing FR9 validation does not imply secure admission or denial-of-service acceptance.
+
+Validation: exact movement unit command/result in security_review.txt; PASS, exit 0 on Godot 4.7.2 with existing user-log/certificate-store errors. No adversarial network exploitation, flooding, physical-device tests or full regression. Documentation checks cover IDs, source checksums, links, revision consistency and file boundaries; prior missing historical VM_TEST_REPORT.txt link remains reported and unrepaired. Bare Git unavailable on PATH; bundled executable used. Initial rg Godot/*.gd glob failed on Windows; corrected to rg Godot -g '*.gd'.
+
+Token usage: input, cached input, output, model usage record and usage source **Unavailable**; reliable per-request telemetry covering all calls is not exposed. Cached-input inclusion **Unavailable**. Estimated cost and actual billed charge **Unavailable** because reliable usage and applicable rates are unavailable.
+
+## P076 - November 10, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 10:19:03 AM (America/Regina; recording clock).
+
+Actual request:
+
+> Read the README, AGENTS.md, and recent status.md logs and summerize the contents of this workspace.
+
+Result: reviewed root and Godot READMEs, AGENTS.md, current status tables and recent P073-P075 records, workspace inventory and both requirements DOCX sources. Summarized the Godot 4.7.2/GDScript two-player LAN framework, implemented lobby/room/movement flows, project organization, prior November 6 integration and test evidence, unfinished gameplay and unverified physical/graphical acceptance. No implementation or protected documentation changes. Required tracking updates only.
+
+Associated [status.md](status.md): S-2026-11-10-01; all requirement statuses unchanged. Documentation checks cover 33 requirement IDs, local links, both source checksums, revision consistency and file-change boundaries. No gameplay tests needed/run. Bare git unavailable on PATH; bundled Git used for working-state inspection.
+
+Token usage: **Unavailable** for input, cached input, output, model usage record and usage source; reliable per-request telemetry covering all calls is not exposed. Cached-input inclusion: **Unavailable**. Estimated cost and actual billed charges: **Unavailable** because reliable usage and applicable rates are unavailable.
 
 # November 6, 2026
 

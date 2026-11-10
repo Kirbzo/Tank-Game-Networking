@@ -1,0 +1,169 @@
+Moooze Tanks network security review - P077
+Date: November 10, 2026. Recording time: 10:24:00 AM America/Regina.
+Scope: source review of Godot/discovery.gd, lobby.gd, game_room.gd,
+room_world.gd, room_view.gd, lan_address.gd and project.godot; relevant
+requirements, READMEs, AGENTS.md and existing tests. No implementation fixes.
+
+Conclusion
+The prototype has useful movement authority and validation controls, but
+discovery and admission trust any reachable peer. It should not be treated
+as authenticated or confidential networking. Severity below is qualitative
+for this two-player prototype, not a CVSS score or a compliance certification.
+Findings are source-confirmed gaps; adversarial network exploitation was not
+performed. Performance impact and malformed-message runtime behavior need tests.
+
+Network scenarios
+- Same computer, loopback: another local process can send announcements and
+  connect. Loopback does not authenticate the process. Remote LAN interception
+  is not inherent to loopback traffic, but current listeners also bind beyond it.
+- Different private IPs on a reachable LAN: other reachable devices can target
+  discovery and the advertised session port, subject to firewall policy.
+- Same public IP behind NAT: this does not imply one device or trusted player.
+  Do not use IP equality as identity; legitimate users can share an address.
+- Different networks/public IPs: broadcast discovery does not cross routers by
+  default. Manual IPv4 lookup alone does not make NAT/firewalls traversable.
+  If VPNs, routing or forwarding make ports reachable, the same risks apply.
+  No Internet reachability or physical two-device acceptance was established.
+
+F01 HIGH - Unauthenticated discovery allows listing impersonation/redirection
+Evidence: discovery.gd:33-61,100-108; lobby.gd:342-377,383-391.
+Only a public protocol string, six-character ID and port constraints establish
+listing validity. The instance field is a self-filter, not proof of identity.
+Entries are keyed by game ID; another sender can replace the address/port,
+username and count for an existing ID. No source-IP spoofing is required: a
+reachable attacker can advertise the copied ID from its own endpoint.
+Loopback address preference is not authentication; it can also retain a LAN
+address while accepting a newly supplied port and metadata from loopback.
+Retry and the 500 ms delay refresh the target from this mutable cache.
+join_connected trusts transport success and copies the locally requested ID;
+there is no handshake proving that endpoint owns the intended room.
+Impact: fake hosts, wrong-room connections, misleading names and forged Room
+Full notices that block joining. Authority-only RPCs then trust the fake server.
+Recommendation: authenticate host identity and bind room ID/endpoint to it;
+verify it before declaring Join successful. Pin the selected identity through
+Retry, flag conflicts and require explicit approval for identity changes.
+Unsigned discovery should be treated as a hint, not authorization.
+
+F02 HIGH - Anyone reachable can occupy the guest slot
+Evidence: lobby.gd:258-259,182-186; no auth_callback or admission proof in code.
+create_server(0,1) limits capacity but does not authorize the one guest. The
+game ID is not submitted as a secret on connection; names are self-asserted.
+A modified client can connect directly to the advertised endpoint and hold
+the only slot, including without completing room_ready. There is no application
+readiness timeout or host approval. Transport keepalives are not admission.
+Recommendation: decide whether rooms are intentionally public; for private
+rooms use host approval or a protected invitation challenge before membership,
+with authentication/readiness deadlines and bounded failed-attempt handling.
+Do not use the broadcast game ID or IP address as a credential.
+
+F03 HIGH - Discovery processing has no application resource budget
+Evidence: discovery.gd:36-68,100-108; lobby.gd:270-298 refresh_games.
+The socket is drained in one frame, games has no entry cap, and each changed
+announcement synchronously triggers sorting and rebuilding the whole UI list.
+An attacker can vary valid IDs or metadata continuously. Four-second expiry
+and a 1024-byte packet limit do not bound total work or sustained cache size.
+Impact: plausible CPU/UI stalls and memory growth before any player joins.
+Recommendation: cap packets/time per frame, global entries and per-source
+updates; batch UI changes once per frame; validate exact announcement type and
+field types. Use global budgets as well as per-IP limits to avoid NAT problems.
+UDP queries also generate replies without rate limits; reflection is a
+conditional additional concern where source-spoofed UDP can reach the host.
+No reflection amplification factor or denial-of-service threshold was measured.
+
+F04 MEDIUM - Joined peers can repeatedly trigger expensive reliable replies
+Evidence: lobby.gd:182-186; game_room.gd:118-126,152-158.
+Every room_ready call adds/looks up the player and broadcasts names/world,
+even when that peer is already ready. Reliable calls have no application rate
+limit or one-time transition guard. room_input also has no rate budget: valid
+input checks prevent speed-vector abuse but still consume processing per call.
+Impact: a malicious admitted guest can burden the host and generate outbound
+work. Engine/UDP limits exist; actual overload severity remains unmeasured.
+Recommendation: make ready idempotent without repeated broadcasts, enforce
+per-peer/global message budgets, reject oversized readiness payloads as early
+as practical and disconnect sustained abusive senders with a clear reason.
+
+F05 MEDIUM - No configured encryption or cryptographic peer verification
+Evidence: plain JSON UDP discovery and ENet create_server/create_client;
+no DTLS/TLS setup, certificate pinning or authenticated handshake in source.
+Impact: discovery metadata and session traffic lack application-configured
+confidentiality and cryptographic integrity. On-path observation/manipulation
+is a concern on shared networks; arbitrary off-path ENet injection was not
+demonstrated. No passwords or account tokens currently appear to be transmitted.
+Recommendation: choose an authenticated encrypted transport supported by the
+retained engine, or an authenticated secure tunnel with explicit identity
+verification. ENet DTLS APIs exist, but integration with this high-level peer
+must be verified; do not assume a drop-in switch or disable certificate checks.
+Discovery authentication must still be addressed separately.
+
+F06 MEDIUM - Malicious host data is incompletely bounded on the client
+Evidence: lobby.gd:188-202; game_room.gd:147-150,160-170;
+room_view.gd:29-50.
+Snapshot positions have good count/type/finite/bounds checks, but room_names
+accepts and duplicates any Dictionary without count, key or name validation.
+Acknowledgements lack count/key/value schema checks before int conversion.
+An authoritative host can send excessive names/nested values, malformed acks
+or extreme monotonic ticks. Validation inside an RPC happens after payload
+deserialization, so it cannot alone prevent allocation from a large message.
+Impact: potential client resource exhaustion, script errors or corrupted
+presentation; specific crashes were not reproduced. Host-authoritative game
+rules do not justify trusting host payloads with unrestricted client resources.
+Recommendation: strict two-player schemas, bounded strings/ack maps/ticks and
+transport/application message-size controls; reject malformed data safely.
+
+F07 MEDIUM - Listening scope exceeds a same-computer-only test
+Evidence: discovery.gd:25; lobby.gd:259; lan_address.gd header.
+Discovery explicitly binds 0.0.0.0, and ENet has no selected-interface bind
+restriction. Displaying one IPv4 address does not restrict either listener.
+This is consistent with LAN functionality but exposes all reachable interfaces
+allowed by the firewall, potentially including VPN or public-facing adapters.
+Recommendation: explicit loopback-only versus LAN mode, intentional interface
+binding where supported, and restricted firewall profiles/sources. Do not claim
+Internet exposure solely from a wildcard bind; routing/firewall checks are needed.
+
+Controls already present
+- Host derives input sender from multiplayer, checks connected-peer membership,
+  and uses authority-only RPCs for names/snapshots.
+- Host rejects unknown players, NaN/infinite/oversized movement vectors and
+  stale/duplicate sequenced input; movement speed and bounds are host-owned.
+- Discovery packet size, ID format, advertised names and counts are constrained.
+- Client snapshot positions, prediction queue and snapshot history are bounded.
+- Cancel/timeout/leave invalidate pending attempts and close session transports.
+- No remote-data-to-shell execution or dynamic resource loading found in the
+  reviewed production paths. lan_address.gd executes a fixed local script.
+- No project enablement of Godot object decoding found; documented default is
+  false. This is not proof that the engine has no exploitable vulnerabilities.
+
+Validation performed
+Command (repository root, PowerShell):
+& 'C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/world_sync_smoke.gd -- unit
+Result: PASS authoritative movement validation; exit 0, Godot 4.7.2.
+User-log write and root-certificate-store errors occurred; no script errors
+reported. This test checks unknown peers, invalid vectors, speed, stale input
+and bounds. It does not validate authentication, encryption or flood resistance.
+No packet flooding, third-party probing, packet capture, fuzzing, malformed RPC
+runtime test, two-device test or new full gameplay regression was performed.
+Prior P075 tests remain historical evidence.
+
+Recommended acceptance tests for a later hardening implementation
+1. Owned loopback fixtures: duplicate-ID/changed-endpoint announcements cannot
+   silently change authenticated host identity, including during Join/Retry.
+2. Unauthorized guest and never-ready guest cannot indefinitely reserve a room.
+3. Bounded synthetic bursts keep cache size/frame work bounded; normal discovery,
+   Cancel, Exit and connected movement remain responsive.
+4. Repeated ready/input calls are limited without unfairly rejecting ordinary
+   players sharing an IP. Invalid/oversized name, ack and tick messages fail safe.
+5. Secure transport rejects untrusted host identity and packet tampering; an
+   owned packet capture confirms intended traffic protection.
+6. Repeat on two owned devices, then verify loopback/LAN/VPN firewall exposure.
+
+Primary practice references (reviewed November 10, 2026)
+OWASP Denial of Service: resource budgets, validation and rate limits.
+https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html
+OWASP Input Validation: validate types, lengths, allowed values and structure.
+https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html
+Godot SceneMultiplayer: authentication callbacks and default object decoding.
+https://docs.godotengine.org/en/stable/classes/class_scenemultiplayer.html
+Godot ENetConnection: optional DTLS setup APIs.
+https://docs.godotengine.org/en/stable/classes/class_enetconnection.html
+These living references describe practices/APIs; they do not establish the
+installed binary's patch status or certify this project. Engine remains 4.7.2.

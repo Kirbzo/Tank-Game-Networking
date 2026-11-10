@@ -1,6 +1,18 @@
 # Requirements status
 
+Current request addendum: November 10, 2026. Revision: S-2026-11-10-05. Prompt: P080 (implements P079 authorization draft following explicit "approved" message). Added the approved five-bullet Authorization to write files section to AGENTS.md. Draft/review requests are read-only except required tracking; AGENTS.md changes require a separate approval message containing "approved" referring to identified proposals. Source/session files remain read-only. Prior addenda and pre-existing merge conflicts retained; no requirement status changes. P079 draft snapshot: S-2026-11-10-04, chat-only proposal, no files changed during that drafting turn. Documentation-only; no gameplay tests needed/run.
+
+P080 validation: PowerShell file SHA256 baseline comparison found only AGENTS.md, status.md and prompt_log.md changed, with no removed files. All 33 requirement IDs and current revision references passed; source DOCX SHA256 values remain 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A and F622DC1114974EDD927B5D50DF6483F8E8D5DD64181B24DC7D8E1F009B0F647C. Local-link scan still reports only the prior missing VM_TEST_REPORT.txt and vm_test_results.json targets. Bundled Git diff --check reports pre-existing conflict markers in status.md/prompt_log.md; those remain unresolved. README.md and implementation hashes unchanged; session files only opened read-only. No gameplay tests performed.
+
+Current request addendum: November 10, 2026. Revision: S-2026-11-10-03. Prompt: P078. Added user-authorized AGENTS.md rules for protected read-only session access and evidence-based per-prompt usage accounting. Per-response deduplication, cumulative cross-checks, cached/reasoning subsets, provenance, partial live-turn totals and careful backfills extend FR14 logging. Existing merge conflicts below predate this request and are preserved; requirement statuses unchanged. README.md and implementation unchanged. No gameplay tests needed or run.
+
+P078 validation: PowerShell baseline SHA256 comparison confirmed only AGENTS.md, status.md and prompt_log.md changed during this request; both requirements DOCX hashes and README.md unchanged. All 33 requirement IDs and current revision references passed. Local-link scan found the existing missing Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json targets in historical prompt records. Bundled Git diff --check exited 1 due to pre-existing conflict markers in status.md and prompt_log.md; no conflict resolution attempted. Live-session per-response usage sum matched the observed cumulative turn snapshot; partial coverage explicitly recorded.
+
+<<<<<<< Updated upstream
 Updated: November 6, 2026. Revision: S-2026-11-06-09. Prompt: P074 (apply approved documentation wording).
+=======
+Updated: November 10, 2026. Revision: S-2026-11-10-02. Prompt: P077 (network security review; requirement statuses unchanged).
+>>>>>>> Stashed changes
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement). Supplemental source: [WP2 Requirements.docx](MoozeTanks/WP2%20Requirements.docx).
 
 Evidence: P029 explicitly authorizes real joining beyond the original alpha. Ported local main commit 99fe2479f4ed0eaa717139f56e3c775d5db6cf6e into malik-other-branch without switching branches. Godot 4.7.2 same-computer host/client tests verify real Join, persistent connection, host-name listings, timeout/retry/back and host-disconnect recovery. P034 supersedes P029 display-only Exit: client Exit disconnects; host Exit closes the session and stops advertising; the application remains on Exiting game.... Visual and physical two-device checks remain unverified. Historical disabled-Join evidence below is prior-state evidence, superseded where noted by P029. P031 applies the approved root documentation updates; original alpha source requirements remain preserved.
@@ -41,6 +53,10 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-11-10-02 (P077): reviewed network production code against OWASP validation/denial-of-service guidance and Godot authentication/DTLS documentation. Findings and recommendations in security_review.txt cover discovery impersonation, unauthenticated slot occupation, resource limits, RPC abuse, absent configured encryption, incomplete malicious-host payload checks and listening scope. Same-computer movement validation unit test passed on Godot 4.7.2, exit 0; user-log/certificate-store errors remain. No exploit/flood/physical-device acceptance claimed. No implementation or protected-document changes; all requirement statuses unchanged.
+
+- S-2026-11-10-01 (P076): read both READMEs, AGENTS.md, current requirement tables and recent status/prompt records; inspected workspace file inventory and both DOCX sources. Summarized current networking prototype, prior P075 integration/test evidence, unfinished gameplay and outstanding physical/graphical acceptance. Only status.md and prompt_log.md updated for required request tracking. No gameplay tests run; historical results remain historical. Documentation validation checks requirement IDs, links, source hashes, revision consistency and file boundaries. Bare git unavailable on PATH; bundled Git used for working-state inspection.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 
@@ -414,3 +430,24 @@ Applied the P073 proposals with user approval to AGENTS.md, README.md and Godot/
 Validation: Python documentation audit checked all 20 original and 13 supplemental IDs, local links, referenced test paths, source SHA256 values and prompt/status revision consistency. File-boundary audit confirms only these three approved documents plus status.md and prompt_log.md changed for P074; pre-existing implementation/test changes preserved. Git diff --check passed using the bundled Git executable; bare git was unavailable on PATH. No gameplay tests run for documentation only. Physical LAN, graphical/performance acceptance and source interpretations remain outstanding. No staging, commit or push.
 
 - S-2026-11-06-09 (P074): approved P073 wording applied; FR15 documentation consistency complete, gameplay statuses unchanged.
+<<<<<<< Updated upstream
+=======
+
+## Preserved main transfer history
+
+- S-2026-10-27-12 (P044): user selected lobby changes plus latest documentation, rather than documentation-only latest commit 56e96c3. Applied source-only commits b805909, e75f8c1, 106491b, ecf5f6b, 277157a, 7fbad3f, 6413d3c and 56e96c3 to main without intermediate commits; consolidated as the requested Lobby Clutter Update w/ Bug Fixes commit. Resolved overlapping documentation/code/tests to the selected source versions; removed stale main documentation preambles. Preserved main-only editor/cache/UID metadata and all source requirements. Source branch unchanged; no push. Current Godot 4.7.2 host/client/observer counts, Join/Exit, network UI and hosting/discovery checks passed. Restricted route selection safely reports ambiguity; earlier actual Wi-Fi selection remains prior evidence. Physical two-device and visual acceptance unverified; requirement statuses unchanged.
+
+P044 validation note: aggregate staged whitespace warnings are inherited from source historical prompt/comparison records and were preserved rather than silently rewritten. Current runtime checks passed; no new script errors reported.
+
+## P075 - beta integration into main
+
+Compared clean main c06ecd4 with malik-other-branch 3738b97 and applied git merge --squash malik-other-branch. Resolved 12 overlapping files to the selected source versions; retained main P044 prompt and status history and main-only generated metadata. Transfers connected room/HUD, authoritative shared movement, client prediction/interpolation/reconciliation, connection delay/countdown/Cancel/Retry, Room Full/Disconnected feedback, named departures, username changes, current tests and approved documentation. Source branch remains unchanged. Single requested commit title: Beta Network Mooze Tanks Game v1.0. No remote push.
+
+Current validation: Godot 4.7.2 executable C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe with --headless --path Godot --script res://tests/<name>.gd: room_view_smoke, join_delay_smoke, game_room_smoke (no arguments); world_sync_smoke host/no-argument pair; connected_room_smoke host/no-argument pair and host host-leaves/host-leaves pair; room_full_smoke host/occupant/no-argument group; join_cancel_smoke -- full-timeout. All passed, exit 0. Existing user-log write and root-certificate-store errors appeared without reported script errors. Checks cover shared authority/input validation, smoothing, membership/departure, host closure notice, capacity, delay/cancellation and ten-second timeout/Retry. Physical two-device LAN, graphical FPS/smoothness, pending-host-loss fixture and discovery regression not rerun; their earlier evidence remains historical. Start/combat/hit reconciliation/reset remain absent; beta commit title does not claim full requirement acceptance.
+
+Documentation checks: all 33 canonical requirement IDs, local links, source SHA256 preservation, source-code equivalence and revision/log consistency. Git metadata write initially failed in the sandbox; approved escalation allowed squash merge/staging/commit. Historical whitespace warnings are retained rather than rewriting old evidence.
+
+- S-2026-11-06-10 (P075): one squash integration commit on main; current validation recorded, source branch retained.
+
+P076 validation result: all 33 status IDs present. Local-link audit found an existing historical prompt_log.md link to missing Godot/tests/VM_TEST_REPORT.txt; reported without repairing unrelated history.
+>>>>>>> Stashed changes
