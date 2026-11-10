@@ -18,32 +18,18 @@ func key(code: Key, pressed: bool) -> void:
 	Input.flush_buffered_events()
 
 func run() -> void:
-	var room: Control
-	if OS.get_cmdline_user_args().has("from-lobby"):
-		var lobby = load("res://lobby.tscn").instantiate()
-		root.add_child(lobby)
-		current_scene = lobby
-		await process_frame
-		if not check(lobby.test_room_button.is_visible_in_tree() and not lobby.test_room_button.disabled, "Lobby must expose the temporary room button"):
+	for argument in OS.get_cmdline_user_args():
+		if argument != "escape":
+			printerr("Unsupported preview test option: " + argument + ". Use no arguments or escape; the lobby test button was removed.")
+			quit(1)
 			return
-		lobby.joining = true
-		lobby.update_join_button()
-		lobby.open_test_room()
-		if not check(lobby.test_room_button.disabled and current_scene == lobby, "Preview must not interrupt a Join attempt"):
-			return
-		lobby.joining = false
-		lobby.update_join_button()
-		lobby.test_room_button.pressed.emit()
-		await process_frame
-		await process_frame
-		if not check(current_scene != null and current_scene.scene_file_path == "res://game_room.tscn", "Temporary button must open the room scene"):
-			return
-		room = current_scene
-	else:
-		room = load("res://game_room.tscn").instantiate()
-		root.add_child(room)
-		current_scene = room
-		await process_frame
+	var room: Control = load("res://game_room.tscn").instantiate()
+	root.add_child(room)
+	current_scene = room
+	await process_frame
+	await create_timer(0.3).timeout
+	if not check(room.fps_label.is_visible_in_tree() and room.fps_label.text.begins_with("FPS: ") and room.fps_label.get_global_rect().end.y <= room.leave_button.get_global_rect().position.y, "FPS counter updates above back arrow"):
+		return
 	room.set_physics_process(false)
 	var hud_rect: Rect2 = room.leave_button.get_global_rect()
 	var settings_rect: Rect2 = room.settings_button.get_global_rect()

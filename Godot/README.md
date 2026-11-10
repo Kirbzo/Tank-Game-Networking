@@ -6,18 +6,15 @@ Use **Godot 4.7.2** and GDScript. Import `project.godot`, then run the project (
 
 ## Host, Join and room departure
 
-1. Open two instances. Press **Host** in one to create a server and enter its room. The other instance discovers its game ID, host username and player count.
-2. Select the listing or enter its game ID (case-insensitive), then press **Join**. A successful connection opens the same room.
-3. While connecting, a **10-second countdown**, progress bar and **Cancel** button are shown. Cancel stops the attempt and restores the lobby. Failure or timeout provides **Retry** and **Back**; Retry starts a fresh 10-second attempt.
-4. Move using **WASD or the arrow keys**. The host calculates both players' positions and sends authoritative updates. Each assigned username appears above its player rectangle in white; the top-center label identifies the host. The HUD also shows the game ID and connected-player count.
-5. Use the room's **back arrow** or **Escape** to disconnect and return to the lobby. Client departure updates the host's player display and count. Host departure returns the other player to the lobby with an explanation; its listing expires after approximately four seconds.
-6. **Lobby Exit** keeps the application open on "Exiting game...". Future main-screen routing remains unimplemented. **Test Game Room** remains a separate local preview.
+Run with F5. Press Host to create and enter a room. In another instance, select its listing or enter its game ID and press Join. The loading screen appears immediately; the connection begins after 500 ms. The ten-second countdown includes that delay. Cancel restores the lobby. Retry restarts the same flow after an ordinary connection failure. A recent 2/2 listing displays Room Full with Return to Lobby.
 
-Connected instances use common world bounds fitted to each window. Movement is currently 220 logical units/second with normalized diagonals, bounded positions, validation of input vectors and a stale-input timeout. These are provisional test settings; final FR9 movement/action rules require team confirmation. Clients render host updates without prediction or interpolation. The gear opens placeholder settings and suppresses that player's movement input while open; shared simulation continues.
+Move using WASD or the arrow keys. Remote player movement is interpolated; your own movement is predicted locally and reconciled to the host. The host remains authoritative. The FPS counter above the back arrow reports local frame rate; it is separate from the nominal 20 Hz snapshot rate. Usernames appear above players in white, and the top-center label identifies the host. The settings gear opens a placeholder and suppresses local movement input while open.
 
-Game start, combat, hit reconciliation and match reset remain unimplemented. Room failures currently use generic feedback, and the host has no explicit client-disconnect event message. Final movement rules and proposed host-only/two-player start permissions require team confirmation. Player membership is displayed through named rectangles rather than a separate roster panel. Graphical and physical two-device acceptance remain unverified.
+The back arrow or Escape leaves the room and returns to the lobby. The host sees a named departure message when its guest leaves. Losing the host shows Disconnected with Return to Lobby. Lobby Exit shows Exiting game... and keeps the application open. The lobby Test Game Room button has been removed; direct standalone scene testing remains available through F6 or a direct scene command.
 
-Full-room listings remain visible with 2/2 players. Usernames are display names, not authenticated identities, and can repeat. See [WP2 Requirements.docx](../MoozeTanks/WP2%20Requirements.docx) and [status.md](../status.md). LR5 interpretation of manual host-IP lookup remains open.
+Connected instances use common world bounds fitted to each window. Movement is currently 220 logical units/second with normalized diagonals, bounded positions, validated input vectors and a stale-input timeout. These are provisional test settings; final FR9 movement/action rules require team confirmation. The FPS counter refreshes four times per second from the engine frame-rate measurement and remains above the settings overlay. Restart both instances with matching code after RPC format changes.
+
+Start, combat, hit reconciliation and match reset remain unimplemented. Proposed host-only/two-player Start permissions and final movement rules need team confirmation. Named rectangles display membership rather than a separate roster panel. LR5 interpretation of manual host-IP lookup remains open. Full-room listings remain visible with 2/2 players; only recent full-room information selects Room Full, while unknown or expired availability retains Retry/Back. Usernames can repeat and are not authenticated identities. Graphical performance, physical two-device and abrupt network-loss acceptance remain unverified. See [WP2 Requirements.docx](../MoozeTanks/WP2%20Requirements.docx) and [status.md](../status.md).
 
 ## Two laptops on the same network
 
@@ -70,6 +67,30 @@ godot --headless --path Godot --script res://tests/alpha_smoke.gd -- packets
 godot --headless --path Godot --script res://tests/alpha_smoke.gd -- failure
 ```
 
+Display interpolation/prediction and delayed Join/Retry checks:
+
+```powershell
+godot --headless --path Godot --script res://tests/room_view_smoke.gd
+godot --headless --path Godot --script res://tests/join_delay_smoke.gd
+```
+
+Full-room checks use three terminals: start the host, then the occupant, then the third-player check without arguments:
+
+```powershell
+godot --headless --path Godot --script res://tests/room_full_smoke.gd -- host
+godot --headless --path Godot --script res://tests/room_full_smoke.gd -- occupant
+godot --headless --path Godot --script res://tests/room_full_smoke.gd
+```
+
+Pending host-loss checks use two terminals, starting the host first and the client within ten seconds:
+
+```powershell
+godot --headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host
+godot --headless --path Godot --script res://tests/pending_host_loss_smoke.gd
+```
+
+This fixture intentionally delays host ENet polling/handshake before closing the real host. It checks pending-Join timeout feedback with Retry/Back; it does not establish physical network-loss acceptance.
+
 Discovery regression: run `alpha_smoke.gd -- observer` first, then `alpha_smoke.gd -- host` within ten seconds. Append `unicast` to both for broadcast-disabled direct-IP discovery. For query-only late discovery append `late` to both and start host first. These check discovery and ID selection, not joining. All tests must print PASS and exit 0; separate protocol identifiers isolate discovery and join test groups.
 
 November 3, 2026 (P061): the full 10-second timeout/cancel/retry check, Join failure/Retry/Back check, actual world-sync host/client pair, and connected-room host-closure/client-recovery pair passed on Godot 4.7.2. User-log/certificate-store errors remain without script errors. These are same-computer headless checks; graphical and physical two-device acceptance remain unverified.
@@ -96,7 +117,7 @@ October 27, 2026: deterministic route-choice cases and actual UI feedback tests 
 
 ## Standalone game-room preview
 
-Run the project normally with **F5**, then click the temporary **Test Game Room** button beneath Exit in the lobby. It opens the local room preview; Leave Room or Escape returns to the lobby. The test button is unavailable while joining, hosting or connected, so it cannot interrupt an existing session. Normal Host/Join enters the connected room described above; this button opens only the standalone preview. You can also open `game_room.tscn` and press **F6** (Run Current Scene). Alternatively, run from the repository root:
+The temporary lobby **Test Game Room** button has been removed. For the standalone local preview, open `game_room.tscn` and press **F6** (Run Current Scene), or run from the repository root:
 
 ```powershell
 godot --path Godot res://game_room.tscn
@@ -115,14 +136,14 @@ godot --headless --path Godot --script res://tests/game_room_smoke.gd -- escape
 
 Both commands passed on October 30, 2026 using Godot 4.7.2. They exercise keyboard movement, normalized diagonals, opposite inputs, walls, resizing, duplicate leave protection, and actual scene return to a lobby with no session. Existing environment user-log/certificate errors remain; no script errors were reported. Existing lobby networking tests were not rerun for this isolated scene addition.
 
-Temporary-button check: `godot --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`. Passed on October 30, 2026: lobby button visibility, pending-Join guard, actual lobby-to-room transition, room movement/bounds and leave-to-lobby behavior.
+Historical temporary-button check (retired after P072; `-- from-lobby` is no longer supported): `godot --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`. Passed on October 30, 2026: lobby button visibility, pending-Join guard, actual lobby-to-room transition, room movement/bounds and leave-to-lobby behavior.
 
 ## Game-room layout reference
 
 The room follows [GameRoomImage.jpeg](../MoozeTanks/GameRoomImage.jpeg). The two lower sketches represent layers composed into the top full-screen view, not side-by-side panels:
 
 - Player rectangles are drawn in the base canvas. Connected rooms show synchronized assigned usernames above them in white; the standalone preview uses P.
-- A separate `HUD` CanvasLayer above the world holds the fixed top-left back arrow, top-right settings gear, top-center host username, connected count/status, and bottom-center game ID. Player movement does not move the HUD.
+- A separate `HUD` CanvasLayer above the world holds the fixed top-left FPS counter above the back arrow, top-right settings gear, top-center host username, connected count/status, named departure message, and bottom-center game ID. Player movement does not move the HUD.
 - The preview displays **Game ID: PREVIEW**, not a real hosted session ID. Connected Host/Join entry supplies the actual session game ID.
 - The gear opens a **Game Settings** placeholder screen with **Back to Room**. No settings are implemented. Local movement input is blocked while this screen is open; connected world updates continue; Escape closes settings first and leaves the room only when settings are closed.
 

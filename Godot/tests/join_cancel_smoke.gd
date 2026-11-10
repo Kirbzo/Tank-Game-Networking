@@ -49,7 +49,7 @@ func run() -> void:
 	screen.cancel_button.pressed.emit()
 	if not check(lobby.session == null and (lobby.multiplayer.multiplayer_peer == null or lobby.multiplayer.multiplayer_peer is OfflineMultiplayerPeer) and not lobby.joining and screen.timeout.is_stopped() and lobby.game_id.text == "ABC123", "Active Cancel closes peer/stops timer and retains selected game"):
 		return
-	if not check(not lobby.join_button.disabled and not lobby.host_button.disabled and not lobby.test_room_button.disabled, "Cancelled lobby actions usable"):
+	if not check(not lobby.join_button.disabled and not lobby.host_button.disabled, "Cancelled lobby actions usable"):
 		return
 	lobby.join_game()
 	if not check(screen.timeout.wait_time == 10.0 and screen.indicator.value < 1 and screen.cancel_button.visible, "Next attempt resets ten-second timer/progress"):

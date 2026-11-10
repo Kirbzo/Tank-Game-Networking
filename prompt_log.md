@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P069 and the next request is **P070**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P074 and the next request is **P075**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -13,6 +13,117 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 # November 6, 2026
 
 **Recorded times - newest first (America/Regina)**
+
+## P074 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:47:51 AM (America/Regina; UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> the changes are apporved
+
+Result: applied the P073 approved wording to AGENTS.md and both READMEs. Updated current behavior and test instructions, preserved alpha/source history and retired-command evidence, and retained functional Retry without an active handoff. Updated [status.md](status.md), revision S-2026-11-06-09 (FR15 documentation consistency complete; remaining gameplay acceptance unchanged).
+
+Validation: Python documentation audit (33 IDs, links, test paths, original source-table preservation, both DOCX SHA256 values, revision consistency and five-file change boundaries); bundled Git diff --check. Bare git unavailable on PATH; used GitHub Desktop bundled executable. No gameplay tests needed/run for documentation only. Prior process results are historical; physical LAN and graphical performance remain unverified. Nothing staged, committed or pushed.
+
+Token usage: **Unavailable** for input, cached input, output and model; reliable per-request usage/model records covering all calls and continuations are not exposed. Whether cached input is included in input totals is unavailable. Usage source: unavailable telemetry. Estimated monetary cost: **Unavailable** because reliable model, rates and usage breakdown are unavailable; no billed charge claimed.
+
+## P073 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:40:35 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> what would you suggest to update those docs, also i think the retry handoff isnt required anymore so you can go ahead and remove it
+
+Result: removed active Retry handoff from top of status.md and its agent-directed code comment. Retry signal/handler/behavior preserved; historical prompt/status references retained under FR14 and explicitly superseded. Drafted concrete AGENTS current scope, root README overview/current-scope and Godot operational/test wording reflecting delay/deadline, differentiated notices, departure messages, smoothing/prediction/reconciliation, FPS and removed button. Protected docs unchanged pending approval. Changed status/log plus one lobby comment; no behavior changes or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-08; contains exact wording proposals. Supersedes active P064 handoff and P072 suggestion to retain/link it.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: `python -` read both source Word documents; verified 33 IDs, active links, unchanged source hashes/protected docs and status/log revision. Git diff --check/status for boundaries. No gameplay tests needed or run for note/comment removal and proposals; prior runtime results remain historical. No staging/commit/push.
+
+## P072 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:35:10 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Lets remove the test game room button and also compair the project now to the AGENTS.md and README.md and suggest anything that seems outdated or missing to be changed or added
+
+Result: removed temporary lobby button and unused open_test_room/flag/guards; retained Host/Join and shared room/direct preview. Updated relevant tests to remove retired button path and validate absence/normal entry. Compared AGENTS and both READMEs with current code; suggested updated 500 ms delay, Room Full/Retry distinction, Disconnected acknowledgement, named guest-departure event, client interpolation/prediction/reconciliation, FPS HUD and current test commands. Flagged Godot README removed button/from-lobby instructions and false no-prediction/no-message wording. Preserved alpha/source history; protected-doc suggestions only, no edits. Changed lobby.gd and game_room/join_smoke/join_cancel tests plus required status/log. No commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-07, detailed proposals retained for approval. FR15 remains partial.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/join_smoke.gd -- initial`: PASS/exit 0 (button absent, initial controls/Exit).
+- `--headless --path Godot --script res://tests/join_cancel_smoke.gd`: PASS/exit 0.
+- `--headless --path Godot --script res://tests/game_room_smoke.gd`: PASS/exit 0 (direct preview/FPS/HUD/settings/movement/return).
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with command without host: both PASS/exit 0.
+`rg -n 'test_room_button|opening_test_room|open_test_room' Godot --glob '*.gd'` returns no matches (exit 1 expected). Existing user-log/certificate-store errors remain without script errors. No graphical/two-device verification. Python checked 33 IDs, source hashes, active links, protected docs preservation and status/log references; Git diff --check/status for boundaries. Protected updates await approval; no staging/commit/push.
+
+## P071 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:18:06 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets start doing your recommendations, and lets also add a fps counter of your current fps at the top left of the screen
+
+Result: implemented P070 smoothing/prediction recommendations while retaining nominal 20 Hz snapshots initially. Added bounded client snapshot interpolation, local physics prediction, input sequences/host post-simulation acknowledgements, replay/reconciliation and correction smoothing. Host still owns movement; display and authoritative dictionaries separate. Added top-left FPS above back arrow, refreshed using engine FPS and visible above settings. Shared world move rule extracted; cleanup stops render callbacks. Changed game_room.gd/game_room.tscn/lobby.gd/room_world.gd, added room_view.gd and room_view_smoke.gd, expanded existing world_sync/game_room tests and required logs. No source/protected-doc edits or commit. Both game instances need restart on updated packet format; visual/LAN performance still to be assessed.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-06; implements P070 proposal. FR8/FR9/FR12 partial evidence updated.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing telemetry is not exposed.
+
+Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe`:
+- `--headless --path Godot --script res://tests/room_view_smoke.gd`: PASS/exit 0 (interpolation, prediction/replay, host correction, missing/stale snapshots, bounds/queue, acknowledgement and invalid/duplicate input guards).
+- `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0; live client 58 remote interpolated frames and 32 local prediction steps between snapshots, authoritative equality retained, acknowledgement queue bounded, FPS label present.
+- `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` and `-- escape`: both PASS/exit 0, FPS placement/updates and preview regression.
+- `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with command without host; separate pair with `host host-leaves` / `host-leaves`: all final PASS/exit 0. Initial new render callback queried peer after cleanup; added lifecycle guards/stopped render process and reran successfully.
+- `--headless --path Godot --script res://tests/room_full_smoke.gd -- host`, `-- occupant`, and without arguments: all PASS/exit 0.
+- `--headless --path Godot --script res://tests/join_delay_smoke.gd`: PASS/exit 0 (512/501 ms Join/Retry).
+Existing user-log/certificate-store errors remain; final cleanup checks without script errors. No graphical/two-device/high-latency/physical packet-loss acceptance. Python checked sources/checksums, 33 IDs, local links and revision consistency; Git diff --check/status checked boundaries. Protected wording edits remain pending as previously recorded; no staging/commit/push.
+
+## P070 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 11:08:48 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> so from the player side, the game stutters and runs at an extremly low fps but the host's side is completly clear. check why that is and suggest some ideas to deal with this issue
+
+Clarification asked:
+
+> Where are the host and joined player running?
+
+Actual answer:
+
+> its both the same computer in 2 instances and seperate computers
+
+Clarification asked:
+
+> What looks slow on the joined player?
+
+Actual answer:
+
+> Player movement stutters, but buttons/UI stay responsive
+
+Result: code shows host physics-rate positions, nominal 20 Hz snapshots and direct client state replacement without interpolation/prediction. Current isolated same-computer headless timing probe measured host 59.969 world updates/s versus client 19.992, with client update median/max 48.451/55.340 ms; both physics ~60 Hz and main loop ~145 Hz. This supports movement cadence as likely cause, not a measured graphical FPS collapse. Recommended buffered per-render network interpolation first, local prediction/server reconciliation for responsiveness, optional higher snapshot rate after measurement, and actual graphical/LAN profiling. 500 ms Join delay is startup-only. Temporary probe removed; only status/log retained, no gameplay/protected-doc edits or commit.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-06-05, contains full measurements and ranked proposals. Any subsequent implementation gets its own prompt ID.
+
+Token usage (input, cached input, output), cache inclusion, model usage record and estimated/actual cost: **Unavailable**; reliable per-request usage/billing records are not exposed.
+
+Validation: repository root, `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe --headless --path Godot --script res://tests/_motion_probe.gd -- host` paired with same command without host: both exit 0 and output MOTION_DIAGNOSTIC timing JSON. Probe sampled process frames/world tick changes four seconds after connected warmup. Temporary probe removed after inspection; path cannot be rerun unless recreated. No GUI/physical-device FPS, RTT or packet-loss capture. Existing user-log/certificate errors remain without script errors. Read official Godot interpolation/jitter/networking docs, local code and both requirements sources. Python checked 33 IDs, links, source checksums, revision consistency and two-file retained change boundary. Git diff --check/status checked boundaries; no staging/commit/push.
 
 ## P069 - November 6, 2026
 

@@ -121,9 +121,30 @@ func run() -> void:
 			return
 		key(KEY_D, true)
 		key(KEY_S, true)
-		await create_timer(0.6).timeout
+		var deadline := Time.get_ticks_msec() + 600
+		var last_tick: int = room.world_tick
+		var last_remote: Vector2 = room.display_positions.get(1, Vector2.ZERO)
+		var last_prediction: Vector2 = room.client_view.predicted_position
+		var interpolated_frames := 0
+		var predicted_frames := 0
+		while Time.get_ticks_msec() < deadline:
+			await process_frame
+			var remote: Vector2 = room.display_positions.get(1, Vector2.ZERO)
+			if room.world_tick == last_tick:
+				if not remote.is_equal_approx(last_remote):
+					interpolated_frames += 1
+				if not room.client_view.predicted_position.is_equal_approx(last_prediction):
+					predicted_frames += 1
+			last_tick = room.world_tick
+			last_remote = remote
+			last_prediction = room.client_view.predicted_position
 		key(KEY_D, false)
 		key(KEY_S, false)
+		if not check(interpolated_frames > 0 and predicted_frames > 0, "Remote interpolation and local prediction advance between host snapshots"):
+			return
+		if not check(room.fps_label.is_visible_in_tree() and room.fps_label.text.begins_with("FPS: "), "Live FPS counter present"):
+			return
+		print("TRACE between snapshots remote frames=", interpolated_frames, " local predictions=", predicted_frames)
 		var original_host_y: float = World.BOUNDS.get_center().y - World.PLAYER_SIZE.y / 2
 		if not check(room.world_positions[1].y < original_host_y - 30, "Host movement reaches client during simultaneous input"):
 			return
@@ -136,12 +157,14 @@ func run() -> void:
 		if not check(room.world_positions == stopped, "Settings stops local input while snapshots continue"):
 			return
 		room.close_settings()
-		lobby.room_input.rpc_id(1, Vector2(999, 999))
+		lobby.room_input.rpc_id(1, Vector2(999, 999), room.client_view.input_sequence + 1)
 		await create_timer(0.3).timeout
 		if not check(room.world_positions == stopped, "Oversized network input cannot teleport player"):
 			return
 		room.receive_world(room.world_tick - 1, {})
 		if not check(room.world_positions == stopped, "Old snapshot ignored"):
+			return
+		if not check(room.client_view.latest_ack > 0 and room.client_view.pending_inputs.size() < 10, "Host acknowledges sequenced input without growing replay queue"):
 			return
 		probe.report.rpc_id(1, room.world_positions)
 		for i in range(200):
