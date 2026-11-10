@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P074 and the next request is **P075**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P075 and the next request is **P076**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -13,6 +13,25 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 # November 6, 2026
 
 **Recorded times - newest first (America/Regina)**
+
+## P075 - November 6, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 12:02:50 PM (America/Regina; UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets look back at the repository now and check the comparisons between the malik-other-branch and main. Lets create a single commit with the changes from the malik-other-branch into the main branch. Name it "Beta Network Mooze Tanks Game v1.0"
+
+Compared clean main c06ecd4 with malik-other-branch 3738b97 and applied git merge --squash malik-other-branch. Resolved 12 overlapping files to the selected source versions; retained main P044 prompt and status history and main-only generated metadata. Transfers connected room/HUD, authoritative shared movement, client prediction/interpolation/reconciliation, connection delay/countdown/Cancel/Retry, Room Full/Disconnected feedback, named departures, username changes, current tests and approved documentation. Source branch remains unchanged. Single requested commit title: Beta Network Mooze Tanks Game v1.0. No remote push.
+
+Current validation: Godot 4.7.2 executable C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe with --headless --path Godot --script res://tests/<name>.gd: room_view_smoke, join_delay_smoke, game_room_smoke (no arguments); world_sync_smoke host/no-argument pair; connected_room_smoke host/no-argument pair and host host-leaves/host-leaves pair; room_full_smoke host/occupant/no-argument group; join_cancel_smoke -- full-timeout. All passed, exit 0. Existing user-log write and root-certificate-store errors appeared without reported script errors. Checks cover shared authority/input validation, smoothing, membership/departure, host closure notice, capacity, delay/cancellation and ten-second timeout/Retry. Physical two-device LAN, graphical FPS/smoothness, pending-host-loss fixture and discovery regression not rerun; their earlier evidence remains historical. Start/combat/hit reconciliation/reset remain absent; beta commit title does not claim full requirement acceptance.
+
+Documentation checks: all 33 canonical requirement IDs, local links, source SHA256 preservation, source-code equivalence and revision/log consistency. Git metadata write initially failed in the sandbox; approved escalation allowed squash merge/staging/commit. Historical whitespace warnings are retained rather than rewriting old evidence.
+
+Associated [status.md](status.md): S-2026-11-06-10. Preserved main P044 history and continuing source prompt IDs; next P076.
+
+Token usage: **Unavailable** for input, cached input, output and model; reliable per-request telemetry covering all model/tool continuations is not exposed. Cached-input inclusion: unavailable. Usage source: unavailable. Estimated cost and actual billed charge: **Unavailable**; reliable model/rates/usage breakdown not available.
 
 ## P074 - November 6, 2026
 
@@ -544,6 +563,31 @@ Validation: rg filename/reference searches and source/requirements review; Pytho
 # October 27, 2026
 
 **Recorded times — newest first (America/Regina)**
+
+## P044 - October 27, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 12:35:45 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Lets also cherrypick the latest commit in malik-other-branch to main. Name the new commit to "Lobby Clutter Update w/ Bug Fixes"
+
+Clarification asked:
+
+> The latest malik-other-branch commit is 56e96c3, which changes only AGENTS.md and the prompt/status logs. It does not contain the lobby cleanup or bug-fix code. Which changes should I bring to main under ?Lobby Clutter Update w/ Bug Fixes??
+
+Actual answer:
+
+> Lobby changes plus latest documentation (recommended)
+
+Result: main was already checked out and clean at 99fe247. Applied the eight source-only commits (b805909, e75f8c1, 106491b, ecf5f6b, 277157a, 7fbad3f, 6413d3c, 56e96c3) without intermediate commits, resolved source-history and code/test conflicts, and prepared the combined requested commit. Source lobby code and documentation match 56e96c3; main-only editor/cache/UID metadata preserved. Main's stale display-only Exit documentation preambles replaced by the selected source documents. Added this transfer log/status record; source branch remains at 56e96c3. The resulting main commit uses the exact requested title. No remote push.
+
+Associated status.md: [status.md](status.md), revision S-2026-10-27-12. Historical source prompt IDs/imports and merge audit preserved; next local request P045.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: bundled Git cherry-pick --no-commit was used. Initial sequencer continuation could not replay atop the staged conflict resolution; quit cleared its files but left an empty sequencer directory. Approved removal of only that verified-empty directory succeeded; remaining commits were applied individually without commits, resolving expected overlapping files. No user work was reset or stashed. Godot executable `C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe` ran `--headless --path Godot --script res://tests/join_smoke.gd` with `-- counts`, `-- host`, and no user arguments in separate processes (client prefixed with Start-Sleep -Seconds 2): all PASS, matched PDNC9O/52545, verified username listings, persistent connection, client Exit, host count recovery and host Exit. Also ran `--headless --path Godot --script res://tests/network_ui_smoke.gd` and alpha_smoke.gd host/observer: PASS. Restricted Windows route metadata remained unavailable, correctly showing no unambiguous address. Log-writing/certificate-store errors persisted without reported script errors. Two-device LAN, visual, typed-ID, timeout/retry and packet-mode checks not rerun; prior evidence remains separate. Python via `python -` verified source-code equivalence, all 20 IDs, active links, historical prompt preservation, current P044/next P045, source/audit checksums, allowed 15-file staged scope and unchanged source branch. Working-tree git diff --check passed before committing. The aggregate staged check reports source-inherited trailing whitespace in the historical comparison document and preserved prompt entries; those records were intentionally kept unchanged. No requirements, generated metadata, gameplay or unrelated-file changes.
 
 ## P043 - October 27, 2026
 
