@@ -44,7 +44,7 @@ func _ready() -> void:
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 14)
 	scroll.add_child(column)
-	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
+	var title := add_label(column, "MOOOZE TANKS  /  BETA LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
