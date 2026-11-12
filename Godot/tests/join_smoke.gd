@@ -65,7 +65,7 @@ func connected_lobby_checks(is_host: bool) -> bool:
 	lobby.identify_game("UNKNOWN")
 	if not require(lobby.feedback.text.contains(id) and lobby.feedback.text.contains("Game start is not implemented") and lobby.feedback.text.contains("Players: 2/2" if is_host else "Connected to game"), "Both lobbies must explain their actual session state"):
 		return false
-	if not require(lobby.game_list.get_item_text(lobby.listed_ids.find(id)) == "%s  |  BraveMoose  |  2/2 players" % id, "Connected host and client listings must show 2/2"):
+	if not require(lobby.game_list.get_item_text(lobby.listed_ids.find(id)) == "%s  |  BraveMoose  |  2/2 · Full" % id, "Connected host and client listings must show full capacity"):
 		return false
 	print("PASS persistent session id=%s local_peer=%d peers=%s endpoint_port=%d" % [id, lobby.multiplayer.get_unique_id(), peers, session.get_host().get_local_port() if is_host else lobby.join_target["port"]])
 	return true

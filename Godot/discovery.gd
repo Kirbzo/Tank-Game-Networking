@@ -6,7 +6,9 @@ signal network_warning(message: String)
 
 const FIRST_PORT := 49140
 const SLOT_COUNT := 16
-const PROTOCOL := "moooze-alpha-1"
+# Combined builds share a stable Application/AlphaLobby RPC path.
+# Broadcast and direct-IP replies pass this check before ID cache lookup.
+const PROTOCOL := "moooze-combined-2"
 var protocol := PROTOCOL
 const EXPIRY_MS := 4000
 var instance_id := Crypto.new().generate_random_bytes(12).hex_encode()

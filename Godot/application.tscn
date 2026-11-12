@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://application.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/main.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://lobby.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://client_waiting_room.tscn" id="4"]
+
+[node name="Application" type="Node"]
+script = ExtResource("1")
+
+[node name="MooozeTanks" parent="." instance=ExtResource("2")]
+
+[node name="AlphaLobby" parent="." instance=ExtResource("3")]
+room_scene = ExtResource("4")
