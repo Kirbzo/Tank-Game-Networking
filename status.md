@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: October 19, 2026. Revision: S-2026-10-19-06. Prompt: P012 (six-character host IDs).
+Updated: November 17, 2026. Revision: S-2026-11-17-01-Jaden. Prompt: P013 (token-accounting validation only; requirement statuses unchanged).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -39,6 +39,8 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-11-17-01-Jaden (P013): validated accounting modules and saved P084 audit from malik-other-branch commit 60123f5a21a00ca9ce7a862cb203b83bdde21974 using git show and python -B - (in-memory modules; unittest: 21 passed). Independent assertions confirmed 93 historical records (63 completed, one partial, 29 unavailable), 481 unique response identities, arithmetic/model sums and source README agreement: 82,375,613 completed tokens and 701,058 separate partial tokens. Saved P081 total 1,187,563 is internally consistent. All four historical source session paths are absent locally; the unchanged checker found no attributable matches for the source branch's current 112 prompts in four available local session files. Historical totals therefore cannot be independently revalidated from raw usage here; unavailable is not zero. No backfill, README/audit/tool/gameplay changes, branch switch, staging, commit or push. Only local status/prompt tracking updated. Source DOCX checksum unchanged; all 20 local IDs, links and revision references checked. No gameplay tests needed.
 
 - S-2026-10-19-05 (P010): removed the bottom Alpha Walkthrough description at the user's request. Disabled Join/Exit, their explanatory tooltips, session feedback, and README walkthrough remain. Requirement statuses unchanged. Verified the label removal and documentation consistency by source review; no runtime tests needed for this text-only UI removal.
 

@@ -1,5 +1,21 @@
 # Prompt log
 
+## P013 - November 17, 2026
+
+Actual request:
+
+> Try and validate the token usage based off the TOKEN_USAGE_AGENT_HANDOFF.txt.
+
+Branch association: Jaden (current checkout). Validation target: malik-other-branch at 60123f5a21a00ca9ce7a862cb203b83bdde21974. This is Jaden's P013, distinct from that branch's historical P013. Date uses America/Regina; receipt time unavailable.
+
+Result: followed the handoff's validation procedure without switching branches or applying a backfill. Accounting files are absent from Jaden, so loaded the four Python accounting/test modules from the source branch through git show and executed them in memory using python -B - and unittest. All 21 tests passed; temporary synthetic fixtures were cleaned up. Independently checked saved P084 JSON counts, entry arithmetic, cached/reasoning subsets, model sums, 481 unique session/response identities, category totals and agreement with the source branch README. Historical completed subtotal: 82,375,613 tokens across 63 completed records; partial: 701,058 across one record; 29 unavailable. P081's saved 1,187,563 total is internally consistent.
+
+Source verification limitation: read-only scan found four local session JSONL files, but none of the four historical session paths cited by P084 exists here. The unchanged checker could not attribute P081 or any of the 112 entries in the current source-branch log to a unique local project turn. These results mean unavailable evidence, not zero usage or invalid historical totals. No source-backed revalidation, new completed subtotal, cost estimate or billing claim is made. Current-request usage also remains unavailable; no reliable attributable total was established.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-17-01-Jaden. Requirement statuses unchanged. Only required local prompt/status tracking updated; README, AGENTS, historical audits, source branch, implementation and protected sessions unchanged. No --apply, branch switch, staging, commit or push. Previous explicit read-only request remains unlogged as instructed.
+
+Validation: Python assertions checked the historical audit and README agreement; unittest ran 21 tests successfully. Documentation checks cover all 20 local requirement IDs, local links, revision references, unchanged source DOCX checksum and the two-file change boundary. No gameplay tests needed.
+
 ## P012 - October 19, 2026
 
 Actual request:
