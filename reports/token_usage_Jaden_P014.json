@@ -1,0 +1,209 @@
+{
+  "audit_id": "P014",
+  "recorded_at_utc": "2026-11-17T17:23:43.133357+00:00",
+  "scope": "Jaden prompt_log.md before P014 addition: P001-P013; not all lifetime branch activity",
+  "entries_checked": 13,
+  "counts": {
+    "completed": 1,
+    "partial": 0,
+    "Unavailable": 12
+  },
+  "unique_responses": 7,
+  "totals": {
+    "completed": {
+      "input_tokens": 1021954,
+      "cached_input_tokens": 1006720,
+      "output_tokens": 3604,
+      "total_tokens": 1025558,
+      "reasoning_output_tokens": 385,
+      "cache_write_input_tokens": 0
+    },
+    "partial": {
+      "input_tokens": 0,
+      "cached_input_tokens": 0,
+      "output_tokens": 0,
+      "total_tokens": 0,
+      "reasoning_output_tokens": 0,
+      "cache_write_input_tokens": 0
+    }
+  },
+  "combined_observed_tokens": 1025558,
+  "aggregation": "Unique (session_id,response_id); completed takes priority over partial",
+  "cached_input_included_in_input": true,
+  "missing_usage_is_not_zero": true,
+  "dollar_costs": "Unavailable; not calculated",
+  "shared_response_groups": [],
+  "entries": [
+    {
+      "prompt_id": "P013",
+      "status": "completed",
+      "evidence": {
+        "prompt_id": "P013",
+        "session_id": "01a1551b-f375-7c40-b22a-4ba126398028",
+        "turn_id": "01a1ea78-5f3d-7832-98f4-781bede998bb",
+        "root_turn_ids": [
+          "01a1ea78-5f3d-7832-98f4-781bede998bb"
+        ],
+        "receipt_utc": "2026-11-17T17:05:19.733Z",
+        "receipt_America_Regina": "2026-11-17 11:05:19 AM",
+        "cutoff_utc": "2026-11-17T17:07:21.812Z",
+        "response_count": 7,
+        "response_ids": [
+          "resp_07f33cf71e2eaa7c016afc894fd53887d0bbf083530150d5ad",
+          "resp_07f33cf71e2eaa7c016afc89578c1487d0b48c7ac931d770ea",
+          "resp_07f33cf71e2eaa7c016afc89647d6087d089313997d9ac68fb",
+          "resp_07f33cf71e2eaa7c016afc896ed7e087d08c50a09c8c68d9ed",
+          "resp_07f33cf71e2eaa7c016afc898441a087d0a2bb044ace56f5f3",
+          "resp_07f33cf71e2eaa7c016afc899aa09087d093eb5e72d9e4bc05",
+          "resp_07f33cf71e2eaa7c016afc89c1cfe887d0a1ba2904f0959ce8"
+        ],
+        "usage": {
+          "input_tokens": 1021954,
+          "cached_input_tokens": 1006720,
+          "output_tokens": 3604,
+          "total_tokens": 1025558,
+          "reasoning_output_tokens": 385,
+          "cache_write_input_tokens": 0
+        },
+        "by_model": {
+          "gpt-6-astra": {
+            "input_tokens": 1021954,
+            "cached_input_tokens": 1006720,
+            "output_tokens": 3604,
+            "total_tokens": 1025558,
+            "reasoning_output_tokens": 385,
+            "cache_write_input_tokens": 0
+          }
+        },
+        "cached_input_included_in_input": true,
+        "reasoning_is_separately_exposed_not_added_to_output": true,
+        "completeness": "Complete for matched recorded turn",
+        "final_total": 1025558,
+        "method": "Sum unique (session, response_id) payload.usage; cumulative cross-check only",
+        "coverage": "One exactly matched project turn; external/unlogged calls cannot be established",
+        "sources": {
+          "~/.codex/sessions/2026/10/19/rollout-2026-10-19T11-00-58-01a1551b-f375-7c40-b22a-4ba126398028.jsonl": {
+            "sha256_at_read": "e6b745d7678b2698e330282d1c250007ae38975f1475e66089d9343a8f5e4e72",
+            "issues": []
+          }
+        },
+        "warnings": [],
+        "estimated_cost": "Unavailable",
+        "billed_cost": "Unavailable"
+      }
+    },
+    {
+      "prompt_id": "P012",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P011",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P010",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P009",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P008",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P007",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P006",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P005",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P004",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P003",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P002",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    },
+    {
+      "prompt_id": "P001",
+      "status": "Unavailable",
+      "reason": "Prompt does not match exactly one project turn; specify --turn-id if repeated"
+    }
+  ],
+  "branch": "Jaden",
+  "branch_commit": "d24e55a05fc1d26ea8599f2bbf7378fa4258ee4f",
+  "tool_source_commit": "60123f5a21a00ca9ce7a862cb203b83bdde21974",
+  "log_sha256_at_read": "e933909bb2d32db76e6e6cbc1011000beffd06098b3a4d23a604d03e587e7cb7",
+  "current_request_partial": {
+    "prompt_id": "P014",
+    "session_id": "01a1551b-f375-7c40-b22a-4ba126398028",
+    "turn_id": "01a1ea88-a2b1-7a22-becc-afed8346ee40",
+    "root_turn_ids": [
+      "01a1ea88-a2b1-7a22-becc-afed8346ee40"
+    ],
+    "receipt_utc": "2026-11-17T17:23:05.616Z",
+    "receipt_America_Regina": "2026-11-17 11:23:05 AM",
+    "cutoff_utc": "2026-11-17T17:23:41.880Z",
+    "response_count": 2,
+    "response_ids": [
+      "resp_07f33cf71e2eaa7c016afc8d79b3a887d08976a853d7912176",
+      "resp_07f33cf71e2eaa7c016afc8d8d11a087d0bf3c7438b42d736c"
+    ],
+    "usage": {
+      "input_tokens": 310970,
+      "cached_input_tokens": 308864,
+      "output_tokens": 1123,
+      "total_tokens": 312093,
+      "reasoning_output_tokens": 63,
+      "cache_write_input_tokens": 0
+    },
+    "by_model": {
+      "gpt-6-astra": {
+        "input_tokens": 310970,
+        "cached_input_tokens": 308864,
+        "output_tokens": 1123,
+        "total_tokens": 312093,
+        "reasoning_output_tokens": 63,
+        "cache_write_input_tokens": 0
+      }
+    },
+    "cached_input_included_in_input": true,
+    "reasoning_is_separately_exposed_not_added_to_output": true,
+    "completeness": "Partial",
+    "final_total": "Unavailable",
+    "method": "Sum unique (session, response_id) payload.usage; cumulative cross-check only",
+    "coverage": "One exactly matched project turn; external/unlogged calls cannot be established",
+    "sources": {
+      "~/.codex/sessions/2026/10/19/rollout-2026-10-19T11-00-58-01a1551b-f375-7c40-b22a-4ba126398028.jsonl": {
+        "sha256_at_read": "e6b745d7678b2698e330282d1c250007ae38975f1475e66089d9343a8f5e4e72",
+        "issues": []
+      }
+    },
+    "warnings": [],
+    "estimated_cost": "Unavailable",
+    "billed_cost": "Unavailable"
+  }
+}

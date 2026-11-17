@@ -1,5 +1,22 @@
 # Prompt log
 
+## P014 - November 17, 2026
+
+Receipt time: 11:23:05 AM (America/Regina; matched session user timestamp).
+Branch association: Jaden (current checkout).
+
+Actual request:
+
+> Using those files, try and see what the token usage is on this branch.
+
+Result: loaded the accounting tools from malik-other-branch into memory and audited this branch's 13 existing log entries against four local session files opened read-only. P013 is complete for its matched recorded turn: input 1,021,954 (including cached input 1,006,720), output 3,604, total 1,025,558; seven unique response records with cumulative cross-check. P001-P012 could not be matched to a unique project turn and remain unavailable, not zero. Thus 1,025,558 is a verified completed subtotal for matched logged requests, not all lifetime branch usage. Prior P013 unavailable coverage remains preserved as its earlier snapshot.
+
+Current P014 usage: Partial as of 2026-11-17T17:23:41.880Z (11:23:41 AM America/Regina): input 310,970, cached input 308,864 included in input, output 1,123, total 312,093; reasoning output 63 included in output, cache-write 0. Model gpt-6-astra; two deduplicated responses, cumulative cross-check passed. Later tool continuations and final reply excluded; final total and costs unavailable. This partial usage is excluded from the completed subtotal.
+
+Evidence: [Jaden P014 token report](reports/token_usage_Jaden_P014.json) records source hashes, home-relative session paths, response/turn IDs, model groups, cutoffs, branch/tool commits and per-entry availability. Associated [status.md](status.md): S-2026-11-17-02-Jaden. Requirement statuses unchanged. Only report and required logs changed; no README refresh, broad historical backfill, branch switch, session edits or gameplay changes.
+
+Validation: python -B - invoked the unchanged report/build_audit functions against the local log, then checked report arithmetic, response uniqueness, partial separation, all 20 requirement IDs, local links, revision references, source checksum and changed-file boundaries. The tools' 21 tests passed during P013 and were not rerun without code changes. No gameplay tests needed.
+
 ## P013 - November 17, 2026
 
 Actual request:

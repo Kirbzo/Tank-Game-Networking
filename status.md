@@ -1,6 +1,6 @@
 # Requirements status
 
-Updated: November 17, 2026. Revision: S-2026-11-17-01-Jaden. Prompt: P013 (token-accounting validation only; requirement statuses unchanged).
+Updated: November 17, 2026. Revision: S-2026-11-17-02-Jaden. Prompt: P014 (current-branch token usage; requirement statuses unchanged).
 Source: `MoozeTanks/Requirements Document.docx` (relative to the repository root) (Server Requirement).
 
 Evidence: Godot/ contains the alpha project. Godot 4.7.2 import and two headless processes using the actual lobby scene passed initial empty lists, real ENet host creation, remote matching ID visibility, disabled Join/Exit, selection, typed/unknown IDs, and listing expiry after shutdown. Visual review and two-device LAN testing remain unverified. No actual joining, leaving, or gameplay is claimed.
@@ -39,6 +39,8 @@ Alpha requires working hosting and visibility of its game entry to another user.
 FR1?FR12 are longer-term framework requirements; only their alpha subset belongs in this iteration (AR5). Team confirmation remains necessary for FR6 start permissions, FR9 movement/action rules, and FR11 match-end trigger.
 
 ## Revision history
+
+- S-2026-11-17-02-Jaden (P014): audited this branch's P001-P013 using source-branch accounting modules loaded in memory and four local read-only session snapshots. P013 verified completed recorded turn: 1,021,954 input (1,006,720 cached subset) + 3,604 output = 1,025,558 total across seven unique responses. Other 12 entries unavailable due to no unique project-turn match; full branch usage cannot be determined. Current request separately observed at 312,093 partial tokens as of 2026-11-17T17:23:41.880Z, excluded from completed subtotal. Evidence: [report](reports/token_usage_Jaden_P014.json). Earlier P013 historical-source validation remains distinct. Python checks report arithmetic, unique responses, 20 IDs, links, source checksum and report/log-only boundaries; no gameplay tests or README refresh. No branch switch, staging, commit or push.
 
 - S-2026-11-17-01-Jaden (P013): validated accounting modules and saved P084 audit from malik-other-branch commit 60123f5a21a00ca9ce7a862cb203b83bdde21974 using git show and python -B - (in-memory modules; unittest: 21 passed). Independent assertions confirmed 93 historical records (63 completed, one partial, 29 unavailable), 481 unique response identities, arithmetic/model sums and source README agreement: 82,375,613 completed tokens and 701,058 separate partial tokens. Saved P081 total 1,187,563 is internally consistent. All four historical source session paths are absent locally; the unchanged checker found no attributable matches for the source branch's current 112 prompts in four available local session files. Historical totals therefore cannot be independently revalidated from raw usage here; unavailable is not zero. No backfill, README/audit/tool/gameplay changes, branch switch, staging, commit or push. Only local status/prompt tracking updated. Source DOCX checksum unchanged; all 20 local IDs, links and revision references checked. No gameplay tests needed.
 
