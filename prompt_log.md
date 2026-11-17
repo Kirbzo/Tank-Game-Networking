@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P083 and the next request is **P084**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P090 and the next request is **P091**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2263,3 +2263,98 @@ Result: created README.md, AGENTS.md, and documentation_rationale.txt based on t
 Associated status.md: none existed at that time; requirement tracking was introduced by the updated DOCX. Historical snapshot: documentation created; no game implementation verified.
 
 Merge provenance: `P001`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
+
+## P084 - Workspace summary
+
+Date: 2026-11-17.
+Time: 12:18:21 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Read the README, AGENTS.md, and recent status.md logs and summerize the contents of this workspace.
+
+Associated status snapshot: S-2026-11-17-05. Reviewed guidance, requirements, recent status history and file layout. Summary distinguishes historical integrated-game test evidence from this checkout's older lobby entry scene and absent imported assets/application scene. No implementation changes or protected-document edits. Updated only status.md and prompt_log.md for FR13-FR14. All 33 requirement IDs checked; local Markdown targets checked; source checksums preserved. Git unavailable; runtime tests not run. Physical two-device acceptance remains unverified.
+
+Input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; reliable full-request usage records including tool continuations were not provided. Whether cached input is included in input total: **Unavailable**. Estimated monetary cost and actual billed cost: **Unavailable** without reliable usage/model/rates.
+## P085 - Validate current game functionality
+
+Date: November 17, 2026.
+Time: 12:30:08 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> validate the current game and what functionally works
+
+Associated status snapshot: S-2026-11-17-06. Performed Godot 4.7.2 local headless validation using current startup and real paired/triple processes: 25/28 runner processes pass. Discovery, connection/error/cancel, capacity/lifecycle and rectangle movement/authority/display checks pass. Original packet test has a demonstrated same-millisecond timing failure; diagnostic delayed copy passes. Combined startup and combat tests fail on the older startup configuration. Direct newer arena compilation fails on absent assets/scripts. Historical P083 tank-game success is not accepted as current checkout success. Physical LAN and graphical/human/audio acceptance untested. Full report and exact commands: reports/P085/validation.txt and results.json. No gameplay repair or protected-document changes. Generated test artifacts and required logs only; source checksums preserved. Runner setup issues and engine/environment limitations are recorded in the report.
+
+Per-request input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; complete reliable accounting across this request/tool continuations is not supplied. Cached-input inclusion: **Unavailable**. Estimated monetary cost and billed charges: **Unavailable** without reliable usage/model/rates. No figures invented.
+## P086 - Integrate candidate gameplay files using current project as authority
+
+Date: November 17, 2026.
+Time: 12:56:58 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> lets intigrate the candidate files into our current project. Use the current files as the files of truth. After the intigration, rerun the combat test
+
+Associated status snapshot: S-2026-11-17-07; follows P085 validation and the subsequent chat-only repository comparison. Added missing gameplay dependencies from AnnMaxine/Moooze-Tanks-Repository pinned commit a69699527b3c5b9beae88157fa63ac84291ed42e. Current host authority, validation, contact cooldown/knockback, shot pass-through and lifecycle retained. Added startup/menu/inherited room wiring and restored existing tank room's prediction hooks. Existing test source and protected documentation/requirements unchanged. Final combat host/guest PASS; 11 related regression processes PASS; additional generated menu-Exit check PASS. Intermediate readiness/contact failures, exact commands, changed files, provenance and evidence boundaries are recorded in status.md. Physical LAN, graphical/manual/audio/performance acceptance pending; health/scoring/reset deferred. No new report documents; temporary runners/results/logs in ignored Godot cache. Only existing required status/prompt documentation updated.
+
+Per-request input/cached input/output tokens, model and usage source: **Unavailable**; reliable complete accounting across all model/tool continuations was not supplied. Cached-input inclusion: **Unavailable**. Estimated monetary cost and actual billed charges: **Unavailable** without validated full usage/model/rates. No figures invented.
+## P087 - Revert added menu UI, retain tank arena and combat
+
+Date: November 17, 2026.
+Time: 01:03:21 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can we revert the changes that involve changing the UI?
+
+Clarification question: Should I restore just the original lobby/startup screen and keep the tank arena, or also restore the rectangle room?
+Actual answer:
+
+> Restore original lobby; keep tank arena and combat
+
+Associated status snapshot: S-2026-11-17-08. Restored lobby.tscn startup and removed added application/menu wrappers. Kept the tank room by scene override and moved fire binding initialization to the existing lobby. Updated four test entry paths for direct lobby routing; preserved gameplay assertions. All 12 actual Godot 4.7.2 headless test processes PASS/exit 0, including combat/Start/mouse host/client and three-process lifecycle. Protected docs/requirements unchanged; required status/prompt logs updated. No new standalone report files. Graphical and physical LAN acceptance remain unverified.
+
+Input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; no reliable complete-request records across tools and clarification supplied. Cached-input inclusion: **Unavailable**. Estimated cost and billed cost: **Unavailable** without complete usage/model/rates.
+## P088 - Check the UI from the Milestone 2 commit
+
+Date: November 17, 2026.
+Time: 01:09:07 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Can you check the UI that was from the commit within the repo named Milestone 2 commit since thats what i meant when i said revert
+
+Associated status snapshot: S-2026-11-17-09. Inspected local Git history using the discovered GitHub Desktop bundled Git executable. Identified original rica f3ef77d and current cherry-pick d5fffbb with identical commit titles but differing client startup/UI contents. Original UI is branded full client menu at 1280x800, not the alpha lobby restored by P087. Compared menu functions, scenes and startup wiring. No implementation edits or runtime tests; temporary historical script in ignored cache only. Updated required status/prompt logs; no standalone report. Per-request input/cached/output tokens, model, usage source and cached-input inclusion: **Unavailable** because reliable complete accounting was not supplied. Estimated/billed cost: **Unavailable** without reliable usage/model/rates.
+## P089 - Launch the original Milestone 2 main menu
+
+Date: November 17, 2026.
+Time: 01:13:04 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> when i launch the game i want that ui to appear rather than the lobby screen
+
+Associated status snapshot: S-2026-11-17-10; implements P088's identified original rica f3ef77d UI. Restored exact original application/menu scenes, game.gd and 1280x800 project startup while retaining current authoritative network combat. Host/Join are reached through the original Play submenu. Four test entry paths restored to the original menu flow. All 12 final combat/navigation processes PASS/exit 0. Generated menu assertions pass headlessly and graphically; main-menu/Play PNGs opened and visually inspected. Graphical preview was approved and auto-closed. No physical LAN/full graphical gameplay or offline acceptance claim. Protected docs/requirements unchanged; required logs only, no standalone report. Exact commands, intermediate headless probe teardown warnings and cached evidence recorded in status.md.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable complete-request accounting not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without full usage/model/rates. No figures invented.
+## P090 - Integrate GitHub Local Duel mode
+
+Date: November 17, 2026.
+Time: 01:24:10 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can we use the github version to intigrate the local dual mode?
+
+Associated status snapshot: S-2026-11-17-11. Integrated same-computer Local Duel as a separate Play choice using the previously inspected pinned GitHub source; Milestone 2 main-menu styling and existing modes retained. Opposing shots, health/lives, respawn protection, winner/final explosion/confetti and duel replay now work locally. LAN combat remains unchanged. Changed scripts/game.gd and added a meaningful local_duel_smoke.gd, plus required status/prompt logs. New real-projectile duel test PASS; all 12 actual network/navigation regression processes PASS; approved graphical preview/captures inspected. Exact commands, deterministic fixtures, first test parse correction, teardown warnings and remaining human/LAN acceptance limits recorded in status.md. No standalone report documents created. Protected README/AGENTS and requirements preserved.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable full-request accounting was not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without full usage/model/rates. No figures invented.

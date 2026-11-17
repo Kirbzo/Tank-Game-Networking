@@ -1,0 +1,105 @@
+P085 - Current-checkout functional validation - November 17, 2026
+
+Outcome
+The configured project runs a networked rectangle-room prototype. It does not
+currently provide the integrated tank/combat game described by historical P083
+logs. Those historical results must not be treated as current-checkout acceptance.
+
+Environment
+Branch reference read from .git/HEAD: game-intigration-malik.
+Godot executable reports 4.7.2.stable.official.ed1daf0bf.
+The Downloads console launcher initially failed because its sibling main executable
+was missing. Both executables were extracted from the existing local Godot ZIP to
+Godot/.godot/validation_engine, an ignored generated-cache directory.
+No download or engine-version substitution occurred. All runtime tests were
+headless, using separate real local processes for networked tests.
+
+Passed in this request
+- Configured main scene starts and exits normally (startup exit 0).
+- Initial lobby controls and no-session Exit retain the exit screen.
+- Hosting failure reports an error without advertising a failed session.
+- Automatic and broadcast-disabled direct-IP discovery: actual host visibility,
+  six-character IDs, stable listing/endpoint, host username, count, ID selection,
+  case-insensitive identification, unknown-ID feedback and listing expiry.
+- Loading/failure/Retry/Back, duplicate-Join guard, immediate loading display,
+  500 ms connection delay, cancellation races and full ten-second timeout.
+- IPv4 selection logic and network UI errors/feedback. This is not physical LAN
+  reachability acceptance.
+- Standalone room movement, normalized diagonals, walls, resize, fixed HUD,
+  settings overlay, Back/Escape routing.
+- Interpolation, local prediction/reconciliation, stale/lost snapshots, bounded
+  replay queue and host acknowledgement validation.
+- Host-authoritative input validation rejects unknown peers and invalid vectors.
+- Actual paired Host/Join room entry and synchronized world movement; assigned
+  names/host identity/count; invalid network movement and old snapshots rejected;
+  authoritative state equality, settings input blocking and membership cleanup.
+- Guest departure keeps host alive and reports the departed username.
+- Host room closure shows disconnected recovery and returns guest to lobby.
+- Host loss during the handshake ends with explained timeout/recovery.
+- Three real processes: two-player capacity, full-room rejection, Join/Retry
+  notices, stale/unknown availability fallback, occupied-session preservation.
+Some assertions use controlled fixtures or emitted UI signals; these are automated
+functional checks, not human visual or hardware-input acceptance.
+
+Failures and limitations
+1. Original alpha_smoke.gd -- packets fails the strict seen > prior_seen assertion.
+   Diagnostic copy prints correct updated port 32101, LuckyOtter username, count 2,
+   preferred LAN address, and one listing, but seen equals prior_seen in the same
+   millisecond. A diagnostic copy adding OS.delay_msec(2) after prior_seen passes
+   the entire packet test. Original test and production discovery are unchanged.
+   Classify the original test as failed, with a demonstrated timing-sensitive
+   assertion; do not silently count the diagnostic result as its replacement.
+2. combined_smoke.gd -- local exits 1: configured startup is lobby.tscn, whereas
+   that test requires application.tscn. application.tscn is absent.
+3. combat_smoke.gd -- host errors at line 26 accessing app.lobby on the old
+   lobby Control; its process does not terminate itself and was killed by the
+   runner after the five-second bound. Guest/combat simulation was not reached.
+4. Direct check of client_waiting_room.gd reports parse/compile errors for missing
+   brick/forest_tree/tank/turret SVGs and player/bullet/brick/moose/game/sound
+   scripts, with dependent compilation failures. Godot returned exit 0 despite
+   these errors; this check is FAILED based on diagnostics.
+5. Normal startup loads lobby.tscn, whose room_scene is game_room.tscn. There is
+   no accessible Ready/Start/tank combat flow here. Shooting, ice destruction and
+   moose contact cannot be accepted as working in this checkout.
+6. Health/damage, scoring, victory and match reset remain unimplemented/deferred.
+7. Physical two-device LAN, abrupt Wi-Fi loss, latency/loss tolerance, human mouse
+   input, graphical appearance/audio and graphical performance were not tested.
+
+Counts and evidence
+results.json contains 28 bounded test-process results: 25 pass, 3 fail (packet,
+combined entry, combat entry). Startup, editor import, direct arena compilation
+and two diagnostic packet runs are additional checks outside that count.
+Each process command, stdout, stderr, exit and timeout is in results.json and
+the corresponding .log files beside this report. Passing runs have no script
+errors. Certificate-store warnings recur. The initial startup also reported
+user-log access failures. Editor import exits 0 but reports inability to save
+external editor settings; it does not establish that every script compiles.
+An initial PowerShell runner version mishandled exited-process metadata and log
+file locks. It was corrected to own .NET processes and capture asynchronous pipes;
+results.json contains the final run only.
+
+Commands (from repository root; exact expanded per-test commands: results.json)
+$engine = './Godot/.godot/validation_engine/Godot_v4.7.2-stable_win64_console.exe'
+& $engine --version
+& $engine --headless --path Godot --quit-after 3
+& ./reports/P085/validate.ps1
+& $engine --headless --editor --path Godot --import --quit --log-file <absolute reports/P085/import.engine.log>
+& $engine --headless --path Godot --check-only --script res://client_waiting_room.gd --log-file <absolute reports/P085/arena-check.engine.log>
+& $engine --headless --path Godot --script res://.godot/validation_packet_probe.gd -- packets
+The diagnostic copy was run first with added state printing, then with a 2 ms
+delay. Its generated source remains under .godot; gameplay source was untouched.
+
+Changes and checks
+Created reports/P085 validation runner, result JSON, logs and this report.
+Updated status.md and prompt_log.md for FR13-FR14; protected README/AGENTS unchanged.
+Editor import regenerated 12 previously missing .gd.uid sidecars; only those
+specific generated files were removed afterward to preserve the original layout.
+Ignored Godot cache and local engine files remain regenerable test artifacts.
+No unrelated fixes, gameplay edits or requirement-status completion upgrades.
+All 20 AR/FR and 13 WP2 table IDs checked. Existing unresolved Markdown targets
+remain historical client_import.json and two VM report targets (four occurrences).
+Both source-document hashes match the preceding review:
+Requirements Document.docx: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A
+WP2 Requirements.docx: F622DC1114974EDD927B5D50DF6483F8E8D5DD64181B24DC7D8E1F009B0F647C
+Git is unavailable on PATH; no clean-working-tree or commit claim is made.
+README/AGENTS scope corrections still require user approval under repository rules.

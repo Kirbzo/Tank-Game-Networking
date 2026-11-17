@@ -33,6 +33,12 @@ var room_return_message := ""
 var disconnected_screen: Control
 
 func _ready() -> void:
+	# Network combat must not depend on the optional offline client's menu setup.
+	if not InputMap.has_action("fire"):
+		InputMap.add_action("fire")
+		var fire_button := InputEventMouseButton.new()
+		fire_button.button_index = MOUSE_BUTTON_LEFT
+		InputMap.action_add_event("fire", fire_button)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "top", "right", "bottom"]:

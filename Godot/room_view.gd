@@ -15,6 +15,8 @@ var previous_prediction := Vector2.ZERO
 var correction_offset := Vector2.ZERO
 var prediction_ready := false
 var local_peer := 0
+var movement_solver: Callable = World.move_position
+var display_bounds := Rect2(World.BOUNDS.position, World.BOUNDS.size - World.PLAYER_SIZE)
 
 func predict(direction: Vector2, delta: float) -> int:
 	if not prediction_ready or pending_inputs.size() >= MAX_PENDING_INPUTS:
@@ -22,7 +24,7 @@ func predict(direction: Vector2, delta: float) -> int:
 	input_sequence += 1
 	pending_inputs.append({"sequence": input_sequence, "direction": direction, "delta": delta})
 	previous_prediction = predicted_position
-	predicted_position = World.move_position(predicted_position, direction, delta)
+	predicted_position = movement_solver.call(predicted_position, direction, delta)
 	return input_sequence
 
 func receive(tick: int, positions: Dictionary, acknowledgements: Dictionary, peer: int, step: float) -> void:
@@ -45,7 +47,7 @@ func receive(tick: int, positions: Dictionary, acknowledgements: Dictionary, pee
 		pending_inputs.pop_front()
 	var corrected: Vector2 = positions[peer]
 	for command in pending_inputs:
-		corrected = World.move_position(corrected, command["direction"], command["delta"])
+		corrected = movement_solver.call(corrected, command["direction"], command["delta"])
 	if prediction_ready:
 		var change := corrected - predicted_position
 		previous_prediction += change
@@ -78,5 +80,5 @@ func advance(delta: float, fraction := 1.0) -> Dictionary:
 		result[peer] = origin.lerp(target, weight)
 	correction_offset = correction_offset.lerp(Vector2.ZERO, 1.0 - exp(-20.0 * delta))
 	if prediction_ready and result.has(local_peer):
-		result[local_peer] = (previous_prediction.lerp(predicted_position, clampf(fraction, 0.0, 1.0)) + correction_offset).clamp(World.BOUNDS.position, World.BOUNDS.end - World.PLAYER_SIZE)
+		result[local_peer] = (previous_prediction.lerp(predicted_position, clampf(fraction, 0.0, 1.0)) + correction_offset).clamp(display_bounds.position, display_bounds.end)
 	return result

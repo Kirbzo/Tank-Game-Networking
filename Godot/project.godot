@@ -11,15 +11,15 @@ config_version=5
 [application]
 
 config/name="Moooze Tanks Alpha Lobby"
-run/main_scene="res://lobby.tscn"
+run/main_scene="res://application.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
 
-window/size/viewport_width=1000
-window/size/viewport_height=720
-window/size/window_width_override=1000
-window/size/window_height_override=720
+window/size/viewport_width=1280
+window/size/viewport_height=800
+window/size/window_width_override=1280
+window/size/window_height_override=800
 window/stretch/mode="canvas_items"
 
 [rendering]

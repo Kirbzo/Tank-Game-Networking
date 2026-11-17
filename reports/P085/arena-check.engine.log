@@ -1,0 +1,46 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+SCRIPT ERROR: Parse Error: Preload file "res://assets/brick.svg" does not exist.
+   at: GDScript::reload (res://scripts/waiting_arena.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://assets/forest_tree.svg" does not exist.
+   at: GDScript::reload (res://scripts/waiting_arena.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://assets/tank.svg" does not exist.
+   at: GDScript::reload (res://scripts/waiting_arena.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://assets/turret.svg" does not exist.
+   at: GDScript::reload (res://scripts/waiting_arena.gd:7)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/player.gd" does not exist.
+   at: GDScript::reload (res://tank_world.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/bullet.gd" does not exist.
+   at: GDScript::reload (res://combat_world.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/brick.gd" does not exist.
+   at: GDScript::reload (res://combat_world.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/moose.gd" does not exist.
+   at: GDScript::reload (res://combat_world.gd:6)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/player.gd" does not exist.
+   at: GDScript::reload (res://combat_world.gd:8)
+SCRIPT ERROR: Parse Error: Assigned value for constant "FIRE_INTERVAL" isn't a constant expression.
+   at: GDScript::reload (res://combat_world.gd:8)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/game.gd" does not exist.
+   at: GDScript::reload (res://combat_world.gd:9)
+SCRIPT ERROR: Parse Error: Assigned value for constant "CORNERS" isn't a constant expression.
+   at: GDScript::reload (res://combat_world.gd:9)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "animal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://combat_world.gd:47)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "brick" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://combat_world.gd:56)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "bullet" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://combat_world.gd:98)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/bullet.gd" does not exist.
+   at: GDScript::reload (res://scripts/combat_view.gd:4)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/moose.gd" does not exist.
+   at: GDScript::reload (res://scripts/combat_view.gd:5)
+SCRIPT ERROR: Parse Error: Preload file "res://scripts/sound.gd" does not exist.
+   at: GDScript::reload (res://scripts/combat_view.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "bullet" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/combat_view.gd:23)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "animal" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/combat_view.gd:42)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://client_waiting_room.gd:0)
+ERROR: Failed to load script "res://client_waiting_room.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

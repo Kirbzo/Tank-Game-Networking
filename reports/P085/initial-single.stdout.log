@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+TRACE project=C:/Users/broth/OneDrive/Desktop/codex stuff/Codex for COMP214/COMP214/Godot/ scene=res://lobby.tscn
+TRACE 2621 initial Join click, no selection: lobby=true loading=false joining=false selected= connected=
+PASS initial lobby and Exit without a session

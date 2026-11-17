@@ -49,6 +49,8 @@ func _ready() -> void:
 		animal.heading = Vector2.RIGHT if i % 2 == 0 else Vector2.LEFT
 		animal.emerge_delay = 0.6 + i * 0.25
 		animal.tanks = proxies.values()
+		# Logical host positions, not offline tank physics, determine contact here.
+		animal.authoritative_contacts = true
 		add_child(animal)
 		moose.append(animal)
 
@@ -96,6 +98,8 @@ func shoot(peer: int) -> void:
 	next_shot += 1
 	var id := next_shot
 	var bullet := Bullet.new()
+	# Preserve this framework's world-only shots; no tank/moose damage or charge.
+	bullet.hits_moose = false
 	bullet.origin = tanks.positions[peer]
 	bullet.direction = aims[peer]
 	bullet.position = bullet.origin + bullet.direction * 50.0

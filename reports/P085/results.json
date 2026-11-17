@@ -1,0 +1,282 @@
+﻿[
+    {
+        "group":  "initial",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\initial-single.engine.log\" --script res://tests/join_smoke.gd -- initial",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nTRACE project=C:/Users/broth/OneDrive/Desktop/codex stuff/Codex for COMP214/COMP214/Godot/ scene=res://lobby.tscn\r\nTRACE 2621 initial Join click, no selection: lobby=true loading=false joining=false selected= connected=\r\nPASS initial lobby and Exit without a session\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "host-failure",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\host-failure-single.engine.log\" --script res://tests/alpha_smoke.gd -- failure",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS hosting failure\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "packets",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\packets-single.engine.log\" --script res://tests/alpha_smoke.gd -- packets",
+        "exit":  1,
+        "timeout":  false,
+        "passed":  false,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\nFAIL: Duplicate announcements must refresh endpoint and liveness without duplicates\r\n"
+    },
+    {
+        "group":  "join-failure",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\join-failure-single.engine.log\" --script res://tests/join_smoke.gd -- failure",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nTRACE project=C:/Users/broth/OneDrive/Desktop/codex stuff/Codex for COMP214/COMP214/Godot/ scene=res://lobby.tscn\r\nTRACE 1608 Join pressed: lobby=true loading=true joining=true selected=ABC123 connected=\r\nTRACE 1608 Join pressed: lobby=true loading=true joining=true selected=ABC123 connected=\r\nPASS timeout, loading animation, duplicate-click guard, retry and back\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "join-delay",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\join-delay-single.engine.log\" --script res://tests/join_delay_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nTRACE Join delay ms=510\r\nTRACE Retry delay ms=503\r\nPASS delayed Join/Retry, cancellation races, capacity refresh and timeout\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "join-cancel-full-timeout",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\join-cancel-full-timeout-single.engine.log\" --script res://tests/join_cancel_smoke.gd -- full-timeout",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS join countdown, immediate/active Cancel, late callbacks, timeout and retry reset\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "network-ui",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\network-ui-single.engine.log\" --script res://tests/network_ui_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nSELECTED IPv4: No unambiguous LAN address found\r\nPASS route selection and simplified network UI\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-preview",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-preview-single.engine.log\" --script res://tests/game_room_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS room layers/HUD/settings: fixed controls, preview ID, movement, walls, resize, leave to lobby\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-escape",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-escape-single.engine.log\" --script res://tests/game_room_smoke.gd -- escape",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS room layers/HUD/settings: fixed controls, preview ID, movement, walls, resize, leave to lobby\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "prediction",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\prediction-single.engine.log\" --script res://tests/room_view_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS interpolation, prediction/reconciliation, stale/lost snapshots, bounds, queue and host acknowledgement validation\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "movement-validation",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\movement-validation-single.engine.log\" --script res://tests/world_sync_smoke.gd -- unit",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS authoritative movement validation\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-client-leaves",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-client-leaves-host.engine.log\" --script res://tests/connected_room_smoke.gd -- host",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS connected room host client-leaves\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-client-leaves",
+        "role":  "client",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-client-leaves-client.engine.log\" --script res://tests/connected_room_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS connected room client client-leaves\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-host-leaves",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-host-leaves-host.engine.log\" --script res://tests/connected_room_smoke.gd -- host host-leaves",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS connected room host host-leaves\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-host-leaves",
+        "role":  "client",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-host-leaves-client.engine.log\" --script res://tests/connected_room_smoke.gd -- host-leaves",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS connected room client host-leaves\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "world-sync",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\world-sync-host.engine.log\" --script res://tests/world_sync_smoke.gd -- host",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS synchronized world host\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "world-sync",
+        "role":  "client",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\world-sync-client.engine.log\" --script res://tests/world_sync_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nTRACE between snapshots remote frames=51 local predictions=29\r\nPASS synchronized world client\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "pending-host-loss",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\pending-host-loss-host.engine.log\" --script res://tests/pending_host_loss_smoke.gd -- host",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS pending-handshake host departure\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "pending-host-loss",
+        "role":  "client",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\pending-host-loss-client.engine.log\" --script res://tests/pending_host_loss_smoke.gd --",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS pending-handshake client timeout explanation and lobby recovery\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-full",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-full-host.engine.log\" --script res://tests/room_full_smoke.gd -- host",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS occupied host capacity\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-full",
+        "role":  "occupant",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-full-occupant.engine.log\" --script res://tests/room_full_smoke.gd -- occupant",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS occupied guest remains connected\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "room-full",
+        "role":  "third",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\room-full-third.engine.log\" --script res://tests/room_full_smoke.gd",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nPASS Room Full Join/Retry, pending update, unknown/stale fallback and lobby return\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "discovery",
+        "role":  "observer",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\discovery-observer.engine.log\" --script res://tests/alpha_smoke.gd -- observer",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nOBSERVER_FOUND 8PWSZ2 56312\r\nPASS observer: remote visibility, IDs, selection, expiry\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "discovery",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\discovery-host.engine.log\" --script res://tests/alpha_smoke.gd -- host",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nHOST_STARTED 8PWSZ2 56312\r\nPASS host\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "discovery-direct-ip",
+        "role":  "observer",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\discovery-direct-ip-observer.engine.log\" --script res://tests/alpha_smoke.gd -- observer unicast",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nOBSERVER_FOUND ASUDKG 64894\r\nPASS observer: remote visibility, IDs, selection, expiry\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "discovery-direct-ip",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\discovery-direct-ip-host.engine.log\" --script res://tests/alpha_smoke.gd -- host unicast",
+        "exit":  0,
+        "timeout":  false,
+        "passed":  true,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\nHOST_STARTED ASUDKG 64894\r\nPASS host\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\n"
+    },
+    {
+        "group":  "combined-entry",
+        "role":  "single",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\combined-entry-single.engine.log\" --script res://tests/combined_smoke.gd -- local",
+        "exit":  1,
+        "timeout":  false,
+        "passed":  false,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\nFAIL: Whole-project startup selects combined application\r\n"
+    },
+    {
+        "group":  "combat-entry",
+        "role":  "host",
+        "command":  "\"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\\.godot\\validation_engine\\Godot_v4.7.2-stable_win64.exe\" --headless --path \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\Godot\" --log-file \"C:\\Users\\broth\\OneDrive\\Desktop\\codex stuff\\Codex for COMP214\\COMP214\\reports\\P085\\combat-entry-host.engine.log\" --script res://tests/combat_smoke.gd -- host",
+        "exit":  -1,
+        "timeout":  true,
+        "passed":  false,
+        "stdout":  "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\r\n\r\n",
+        "stderr":  "ERROR: Failed to read the root certificate store.\r\n   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)\r\nSCRIPT ERROR: Invalid access to property or key \u0027lobby\u0027 on a base object of type \u0027Control (lobby.gd)\u0027.\r\n   at: run (res://tests/combat_smoke.gd:26)\r\n   GDScript backtrace (most recent call first):\r\n       [0] run (res://tests/combat_smoke.gd:26)\r\n"
+    }
+]

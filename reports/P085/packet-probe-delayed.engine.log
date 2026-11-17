@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+PACKET_PROBE actual={ "AB12CD": { "players": 2, "username": "LuckyOtter", "id": "AB12CD", "address": "192.0.2.10", "port": 32101, "seen": 551 } } prior_seen=547
+PASS packet refresh, duplicate suppression, address preference
