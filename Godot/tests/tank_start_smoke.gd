@@ -63,6 +63,11 @@ func run() -> void:
 		return
 	if not check(lobby.session == session, "Start preserves ENet session"):
 		return
+	if hosting:
+		# Isolate the original wall/movement acceptance path from the now-active hazard.
+		# combat_smoke separately verifies actual contact impulses and shared results.
+		for member in room.player_names:
+			room.tank_world.contact_cooldowns[member] = 1000.0
 	if not hosting:
 		# Invalid commands traverse the same RPC boundary as genuine input.
 		lobby.tank_input.rpc_id(1, room.game_id, room.epoch, Vector2(INF, 0), 100000)

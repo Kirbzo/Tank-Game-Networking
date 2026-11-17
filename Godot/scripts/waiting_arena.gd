@@ -8,15 +8,14 @@ const TURRET = preload("res://assets/turret.svg")
 var tank_markers: Dictionary = {}
 var members: Dictionary = {}
 var ice_count := 0
+var ice_sprites: Array[Sprite2D] = []
+var contact_timers: Dictionary = {}
+var muzzle_flashes: Array[Dictionary] = []
 
 func _ready() -> void:
 	# Same arena coordinates as the imported offline client; decoration only.
-	for col in range(24):
-		add_brick(Vector2(88 + col * 48, 132), true)
-		add_brick(Vector2(88 + col * 48, 732), true)
-	for row in range(1, 15):
-		add_brick(Vector2(88, 132 + row * 40), true)
-		add_brick(Vector2(1192, 132 + row * 40), true)
+	for center in preload("res://tank_world.gd").border_centers():
+		add_brick(center, true)
 	for center in preload("res://tank_world.gd").ice_centers():
 		add_brick(center, false)
 
@@ -32,6 +31,24 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 	add_child(sprite)
 	if not reinforced:
 		ice_count += 1
+		ice_sprites.append(sprite)
+
+func reset_ice() -> void:
+	contact_timers.clear()
+	muzzle_flashes.clear()
+	for sprite in ice_sprites:
+		sprite.show()
+	ice_count = ice_sprites.size()
+
+func remove_ice(id: int) -> void:
+	if id >= 0 and id < ice_sprites.size() and ice_sprites[id].visible:
+		ice_sprites[id].hide()
+		ice_count -= 1
+
+func apply_aims(aims: Dictionary) -> void:
+	for peer in aims:
+		if tank_markers.has(peer):
+			tank_markers[peer].get_node("Turret").rotation = aims[peer].angle()
 
 func set_members(names: Dictionary) -> void:
 	members = names.duplicate()
@@ -43,13 +60,17 @@ func set_members(names: Dictionary) -> void:
 		if tank_markers.has(peer):
 			continue
 		var marker := Node2D.new()
+		marker.z_index = 3 # Client tanks remain visible over foliage/moose.
 		marker.position = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
 		var chassis := Sprite2D.new()
 		chassis.texture = TANK
 		marker.add_child(chassis)
-		var turret := Sprite2D.new()
-		turret.texture = TURRET
-		turret.position = Vector2(12, 0)
+		var turret := Node2D.new()
+		turret.name = "Turret"
+		var sprite := Sprite2D.new()
+		sprite.texture = TURRET
+		sprite.position = Vector2(12, 0)
+		turret.add_child(sprite)
 		marker.add_child(turret)
 		if peer != 1:
 			marker.modulate = Color(1.8, 0.65, 1.0)
@@ -57,7 +78,12 @@ func set_members(names: Dictionary) -> void:
 		tank_markers[peer] = marker
 	queue_redraw()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	for peer in contact_timers:
+		contact_timers[peer] = maxf(0, contact_timers[peer] - delta)
+	for flash in muzzle_flashes:
+		flash.life -= delta
+	muzzle_flashes = muzzle_flashes.filter(func(flash): return flash.life > 0)
 	# Snow is decorative; the session and all gameplay clocks are unaffected.
 	queue_redraw()
 
@@ -93,6 +119,9 @@ func _draw() -> void:
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), Color("#a6dfff"), 2)
 	for peer in tank_markers:
+		var remaining: float = contact_timers.get(peer, 0.0)
+		if remaining > 0:
+			draw_arc(tank_markers[peer].position, 34, 0, TAU, 48, Color("#ffbf69"), 3.0)
 		var label := str(members[peer])
 		var font := ThemeDB.fallback_font
 		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
@@ -100,3 +129,5 @@ func _draw() -> void:
 		# White labels keep the existing named-room presentation on pale snow.
 		draw_rect(Rect2(at + Vector2(-6, -22), Vector2(width + 12, 30)), Color(0.04, 0.12, 0.16, 0.85))
 		draw_string(font, at, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
+	for flash in muzzle_flashes:
+		draw_circle(flash.position, 8, Color("#eefaff"))

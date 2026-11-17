@@ -225,6 +225,28 @@ func tank_snapshot(id: String, generation: int, tick: int, positions: Dictionary
 	if not multiplayer.is_server() and has_tank_room(id):
 		active_room.receive_tank_snapshot(generation, tick, positions, acknowledgements)
 
+@rpc("any_peer", "call_remote", "unreliable_ordered", 3)
+func combat_input(id: String, generation: int, aim: Vector2, fire: bool, sequence: int) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and has_tank_room(id) and multiplayer.get_peers().has(sender):
+		active_room.accept_combat_input(sender, generation, aim, fire, sequence)
+
+@rpc("authority", "call_remote", "reliable")
+func combat_event(id: String, generation: int, sequence: int, kind: String, data: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id):
+		active_room.receive_combat_event(generation, sequence, kind, data)
+
+@rpc("any_peer", "call_remote", "reliable")
+func combat_fire(id: String, generation: int, aim: Vector2, sequence: int) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and has_tank_room(id) and multiplayer.get_peers().has(sender):
+		active_room.accept_fire_request(sender, generation, aim, sequence)
+
+@rpc("authority", "call_remote", "unreliable_ordered", 4)
+func combat_snapshot(id: String, generation: int, tick: int, state: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id) and active_room.epoch == generation:
+		active_room.apply_combat_snapshot(tick, state)
+
 func return_from_room(message := "You left the room.") -> void:
 	if not is_instance_valid(active_room):
 		return

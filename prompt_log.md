@@ -2,13 +2,115 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P079 and the next request is **P080**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P083 and the next request is **P084**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 17, 2026
+
+## P083 - Fix graphical mouse shooting and validate client/contact/token integration
+
+Date: November 17, 2026.
+Time: 11:48:40 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Fix Milestone 3 on my existing `rica` branch.
+>
+> In the actual playable integrated game, the tanks DO NOT SHOOT when I left-click after Ready/Start. The previous report claimed shooting tests passed, but this functionality is failing during my graphical testing.
+>
+> First reproduce and fix shooting through the normal Host → Join → Ready → Start flow. Trace the complete path from mouse input through match-start gating, player ownership, fire requests, host validation, projectile creation, synchronization, and rendering. Check for UI controls consuming mouse input and disabled or bypassed client scripts.
+>
+> Verify that BOTH the host and joining player can fire visible projectiles from their own tank and that each shot appears on both screens. Use @Studio’s existing shooting implementation and visuals as the reference.
+>
+> After shooting works, complete the client-design comparison, tank–moose interaction fixes, and validation of the token-usage file copied from Malik’s branch described below.
+>
+> Report exactly how shooting was verified. If graphical testing is unavailable, mark visible shooting as pending my verification and provide the steps to test it.
+
+Clarification requested because the referenced details were not included. Actual user reply:
+
+> its the token usage file ive copied from malik-other-branch
+
+Status snapshot: S-2026-11-17-04. Preserved rica's existing uncommitted work and protected files. Reproduced a graphical lost-click defect: press/release before physics tick yielded zero shots despite valid binding/focus/running state. Earlier action_press tests bypassed this case. Added reliable click-edge requests with host sender/epoch/aim/sequence/cooldown validation, retained hold-to-repeat, and replaced broad hover veto with real room-button/settings guards. Added client muzzle flash/audio and restored non-damage tank-moose knockback/cooldown/ring/contact sound while leaving health/scoring/reset deferred. Completed client comparison in status.md. Protocol combined-4 prevents incompatible old RPC connections.
+
+Final graphical validation: two normal application instances, real discovery/Join/Ready/Start, Windows mouse-button messages posted only to each owned game window; runner and both game processes exit 0/PASS. Four actual rendered captures inspected: each player's projectile visible on both screens. Also passed injected-event graphical pair, combat/contact pair and isolated movement/Start/lifecycle pair; final compatibility/full-room checks recorded in status. No physical two-laptop or human hardware-click verification claimed. Intermediate test teardown/PID/coordinate-fixture issues and known sandbox warnings are recorded in status; no script errors in passing final runs.
+
+Token validation: all six copied files match Malik commit byte-for-byte, 21 unit tests passed, real P082 report saved at tools/usage_validation_P083.json. Report matches five responses, no warnings, Complete for matched recorded turn; input 677,397 including 669,312 cached, output 2,177, total 679,574, model gpt-6-astra. Source is exact prompt/project session evidence with unique-response summation and cumulative cross-check (report records source snapshot hashes/cutoff). This is a new validation observation for P082, not a rewrite of its historical unavailable entry or a branch-wide audit. No README/accounting backfill or source-session writes performed.
+
+P083 token usage across this live request and clarification: input/cached/output/model totals **Unavailable**; no full-request matched usage report has been established, and the P082 validation cannot be used as P083 usage. Cached-input inclusion for P083 unknown. Estimated/billed costs **Unavailable** without validated rates and complete usage. No figures invented. Changes remain unstaged/uncommitted.
+
+## P082 - Copy token-accounting utility from malik-other-branch
+
+Date: November 17, 2026.
+Time: 11:29:35 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request:
+
+> go to malik-other-branch and look into the token usage file and copy it to my rica branch
+
+Status snapshot: S-2026-11-17-03. Inspected malik-other-branch at 60123f5a21a00ca9ce7a862cb203b83bdde21974 with git ls-tree/git show while keeping rica checked out and preserving uncommitted Milestone 3 work. Copied TOKEN_USAGE_AGENT_HANDOFF.txt, tools/token_usage.py, tools/token_usage.md, tools/audit_token_history.py, tools/test_token_usage.py and tools/test_audit_token_history.py byte-for-byte from that commit. All destinations were absent; no pre-existing files overwritten. Historical reports, plots and branch-specific usage totals were not copied or applied. Handoff historical P081/P084 IDs belong to the source branch, not rica's same-numbered prompts.
+
+Validation: all copied bytes match source Git blobs; hash comparison confirmed all pre-existing files unchanged before adding this required log/status entry. `python -B -m unittest discover -s tools -p 'test_*.py' -v` passed all 21 tests. No usage audit/backfill or gameplay tests run. Protected documents and gameplay edits retained, no branch switch/stash/staging/commit.
+
+Token usage: input, cached input, output, exact model and usage source **Unavailable**; no reliable per-request counters supplied and the copied utility has not been run against session evidence. Cached-input inclusion unknown. Estimated/billed cost **Unavailable** without verified usage/model/rates.
+
+## P081 - Milestone 3: networked aiming, shooting and world interaction
+
+Date: November 17, 2026.
+Time: 11:15:24 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Continue Moooze Tanks with Milestone 3: networked aiming, shooting, and world interaction.
+>
+> Work on my existing `rica` branch in Tank-Game-Networking. Before editing, run `git branch --show-current` and `git status --short`. If `rica` is not checked out, report the current branch and pause before switching or editing. Inspect the staged and unstaged diffs so you can build on the uncommitted Milestone 2 changes and preserve them.
+>
+> Read AGENTS.md, README.md, the Framework Requirements in the requirements document referenced by AGENTS.md, and the relevant status and prompt logs. Inspect the integrated @Studio client under `Godot`, including the arena, tank and turret, input actions, projectile scenes, and any moose or other world-object scenes.
+>
+> Identify the exact Framework Requirement IDs for this milestone and map them to the client scenes and scripts you’ll use. Verify which interactions are in scope, especially whether tanks, shots, or both interact with the moose and what should happen in each case. If the requirements and client implementation disagree or leave a behavior undefined, flag the specific gap and continue with the confirmed behavior.
+>
+> Implement through the existing Host → Join → Ready → Start flow in the integrated @Studio arena.
+>
+> - Reuse @Studio’s existing controls, scenes, nodes, and visuals where available. Each player aims and fires their own tank. Both players see the turret direction and each shot.
+> - Follow the existing host-authoritative networking model. Clients send aim and fire input. The host validates it, resolves projectile collisions and confirmed world interactions, and synchronizes the results. Each shot should appear exactly once on each screen.
+> - Enable aim and fire only after the match starts. Keep tank damage, scoring, and match reset for their scheduled milestones.
+> - Preserve the waiting room, host-only Start, networked movement, tank collisions, and leave/disconnect behavior.
+>
+> Test with two instances using the normal client entry point. Verify that the host and joining player can each aim and fire after Start, both see the same turret directions and shots, pre-start aim and fire have no gameplay effect, and both see the same outcome for every confirmed world interaction. Recheck Milestone 2 movement and disconnect behavior. Mark two-laptop LAN testing as pending unless it was actually performed.
+>
+> Follow the repo’s logging rules. Report the requirement IDs covered, files changed, actual test results, and any open @Studio or moose integration questions. Leave the changes uncommitted for my review.
+
+Status snapshot: S-2026-11-17-02 in status.md. Initial branch rica; staged and unstaged diffs empty, Milestone 2 already committed in 9785731. Read protected instructions/README, both source DOCXs, status/logs and imported client code before editing. Retained the existing application and lobby session.
+
+Results: FR8/FR9/FR10/FR12 extended with host-owned aim/fire/projectile/moose simulation, reliable unique shot/world events, shared ice removal and collision updates, and reused imported visuals/scripts. FR10 remains partial because health/damage is deferred. Confirmed client rules: shots destroy ice/stop at forest, pass through tanks/moose; moose roam/yield. The DOCX does not define detailed moose behavior. Damage-linked knockback/protection remains deferred with damage; scoring/reset also excluded. Protocol combined-3 hides incompatible older builds. Source scripts/assets and protected docs unchanged.
+
+Tests: actual paired combat test from normal menu entry PASS; Milestone 2 Start/movement/disconnect pair PASS; combined host/guest/third lifecycle PASS; compatibility fixtures and interpolation tests PASS. Initial combat targeting assertion failed from headless pointer polling; event-coordinate aiming corrected it, and final runs passed. Exact commands, code mapping, tests/fixture boundaries and outstanding two-laptop checklist are in the status snapshot. Sandbox log/certificate/editor-settings warnings remain. Physical LAN and graphical simultaneous gameplay were not tested. All changes remain unstaged/uncommitted; generated tracked caches restored.
+
+Final documentation check: all 33 requirement IDs and P080/P081 snapshot references present; protected hashes unchanged; git diff --check passed. Historical links to Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json are missing from the checkout and were left unchanged.
+
+Token usage for P081 (all model/tool continuations): input **Unavailable**, cached input **Unavailable**, output **Unavailable**, exact model **Unavailable**, usage source **Unavailable**; no reliable per-request counters exposed. Whether cached input is included in input totals cannot be determined. Estimated cost and actual billed cost **Unavailable** because model/rates/usage are not reliably known; no figures invented.
+
+## Time unavailable
+
+### P080 - Which integration milestone is current?
+
+Date: November 17, 2026.
+Time: **Unavailable** (receipt and original recording time unavailable; retrospectively logged with P081).
+
+Actual request:
+
+> what part of the integration plan are we in?
+
+Status snapshot: S-2026-11-17-01, P080 section in status.md, referring to prior S-2026-11-11-02/P079 evidence. Answer: Milestone 2 Start/movement implemented locally, earlier menus/waiting room integrated, two-laptop testing/review pending; shooting/damage/scoring/reset later. No new code inspection or tests were performed for that answer. The answer described changes as last left uncommitted; P081 subsequently found those changes committed at 9785731, with a clean tree.
+
+Token usage for P080: input/cached input/output/model/usage source **Unavailable**; no reliable usage record for the original answer. Cached-input inclusion unknown. Estimated and billed cost **Unavailable**; no figures invented.
 
 # November 11, 2026
 
