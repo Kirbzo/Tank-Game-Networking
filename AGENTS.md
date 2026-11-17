@@ -81,6 +81,23 @@ Team confirmation is needed for start permissions (FR6/GR8), movement/action rul
 - A live request usually has more calls after its log is written, including the final response. Label observed totals **Partial as of** the cutoff and identify missing/unfinished coverage; never call them final. Finalize on a later request only after checking completion and all attributable usage, including interrupted/resumed work. If a complete total cannot be established, retain the partial evidence and mark the final total **Unavailable**. Do not loop solely to account for the logging calls themselves.
 - Preserve historical prompt text and IDs. Backfill only entries with a reliable match, recording the correction date, evidence and earlier unavailable/partial state. A rule change alone does not authorize a broad historical rewrite. Token counts do not establish billed cost: retain the existing requirements for known model/rates, currency, pricing source, rate date and a separately labelled estimate; otherwise cost remains **Unavailable**.
 
+### Merging prompt logs across branches
+
+- Treat requests to review, suggest or draft a merge as read-only. Apply changes only when authorized. Follow the project's documented merge conventions and relevant prior examples.
+- Inspect the working state and preserve existing user changes. Review `prompt_log.md` at each local branch tip and available remote-tracking branch tip. Exclude symbolic aliases such as `origin/HEAD`. State whether remote references were refreshed.
+- Merge documentation evidence only. Do not switch branches, merge implementation, resolve unrelated conflicts, stage, commit or push unless separately requested.
+- Preserve existing prompt identifiers. When distinct imported prompts have conflicting identifiers, qualify them with their source branch or another documented namespace. Preserve unique qualified identifiers and continue the destination log's identifier sequence without reusing reserved identifiers.
+- Identify duplicate candidates using the recorded source date and normalized actual prompt text. Do not merge distinct requests merely because their IDs match. Ambiguous matches require review; preserve differing source versions.
+- Sort by source date, newest first. Within each date, sort available receipt/recording times newest first while preserving their labels. Group unavailable times separately. Never infer prompt dates or receipt times from Git timestamps.
+- Give every canonical entry an explicit **source-log branch association**. Use the original merge audit's source choice for existing imports. Name other branch-tip copies where supported. Do not present a source-log association as proof of the original authoring branch.
+- Preserve actual prompt text, results, status references, token annotations and earlier verification limits. Imported implementation and test claims remain historical evidence for their source branch.
+- Maintain `prompt_log_merge_audit.json` with exact source bytes, encoding, SHA256, Git blob/commit IDs, refs, original prompt IDs, canonical mappings and differing versions. Append dated follow-up reviews without overwriting earlier audit evidence.
+- Preserve superseded summaries and source conflicts as clearly labelled historical evidence. Do not silently discard them or leave imported conflict markers active in the consolidated presentation.
+- Keep prompt quotations unchanged. Where needed, link source-only narrative references to pinned source commits rather than unrelated files in the current checkout.
+- Do not add token annotations together or refresh README totals, graphs or token audits merely because logs were merged. Those require a separately scoped accounting review.
+- Record the merge request and resulting status revision. Validate source coverage, unique IDs, branch labels, ordering, preserved historical text and usage, links, requirement IDs, protected-source checksums and file-change boundaries. Report exact checks, exclusions and remaining issues.
+- Keep changes scoped to `prompt_log.md`, its merge audit and required `status.md` tracking unless additional files are explicitly authorized. No gameplay tests are needed for a documentation-only merge.
+
 ## Validation and reporting
 
 Use the relevant commands documented in Godot/README.md after checking they apply to the current checkout. Report exact commands attempted and actual results, including unavailable tools and checks not run. Do not claim a command was verified solely because documentation lists it.

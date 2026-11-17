@@ -1,6 +1,213 @@
 # Prompt log
 
+- **Current branch attribution:** P091 adds an explicit source-log branch association to every canonical prompt. These names identify recorded source snapshots, not a proven original authoring branch unless explicitly stated. The latest local request is P093; next local ID **P094**. Earlier merge counts/next-ID notes remain historical snapshots.
+
+Consolidated again November 17, 2026 by P090, revision S-2026-11-17-01, following the P042 policy. Documentation evidence only.
+
+- **IDs:** all 98 pre-existing IDs/history retained. Ten additional identities use branch-qualified IDs, including already qualified ALLEN-P021. This request is P090; next local ID **P091**. Reserved gaps, including P049-P054 and P082, are not reused.
+- **Sources:** eight local branches and seven fetched origin branch refs reviewed; symbolic origin/HEAD excluded. Seven unique log blobs contain 403 source entry instances. Differing local/remote snapshots retained.
+- **Ordering:** newest source date first; available receipt/recording times sorted newest first within each date and labelled as recorded. Missing times form a separate group; no chronology invented or inferred from Git.
+- **Duplicates and variants:** same source date and normalized actual prompt identify a shared record; existing IDs win. Different prompts keep separate IDs even when their source PXXX collides. All differing source versions and exact snapshots remain traceable.
+- **Evidence boundary:** imported behavior, tests and status references describe source-branch history, not this checkout's implementation/acceptance. Imported unqualified IDs refer to the original branch.
+- **Usage:** historical token annotations preserved without recounting them; README totals/graphs not refreshed. No dollar costs invented.
+- **Audit:** [prompt_log_merge_audit.json](prompt_log_merge_audit.json) retains the original P042 fields and adds followup_merges/P090 with exact source bytes, commits/blobs, SHA256, original IDs, versions and mappings. Source-only narrative links use pinned GitHub snapshots; actual prompt quotations are unchanged.
+
+<details>
+<summary>Superseded P042-era summaries/sequence metadata (preserved history)</summary>
+
+<pre>Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P074 and the next request is **P075**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+&#61;======
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P077 and the next request is **P078**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; Stashed changes
+- **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
+- **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
+- **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
+- **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
+- **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
+- **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 10, 2026</pre>
+
+</details>
+
+# November 17, 2026
+
+**Recorded receipt/recording times ? newest first (America/Regina)**
+
+## P093 - November 17, 2026 (approved prompt-log merge rules)
+
+Branch association: source log branch **malik-other-branch** (current request; verified workspace branch).
+
+Receipt time: 10:55:08 AM (America/Regina; matched user timestamp 2026-11-17T16:55:08.566Z).
+Recording time: 10:55:17 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> approved
+
+Result: applied the P092 draft as AGENTS.md's Merging prompt logs across branches section. Only the first and fourth bullets use the user's approved generalized wording; the second remains the original repository-specific local/remote prompt_log.md instruction. Other drafted rules retained: documentation-only scope, ID integrity, duplicate/source versions, date/time grouping, branch association, exact audit evidence, historical claims, quotations, token accounting separation and validation. No broader rule changes. This separate explicit approval satisfies the protected AGENTS.md authorization rule. No branch log merge, token refresh, README edit, stage, commit or push performed.
+
+Associated status.md: S-2026-11-17-04; implements P092 draft snapshot S-2026-11-17-03. Requirement statuses unchanged. Next local ID P094.
+
+Usage: **Partial as of 2026-11-17T16:56:13.594Z (10:56:13 AM America/Regina)**. Input 682,763; cached input 678,784 included in input; output 2,651; total 685,414; reasoning output 516 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1ea6f-0bf6-7133-a02e-cbe8f3c10ce9. Python token checker report was restricted to that source/turn and exact approved text, avoiding other approval messages. Two unique response usages summed and cross-checked to cumulative snapshot; response IDs resp_071e9e193857adc1016afc86ed5f4487d095c71e48113d3364 and resp_071e9e193857adc1016afc86f6ec6887d097f6e297a109d695. Later checks/final response excluded; complete final total and estimated/billed costs **Unavailable**. No verified rates/billing; protected source read-only.
+
+## P092 - November 17, 2026 (preceding merge-rule draft and clarifications)
+
+Branch association: source log branch **malik-other-branch** (draft context; no separate branch reviewed).
+
+Receipt time: **Unavailable** in this backfilled entry; individual drafting-turn timestamps not yet matched.
+Recording time: 10:55:17 AM (America/Regina; recorded during P093, not the draft's receipt time).
+
+Actual request:
+
+> can we draft something for prompt_log.md merges in the AGENTS.md based on the work we did now and the one in P42
+
+Clarifications, preserved from visible conversation:
+
+> can we change the first, second, and forth bulletpoints to be more generalistic, so that someone could use this outside this reposiotry
+
+> change the first and forth ones but not the second one
+
+> appoved to add into AGENTS.md
+
+Result: drafted merge rules in chat, then revised only the first and fourth bullets and retained the second. No files changed during drafting. The misspelled approval did not meet the explicit approved requirement; implementation waited for P093's separate "approved" message.
+
+Associated status.md: S-2026-11-17-03 (draft snapshot: policy proposed, unapplied, requirement statuses unchanged); recorded retrospectively with P093 in S-2026-11-17-04. Input, cached input, output, model attribution, usage source, cached-input inclusion, final total and estimated/billed costs **Unavailable** for this combined historical drafting/clarification entry: constituent turn IDs and complete response usage have not been matched. No current-turn counts assigned to those earlier prompts.
+
+## P091 - November 17, 2026 (explicit branch association for every prompt)
+
+Branch association (P091): source log branch **malik-other-branch** (current request, verified workspace branch). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Receipt time: 10:41:37 AM (America/Regina; matched user timestamp 2026-11-17T16:41:37.212Z).
+Recording time: 10:41:52 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> can you check everything in the prompt log for prompt's that arn't associated with a branch and change it so that it mentions the branch it came from?
+
+Result: checked every canonical prompt and added a consistent explicit branch-association line, using the original P042 canonical source for older imports and the P090 branch snapshots for newer records. Names the source-log branch and other branch-tip copies without inventing an original authoring branch. Preserves all IDs, prompt text, usage figures and prior provenance. Existing 109 records plus this request yield 110 labelled entries. Recorded evidence in prompt_log_merge_audit.json under branch_attribution_reviews/P091; P042/P090 snapshots unchanged. No README/AGENTS/source/gameplay changes. Next local ID P092.
+
+Associated status.md: S-2026-11-17-02. Documentation-only; no gameplay tests needed/run.
+
+Usage: **Partial as of 2026-11-17T16:43:46.992Z (10:43:46 AM America/Regina)**. Input 1,314,429; cached input 1,311,104 included in input; output 4,408; total 1,318,837; reasoning output 1,435 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1ea62-aa54-7590-9bd9-c98e0d5acd7c. Four unique response payload usages summed and cross-checked to cumulative turn snapshot by the single-prompt checker, exit 0. Exact provenance retained in branch_attribution_reviews/P091. Later checks/final response excluded; final complete total and estimated/billed costs **Unavailable**. No verified rates/billing; session source read-only.
+
+## P090 - November 17, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (P090 current-request branch). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Receipt time: 10:20:12 AM (America/Regina; matched user timestamp 2026-11-17T16:20:12.956Z).
+Recording time: 10:20:26 AM (America/Regina; initial inspection clock).
+
+Actual request:
+
+> could you look into each branch's prompt_log.md within the repo and merge the prompt logs. Keep it consistant with how others have been merged. Reread the AGENTS.md as it should have more detail on the matter and if it doesn't, check the prompt_log.md and look for a prompt that was merged from a seperate branch.
+
+Follow-up clarification: the user asked "what are you trying to delete exactly?" Explained that no files or prompt records would be deleted. Duplicate displays would be consolidated and stale summary metadata superseded, with original source snapshots preserved. The merge request remains active.
+
+Result: followed P042's established policy because AGENTS.md contains no branch-log-specific merge procedure. Compared 15 local/fetched branch refs after fetching origin: seven distinct log blobs, 403 source entry instances. Preserved all 98 existing IDs, prompt text, source versions and token annotations; imported ten additional identities with branch-qualified IDs and added P090, yielding 109 canonical records. Dates descend; available receipt/recording times sort within dates, unavailable times remain grouped separately. No times or usage inferred from commits. Imported branch behavior/tests remain historical, not current acceptance. Source-only narrative links point to pinned source commits. Original P042 audit fields retained; added followup_merges/P090 with source archives and mappings.
+
+Associated [status.md](status.md): S-2026-11-17-01. Audit: [prompt_log_merge_audit.json](prompt_log_merge_audit.json), followup_merges/P090. Next local ID P091; reserved gaps retained.
+
+Token usage: input, cached input, output, model attribution, cached-input inclusion and final total **Unavailable** for the original prompt alone until unambiguous assignment. This live request includes the later user clarification above; no whole-turn cumulative figure is silently assigned to only its first input. Session evidence remains read-only. Estimated cost and actual billed charges **Unavailable** without verified applicable rates/billing. Imported token evidence preserved; README subtotal and graphs not refreshed.
+
+Validation: source entries mapped to canonical IDs, raw bytes/base64/blob IDs/SHA256 archived, original local canonical text/usage preserved, IDs and ordering checked. Documentation checks cover 33 requirement IDs, links, source checksums, status/log references and a three-file boundary. No gameplay tests needed/run. No branch switch, gameplay/code merge, staging, commit or push.
+
+# November 11, 2026
+
+**Recorded receipt/recording times ? newest first (America/Regina)**
+
+## RICA-P079 - Host-only Start and synchronized tank movement
+
+Branch association (P091): source log branch **rica** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P079; source branch: refs/remotes/origin/rica; commit 97857310957cc42a836da7f4adc9d536968ab940. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: November 11, 2026.
+Time: 06:15:12 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request:
+
+> Continue on my `rica` branch. Read and follow `AGENTS.md` and read `README.md`. Treat both files as read-only and preserve my existing changes.
+>
+> Keep the tanks stationary in the waiting room. Add a host-only **Start** button that becomes available when both players are connected. Once the host starts and both players are ready, let each player control their own tank and have both players see the same movement. Use the existing server connection and keep the host in charge of tank positions and collisions.
+>
+> Keep this milestone focused on Start and movement. Leave shooting, damage, and scoring for later. Test with two game instances and report what still needs a two-laptop test. Leave the changes uncommitted for my review.
+
+Status snapshot: S-2026-11-11-02 in status.md. Builds on P077/P078 waiting room; host-only Start is now explicitly authorized. Branch rica and existing diff inspected before editing; read AGENTS.md, both README files, both requirements DOCXs and applicable status records. Starting protected bytes and file hashes captured. No protected documents edited; existing user work retained.
+
+Results: Start/readiness state machine on the existing live lobby, host-owned tank movement with wall/ice collisions, client prediction/reconciliation/interpolation, stationary waiting, ten-second readiness timeout/retry, generation checks, departure/rejoin handling. Protocol bumped to combined-2 for new RPC compatibility; full-room UI unchanged. Speed/footprint remain provisional (235 px/s, 48px square; no tank-to-tank collision). Shooting, damage, scoring and match reset remain out of scope.
+
+Validation: actual two-instance Start/movement test and existing rectangle sync pair passed; three-instance full-room/lifecycle regression passed; discovery compatibility fixtures and interpolation/prediction tests passed. Graphical solo-room capture inspected. The initial new test parse error was fixed; final tests had no script errors. Sandbox user-log/certificate/editor-settings warnings remain. Exact commands, actual evidence boundaries, files and two-laptop checklist are recorded in the associated status section. Protected files/source checksums unchanged, no staged changes, no commits. Physical LAN and graphical two-player movement acceptance remain unverified.
+
+Token usage (all model/tool continuations for P079): input **Unavailable**; cached input **Unavailable**; output **Unavailable**; exact model **Unavailable**; usage source **Unavailable** (no reliable per-request usage record exposed). Cached-input inclusion cannot be determined. Estimated cost and actual billed cost: **Unavailable**; model/rates/usage breakdown are not available, so no estimate is invented.
+
+P090 merge provenance: 1 branch refs; original IDs, snapshots and source versions are mapped under RICA-P079 in the P090 follow-up audit.
+
+## RICA-P078 - Resume P077: restore stashed rica integration
+
+Branch association (P091): source log branch **rica** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P078; source branch: refs/remotes/origin/rica; commit 97857310957cc42a836da7f4adc9d536968ab940. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: November 11, 2026.
+Time: 06:02:26 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request:
+
+> Resume P077 on my `rica` branch in `Tank-Game-Networking`. Read and follow `AGENTS.md` and read `README.md`. Treat both as read-only and preserve my existing edits.
+>
+> Yesterday Godot opened the client main menu. Today, launching from Godot Project Manager opens the Alpha Lobby directly, and Host still opens the rectangle room. Before changing code, check the current branch and diff, confirm the exact `Godot/project.godot` path I should open, and verify that its startup scene points to the combined application. Check whether the P077 waiting room changes are still present and wired into that application.
+>
+> If I’m launching the wrong copy, give me the exact project path to open. If the startup scene or room wiring is wrong in `rica`, fix it. Verify that running the whole project opens the client main menu, **Play → Host Game** opens the client waiting room, and a guest who joins sees the same room. Complete the P077 log if needed and leave the changes unstaged and uncommitted.
+
+Diagnosis before edits: branch rica at 8ceb25b, clean working tree. Godot/project.godot selected res://lobby.tscn at 1000x720. Application and waiting-room scenes/scripts, client imports and P076/P077 logs were absent from the working tree. GitHub Desktop's saved rica stash, `1c56969c54c8d0b7cfd5ec3177d3f3a27d2880ba` (stash@{0}, On rica: !!GitHub_Desktop<rica>), contained all that work. Reflog shows a rica-to-Allen-to-rica branch switch. This is saved uncommitted work not restored into the checkout, rather than evidence of a broken P077 room implementation. Godot's projects.cfg registers the exact repository Godot directory; its other entry C:/GameDemo is the unrelated MIDNIGHT MAZE project.
+
+Exact project to import/open: `C:/Users/ricaa/OneDrive - Saskatchewan Polytechnic/Documents/GitHub/Tank-Game-Networking/Godot/project.godot`. Run the whole project (F5), not the lobby scene with F6. The Project Manager name remains Moooze Tanks Alpha Lobby; that title alone does not indicate the startup scene.
+
+Restored the 85 added/modified file contents from the rica stash using git show, without applying its index, dropping the stash, or touching other branches. The stash and all its saved edits are retained. Restored run/main_scene=res://application.tscn, 1280x800 settings, client dependencies, persistent application/lobby, client_waiting_room and waiting_arena, tests, provenance and P076/P077 records. The application selects client_waiting_room.tscn through AlphaLobby.room_scene; both Host and Join use that property while the lobby retains the same ENet session. Protected AGENTS.md, both README files and requirements documents were excluded from restoration and remain unchanged. This recovery restores the previously authorized P076/P077 work; no Start, gameplay or further Available Games features were added.
+
+Strengthened combined_smoke.gd and combined_preview.gd to assert and load the configured application/run/main_scene rather than hardcoding application.tscn, so a future startup regression is detected. The initial three-process test failed in the existing rejoin sequence: the departing guest interpreted its own stale 2/2 row as the third player's arrival, then competed for the freed slot. Added a test-only wait for its own 1/2 departure update before awaiting the third player's 2/2 update. Production networking was not changed for this race. All three roles passed after that test correction.
+
+Current validation commands, from repository root, with `$engine = 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe'`:
+
+```powershell
+& $engine --headless --path Godot --editor --import --quit
+& $engine --headless --path Godot --quit-after 60
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- host
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- guest
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- third
+& 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --path Godot --script res://tests/combined_preview.gd
+```
+
+Godot 4.7.2 import/startup completed without reported script/parser errors; ordinary whole-project launch exited 0. The three host/guest/third modes ran concurrently with local network access and ultimately PASS/exit 0. They assert initial client menu, one-click Play/Host callback, same waiting-room script on host and guest, membership/name/snapshot delivery, stationary waiting markers, full/reopened room, Escape departure, typed-ID rejoin, host-loss notice and expiry. Graphical preview ran hidden, exit 0/PASS; inspected configured-startup main-menu and hosted waiting-room captures. These checks do not constitute a manual Project Manager click-through or a physical two-device test.
+
+Environment output: sandbox runs reported user-log/root-certificate access errors and import could not save external editor settings. Plain startup reported the previously observed two ObjectDB instances leaked at exit. No unrelated fixes made. Historical P076/P077 results are preserved separately; other standalone movement/offline gameplay/failure tests were not rerun for this recovery.
+
+Follow-up: on two laptops, open the exact restored project on matching rica builds, run F5, verify Play → Host Game and guest Join show the same waiting room/game ID/names/count. Verify guest leave/rejoin, third-instance full/reopened listing, host disconnection and reversed host roles. Physical LAN discovery/firewalls, abrupt network loss and graphical performance remain unverified. AGENTS/README documentation updates remain pending separate approval.
+
+Associated [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/97857310957cc42a836da7f4adc9d536968ab940/status.md): S-2026-11-11-01; resumes P077 and retains its completed historical record.
+
+Token usage (input, cached input, output), model usage records, cached-input inclusion and usage source: **Unavailable**; reliable per-request telemetry covering all model/tool continuations is not exposed. Estimated cost/actual billing: **Unavailable**, because reliable model/rates/usage are unavailable.
+
+P090 merge provenance: 1 branch refs; original IDs, snapshots and source versions are mapped under RICA-P078 in the P090 follow-up audit.
+
+# November 10, 2026
+
+**Recorded receipt/recording times ? newest first (America/Regina)**
+
 ## P089 - November 10, 2026 (README token-coverage note)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Receipt time: 01:12:06 PM (America/Regina; matched user timestamp 2026-11-10T19:12:06.599Z).
 Recording time: 01:12:14 PM (America/Regina; initial inspection clock).
@@ -15,7 +222,12 @@ Associated status.md: S-2026-11-10-14. Documentation-only, no gameplay tests nee
 
 Usage: **Partial as of 2026-11-10T19:12:46.790Z (01:12:46 PM America/Regina)**. Input 533,100; cached input 530,304 included in input; output 1,528; total 534,628; reasoning output 111 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6df-ed70-7c11-8634-e05a668096b5. Two unique response payload usages summed and cross-checked to turn snapshot by the single-prompt checker restricted to this session, exit 0. Later checks/final reply excluded; final total and estimated/billed cost **Unavailable**. No verified rates/billing; sessions read-only.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P089 in the P090 follow-up audit.
+
 ## P088 - November 10, 2026 (targeted P004 token search)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Receipt time: 01:06:28 PM (America/Regina; matched user timestamp 2026-11-10T19:06:28.393Z).
 Recording time: 01:06:37 PM (America/Regina; initial inspection clock).
@@ -30,7 +242,12 @@ Result: branch ancestor e23eeb7 records P004 with unchanged original wording. Se
 
 Associated status.md: S-2026-11-10-13. Current-request input/cached input/output/model/total and estimated/billed costs **Unavailable** for the original prompt alone until unambiguous attribution; current turn includes a later scope-approval reply. Session evidence read-only. No gameplay tests needed/run.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P088 in the P090 follow-up audit.
+
 ## P087 - November 10, 2026 (P002/P003 branch-scoped verification test)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Receipt time: 12:59:02 PM (America/Regina; matched user timestamp 2026-11-10T18:59:02.723Z).
 Recording time: 12:59:11 PM (America/Regina; initial inspection clock).
@@ -47,7 +264,12 @@ Associated status.md: S-2026-11-10-12. Investigation/documentation only; no game
 
 Current-request token usage: input, cached input, output, total, model attribution and final complete total **Unavailable** for the original prompt alone. `python -B tools/token_usage.py --prompt-id P087 --session <current November 10 session>` refused attribution because this turn contains later user input (the scope-approval reply); its whole-turn usage must not be silently assigned only to the first prompt. Source is ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl, read-only. Cached-input inclusion for an assigned per-prompt total **Unavailable**; estimated/billed costs **Unavailable**. This current-request limitation does not affect the independently checked P002/P003 turns, which contain no later user input and have matching root-turn IDs.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P087 in the P090 follow-up audit.
+
 ## P086 - November 10, 2026 (prompt versus token line graph)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Receipt time: 12:35:58 PM (America/Regina; matched user timestamp 2026-11-10T18:35:58.993Z).
 Recording time: 12:36:07 PM (America/Regina; initial inspection clock).
@@ -62,7 +284,12 @@ Associated status.md: S-2026-11-10-11. Current request usage is partial, separat
 
 Usage: **Partial as of 2026-11-10T18:37:43.503Z (12:37:43 PM America/Regina)**. Input 607,758; cached input 604,160 included in input; output 4,460; total 612,218; reasoning output 1,032 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6be-da37-7573-9cec-131943a0b938. Three unique response payload usages summed and cross-checked to turn snapshot by `python -B tools/token_usage.py --prompt-id P086`, exit 0; no cumulative duplication. Later checks/final response excluded; final total and estimated/billed costs **Unavailable**. No verified rates/billing; sessions read-only.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P086 in the P090 follow-up audit.
+
 ## P085 - November 10, 2026 (plain-text agent handoff)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Receipt time: 12:32:21 PM (America/Regina; matched user timestamp 2026-11-10T18:32:21.057Z).
 Recording time: 12:32:28 PM (America/Regina; initial inspection clock).
@@ -77,7 +304,12 @@ Associated status.md: S-2026-11-10-10. Current request usage recorded separately
 
 Usage: **Partial as of 2026-11-10T18:33:37.288Z (12:33:37 PM America/Regina)**. Input 383,109; cached input 377,344 included in input; output 3,277; total 386,386; reasoning output 269 included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6bb-8719-71d0-b2e8-27637965667b. Two unique payload.usage records summed, deduplicated and cross-checked to cumulative turn evidence by `python -B tools/token_usage.py --prompt-id P085` (exit 0). Response IDs resp_071e9e193857adc1016af36335ce5c87d0a66f74fa1dcb74a3 and resp_071e9e193857adc1016af3633d54f087d0844f829bd7c1acfa. Later continuations/final reply excluded. Final complete total and estimated/billed cost **Unavailable**; live turn unfinished and no verified rates/billing. Protected sessions read-only.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P085 in the P090 follow-up audit.
+
 ## P084 - November 10, 2026 (verified token backfill and root README subtotal)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Partial**. Input 694,318; cached input 682,880 (included in input); output 6,740; total 701,058. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-11-10T18:28:04.306Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c6b5-3b10-7070-bc64-c782289e086b. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: Unavailable.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -93,7 +325,12 @@ Result: authorized token-only historical audit and dated per-prompt annotations,
 
 Associated status.md: S-2026-11-10-09. Audit evidence and current request partial usage are in its dated token annotation; final live-turn total unavailable until later completion review.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P084 in the P090 follow-up audit.
+
 ## P083 - November 10, 2026 (token checker cost verification)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 802,270; cached input 795,520 (included in input); output 1,841; total 804,111. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-10T18:19:55.707Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c6af-1092-7c83-a305-971fb0e19e96. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 804111.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -111,23 +348,145 @@ Associated status.md: S-2026-11-10-08. Current request usage and receipt timesta
 
 Current request usage: **Partial as of 2026-11-10T18:19:22.764Z (12:19:22 PM America/Regina)**. Input 475,219; cached input 470,400 included in input; output 1,087; total 476,306; reasoning output 143 separately exposed and included in output; cache-write input 0. Model gpt-6.1-sol. Source ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c6af-1092-7c83-a305-971fb0e19e96. Three deduplicated response records summed and cross-checked to turn snapshot by `python -B tools/token_usage.py --prompt-id P083`, exit 0. Later continuations and final reply excluded; final total, estimated cost and actual billing **Unavailable**. No verified applicable rates or billing records.
 
-Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P083 in the P090 follow-up audit.
 
-<<<<<<< Updated upstream
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P074 and the next request is **P075**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
-=======
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P077 and the next request is **P078**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
->>>>>>> Stashed changes
-- **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
-- **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
-- **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
-- **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
-- **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
-- **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+## RICA-P077 - Client arena waiting room
 
-# November 10, 2026
+Branch association (P091): source log branch **rica** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P077; source branch: refs/remotes/origin/rica; commit 97857310957cc42a836da7f4adc9d536968ab940. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: November 10, 2026.
+Time: 11:35:49 AM (recording time; America/Regina).
+Receipt time: **Unavailable** (not supplied by chat metadata).
+
+Actual request:
+
+> Continue on my `rica` branch in `Tank-Game-Networking`. Before making any changes, read and follow `AGENTS.md` and read `README.md` for project context. Treat both files as read-only. Preserve my existing edits and verify that both files are byte-for-byte identical to their starting versions. Confirm this in your final summary.
+> **Host Game** currently starts a session and opens our rectangle placeholder room. After hosting succeeds, show the client team’s game room from the [Moooze Tanks client repo](https://github.com/AnnMaxine/Moooze-Tanks-Repository) inside the same live session. A guest who successfully joins should see the same room. Keep the room in a waiting state and preserve the game ID, player count, and leave/disconnect behavior.
+> First, check whether the client repo has a dedicated multiplayer room or whether the screen is part of its offline arena in `scripts/game.gd`. If there’s a dedicated room, integrate it. If you only find the offline arena, tell me which branch or scene you checked and what visuals can be reused before wiring it in. Keep the current networking active during the screen change.
+> Keep this scoped to the room shown after Host or Join. Leave the Available Games UI, Start behavior, and networked tank gameplay for later. Run the local Host and Join checks, report what still needs a two-laptop test, and leave the changes uncommitted.
+
+Confirmed branch rica; retained all starting uncommitted Milestone 1 changes, generated UIDs and the existing editor project_metadata.cfg edit. Read AGENTS.md, README.md, Godot/README.md, both source requirements and relevant status entries before editing. Captured protected file bytes and starting repository hashes/cache bytes for final preservation checks.
+
+Client investigation: checked default branch main at commit `136e878a0dcbe1d8757ca4970e0af07784eb5587`. Its scene inventory contains only scenes/main.tscn; scripts/game.gd constructs the offline arena. No dedicated multiplayer room was found in that branch. Reported this finding and reusable snowy field, perimeter, ice-brick layout, tank sprites and decorative lights to the user before wiring the view. Reused the already imported `167b4f6` visual layout/assets rather than pulling unrelated newer gameplay changes. This is a visual adaptation of the offline arena, not an existing multiplayer scene or synchronized tank gameplay.
+
+Added client_waiting_room.tscn/.gd, inheriting the existing room HUD and membership/leave/disconnect handling. Added scripts/waiting_arena.gd with visual-only Sprite2D bricks, trees and stationary host/guest tank markers; decorative snow/lights remain animated. Markers follow actual room membership/names. No offline player/brick/moose physics scripts are instantiated; movement, shooting, damage and match simulation do not run in the waiting scene. Added Waiting text while retaining game ID, host, count, named departure, settings and FPS displays.
+
+The lobby now exposes a PackedScene room_scene, defaulting to the original rectangle room for standalone preview/regression uses. application.tscn selects the waiting room for both normal Host and successful Join. Existing session creation, room-ready/name RPCs and Application/AlphaLobby ownership/path are retained; no reconnect, new host or scene-tree replacement occurs. Available Games UI, discovery protocol, Start and offline client code are unchanged by P077. Extended combined_smoke.gd to assert waiting-room selection, membership artwork, disabled simulation/input and Escape leave with the menu hidden. Scene/script UID files accompany new scripts.
+
+Scope mapping: FR1/FR4/FR5/FR7 and GR1-GR7 room entry/membership/leave; FR12 visual placeholder, client R1/R2/R4/R9 and UI2 visual reuse only. FR6/GR8 Start and networked tank movement/combat/reset remain deferred. The rectangle movement implementation and prior evidence remain available, but the combined waiting screen intentionally does not run it. No full gameplay or two-device acceptance is claimed.
+
+Current checks (separate from P076 historical results), from repository root; `$engine = 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe'`:
+
+```powershell
+& $engine --headless --path Godot --editor --import --quit
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- host
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- guest
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- third
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- failure
+& $engine --headless --path Godot --script res://tests/join_delay_smoke.gd
+& $engine --headless --path Godot --script res://tests/game_room_smoke.gd
+```
+
+Godot reported 4.7.2.stable.official.ed1daf0bf. Import exited 0 without reported parser/script errors. Actual host/guest/third processes were run concurrently with local network access: all PASS/exit 0, including waiting-room scene, 35 visual bricks, real names/member markers, no gameplay physics, stationary markers under movement/fire input, zero simulation/input sequence, unpaused settings overlay, full-room response, reopened slot, Escape leave, lowercase-ID rejoin, host-loss notice and listing expiry. The three-role run was repeated after adding actual Escape input coverage; all passed. Failure fixture, Join delay and original standalone rectangle preview all PASS/exit 0. Join and Retry measured 509 ms and 502 ms. Hosting failure uses an injected ERR_CANT_CREATE, not an induced physical-network failure.
+
+Graphical capture command: `& 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --path Godot --script res://tests/combined_preview.gd`, launched hidden with Start-Process; exit 0/PASS. Inspected the actual hosted waiting-room PNG at 1280x800, showing snowfield/trees/ice, named stationary host tank and live session HUD. Captures do not establish physical two-player or sustained performance acceptance.
+
+Sandbox import/capture emitted root-certificate/user-log access errors and inability to save external editor settings; no script errors reported. The failure fixture retained the previously observed two ObjectDB leaked-instance warning. No unrelated fixes made. Current offline client smoke, authoritative movement pairs, protocol filtering fixtures and full-timeout fixtures were not rerun: their P076 evidence remains historical; their implementation was not changed by P077.
+
+Two-laptop acceptance still required: run matching updated combined builds; one-click Host and selected/typed-ID Join must enter the same waiting room with matching game ID, names and 2/2 count. Verify stationary tanks/no shooting on both, guest Back/Escape returns to lobby and removes its marker/count on host, rejoin restores membership, host closure shows Disconnected/Return to Lobby, and a third instance sees full/reopened capacity correctly. Reverse host roles and verify LAN discovery/firewalls, manual-IP fallback, abrupt network loss, window resizing and readable HUD. Start is not implemented. Keep both builds matching; discovery filtering is not an ENet build handshake.
+
+Final preservation audit: AGENTS.md and README.md each match their captured request-start bytes exactly. Hash comparison of every starting tracked/untracked file confirms that this request changed only Godot/lobby.gd, Godot/application.tscn, Godot/tests/combined_smoke.gd, status.md and prompt_log.md, plus the new waiting-room scene/scripts and two UIDs. All other starting edits (including editor metadata and generated UIDs), Godot/README.md, imported client scripts/assets and both requirements DOCX files are unchanged. Test-generated tracked cache changes were restored from captured starting bytes rather than HEAD, preserving the user's editor metadata edit. All 33 requirement rows and P077/S-2026-11-10-02 references pass; git diff --check passes. Branch is rica; staging area is empty; no commit/push. Protected documentation remains outdated for the new waiting-room presentation and requires separate approval to update.
+
+Associated [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/97857310957cc42a836da7f4adc9d536968ab940/status.md): S-2026-11-10-02. Builds on P076; all work remains uncommitted.
+
+Token usage: **Unavailable** for input, cached input, output and model usage records; reliable per-request telemetry including all model/tool continuations is not exposed. Cached-input inclusion and usage source: **Unavailable**. Estimated cost/actual billing: **Unavailable**, because reliable model/rates/usage data is unavailable.
+
+P090 merge provenance: 1 branch refs; original IDs, snapshots and source versions are mapped under RICA-P077 in the P090 follow-up audit.
+
+## RICA-P076 - Milestone 1 combined menu integration
+
+Branch association (P091): source log branch **rica** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P076; source branch: refs/remotes/origin/rica; commit 97857310957cc42a836da7f4adc9d536968ab940. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: November 10, 2026.
+Time: 11:09:44 AM (recording time; America/Regina).
+Receipt time: **Unavailable** (not supplied by chat metadata).
+
+Actual request:
+
+> Implement **Milestone 1 only** from `Moooze_Tanks_Integration_Plan.docx` on my branch in `Tank-Game-Networking`. Use `Tank-Game-Networking/Godot` as the base for the combined build. Bring in the client menu and its required dependencies from the client revision reviewed in the plan.
+>
+> Before editing, **read and follow `AGENTS.md`**. Confirm the current branch and check for existing changes. If you’re on `main` or can’t confirm you’re on my branch, stop and tell me. Preserve my existing edits. Treat `AGENTS.md` and `README.md` as read-only. Record the starting contents of `AGENTS.md` so you can verify it is identical after implementation, including any edits that were already there.
+>
+> - **Host Game** starts hosting with one click through the existing `host_game()` flow and opens the multiplayer rectangle room. If hosting fails, show the existing error in the lobby.
+> - **Join Game** opens Available Games. Compatible full rooms stay visible as **2/2 · Full**. Preserve the **Room Full** response when someone tries to join. When a slot opens, update the listing and allow joining again.
+> - **Incompatible older builds** stay hidden from Available Games. Apply the compatibility check across automatic discovery, typed game ID, and manual IP lookup.
+> - Keep one persistent lobby instance so the connection survives screen changes. Preserve the existing rectangle room and connection flows. Leave Start and networked tank gameplay for later milestones.
+>
+> Run the checks you can locally and report the actual results. Summarize the files changed, confirm `AGENTS.md` is identical to its starting contents, and list the checks I still need to run on two laptops. Follow the repo’s logging instructions and leave the changes uncommitted for my review.
+
+Implemented Milestone 1 on confirmed branch `rica`, starting from clean server commit `8ceb25b`. The plan was read from the downloaded Word document. Earlier review/plan requests deliberately left repository logs unchanged under their explicit read-only instruction; they have no assigned repository prompt IDs. This entry links the resulting implementation to that latest revised plan rather than inventing a historical ID.
+
+Imported the menu, six client scripts, scene, required textures/audio/import metadata and unchanged offline smoke test from client revision `167b4f6f8f56696efc7b80212fd32b8b7e011d8a`. Source SHA256 values and provenance are in [Godot/client_import.json](https://github.com/Kirbzo/Tank-Game-Networking/blob/97857310957cc42a836da7f4adc9d536968ab940/Godot/client_import.json). Only imported game.gd is adapted: Host/Join emit signals to the combined application. No client repository checkout was modified.
+
+Added application.gd/application.tscn with one persistent Application/AlphaLobby. Host Game calls existing host_game once; failure stays in the visible lobby. Join opens Available Games. Client CanvasLayer, input and sound are disabled during online presentation; discovery/ENet remain active. Existing room Back/Escape and lobby Exit behavior retained. The server project keeps its engine/renderer and adopts the client 1280x800 viewport. Full listings show `2/2 · Full`; existing fresh-full Room Full and retry/stale rules remain intact. New discovery protocol `moooze-combined-1` filters old automatic announcements and direct-IP replies before the ID cache; typed-ID joining resolves that cache. This is supported-path compatibility filtering, not a new ENet handshake or protection against a peer falsely claiming the version.
+
+Start, networked tank gameplay, combat, hit reconciliation and reset remain deferred. Imported offline modes are not evidence of completing server FR10-FR12. Client mapping: UI1 menu integration; existing R1-R9/UI2-UI5 offline behavior preserved, without changing source acceptance criteria.
+
+AGENTS.md starting bytes were captured in the tool session before implementation. Starting SHA256: `0F90CEB642872CEE741BFD4337D831B90BE9EB46BAC924F7A46D7EC9C5740832`. Protected AGENTS.md, both README files and requirements documents are unchanged. Generated changes to previously clean tracked editor caches are restored; unrelated generated UIDs are excluded. No staging, commit or push.
+
+Physical acceptance still required: matching builds on two laptops; one-click hosting and error presentation; selection and ID Join; movement/names/count; third instance sees Full and Room Full; departure updates 1/2 and permits join/rejoin; old build filtered via automatic/ID/manual-IP routes; compatible direct-IP discovery; Cancel/Retry; host closure/expiry and reversed host roles. Firewall/VPN/Wi-Fi isolation, abrupt network loss, sustained graphical smoothness and manual menu/input/audio acceptance remain unverified. Keep protected documentation changes pending a separate approval; FR15 is partial because current README entry/protocol descriptions have not been updated.
+
+Associated [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/97857310957cc42a836da7f4adc9d536968ab940/status.md): S-2026-11-10-01.
+
+Commands executed from the repository root with `$engine = 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64_console.exe'`:
+
+```powershell
+& $engine --version
+& $engine --headless --path Godot --editor --import --quit
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- local
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- failure
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- host
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- guest
+& $engine --headless --path Godot --script res://tests/combined_smoke.gd -- third
+& $engine --headless --path Godot --script res://tests/join_delay_smoke.gd
+& $engine --headless --path Godot --script res://tests/join_cancel_smoke.gd -- full-timeout
+& $engine --headless --path Godot --script res://tests/room_view_smoke.gd
+& $engine --headless --path Godot --script res://tests/client/smoke.gd
+& $engine --headless --path Godot --script res://tests/world_sync_smoke.gd -- host
+& $engine --headless --path Godot --script res://tests/world_sync_smoke.gd
+& $engine --headless --path Godot --script res://tests/connected_room_smoke.gd -- host host-leaves
+& $engine --headless --path Godot --script res://tests/connected_room_smoke.gd -- host-leaves
+& $engine --headless --path Godot --script res://tests/alpha_smoke.gd -- packets
+& $engine --headless --path Godot --script res://tests/join_smoke.gd -- initial
+& $engine --headless --path Godot --script res://tests/join_smoke.gd -- failure
+& $engine --headless --path Godot --script res://tests/game_room_smoke.gd
+& $engine --headless --path Godot --script res://tests/room_full_smoke.gd -- host
+& $engine --headless --path Godot --script res://tests/room_full_smoke.gd -- occupant
+& $engine --headless --path Godot --script res://tests/room_full_smoke.gd
+```
+
+Actual results: version 4.7.2.stable.official.ed1daf0bf; import exit 0 with no reported script/parser errors. All listed test modes ultimately passed/exit 0. Paired/triple commands ran concurrently in separate processes, starting host first. Sandbox three-process discovery initially failed (all roles exit 1); rerunning with approved local-network access passed all roles. The Join delay test initially failed its timing bound while other tests ran, then passed in isolation (Join 503 ms; Retry 503 ms), without changing production timing or assertions. Local protocol tests exchange real UDP packets using listing fixtures, not real old-build ENet hosts. Combined host/guest/third tests establish real ENet connections under the combined application path, including full capacity, reopened slot, lowercase-ID rejoin, snapshot/name delivery, departure and host-loss expiry. Failure mode injects ERR_CANT_CREATE to exercise the real menu callback/error route. Imported client smoke passed 32 assertions; it is offline regression evidence, not networked tank acceptance.
+
+Graphical command: `& 'C:\Users\ricaa\Downloads\Godot_v4.7.2-stable_win64.exe\Godot_v4.7.2-stable_win64.exe' --path Godot --script res://tests/combined_preview.gd` (launched with Start-Process -WindowStyle Hidden, output redirected inside ignored Godot/.godot). Exit 0/PASS. Inspected menu, Play, Available Games and rectangle-room PNG captures at 1280x800. No overlapping client menu remained in the online room. Captures are not a full human input/performance playtest.
+
+Environment limitations: sandbox runs report user-log and root-certificate access errors; editor import also reports inability to save external editor settings. Failure fixture and imported client smoke report two ObjectDB instances leaked at exit. Elevated network regressions had no reported script errors. The imported client leak warning is also present in its source history; no unrelated repair made. An initial DOCX terminal print failed on console encoding and was rerun with UTF-8. Initial client archive parsing mistakenly treated the DOCX container as XML; it failed before any import writes and was corrected to read word/document.xml.
+
+Final audit: AGENTS.md compared byte-for-byte with the captured starting contents and matched; its SHA256 and both README/source DOCX hashes match their starting values. All 20 original and 13 WP2 requirement rows occur exactly once. P076/revision references and new local/resource links pass. The full historical link scan reported two pre-existing missing prompt-log targets, Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json; comparison against HEAD confirms neither was introduced here. They were left unchanged. git diff --check passes; branch remains rica and the staging area is empty. Restoring test-generated tracked editor caches initially required an index lock unavailable in the sandbox; approved git restore --worktree -- Godot/.godot restored only those previously clean cache files. No implementation changes were staged or committed.
+
+Token usage: **Unavailable** for input, cached input, output and model usage records; reliable per-request telemetry covering all model calls/tool continuations is not exposed. Cached input inclusion: **Unavailable**. Usage source: **Unavailable**. Estimated cost and actual billed charges: **Unavailable**, because reliable model/rates/usage breakdown is unavailable.
+
+P090 merge provenance: 1 branch refs; original IDs, snapshots and source versions are mapped under RICA-P076 in the P090 follow-up audit.
 
 ## P081 - November 10, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,174,518; cached input 1,161,088 (included in input); output 13,045; total 1,187,563. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-11-10T17:05:32.813Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c667-2809-71d1-ad2c-c14478bb9a83. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1187563.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -147,7 +506,33 @@ Token usage: **Partial as of 2026-11-10T17:03:24.900Z (11:03:24 AM America/Regin
 
 Validation: `python -B -m unittest discover -s tools -p 'test_token_usage.py' -v` passed all 16 tests. `python -B tools/token_usage.py --prompt-id P081 --output tools/usage_P081.json` created the partial evidence report. Real-session CLI checks for P081 and P080 succeeded; P080 reports six responses and 590,095 total tokens for its completed recorded turn, without rewriting that historical entry. CLI rechecked after attribution/resumption hardening. No gameplay tests needed/run. Legacy-only, delegated cross-session and resumed-turn aggregation intentionally remain unsupported rather than guessed; unknown external usage cannot be certified.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P081 in the P090 follow-up audit.
+
+## P079 - November 10, 2026 (preceding authorization draft)
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 90,033; cached input 89,856 (included in input); output 258; total 90,291. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-11-10T16:49:25.994Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c65d-2821-7170-ab05-c1f2f97ce7cb. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 90291.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
+
+
+Receipt time: **Unavailable** in this entry; source timestamp not yet matched.
+Recording time: 10:51:51 AM (America/Regina; backfilled during P080 from visible conversation, not the draft's receipt time).
+
+Actual request:
+
+> Then lets suggest or draft the autherization of writing files. AGENTS.md is the most important file besides protected files and should never be written to without an explicit "approved" message.
+
+Result: presented five authorization rules in chat only; no files changed in that turn. User subsequently approved in P080. Draft snapshot S-2026-11-10-04: requirement statuses unchanged, policy proposed but unapplied; documented retrospectively in the S-2026-11-10-05 addendum. No historical source files changed.
+
+Token usage, model and complete total: **Unavailable** in this entry because this earlier turn's response IDs/usage have not been reliably matched during the current scoped implementation. Current session accounting above pertains only to P080. Cached-input inclusion and usage-source record association **Unavailable** for P079; estimated cost and actual billed charges **Unavailable** without matched usage/rates. This preserves the evidence gap rather than attributing current-turn totals to the draft.
+
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P079 in the P090 follow-up audit.
+
 ## P080 - November 10, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 586,449; cached input 577,408 (included in input); output 3,646; total 590,095. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-11-10T16:53:18.935Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c65f-697c-70e1-b586-9730b304ce73. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 590095.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -167,23 +552,12 @@ Token usage: **Partial as of 2026-11-10T16:52:10.732Z (10:52:10 AM America/Regin
 
 Sequence note: P079 records the preceding draft below, P080 is its distinct implementation request; next local ID P081. Conflicting historical sequence preamble preserved.
 
-## P079 - November 10, 2026 (preceding authorization draft)
-
-Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 90,033; cached input 89,856 (included in input); output 258; total 90,291. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-11-10T16:49:25.994Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c65d-2821-7170-ab05-c1f2f97ce7cb. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 90291.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
-
-
-Receipt time: **Unavailable** in this entry; source timestamp not yet matched.
-Recording time: 10:51:51 AM (America/Regina; backfilled during P080 from visible conversation, not the draft's receipt time).
-
-Actual request:
-
-> Then lets suggest or draft the autherization of writing files. AGENTS.md is the most important file besides protected files and should never be written to without an explicit "approved" message.
-
-Result: presented five authorization rules in chat only; no files changed in that turn. User subsequently approved in P080. Draft snapshot S-2026-11-10-04: requirement statuses unchanged, policy proposed but unapplied; documented retrospectively in the S-2026-11-10-05 addendum. No historical source files changed.
-
-Token usage, model and complete total: **Unavailable** in this entry because this earlier turn's response IDs/usage have not been reliably matched during the current scoped implementation. Current session accounting above pertains only to P080. Cached-input inclusion and usage-source record association **Unavailable** for P079; estimated cost and actual billed charges **Unavailable** without matched usage/rates. This preserves the evidence gap rather than attributing current-turn totals to the draft.
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P080 in the P090 follow-up audit.
 
 ## P078 - November 10, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 682,317; cached input 674,432 (included in input); output 4,926; total 687,243. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-10T16:39:32.110Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c652-2579-7550-972c-f3670241b004. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 687243.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -201,7 +575,12 @@ Associated [status.md](status.md): S-2026-11-10-03 (current request addendum abo
 
 Token usage: **Partial as of 2026-11-10T16:38:28.359Z (10:38:28 AM America/Regina)**. Input: 329,881; cached input: 323,712; output: 2,597; total: 332,478; separately recorded reasoning output: 197; cache-write input: 0. Model: gpt-6.1-sol, from matched turn_context. Cached input is included in input, and reasoning output is included in output; neither is added again. Source: ~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-17-43-01a1c640-44f3-7a60-bfa0-d7ac010c234a.jsonl; session/thread 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn/root-turn 01a1c652-2579-7550-972c-f3670241b004. Sum of payload.usage from four unique response IDs; matched actual prompt in user response_item and adjacent turn context. Sum equals the latest observed turn_token_usage; no cumulative or token_count records added. Later tool continuations and final response are excluded by cutoff. Final complete total: **Unavailable** until the turn completes and is reviewed later. Estimated cost and actual billed charges: **Unavailable**; applicable verified pricing/billing records were not obtained. All session access read-only.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P078 in the P090 follow-up audit.
+
 ## P077 - November 10, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 436,878; cached input 409,216 (included in input); output 5,672; total 442,550. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-10T16:26:15.459Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c645-988e-7402-8905-a1f711f62256. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 442550.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -221,7 +600,12 @@ Validation: exact movement unit command/result in security_review.txt; PASS, exi
 
 Token usage: input, cached input, output, model usage record and usage source **Unavailable**; reliable per-request telemetry covering all calls is not exposed. Cached-input inclusion **Unavailable**. Estimated cost and actual billed charge **Unavailable** because reliable usage and applicable rates are unavailable.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P077 in the P090 follow-up audit.
+
 ## P076 - November 10, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 302,925; cached input 270,208 (included in input); output 2,561; total 305,486. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-11-10T16:20:20.576Z. Session 01a1c640-44f3-7a60-bfa0-d7ac010c234a; turn 01a1c641-4b01-7523-a883-b98182ff5e45. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 305486.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -239,11 +623,42 @@ Associated [status.md](status.md): S-2026-11-10-01; all requirement statuses unc
 
 Token usage: **Unavailable** for input, cached input, output, model usage record and usage source; reliable per-request telemetry covering all calls is not exposed. Cached-input inclusion: **Unavailable**. Estimated cost and actual billed charges: **Unavailable** because reliable usage and applicable rates are unavailable.
 
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under P076 in the P090 follow-up audit.
+
 # November 6, 2026
 
-**Recorded times - newest first (America/Regina)**
+**Recorded receipt/recording times ? newest first (America/Regina)**
+
+## MAIN-P075 - November 6, 2026
+
+Branch association (P091): source log branch **main** (P090 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P075; source branch: refs/heads/main; commit 5980b0d92f6aa65dc5bd8ad3d8df7f9d2e841833. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 12:02:50 PM (America/Regina; UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> lets look back at the repository now and check the comparisons between the malik-other-branch and main. Lets create a single commit with the changes from the malik-other-branch into the main branch. Name it "Beta Network Mooze Tanks Game v1.0"
+
+Compared clean main c06ecd4 with malik-other-branch 3738b97 and applied git merge --squash malik-other-branch. Resolved 12 overlapping files to the selected source versions; retained main P044 prompt and status history and main-only generated metadata. Transfers connected room/HUD, authoritative shared movement, client prediction/interpolation/reconciliation, connection delay/countdown/Cancel/Retry, Room Full/Disconnected feedback, named departures, username changes, current tests and approved documentation. Source branch remains unchanged. Single requested commit title: Beta Network Mooze Tanks Game v1.0. No remote push.
+
+Current validation: Godot 4.7.2 executable C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe with --headless --path Godot --script res://tests/<name>.gd: room_view_smoke, join_delay_smoke, game_room_smoke (no arguments); world_sync_smoke host/no-argument pair; connected_room_smoke host/no-argument pair and host host-leaves/host-leaves pair; room_full_smoke host/occupant/no-argument group; join_cancel_smoke -- full-timeout. All passed, exit 0. Existing user-log write and root-certificate-store errors appeared without reported script errors. Checks cover shared authority/input validation, smoothing, membership/departure, host closure notice, capacity, delay/cancellation and ten-second timeout/Retry. Physical two-device LAN, graphical FPS/smoothness, pending-host-loss fixture and discovery regression not rerun; their earlier evidence remains historical. Start/combat/hit reconciliation/reset remain absent; beta commit title does not claim full requirement acceptance.
+
+Documentation checks: all 33 canonical requirement IDs, local links, source SHA256 preservation, source-code equivalence and revision/log consistency. Git metadata write initially failed in the sandbox; approved escalation allowed squash merge/staging/commit. Historical whitespace warnings are retained rather than rewriting old evidence.
+
+Associated [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/5980b0d92f6aa65dc5bd8ad3d8df7f9d2e841833/status.md): S-2026-11-06-10. Preserved main P044 history and continuing source prompt IDs; next P076.
+
+Token usage: **Unavailable** for input, cached input, output and model; reliable per-request telemetry covering all model/tool continuations is not exposed. Cached-input inclusion: unavailable. Usage source: unavailable. Estimated cost and actual billed charge: **Unavailable**; reliable model/rates/usage breakdown not available.
+
+P090 merge provenance: 9 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P075 in the P090 follow-up audit.
 
 ## P074 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,176,149; cached input 1,138,816 (included in input); output 9,663; total 1,185,812. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-11-06T17:49:29.278Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1f7-5bd1-7ef2-8c08-3cef302572a2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1185812.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -261,7 +676,12 @@ Validation: Python documentation audit (33 IDs, links, test paths, original sour
 
 Token usage: **Unavailable** for input, cached input, output and model; reliable per-request usage/model records covering all calls and continuations are not exposed. Whether cached input is included in input totals is unavailable. Usage source: unavailable telemetry. Estimated monetary cost: **Unavailable** because reliable model, rates and usage breakdown are unavailable; no billed charge claimed.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P074 in the P090 follow-up audit.
+
 ## P073 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,328,307; cached input 1,325,440 (included in input); output 3,528; total 1,331,835. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-11-06T17:41:53.928Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1f2-3000-7222-b29c-72f0099bbdff. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1331835.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -281,7 +701,12 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 
 Validation: `python -` read both source Word documents; verified 33 IDs, active links, unchanged source hashes/protected docs and status/log revision. Git diff --check/status for boundaries. No gameplay tests needed or run for note/comment removal and proposals; prior runtime results remain historical. No staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P073 in the P090 follow-up audit.
+
 ## P072 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,167,374; cached input 2,155,904 (included in input); output 5,170; total 2,172,544. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-06T17:37:18.231Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1ed-9216-7e73-8e09-ebfd6528f4d2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2172544.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -306,7 +731,64 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host` paired with command without host: both PASS/exit 0.
 `rg -n 'test_room_button|opening_test_room|open_test_room' Godot --glob '*.gd'` returns no matches (exit 1 expected). Existing user-log/certificate-store errors remain without script errors. No graphical/two-device verification. Python checked 33 IDs, source hashes, active links, protected docs preservation and status/log references; Git diff --check/status for boundaries. Protected updates await approval; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P072 in the P090 follow-up audit.
+
+## HARSH-OTHER-BRANCH-P047 - November 06, 2026
+
+Branch association (P091): source log branch **Harsh-other-branch** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P047; source branch: refs/heads/Harsh-other-branch; commit c1882aa3061c8dd0601be678c84d16ba4fe583ea. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: 2026-11-06.
+Time: 11:27:09 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> Client https://github.com/AnnMaxine/Moooze-Tanks-Repository
+> how will it integrate this client side to my server but do not implement anything yet just come up with the best process and explain!
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/status.md), revision S-2026-11-06-01.
+Planning artifact: [client_integration_plan.txt](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/client_integration_plan.txt).
+
+Result: reviewed local requirements and current lobby/connection/discovery code.
+Proposed one integrated Godot 4.7.2/GDScript playable project with a persistent
+session owner, coordinated scene loading, authoritative input/state/combat and
+staged acceptance gates. FR6/FR9/FR11 team decisions remain pending. GitHub
+page/raw/API retrieval failed; client compatibility and file mapping are
+explicitly unverified. No implementation, protected README/AGENTS edits,
+commit or push. Reported existing timeout wording inconsistency without repair.
+
+Validation: git status --short was clean before changes. Read DOCX using
+PowerShell ZipFile/XML after Python extraction could not launch (python not
+available on PATH). Web fetches returned cache/access failures;
+Invoke-RestMethod failed with an underlying-connection error; curl.exe -L
+--max-time 25 against GitHub's main tree API failed with
+SEC_E_NO_CREDENTIALS. No inference that the repository is private or absent.
+Documentation checks cover all 20 requirement rows, local links, snapshot/ID
+consistency, git diff --check, changed-file boundaries and unchanged DOCX SHA256
+346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
+No gameplay tests needed or run; previous runtime results are historical only.
+Results: all 20 requirement rows retained; P047 is unique and its snapshot
+matches the plan/status. git diff --check passed (line-ending notices only).
+Only the two tracking files and new plan changed; source checksum matched.
+Link scan found two existing historical missing targets:
+Godot/tests/VM_TEST_REPORT.txt and Godot/tests/vm_test_results.json.
+They remain unchanged; new plan/status links resolve.
+
+Token usage: input tokens, cached input tokens, output tokens, cache-inclusion
+breakdown, model and usage source: **Unavailable**; reliable attributable
+per-request records covering all model/tool continuations are not exposed.
+Estimated monetary cost and actual billed charges: **Unavailable**; attributable
+usage/model/rates are not reliably known. No figures invented.
+
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under HARSH-OTHER-BRANCH-P047 in the P090 follow-up audit.
+
 ## P071 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 4,519,425; cached input 4,501,504 (included in input); output 16,193; total 4,535,618. Model(s): gpt-6.1-sol. 11 unique responses; cutoff 2026-11-06T17:26:43.278Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1dd-f730-78a1-a744-d46f1151c378. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 4535618.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -333,7 +815,12 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/join_delay_smoke.gd`: PASS/exit 0 (512/501 ms Join/Retry).
 Existing user-log/certificate-store errors remain; final cleanup checks without script errors. No graphical/two-device/high-latency/physical packet-loss acceptance. Python checked sources/checksums, 33 IDs, local links and revision consistency; Git diff --check/status checked boundaries. Protected wording edits remain pending as previously recorded; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P071 in the P090 follow-up audit.
+
 ## P070 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -369,7 +856,12 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 
 Validation: repository root, `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-stable_win64.exe --headless --path Godot --script res://tests/_motion_probe.gd -- host` paired with same command without host: both exit 0 and output MOTION_DIAGNOSTIC timing JSON. Probe sampled process frames/world tick changes four seconds after connected warmup. Temporary probe removed after inspection; path cannot be rerun unless recreated. No GUI/physical-device FPS, RTT or packet-loss capture. Existing user-log/certificate errors remain without script errors. Read official Godot interpolation/jitter/networking docs, local code and both requirements sources. Python checked 33 IDs, links, source checksums, revision consistency and two-file retained change boundary. Git diff --check/status checked boundaries; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P070 in the P090 follow-up audit.
+
 ## P069 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,835,898; cached input 2,815,872 (included in input); output 6,966; total 2,842,864. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-06T16:46:46.209Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1be-1c41-76e2-a03b-4d5963141b55. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2842864.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -397,7 +889,12 @@ Validation: repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-s
 - `--headless --path Godot --script res://tests/join_cancel_smoke.gd`.
 Existing user-log/certificate-store errors persist without GDScript errors. No physical two-device/graphical/reviewer/abrupt-loss/Start acceptance. Python checks all 33 IDs, source checksums, active links, status/log consistency and two-file audit boundary. Git diff --check used; all existing user changes preserved, no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P069 in the P090 follow-up audit.
+
 ## P068 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,340,474; cached input 1,334,400 (included in input); output 4,059; total 1,344,533. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-11-06T16:33:19.152Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1b3-7aae-72d0-9ead-462aacd28d61. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1344533.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -421,7 +918,12 @@ Validation: repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-
 - `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`: PASS/exit 0.
 Existing user-log/certificate-store errors remain without script errors. No graphical/physical two-device/abrupt network-loss acceptance. Python checks 33 IDs, links, both source checksums and status/log revision; Git diff --check/status checks boundaries. Existing unrelated changes preserved; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P068 in the P090 follow-up audit.
+
 ## P067 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -453,7 +955,12 @@ Validation: repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-s
 - `--headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host` paired with same command without host: both PASS/exit 0, full real ten-second pending timeout after host closure with explanation/Back recovery.
 Existing user-log/certificate-store errors remain without script errors. No graphical/physical two-device checks. Python validates 33 IDs, links, both source hashes and status/log revision; Git diff --check/status verifies boundaries. Protected files/prior working changes preserved; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P067 in the P090 follow-up audit.
+
 ## P066 - November 6, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,470,806; cached input 2,160,256 (included in input); output 5,955; total 2,476,761. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-06T16:23:19.315Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1b1a8-8c68-70d2-af9a-e7b1b58f195b. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2476761.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -480,11 +987,16 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/pending_host_loss_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
 Existing user-log/certificate-store errors remain without script errors. No graphical/physical-device acceptance. Python verifies 33 IDs, links, original DOCX checksum and log/status revision. WP2 fresh checksum unavailable because read access denied. Git diff --check/status verifies boundaries; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P066 in the P090 follow-up audit.
+
 # November 3, 2026
 
-**Recorded times - newest first (America/Regina)**
+**Recorded receipt/recording times ? newest first (America/Regina)**
 
 ## P065 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,734,148; cached input 1,718,528 (included in input); output 4,463; total 1,738,611. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-11-03T18:41:04.446Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2b5-70e2-7ad3-9f63-a43bba50779a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1738611.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -504,7 +1016,12 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 
 Validation: `python -` read both Word sources, checked all 20 original plus 13 supplemental requirement IDs, source hashes, local links, revision references and two-file review boundary. Git diff --check for whitespace. No runtime tests repeated; P063-P064 process results remain prior evidence. Physical/visual/abrupt-loss acceptance outstanding. Source/protected docs/code and user working changes preserved; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P065 in the P090 follow-up audit.
+
 ## P064 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,152,123; cached input 2,142,208 (included in input); output 9,279; total 2,161,402. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-03T18:35:44.721Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2af-153b-7261-938c-2f170036a25f. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2161402.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -530,7 +1047,12 @@ Validation: repository root, executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host host-leaves` paired with `-- host-leaves`: both PASS/exit 0.
 Existing user-log/certificate errors remain, no script errors. Full-screen classification depends on fresh advertised capacity; no atomic server rejection reason or new protocol added. No visual/physical-device/packet-loss checks. Python checks 33 IDs, links, source hashes and status/log consistency; Git diff --check/status verifies boundaries. Protected wording updates remain pending as P063; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P064 in the P090 follow-up audit.
+
 ## P063 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,772,106; cached input 1,765,504 (included in input); output 7,842; total 1,779,948. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-03T18:24:51.485Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a2a5-8813-7ea3-9f5b-6a0f2871c458. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1779948.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -556,7 +1078,12 @@ Validation: repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4.7.2-
 - `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
 Existing user-log/certificate-store errors remain without script errors. No graphical/two-device/abrupt process or cable-loss acceptance. Python checks 33 IDs, local links, both source checksums and status/log revision; Git diff --check/status checks boundaries. Protected docs unchanged pending operational wording approval; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P063 in the P090 follow-up audit.
+
 ## P062 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -587,7 +1114,12 @@ Validation: from repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4
 - `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: PASS/exit 0.
 Existing user-log/certificate-store errors remain; no script errors. No graphical/physical-device or separate actual-host-leaves-during-handshake test. Python verified all 33 requirement IDs, links, both source hashes, status/log revision and two-file investigation boundary. Git diff --check used. Code, source/protected docs and pre-existing user changes preserved; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P062 in the P090 follow-up audit.
+
 ## P061 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,780,242; cached input 1,762,944 (included in input); output 8,441; total 1,788,683. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-11-03T18:16:27.311Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a29e-1256-7683-b74b-ad7adbff6539. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1788683.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -612,7 +1144,12 @@ Validation: from repository root using `C:/Users/broth/OneDrive/Desktop/Godot_v4
 - `--headless --path Godot --script res://tests/connected_room_smoke.gd -- host host-leaves` paired with `-- host-leaves`: both PASS/exit 0.
 Existing user-log/certificate-store errors remain without script errors. No visual/physical two-device checks. Python checks all 33 status IDs, unchanged original README requirement rows, links, both source hashes, ten-second docs/runtime/test consistency and revision references. Git diff --check/status checks whitespace and change boundaries. Source documents/audit/history/unrelated files preserved; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P061 in the P090 follow-up audit.
+
 ## P060 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 614,535; cached input 611,840 (included in input); output 3,421; total 617,956. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-11-03T18:11:17.517Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a29a-be3e-7431-82f8-b0dd2ce5c42a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 617956.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -632,7 +1169,12 @@ Token usage (input, cached input, output), cache inclusion, model usage record a
 
 Validation: `python -` read both Word sources and verified 33 original/supplemental IDs, active local links, source hashes, status/log consistency and task boundary (status.md/prompt_log.md only). Git diff --check for whitespace. No gameplay tests repeated for wording-only task. Protected edits await approval required by AGENTS.md; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P060 in the P090 follow-up audit.
+
 ## P059 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 966,107; cached input 947,584 (included in input); output 3,855; total 969,962. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-11-03T18:07:56.896Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a297-6fd2-7f40-9d86-089b13c75ee2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 969962.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -652,7 +1194,12 @@ Token usage (input, cached input, output), model usage record, cache inclusion a
 
 Validation: `python -` read Word document XML; checked original 20 plus supplemental 13 requirement IDs, local links, source checksums, status/log revision and two-file task boundary. Git diff --check and status used for whitespace/boundaries. No gameplay tests repeated for documentation audit; earlier process checks remain historical. AGENTS/both READMEs/source docs/code untouched; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P059 in the P090 follow-up audit.
+
 ## P058 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,735,740; cached input 1,543,552 (included in input); output 7,406; total 1,743,146. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-11-03T18:02:18.495Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a290-978f-7613-b4f2-877121e39598. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1743146.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -676,7 +1223,12 @@ Validation: from repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.
 - `--headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby`: PASS/exit 0.
 Existing user-log/certificate errors persist; final runs without script errors. No visual/two-device acceptance. Python verifies 33 IDs, local links, original/Word source checksums and log/status revision; Git diff --check/status verifies boundaries. Protected documentation wording approval remains outstanding; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P058 in the P090 follow-up audit.
+
 ## P057 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,924,430; cached input 1,897,344 (included in input); output 8,064; total 1,932,494. Model(s): gpt-6.1-sol. 13 unique responses; cutoff 2026-11-03T17:49:18.606Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a284-b61c-7cb3-b498-9028b7e37260. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1932494.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -701,7 +1253,12 @@ Validation (repository root; executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/world_sync_smoke.gd -- host` paired with same command without host: both PASS/exit 0.
 Initial new fixture omitted seen timestamp and assumed offline peer instead of null; corrected. Existing progress assertion ran before a subsequent process update; widened accelerated deadline and waited frames, rerun passed. Temporary diagnostic prints removed. Final runs retain existing user-log/certificate errors without script errors. No visual/two-device/full 30-second wall-clock test. Python checked 33 requirement IDs, links, source/protected hashes and revision consistency; Git diff --check/status checked boundaries. Documentation updates remain pending approval; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P057 in the P090 follow-up audit.
+
 ## P056 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,262,209; cached input 1,241,856 (included in input); output 11,353; total 1,273,562. Model(s): gpt-6.1-sol. 11 unique responses; cutoff 2026-11-03T17:37:36.757Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a279-605d-7ea1-a4d2-3d143506659c. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1273562.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -727,7 +1284,12 @@ Validation: from repository root with `C:/Users/broth/OneDrive/Desktop/Godot_v4.
 - `--headless --path Godot --script res://tests/join_smoke.gd -- failure`: PASS/exit 0.
 Existing user-log/certificate errors remain without script errors. No visual/physical two-device/packet-loss/high-latency acceptance. Python checked 20 original plus 13 supplemental IDs, local links, source checksums/protected docs preservation and log/status revision; Git diff --check/status checked boundaries. Protected docs still need approved wording updates; no staging/commit/push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P056 in the P090 follow-up audit.
+
 ## P055 - November 3, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 633,254; cached input 618,368 (included in input); output 4,435; total 637,689. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-11-03T17:28:00.334Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a1a272-6f82-70f3-8e7b-89c9cb0a4d3c. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 637689.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -752,11 +1314,90 @@ Validation (repository root; executable `C:/Users/broth/OneDrive/Desktop/Godot_v
 - `--headless --path Godot --script res://tests/join_smoke.gd -- initial` and `-- failure`: both PASS/exit 0.
 Runtime reports prior user-log/certificate-store errors, no script errors. Python checked original 20 requirement IDs, local links, source checksum and status/log revision. Git diff --check/status checked whitespace and boundaries. No visual or physical two-device acceptance; protected documentation update remains pending approval.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P055 in the P090 follow-up audit.
+
+## HARSH-OTHER-BRANCH-P046 - November 03, 2026
+
+Branch association (P091): source log branch **Harsh-other-branch** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P046; source branch: refs/heads/Harsh-other-branch; commit c1882aa3061c8dd0601be678c84d16ba4fe583ea. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: 2026-11-03.
+Time: 11:26:39 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> please add the cancle button for the third player who is there and dont want to wait for the timer to complete and then exit insted of that please add a cancle button so which the player can exit the game befor 30 second timer gets completed
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/status.md), revision S-2026-11-03-03.
+
+Result: added Cancel to the Join loading screen in Godot/joining_screen.gd. It is visible during pending connections (including full-room waits), and hidden for success/error states. Godot/lobby.gd shares cleanup between Cancel and timeout: cancel pending attempts, stop the countdown, close the peer, and quit the application. Added mouse-click cancellation coverage to Godot/tests/join_smoke.gd. README.md, AGENTS.md, discovery and scenes unchanged.
+
+Validation: with Godot 4.7.2 executable C:/Users/hkp14/OneDrive/Desktop/Pictures/Screenshots/COMP-214/Godot_v4.7.2-stable_win64.exe, ran `--headless --path Godot --script res://tests/join_smoke.gd -- cancel` and `--headless --path Godot --script res://tests/join_smoke.gd -- failure`. Both printed PASS: real mouse-click Cancel closed the process before the deadline with timer/peer cleanup; error, Retry, Back and pending-Join Exit passed. User-log/certificate-store environment errors persist; no script errors reported. `git diff --check` passed; source requirements checksum unchanged; all 20 requirement rows retained. Tests use an actual silent UDP endpoint; full-room three-device and visual acceptance not run. Prior timeout/host-client results in P045 remain historical for this request.
+
+Token usage (input, cached input, output, cache inclusion, model, usage source) and estimated/actual cost: **Unavailable**; reliable attributable per-request telemetry and billing are not exposed.
+
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under HARSH-OTHER-BRANCH-P046 in the P090 follow-up audit.
+
+## HARSH-OTHER-BRANCH-P045 - November 03, 2026
+
+Branch association (P091): source log branch **Harsh-other-branch** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P045; source branch: refs/heads/Harsh-other-branch; commit c1882aa3061c8dd0601be678c84d16ba4fe583ea. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: 2026-11-03.
+Time: 11:09:13 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> look at the main branch and look at the last commit made in the main branch and implement it to allen branch including chnages i have made today
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/status.md), revision S-2026-11-03-02. Today's timer request is ALLEN-P021 (original Allen P021).
+
+Result: fetched origin and merged origin/main c06ecd4 (Lobby Clutter Update w/ Bug Fixes) into Allen, retaining today's 43eebcf timer changes. Resolved documentation and test conflicts; kept main's names/player counts/LAN display/Exit handling and connected confirmation page together with Allen's 30-second progress/countdown/auto-quit. Countdown hides on success; delayed retries respect main's attempt cancellation guard. Imported protected documentation as part of the requested integration and added the timer clarification. Kept main's consolidated log, branch-qualified today's original Allen P021, and preserved today's status snapshot. Editor/cache and UID work was stashed before merging and restored after the merge commit; stash retained as backup. No push.
+
+Validation: using C:/Users/hkp14/OneDrive/Desktop/Pictures/Screenshots/COMP-214/Godot_v4.7.2-stable_win64.exe, ran `--headless --path Godot --script res://tests/join_smoke.gd -- timeout`, `-- failure`, and concurrent `-- host` / no-argument client. Final runs printed PASS for 30-second exit/progress/cleanup, explicit error/retry/back and pending-Join cancellation, real connection, persistent session, host/client count, client Exit, and host Exit. First error test needed progress precision and post-timer frame synchronization; a sequentially launched host/client pair missed its startup window, then concurrent runs passed. Environment user-log and certificate-store errors persist. Python validation unavailable (py reports no installed Python); PowerShell used instead. Physical LAN, visual, full-capacity third-player and vacancy-before-deadline scenarios remain unverified. Requirements DOCX checksum unchanged. Git whitespace/conflict/status checks performed; all 20 requirement rows retained. Existing source-version blocks in main's consolidated log remain historical evidence.
+
+Token usage (input, cached input, output, cache-inclusion breakdown, model and usage source) and estimated/actual monetary cost: **Unavailable**, because attributable per-request telemetry/billing records are not exposed.
+
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under HARSH-OTHER-BRANCH-P045 in the P090 follow-up audit.
+
+## ALLEN-P021 - November 03, 2026
+
+Branch association (P091): source log branch **Harsh-other-branch** (P090 canonical import source). Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: ALLEN-P021; source branch: refs/heads/Harsh-other-branch; commit c1882aa3061c8dd0601be678c84d16ba4fe583ea. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Date: 2026-11-03.
+Time: 10:54:58 AM (recording time; receipt time unavailable).
+Timezone: America/Regina.
+
+Actual request:
+
+> the game allows only 2 plays to connect and if third person tries its showing just loading insted of that loading please add timer of 30 seconds which synchronise with loading bar and eventually once that 30 second timer get over and still 2 players are connected in game then the third player game should auto exit once that timer gets over
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/status.md), revision S-2026-11-03-01.
+
+Result: changed Godot/joining_screen.gd to a 30-second countdown and synchronized elapsed progress. Godot/lobby.gd retries early ENet connection failures within the same deadline and closes the unconnected application at expiry; success stops the timer. Two-player host capacity unchanged. Since the transport does not report room occupancy, this deadline applies to every still-unconnected attempt, including unreachable hosts. Immediate local setup errors and post-connection disconnection retain the existing error/Retry/Back flow. Updated Godot/tests/join_smoke.gd for explicit errors and a real-duration timeout check. No scene, discovery, README.md or AGENTS.md changes.
+
+Validation: attempted `godot --version` and `godot --headless --path Godot --script res://tests/join_smoke.gd -- timeout`; both unavailable because godot is not on PATH. `git diff --check` passed. Runtime host/client/failure/timeout, three-process full-capacity, vacancy-before-deadline, visual and physical-device checks not run. Earlier passing runtime evidence is historical. Existing conflict markers and duplicate historical prompt IDs in status/log were observed and preserved, not repaired. Reliable telemetry for all model calls (input, cached input, output, cache inclusion, model and usage source) and estimated/actual costs: **Unavailable**; no attributable usage/billing records are exposed.
+&#61;======
+
+P090 merge provenance: 2 branch refs; original IDs, snapshots and source versions are mapped under ALLEN-P021 in the P090 follow-up audit.
+
 # October 30, 2026
 
-**Recorded times - newest first (America/Regina)**
+**Recorded receipt/recording times ? newest first (America/Regina)**
 
 ## P048 - October 30, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -782,7 +1423,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: PowerShell filename/source inspection and local view_image read the original reference without edits. An initial combined patch was rejected for targeting the scene twice; no change was applied by that failed patch. Applied the corrected edits and ran `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` and the same command with `-- escape`; both printed PASS and exited 0. Checked separate fixed HUD layer and positions, preview ID, settings screen open/Back/Escape and movement blocking, unchanged controls during player motion, local movement/bounds/resize and actual leave to lobby. Existing log-writing/certificate-store errors remained without GDScript errors. Headless tests do not verify graphical appearance; no Host/network integration, two-device or existing multiplayer regression tests rerun. Python via python - checked all 20 requirement IDs, active local links, prompt/revision references, source/image/audit checksums and six-file task boundary. Protected root docs, lobby code, project settings and pre-existing files unchanged. No pending clarification answers remain for this layout.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P048 in the P090 follow-up audit.
+
 ## P047 - October 30, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,616,046; cached input 1,612,288 (included in input); output 4,198; total 1,620,244. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-30T16:29:52.013Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18da4-16bc-7c93-85aa-aaafe8012602. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1620244.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -802,7 +1448,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd -- from-lobby` printed PASS and exited 0. Checked visible/enabled preview button, pending-Join guard, actual button-signal transition to game_room.tscn, movement/diagonals/bounds/resize, duplicate leave and actual return to lobby with no session. Existing log-writing/certificate-store errors remain without script errors. No graphical review, existing multiplayer regression or two-device checks rerun. Python via `python -` checked all 20 IDs, active local links, log history/revision, source checksum and five-file task boundary. No Host routing, protected documents, project settings, requirements or pre-existing UID-file changes.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P047 in the P090 follow-up audit.
+
 ## P046 - October 30, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,967,278; cached input 1,956,992 (included in input); output 8,371; total 1,975,649. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-30T16:24:11.939Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18d9d-562e-7723-bd58-18c33674cfc9. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1975649.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -822,7 +1473,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe' --headless --path Godot --script res://tests/game_room_smoke.gd`, then the same command with `-- escape`. Both printed PASS and exited 0. Checked actual key input, straight/diagonal motion, cancelling opposite directions, WASD/arrows, top/left and bottom/right bounds, resize containment, duplicate leave and actual scene transition to lobby with null session. Engine reported existing user-log and certificate-store errors without GDScript errors. No graphical review, two-device, Host integration, movement synchronization or existing lobby regression reruns; this scene is isolated from Host. Python via `python -` checked all 20 requirement IDs, local links, historical log preservation, P046/next P047, source/audit checksums and six-file task boundary; bundled git diff --check passed. Source requirements, protected root docs, project.godot, lobby code and pre-existing files preserved.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P046 in the P090 follow-up audit.
+
 ## P045 - October 30, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,521,030; cached input 1,152,512 (included in input); output 2,161; total 1,523,191. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-30T15:51:34.840Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a18d81-5fff-7761-a73f-e063a05895c1. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1523191.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -842,11 +1498,71 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: rg filename/reference searches and source/requirements review; Python via PowerShell python - verified all 20 requirement rows, active local links, new unique P045/time placement, unchanged audit/source checksum and two-file boundary. No gameplay tests needed or run. No source document, root protected file or implementation edits; no staging, commit or push.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P045 in the P090 follow-up audit.
+
+<details>
+<summary>Additional preserved source version: refs/heads/Harsh-other-branch @ c1882aa3061c; original P045</summary>
+
+<pre>## P045 - October 30, 2026
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 09:50:53 AM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+&gt; is the json file here required for our project
+
+Result: identified prompt_log_merge_audit.json as the only project JSON file outside Godot cache. It contains original branch log snapshots, IDs/checksums and consolidation mappings from P042. Game scripts do not load it; JSON use in discovery/address logic parses network/command data instead. The requirements mandate prompt/status logs but not this audit file. Recommended keeping it for provenance or intentionally archiving it and correcting references if removed. No removal or code changes. P044 was already used for the earlier main transfer, so this request receives P045 without reusing that ID.
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/c1882aa3061c8dd0601be678c84d16ba4fe583ea/status.md), revision S-2026-10-30-01. Requirement statuses unchanged.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, model usage record and estimated/actual cost: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: rg filename/reference searches and source/requirements review; Python via PowerShell python - verified all 20 requirement rows, active local links, new unique P045/time placement, unchanged audit/source checksum and two-file boundary. No gameplay tests needed or run. No source document, root protected file or implementation edits; no staging, commit or push.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</pre>
+
+</details>
+
 # October 27, 2026
 
-**Recorded times — newest first (America/Regina)**
+**Recorded receipt/recording times ? newest first (America/Regina)**
+
+## MAIN-P044 - October 27, 2026
+
+Branch association (P091): source log branch **main** (P090 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
+
+Imported source ID: P044; source branch: refs/heads/main; commit 5980b0d92f6aa65dc5bd8ad3d8df7f9d2e841833. Unqualified IDs/status revisions/test results below refer to that branch, not this checkout.
+
+Receipt time: **Unavailable** (not supplied by chat metadata).
+Recording time: 12:35:45 PM (America/Regina; inspection UTC clock converted to UTC-06:00).
+
+Actual request:
+
+> Lets also cherrypick the latest commit in malik-other-branch to main. Name the new commit to "Lobby Clutter Update w/ Bug Fixes"
+
+Clarification asked:
+
+> The latest malik-other-branch commit is 56e96c3, which changes only AGENTS.md and the prompt/status logs. It does not contain the lobby cleanup or bug-fix code. Which changes should I bring to main under ?Lobby Clutter Update w/ Bug Fixes??
+
+Actual answer:
+
+> Lobby changes plus latest documentation (recommended)
+
+Result: main was already checked out and clean at 99fe247. Applied the eight source-only commits (b805909, e75f8c1, 106491b, ecf5f6b, 277157a, 7fbad3f, 6413d3c, 56e96c3) without intermediate commits, resolved source-history and code/test conflicts, and prepared the combined requested commit. Source lobby code and documentation match 56e96c3; main-only editor/cache/UID metadata preserved. Main's stale display-only Exit documentation preambles replaced by the selected source documents. Added this transfer log/status record; source branch remains at 56e96c3. The resulting main commit uses the exact requested title. No remote push.
+
+Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/blob/5980b0d92f6aa65dc5bd8ad3d8df7f9d2e841833/status.md), revision S-2026-10-27-12. Historical source prompt IDs/imports and merge audit preserved; next local request P045.
+
+Token usage (input, cached input, output), cache-inclusion breakdown, per-call model usage record and estimated/actual charges: **Unavailable**; reliable per-request telemetry/billing records are not exposed. Usage source, currency, pricing source/rates/date: unavailable.
+
+Validation: bundled Git cherry-pick --no-commit was used. Initial sequencer continuation could not replay atop the staged conflict resolution; quit cleared its files but left an empty sequencer directory. Approved removal of only that verified-empty directory succeeded; remaining commits were applied individually without commits, resolving expected overlapping files. No user work was reset or stashed. Godot executable `C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-stable_win64.exe` ran `--headless --path Godot --script res://tests/join_smoke.gd` with `-- counts`, `-- host`, and no user arguments in separate processes (client prefixed with Start-Sleep -Seconds 2): all PASS, matched PDNC9O/52545, verified username listings, persistent connection, client Exit, host count recovery and host Exit. Also ran `--headless --path Godot --script res://tests/network_ui_smoke.gd` and alpha_smoke.gd host/observer: PASS. Restricted Windows route metadata remained unavailable, correctly showing no unambiguous address. Log-writing/certificate-store errors persisted without reported script errors. Two-device LAN, visual, typed-ID, timeout/retry and packet-mode checks not rerun; prior evidence remains separate. Python via `python -` verified source-code equivalence, all 20 IDs, active links, historical prompt preservation, current P044/next P045, source/audit checksums, allowed 15-file staged scope and unchanged source branch. Working-tree git diff --check passed before committing. The aggregate staged check reports source-inherited trailing whitespace in the historical comparison document and preserved prompt entries; those records were intentionally kept unchanged. No requirements, generated metadata, gameplay or unrelated-file changes.
+
+P090 merge provenance: 9 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P044 in the P090 follow-up audit.
 
 ## P043 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,020,058; cached input 1,014,656 (included in input); output 2,725; total 1,022,783. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T18:26:11.537Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e9c-1466-7d62-9011-62889c020952. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1022783.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -866,7 +1582,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: Python via PowerShell `python -` checked the general scope wording, all 20 requirement IDs, local links, continuing local IDs and imported-ID preservation, existing-entry history and date/time placement, status/log references, unchanged source DOCX/merge-audit checksums and three-file boundary. Bundled `git diff --check` passed. No gameplay tests needed or run; prior runtime evidence was not rerun. Visual/two-device checks and main-screen routing remain outstanding; no new approval items.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P043 in the P090 follow-up audit.
+
 ## P042 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -891,7 +1612,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Validation: fetched origin using bundled Git after sandbox FETCH_HEAD access failed; approved fetch succeeded and advanced origin/rica. Inventoried 11 local/remote branch refs (excluding the symbolic origin/HEAD alias), six distinct log blobs, 121 source entry instances across those distinct blobs, 59 dated prompt identities and 63 distinct source-entry versions. Combined 59 historical prompts plus P042 into 60 uniquely identified records. Validated every source entry against the audit, exact preservation of current entry text, deduplication, date/time grouping, source snapshot links, all 20 requirement IDs, status/log consistency, unchanged requirements checksum and a three-file boundary. Bundled git diff --check passed. No gameplay tests needed or run; no historical test result was reclassified as current evidence. Protected root documents and implementation unchanged.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P042 in the P090 follow-up audit.
+
 ## P041 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 856,907; cached input 849,152 (included in input); output 1,980; total 858,887. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T17:57:18.282Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e81-e556-7b13-81f8-0419a398a186. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 858887.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -913,7 +1639,12 @@ Validation: Python via PowerShell `python -` checked the exact single-sentence r
 
 Merge provenance: `P041`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P041 in the P090 follow-up audit.
+
 ## P039 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,104,500; cached input 1,095,936 (included in input); output 2,645; total 1,107,145. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-27T17:55:23.792Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e7f-bb63-7680-abf6-cc0cba853817. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1107145.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -935,7 +1666,12 @@ Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-
 
 Merge provenance: `P039`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P039 in the P090 follow-up audit.
+
 ## P038 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 801,009; cached input 796,800 (included in input); output 1,908; total 802,917. Model(s): gpt-6.1-sol. 3 unique responses; cutoff 2026-10-27T17:53:17.462Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e7e-1381-7271-a959-a34d7122f447. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 802917.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -957,7 +1693,12 @@ Validation: `rg -n` and PowerShell source reads confirmed actual port lookup, ho
 
 Merge provenance: `P038`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P038 in the P090 follow-up audit.
+
 ## P037 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 3,056,819; cached input 3,036,544 (included in input); output 10,584; total 3,067,403. Model(s): gpt-6.1-sol. 12 unique responses; cutoff 2026-10-27T17:49:20.585Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e75-f5c6-7911-af7d-f85c948f71e7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 3067403.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -979,7 +1720,12 @@ Validation: `Get-NetIPConfiguration | Select-Object InterfaceAlias,IPv4Address,I
 
 Merge provenance: `P037`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P037 in the P090 follow-up audit.
+
 ## P036 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,157,823; cached input 1,148,672 (included in input); output 2,638; total 1,160,461. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-27T17:36:42.780Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e6e-cddf-7d52-83c8-1adc0ed2bf89. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1160461.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1001,7 +1747,12 @@ Validation: Python via PowerShell `python -` checked all 20 IDs, local links, st
 
 Merge provenance: `P036`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P036 in the P090 follow-up audit.
+
 ## P034 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,158,295; cached input 2,138,240 (included in input); output 7,383; total 2,165,678. Model(s): gpt-6.1-sol. 10 unique responses; cutoff 2026-10-27T17:27:28.123Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e64-2db6-7650-b657-1ce650158020. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2165678.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1023,7 +1774,12 @@ Validation: PowerShell invoked `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-
 
 Merge provenance: `P034`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P034 in the P090 follow-up audit.
+
 ## P032 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,523,157; cached input 1,502,592 (included in input); output 5,524; total 1,528,681. Model(s): gpt-6.1-sol. 8 unique responses; cutoff 2026-10-27T17:18:19.777Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e5c-f58d-70a1-906f-5a630c9d7fce. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1528681.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1045,7 +1801,12 @@ Validation: invoked PowerShell `& 'C:\Users\broth\OneDrive\Desktop\Godot_v4.7.2-
 
 Merge provenance: `P032`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P032 in the P090 follow-up audit.
+
 ## P031 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 846,516; cached input 838,656 (included in input); output 3,419; total 849,935. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-27T17:10:59.918Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e57-0496-7612-9d7b-743aef2a2922. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 849935.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1067,7 +1828,12 @@ Validation: Python via PowerShell `python -` checked all 20 requirement IDs, loc
 
 Merge provenance: `P031`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P031 in the P090 follow-up audit.
+
 ## P029 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Turn contains later user input; per-prompt attribution is ambiguous. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1116,7 +1882,14 @@ Merge provenance: `P029`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 **Time unavailable — date known; exact time/order across branches unknown**
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P029 in the P090 follow-up audit.
+
+**Time unavailable ? source date known; exact time/order unknown**
+
 ## P040 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 279,987; cached input 279,808 (included in input); output 93; total 280,080. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:56:20.836Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e81-7752-72a0-ada7-2e1c6977d8f7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 280080.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1135,7 +1908,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Merge provenance: `P040`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P040 in the P090 follow-up audit.
+
 ## P035 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 223,990; cached input 223,744 (included in input); output 170; total 224,160. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:35:27.440Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e6e-4bd6-7353-81be-5d5a9257e5d3. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 224160.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1154,7 +1932,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P035`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P035 in the P090 follow-up audit.
+
 ## P033 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 198,121; cached input 197,888 (included in input); output 62; total 198,183. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:23:33.289Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e63-69eb-7d92-acc8-14016c9468d5. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 198183.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1173,7 +1956,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Merge provenance: `P033`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P033 in the P090 follow-up audit.
+
 ## P030 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 162,550; cached input 162,176 (included in input); output 257; total 162,807. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-27T17:07:46.153Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e54-e82d-7bd1-9d8c-49396f441401. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 162807.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1192,7 +1980,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P030`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P030 in the P090 follow-up audit.
+
 ## P028 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 248,557; cached input 247,808 (included in input); output 268; total 248,825. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-27T16:13:32.557Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e23-3dbc-72a0-96d5-36bf091e8d89. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 248825.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1211,7 +2004,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P028`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P028 in the P090 follow-up audit.
+
 ## P027 - October 27, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 246,848; cached input 135,424 (included in input); output 269; total 247,117. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-27T16:13:06.548Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a17e22-9b00-77e2-a03a-f52ecacdfdb2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 247117.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1230,11 +2028,16 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P027`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P027 in the P090 follow-up audit.
+
 # October 26, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable ? source date known; exact time/order unknown**
 
 ## MAIN-P021 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1261,7 +2064,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P021`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P021 in the P090 follow-up audit.
+
 ## MAIN-P020 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1292,7 +2100,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P020`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P020 in the P090 follow-up audit.
+
 ## MAIN-P019 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1319,7 +2132,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P019`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P019 in the P090 follow-up audit.
+
 ## MAIN-P018 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1341,7 +2159,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P018`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P018 in the P090 follow-up audit.
+
 ## MAIN-P017 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1370,7 +2193,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P017`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P017 in the P090 follow-up audit.
+
 ## MAIN-P016 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1403,7 +2231,12 @@ Associated status: [status.md](https://github.com/Kirbzo/Tank-Game-Networking/bl
 
 Merge provenance: `MAIN-P016`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P016 in the P090 follow-up audit.
+
 ## MAIN-P015-1 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1432,7 +2265,12 @@ Validation: regression failed before the fix and passed afterward for Join after
 
 Merge provenance: `MAIN-P015-1`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P015-1 in the P090 follow-up audit.
+
 ## MAIN-P015-2 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1457,7 +2295,12 @@ Validation: Godot 4.7.2 headless check passed exact exit text, hidden lobby, dup
 
 Merge provenance: `MAIN-P015-2`; recorded in `refs/heads/main`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P015-2 in the P090 follow-up audit.
+
 ## MAIN-P014 - October 26, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1582,11 +2425,16 @@ Validation: Godot 4.7.2 separate host/client processes passed a real connection 
 
 </details>
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P014 in the P090 follow-up audit.
+
 # October 23, 2026
 
-**Recorded times — newest first (America/Regina)**
+**Recorded receipt/recording times ? newest first (America/Regina)**
 
 ## P026 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 812,207; cached input 801,408 (included in input); output 2,985; total 815,192. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-10-23T17:57:21.231Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e7-a95a-79c0-a63c-bd11b282e3e2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 815192.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1608,7 +2456,12 @@ Validation: full executable path was discovered locally (kept out of portable pr
 
 Merge provenance: `P026`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P026 in the P090 follow-up audit.
+
 ## P025 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 613,877; cached input 590,336 (included in input); output 4,631; total 618,508. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:55:09.553Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e5-837d-7332-9c58-d8b07fb064d3. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 618508.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1630,7 +2483,12 @@ Validation: attempted `godot --headless --path Godot --script res://tests/alpha_
 
 Merge provenance: `P025`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P025 in the P090 follow-up audit.
+
 ## P020 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 261,467; cached input 248,832 (included in input); output 1,955; total 263,422. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-23T17:26:56.702Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169cc-771e-7131-a64a-019f81fd3a8a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 263422.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1654,7 +2512,14 @@ Merge provenance: `P020`; recorded in `refs/heads/Allen`, `refs/heads/malik-othe
 
 **Time unavailable — date known; exact time/order across branches unknown**
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P020 in the P090 follow-up audit.
+
+**Time unavailable ? source date known; exact time/order unknown**
+
 ## P024 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 347,506; cached input 346,112 (included in input); output 232; total 347,738. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:51:30.414Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e3-5bbc-7700-a1df-53ac75b8971e. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 347738.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1673,7 +2538,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P024`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P024 in the P090 follow-up audit.
+
 ## P023 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 86,396; cached input 86,144 (included in input); output 176; total 86,572. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:48:27.490Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169e0-8e65-7e61-9bda-01edbbe54a94. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 86572.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1692,7 +2562,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P023`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P023 in the P090 follow-up audit.
+
 ## P022 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 485,210; cached input 466,816 (included in input); output 3,482; total 488,692. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:41:43.470Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169d9-9825-7ea3-93d2-523787d72b2f. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 488692.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1711,7 +2586,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P022`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P022 in the P090 follow-up audit.
+
 ## P021 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 452,993; cached input 439,296 (included in input); output 2,965; total 455,958. Model(s): gpt-6.1-sol. 7 unique responses; cutoff 2026-10-23T17:35:00.957Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169d3-67ad-7c20-b2cb-c5835da19327. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 455958.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1730,7 +2610,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, per-call m
 
 Merge provenance: `P021`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P021 in the P090 follow-up audit.
+
 ## P019 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 44,694; cached input 44,288 (included in input); output 135; total 44,829. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:25:34.562Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169cb-daec-7ef0-9203-4fe7b74f7772. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 44829.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1750,7 +2635,12 @@ Token usage (input, cached input, output), cache-inclusion breakdown, model usag
 
 Merge provenance: `P019`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P019 in the P090 follow-up audit.
+
 ## P018 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 245,749; cached input 231,808 (included in input); output 2,710; total 248,459. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-23T17:22:37.016Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c8-419e-77a3-96c0-ca71b9599840. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 248459.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1769,7 +2659,12 @@ Validation for P018: Python documentation checks verified all 20 requirement row
 
 Merge provenance: `P018`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P018 in the P090 follow-up audit.
+
 ## P017 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 31,535; cached input 31,232 (included in input); output 236; total 31,771. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-23T17:17:29.600Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c4-6a00-7582-b135-3eac0edce4e8. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 31771.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1786,7 +2681,12 @@ Token usage: **Unavailable** (input, cached input, output, and cache-inclusion b
 
 Merge provenance: `P017`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P017 in the P090 follow-up audit.
+
 ## P016 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 103,474; cached input 92,672 (included in input); output 333; total 103,807. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:15:15.665Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169c2-3f25-7a93-a38b-c479216e82a1. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 103807.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1803,7 +2703,12 @@ Token usage: **Unavailable** (input, cached input, output, and cache-inclusion b
 
 Merge provenance: `P016`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P016 in the P090 follow-up audit.
+
 ## P015 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 39,070; cached input 17,536 (included in input); output 461; total 39,531. Model(s): gpt-6.1-sol. 2 unique responses; cutoff 2026-10-23T17:05:42.964Z. Session 01a169b8-2ebb-79e2-8957-bbebad22347a; turn 01a169b9-82ba-7f71-801c-0d7f80d4837a. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 39531.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1820,7 +2725,12 @@ Token usage: **Unavailable** (input, cached input, output, and cache-inclusion b
 
 Merge provenance: `P015`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P015 in the P090 follow-up audit.
+
 ## P014 - October 23, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 161,750; cached input 122,624 (included in input); output 2,468; total 164,218. Model(s): gpt-6.1-sol. 4 unique responses; cutoff 2026-10-23T17:00:26.423Z. Session 01a15a51-b1d6-73c2-b33e-f08badc7180d; turn 01a169b3-d8cd-7992-a1b9-cd3eb5dc656e. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 164218.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1837,7 +2747,12 @@ Validation: PowerShell invoked a Python documentation check through `python -`; 
 
 Merge provenance: `P014`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P014 in the P090 follow-up audit.
+
 ## MAIN-P013 - October 23, 2026
+
+Branch association (P091): source log branch **main** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1854,11 +2769,16 @@ Historical result: the prior conversation reported that three Godot processes ea
 
 Merge provenance: `MAIN-P013`; recorded in `refs/heads/Allen`, `refs/heads/main`, `refs/remotes/origin/Allen`, `refs/remotes/origin/main`. See audit for commit/blob IDs.
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under MAIN-P013 in the P090 follow-up audit.
+
 # October 20, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable ? source date known; exact time/order unknown**
 
 ## P013 - October 20, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 151,259; cached input 125,184 (included in input); output 4,145; total 155,404. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-20T17:19:30.820Z. Session 01a15a51-b1d6-73c2-b33e-f08badc7180d; turn 01a15a51-b4a9-7af2-a319-8fe4ee8086ef. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 155404.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1895,11 +2815,16 @@ Validation: checked all 20 requirement IDs, local documentation links, prompt/st
 
 </details>
 
+P090 merge provenance: 11 branch refs; original IDs, snapshots and source versions are mapped under P013 in the P090 follow-up audit.
+
 # October 19, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable ? source date known; exact time/order unknown**
 
 ## P012 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1918,7 +2843,12 @@ Validation: Godot 4.7.2 actual host/observer processes passed with matching ID Y
 
 Merge provenance: `P012`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P012 in the P090 follow-up audit.
+
 ## P011 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1935,7 +2865,12 @@ Validation: verified unique IDs in descending order, preservation of existing en
 
 Merge provenance: `P011`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P011 in the P090 follow-up audit.
+
 ## P010 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1952,7 +2887,12 @@ Validation: source review confirmed the walkthrough label is absent. Checked all
 
 Merge provenance: `P010`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P010 in the P090 follow-up audit.
+
 ## P009 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1969,7 +2909,12 @@ Validation: Godot 4.7.2 import and real host/observer smoke tests passed, includ
 
 Merge provenance: `P009`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P009 in the P090 follow-up audit.
+
 ## P008 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -1984,7 +2929,12 @@ Associated status.md: [status.md](status.md), snapshot S-2026-10-19-02 inspected
 
 Merge provenance: `P008`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P008 in the P090 follow-up audit.
+
 ## P007 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2032,7 +2982,12 @@ Validation: Godot 4.7.2 host/observer processes passed automatic, direct-IP (bro
 
 Merge provenance: `P007`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P007 in the P090 follow-up audit.
+
 ## P006 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2052,7 +3007,12 @@ Associated status.md: [status.md](status.md), S-2026-10-19-02 at planning time; 
 
 Merge provenance: `P006`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under P006 in the P090 follow-up audit.
+
 ## P005 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **TestBranch1**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2071,7 +3031,12 @@ Dates use America/Regina. IDs are assigned in conversation order. Historical ent
 
 Merge provenance: `P005`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 15 branch refs; original IDs, snapshots and source versions are mapped under P005 in the P090 follow-up audit.
+
 ## P004 - October 19, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **TestBranch1**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Targeted review (November 10, 2026, P088): **Unavailable remains correct for the available evidence**. Original wording matches malik-other-branch ancestor e23eeb7. User-authorized targeted search of nine protected session files found no exact/normalized prompt, exact "Leave the hosted session" reply or tested distinctive-phrase candidate among user records. No tokens assigned and no totals changed. This does not prove the original session never existed or that no differently worded record could exist. Search criteria, source snapshot hashes and limitations: [P088 targeted evidence](reports/P004_targeted_review.json). Prior audit/README/graph preserved.
 
@@ -2098,7 +3063,12 @@ Validation: Godot 4.7.2 import and actual host/observer headless process tests p
 
 Merge provenance: `P004`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 15 branch refs; original IDs, snapshots and source versions are mapped under P004 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P014 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,498,704; cached input 1,476,736 (included in input); output 9,960; total 1,508,664. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-19T19:21:24.784Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15599-29bd-7b20-9758-3b7c538866c2. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1508664.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2145,7 +3115,12 @@ Validation: Godot 4.7.2 check-only parsed the manual helper without script error
 
 </details>
 
+P090 merge provenance: 12 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P014 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P013 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 1,169,523; cached input 1,163,648 (included in input); output 2,944; total 1,172,467. Model(s): gpt-6.1-sol. 5 unique responses; cutoff 2026-10-19T19:16:25.628Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15596-b1aa-76d1-872e-1cedb5ae59ba. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 1172467.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2166,7 +3141,12 @@ Validation: remote password update and exact-value verification passed. Checked 
 
 Merge provenance: `TESTBRANCH1-P013`; recorded in `refs/heads/TestBranch1`. See audit for commit/blob IDs.
 
+P090 merge provenance: 12 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P013 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P011 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 19,020,762; cached input 18,862,208 (included in input); output 63,707; total 19,084,469. Model(s): gpt-6.1-sol. 116 unique responses; cutoff 2026-10-19T18:27:00.892Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a1553f-d147-7bd3-950d-70c6582191f7. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 19084469.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2216,7 +3196,12 @@ Associated status.md: none existed at that time; requirement tracking was introd
 
 </details>
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P011 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P010 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 2,245,452; cached input 2,208,000 (included in input); output 8,330; total 2,253,782. Model(s): gpt-6.1-sol. 28 unique responses; cutoff 2026-10-19T17:38:51.620Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15534-79b9-7c10-b308-f2cb4540dd55. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 2253782.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2237,7 +3222,12 @@ Validation: VBoxManage reported successful VM creation, configuration, disk crea
 
 Merge provenance: `TESTBRANCH1-P010`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P010 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P009 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 338,789; cached input 336,512 (included in input); output 608; total 339,397. Model(s): gpt-6.1-sol. 6 unique responses; cutoff 2026-10-19T17:26:50.004Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15532-6e3d-7520-aec1-55d2d8931772. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 339397.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2256,7 +3246,12 @@ Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking
 
 Merge provenance: `TESTBRANCH1-P009`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P009 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P008 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 424,427; cached input 409,984 (included in input); output 4,743; total 429,170. Model(s): gpt-6.1-sol. 9 unique responses; cutoff 2026-10-19T17:18:09.482Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15529-bf3b-71b3-bb88-a93265c4a89d. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 429170.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2277,7 +3272,12 @@ Validation: Godot 4.7.2 import passed without script errors. Actual host/observe
 
 Merge provenance: `TESTBRANCH1-P008`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P008 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P007 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Verified completed recorded turn**. Input 38,550; cached input 38,144 (included in input); output 108; total 38,658. Model(s): gpt-6.1-sol. 1 unique responses; cutoff 2026-10-19T17:15:00.660Z. Session 01a1551f-b818-7b43-a773-c4155f57cff3; turn 01a15528-bc15-7760-990a-0f7fd73ab483. Per-response sums cross-checked against cumulative turn evidence; no cached/reasoning double counting. Final total: 38658.  Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2296,7 +3296,12 @@ Associated status.md: [status.md](https://github.com/Kirbzo/Tank-Game-Networking
 
 Merge provenance: `TESTBRANCH1-P007`; recorded in `refs/heads/TestBranch1`, `refs/remotes/origin/TestBranch1`. See audit for commit/blob IDs.
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P007 in the P090 follow-up audit.
+
 ## TESTBRANCH1-P006 - October 19, 2026
+
+Branch association (P091): source log branch **TestBranch1** (P042 canonical import source). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **main**, **malik-other-branch**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2357,11 +3362,16 @@ Validation: Godot 4.7.2 imported without script errors. Actual lobby host/observ
 
 </details>
 
+P090 merge provenance: 13 branch refs; original IDs, snapshots and source versions are mapped under TESTBRANCH1-P006 in the P090 follow-up audit.
+
 # October 16, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Recorded receipt/recording times ? newest first (America/Regina)**
 
 ## P003 - October 16, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **TestBranch1**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Targeted verification (November 10, 2026, P087): recovered **465,915 tokens** from the completed recorded turn: input 463,440; cached input 456,448 included in input; output 2,475; reasoning output 44 included in output; cache-write input 0. Receipt date October 16, 2026; time 12:01:12 PM America/Regina. Model gpt-6.1-sol; six unique responses; cumulative cross-check passed. Exact prompt text, project-folder tool evidence and status revision S-2026-10-16-02 match commit 402545c in malik-other-branch ancestry. Historical session cwd is the parent workspace; its active Git branch is not recorded. This manually corroborated attribution supersedes the earlier unavailable conclusion for this prompt while preserving that historical snapshot. Source path/hash, session/turn IDs, response IDs and completion/cutoff timestamps: [P087 targeted evidence](reports/P002_P003_targeted_review.json). Dollar costs not calculated; original README/graph/P084 audit unchanged.
 
@@ -2380,7 +3390,12 @@ Validation: scanned project files (excluding Git metadata) for machine-specific 
 
 Merge provenance: `P003`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 15 branch refs; original IDs, snapshots and source versions are mapped under P003 in the P090 follow-up audit.
+
 ## P002 ? October 16, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **TestBranch1**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Targeted verification (November 10, 2026, P087): recovered **342,093 tokens** from the completed recorded turn: input 337,844; cached input 270,592 included in input; output 4,249; reasoning output 23 included in output; cache-write input 0. Receipt date October 16, 2026; time 11:46:21 AM America/Regina. Model gpt-6.1-sol; five unique responses; cumulative cross-check passed. Original prompt in branch ancestor 14375de contains Downloads-path wording removed by branch ancestor 402545c; targeted session matches the original text, project-folder tool evidence and status revision S-2026-10-16-01. Historical session cwd is the parent workspace; its active Git branch is not recorded. This manually corroborated attribution supersedes the earlier unavailable conclusion for this prompt while preserving that historical snapshot. Source path/hash, session/turn IDs, response IDs and completion/cutoff timestamps: [P087 targeted evidence](reports/P002_P003_targeted_review.json). Dollar costs not calculated; original README/graph/P084 audit unchanged.
 
@@ -2399,11 +3414,16 @@ Validation: checked all 20 requirement IDs in README.md and status.md, relative 
 
 Merge provenance: `P002`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
+P090 merge provenance: 15 branch refs; original IDs, snapshots and source versions are mapped under P002 in the P090 follow-up audit.
+
 # October 13, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable ? source date known; exact time/order unknown**
 
 ## P001 ? October 13, 2026
+
+Branch association (P091): source log branch **malik-other-branch** (preserved local log; original authoring branch unverified). Also recorded in branch-tip snapshots: **Allen**, **Allen2**, **Harsh-other-branch**, **Jaden**, **TestBranch1**, **main**, **rica**. Exact refs/commits and the distinction from original authorship are retained in the P091 attribution review.
+
 
 Token backfill (2026-11-10, P084; earlier log text retained): **Unavailable** — Prompt does not match exactly one project turn; specify --turn-id if repeated. No tokens assigned. Source paths, response IDs, model groups and snapshot hashes: [P084 token audit](tools/token_usage_audit_P084.json). Dollar costs not calculated.
 
@@ -2419,3 +3439,5 @@ Result: created README.md, AGENTS.md, and documentation_rationale.txt based on t
 Associated status.md: none existed at that time; requirement tracking was introduced by the updated DOCX. Historical snapshot: documentation created; no game implementation verified.
 
 Merge provenance: `P001`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `refs/heads/TestBranch1`, `refs/heads/main`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/Jaden`, `refs/remotes/origin/TestBranch1`, `refs/remotes/origin/main`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
+
+P090 merge provenance: 15 branch refs; original IDs, snapshots and source versions are mapped under P001 in the P090 follow-up audit.
