@@ -30,6 +30,7 @@ func run() -> void:
 		if not check(room.start_button.disabled and room.start_button.visible, "Solo host Start disabled"):
 			return
 		room.request_start()
+		room.begin_game()
 		if not check(room.phase == "waiting", "Solo Start rejected"):
 			return
 	if not check(await until(func(): return room.player_names.size() == 2), "Both rooms loaded"):
@@ -48,18 +49,43 @@ func run() -> void:
 		room.start_button.pressed.emit()
 		if not check(room.phase == "preparing" and room.tank_world.tick == 0 and room.ready_peers.size() == 1, "Start waits for guest readiness"):
 			return
+		room.begin_game()
+		if not check(room.phase == "preparing" and not room.bottom_start_button.visible, "Second Start cannot skip readiness"):
+			return
 		var guest: int = lobby.multiplayer.get_peers()[0]
 		room.accept_tank_input(guest, room.epoch, Vector2.RIGHT, 1)
 		if not check(room.tank_world.received_sequences.is_empty(), "Input blocked until both ready"):
 			return
 	else:
-		if not check(not room.start_button.visible, "Guest has no Start control"):
+		if not check(not room.start_button.visible and not room.bottom_start_button.visible, "Guest has neither Start control"):
 			return
 		room.request_start()
 		lobby.tank_ready.rpc_id(1, room.game_id, 999)
 		if not check(room.phase == "waiting", "Guest cannot start; premature readiness ignored"):
 			return
-	if not check(await until(func(): return room.phase == "running"), "Both ready; running"):
+	if not check(await until(func(): return room.phase == "ready"), "Both ready; second Start still required"):
+		return
+	if hosting:
+		if not check(room.bottom_start_button.visible and not room.bottom_start_button.disabled and not room.start_button.visible, "Bottom Start Game replaces first Start after readiness"):
+			return
+		var rect: Rect2 = room.bottom_start_button.get_global_rect()
+		if not check(rect.get_center().y > room.size.y * 0.7 and rect.end.y < room.size.y and not rect.intersects(room.game_id_label.get_global_rect()), "Second Start is near bottom without covering game ID"):
+			return
+	else:
+		room.begin_game()
+		if not check(room.phase == "ready" and not room.bottom_start_button.visible, "Guest cannot confirm Start Game"):
+			return
+	key(KEY_W, true)
+	await create_timer(0.2).timeout
+	key(KEY_W, false)
+	if not check(room.phase == "ready" and (room.tank_world.tick > 0 if hosting else room.tank_view.input_sequence > 0), "Movement is active between both Start clicks"):
+		return
+	if hosting:
+		await create_timer(0.2).timeout
+		room.bottom_start_button.pressed.emit()
+	if not check(await until(func(): return room.phase == "running"), "Second Start begins game for both players"):
+		return
+	if not check(not room.start_button.visible and not room.bottom_start_button.visible, "Both buttons hide during gameplay"):
 		return
 	if not check(lobby.session == session, "Start preserves ENet session"):
 		return
@@ -102,6 +128,9 @@ func run() -> void:
 			return
 		await create_timer(0.4).timeout
 		room.request_start()
+		if not check(await until(func(): return room.phase == "ready"), "Rejoin requires readiness again"):
+			return
+		room.bottom_start_button.pressed.emit()
 		if not check(await until(func(): return room.phase == "running"), "Readiness handshake works again after rejoin"):
 			return
 		await create_timer(0.5).timeout

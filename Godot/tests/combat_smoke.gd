@@ -47,6 +47,9 @@ func run() -> void:
 	if hosting:
 		await create_timer(0.4).timeout
 		room.start_button.pressed.emit()
+		if not check(await until(func(): return room.phase == "ready"), "Readiness precedes bottom Start Game"):
+			return
+		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Ready then Start"):
 		return
 	var impacts: Array[Vector2] = []
@@ -94,11 +97,11 @@ func run() -> void:
 		animal.emerge_delay = 0
 		animal.heading = Vector2.LEFT
 		await create_timer(0.1).timeout
-		if not check(animal.heading.x > 0 and room.tank_world.positions[1].x < 208 and room.artwork.contact_timers.get(1, 0) > 0, "Moose yields and host applies knockback/contact feedback without health damage"):
+		if not check(animal.heading.x > 0 and room.tank_world.positions[1].x < 208 and room.artwork.contact_timers.get(1, 0) > 0 and room.duel_vitals[1].health == 80, "Moose yields and host applies knockback plus shared 20 damage"):
 			return
 		if not check(not room.tank_world.moose_contact(1, Vector2.RIGHT), "Shared contact cooldown rejects repeated contact"):
 			return
-		# Freeze it in a shot's path: bullets must pass through it and the guest tank.
+		# Moose remain pass-through; the opposing tank now receives an authoritative hit.
 		animal.set_physics_process(false)
 		animal.position = Vector2(400, 612)
 		animal.heading = Vector2.RIGHT
@@ -110,14 +113,14 @@ func run() -> void:
 		lobby.combat_input.rpc_id(1, room.game_id, room.epoch - 1, Vector2.RIGHT, true, 100000)
 		lobby.combat_fire.rpc_id(1, room.game_id, room.epoch, Vector2.RIGHT, 1)
 		lobby.combat_fire.rpc_id(1, room.game_id, room.epoch - 1, Vector2.RIGHT, 100000)
-	if not check(await until(func(): return room.combat_view.shots_seen == 3 and room.combat_view.bullets.is_empty()), "Border stops shot after passing moose and tank"):
+	if not check(await until(func(): return room.combat_view.shots_seen == 3 and room.combat_view.bullets.is_empty()), "Opposing tank consumes shot after it passes moose"):
 		return
 	if not check(room.artwork.ice_count == 33 and room.combat_view.animals.size() == 4 and room.combat_view.animals[0].position == Vector2(400, 612), "Shared moose and border outcome"):
 		return
-	if not check(impacts.size() == 3 and impacts[-1].distance_to(Vector2(1168, 612)) < 0.1, "Both receive the host's border hit beyond the moose and guest"):
+	if not check(impacts.size() == 3 and impacts[-1].distance_to(Vector2(1048, 612)) < 0.1, "Both receive the host-confirmed tank hit"):
 		return
 	if not hosting:
-		if not check(room.artwork.contact_timers.has(1) and room.tank_view.snapshots[-1].positions[1].x < 208, "Guest receives the host's contact feedback and knocked-back position"):
+		if not check(room.artwork.contact_timers.has(1) and room.tank_view.snapshots[-1].positions[1].x < 208 and room.duel_vitals[1].health == 80, "Guest receives contact damage, feedback and knocked-back position"):
 			return
 	if hosting:
 		await create_timer(0.8).timeout
@@ -133,7 +136,7 @@ func run() -> void:
 		if not check(not is_instance_valid(room.combat) and not is_instance_valid(room.combat_view) and lobby.session == session, "Departure clears combat and retains session"):
 			return
 		room.leave_room()
-		print("PASS combat host: controls, authority, ice, moose yield/pass-through, border, cadence and cleanup")
+		print("PASS combat host: controls, authority, ice, moose contact, tank damage, cadence and cleanup")
 	else:
 		# Duplicates and old epochs cannot resurrect/create a second presentation.
 		var before: int = room.combat_view.shots_seen

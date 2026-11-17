@@ -24,6 +24,7 @@ var turret: Node2D
 var chassis: Sprite2D
 var cooldown := 0.0
 var active := true
+var damage_enabled := true
 var shot_flash := 0.0
 const MOOSE_DAMAGE := 20
 const MOOSE_COOLDOWN := 2.0
@@ -64,11 +65,7 @@ func _physics_process(delta: float) -> void:
 	if not active:
 		velocity = Vector2.ZERO
 		return
-	moose_cooldown = maxf(0.0, moose_cooldown - delta)
-	respawn_protection = maxf(0.0, respawn_protection - delta)
-	shield_time = maxf(0.0, shield_time - delta)
-	speed_time = maxf(0.0, speed_time - delta)
-	recovery_time = maxf(0.0, recovery_time - delta)
+	advance_vitals(delta)
 	var prefix := "p2_" if player_number == 2 else ""
 	var movement := Input.get_vector(prefix + "move_left", prefix + "move_right", prefix + "move_up", prefix + "move_down")
 	velocity = movement * SPEED * (Powerups.SPEED_MULTIPLIER if speed_time > 0.0 else 1.0) + hit_push
@@ -91,8 +88,15 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 # Shared by every moose, independently for each tank. Existing damage API stays intact.
+func advance_vitals(delta: float) -> void:
+	moose_cooldown = maxf(0.0, moose_cooldown - delta)
+	respawn_protection = maxf(0.0, respawn_protection - delta)
+	shield_time = maxf(0.0, shield_time - delta)
+	speed_time = maxf(0.0, speed_time - delta)
+	recovery_time = maxf(0.0, recovery_time - delta)
+
 func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
-	if moose_cooldown > 0.0 or shield_time > 0.0 or not active or get_tree().paused:
+	if not damage_enabled or moose_cooldown > 0.0 or shield_time > 0.0 or not active or get_tree().paused:
 		return false
 	moose_cooldown = MOOSE_COOLDOWN
 	var previous_lives := lives
@@ -110,7 +114,7 @@ func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
 	return true
 
 func take_projectile_hit(amount: int) -> void:
-	if respawn_protection > 0.0 or shield_time > 0.0 or not active or get_tree().paused:
+	if not damage_enabled or respawn_protection > 0.0 or shield_time > 0.0 or not active or get_tree().paused:
 		return
 	var previous_lives := lives
 	take_damage(amount)
@@ -120,7 +124,7 @@ func take_projectile_hit(amount: int) -> void:
 		queue_redraw()
 
 func take_damage(amount: int) -> void:
-	if amount <= 0 or shield_time > 0.0 or not active or not is_inside_tree() or get_tree().paused:
+	if not damage_enabled or amount <= 0 or shield_time > 0.0 or not active or not is_inside_tree() or get_tree().paused:
 		return
 	health = maxi(0, health - amount)
 	if health == 0:

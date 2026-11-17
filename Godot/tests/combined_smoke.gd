@@ -194,7 +194,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-3" # Previous polling-fire build lacks the reliable click RPC.
+	old.protocol = "moooze-combined-6" # Previous build has no authoritative tank damage/results.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()

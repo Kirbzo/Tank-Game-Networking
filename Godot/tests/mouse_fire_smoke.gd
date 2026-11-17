@@ -36,6 +36,9 @@ func run() -> void:
 	if hosting:
 		await create_timer(0.3).timeout
 		room.start_button.pressed.emit()
+		if not check(await until(func(): return room.phase == "ready"), "Readiness precedes bottom Start Game"):
+			return
+		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Started"):
 		return
 	if DisplayServer.get_name() != "headless":

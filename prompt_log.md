@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P090 and the next request is **P091**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P093 and the next request is **P094**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2358,3 +2358,55 @@ Actual prompt:
 Associated status snapshot: S-2026-11-17-11. Integrated same-computer Local Duel as a separate Play choice using the previously inspected pinned GitHub source; Milestone 2 main-menu styling and existing modes retained. Opposing shots, health/lives, respawn protection, winner/final explosion/confetti and duel replay now work locally. LAN combat remains unchanged. Changed scripts/game.gd and added a meaningful local_duel_smoke.gd, plus required status/prompt logs. New real-projectile duel test PASS; all 12 actual network/navigation regression processes PASS; approved graphical preview/captures inspected. Exact commands, deterministic fixtures, first test parse correction, teardown warnings and remaining human/LAN acceptance limits recorded in status.md. No standalone report documents created. Protected README/AGENTS and requirements preserved.
 
 Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable full-request accounting was not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without full usage/model/rates. No figures invented.
+## P091 - Second bottom Start Game button after first Start
+
+Date: November 17, 2026.
+Time: 01:34:28 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets add a second start game button for after the first one thats located at the bottom of the screen.
+
+Clarification question: Should the bottom Start Game button appear after pressing the first Start button, or be visible alongside it?
+Actual answer:
+
+> Appear after the first Start (two-step start)
+
+Associated status snapshot: S-2026-11-17-12. Added host-only bottom Start Game confirmation after both peers acknowledge first Start. Gameplay waits for the second click; rejoin resets the sequence. Preserved existing timeout/error/authority rules and offline Local Duel. Advanced discovery protocol to combined-5 for handshake compatibility. Updated four meaningful existing test flows; all 12 actual Godot 4.7.2 local headless processes PASS/exit 0. Exact commands/results and physical/graphical limits in status.md. No new report documents; required status/prompt logs only. Protected docs and source requirements unchanged.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable complete request/clarification accounting not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without reliable usage/model/rates.
+## P092 - LAN-only movement and shooting before second Start
+
+Date: November 17, 2026.
+Time: 01:46:35 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can we allow movement and shooting, but nothing else. Don't add anything else besides the tank's moving & shooting, no other interactions are needed. Ask questions where unclear
+
+Clarifications requested about activation point, affected modes and collision/effect rules. Actual answers:
+
+> After the first Start, before the bottom Start Game
+>
+> This should only happen inside the LAN rooms when both players are connecting. And your correct in your assumtions of no tank damage, ice destructions, or moose effects, but still block movement against walls
+
+Associated status snapshot: S-2026-11-17-13. Enabled LAN ready-phase movement/shooting with authority/prediction/synchronization retained, preview ice indestructible and moose inactive, and normal LAN interactions restored only on bottom Start Game. Preview bullets cleared on transition; leaving resets preview. No offline/Local Duel changes. Protocol combined-6 excludes older semantics. Added paired preview acceptance and updated existing Start/protocol assertions. All 16 final actual Godot 4.7.2 process checks PASS/exit 0. Initial preview fixture teardown races corrected and failing pairs rerun. Exact commands/evidence and graphical/physical LAN limits recorded in status.md. No new report documents; protected docs/requirements preserved.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable complete-request accounting across clarification/tools not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without reliable usage/model/rates.
+## P093 - Integrate Local Duel rules with LAN authority
+
+Date: November 17, 2026.
+Time: 02:14:34 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets now intigrate the dual mode into the LAN version of the game. Try to use the same files that you used for the local dual mode, but intigrate the LAN features to it.
+
+Associated status snapshot: S-2026-11-17-14. Reused Local Duel player/bullet health, life, protection and swept collision logic in host-only LAN bodies; reused explosion/confetti files. Existing validated movement/prediction retained. Host synchronizes health/lives/respawn/outcome; revision/tick guards reject stale reconciliation. Added vitals HUD, shared results and host-only same-session replay with fresh epoch/reset. Restricted pre-match preview, original Milestone 2 main menu and local offline modes retained. Protocol combined-7 excludes earlier builds. FR11 now partial with actual reset evidence; no full physical-network completion claim. Changed seven existing source/test files plus new lan_duel_smoke.gd and required status/prompt logs. No report documents added.
+
+Final checks: all 20 actual LAN/regression processes PASS/exit 0; Local Duel test PASS; approved rendered-host/headless-guest UI pair PASS, health/result captures opened and inspected. Tests cover both winners, real shots across all lives, immunity, prediction correction, rejected guest restart/fire, stale data, replay and fresh replayed shots. Intermediate fixture snapshot/teardown issue and scope/visual/physical limits recorded in status.md. No physical two-device/human/latency-loss acceptance claimed. Protected README/AGENTS/requirements and game.gd preserved. Exact commands and cached evidence locations in status.md.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; complete reliable request accounting across tools was not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without reliable usage/model/rates. No figures invented.
