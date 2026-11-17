@@ -1,0 +1,52 @@
+{
+  "prompt_id": "P082",
+  "session_id": "01a1c638-e7d6-7841-9ef8-8b55c06cc03e",
+  "turn_id": "01a1ea8d-a921-7393-be5c-e8a4de393304",
+  "root_turn_ids": [
+    "01a1ea8d-a921-7393-be5c-e8a4de393304"
+  ],
+  "receipt_utc": "2026-11-17T17:28:34.966Z",
+  "receipt_America_Regina": "2026-11-17 11:28:34 AM",
+  "cutoff_utc": "2026-11-17T17:29:40.344Z",
+  "response_count": 5,
+  "response_ids": [
+    "resp_00ad97788e3ca8e0016afc8ec9aa9c87d09f17465f4ef7adac",
+    "resp_00ad97788e3ca8e0016afc8ecfc45087d0be82bf4f1d35333f",
+    "resp_00ad97788e3ca8e0016afc8ed4c9ac87d0b678aa1accced52b",
+    "resp_00ad97788e3ca8e0016afc8eecc48487d09229b846bc964de2",
+    "resp_00ad97788e3ca8e0016afc8f066a9487d0ba9f41702bb7594f"
+  ],
+  "usage": {
+    "input_tokens": 677397,
+    "cached_input_tokens": 669312,
+    "output_tokens": 2177,
+    "total_tokens": 679574,
+    "reasoning_output_tokens": 372,
+    "cache_write_input_tokens": 0
+  },
+  "by_model": {
+    "gpt-6-astra": {
+      "input_tokens": 677397,
+      "cached_input_tokens": 669312,
+      "output_tokens": 2177,
+      "total_tokens": 679574,
+      "reasoning_output_tokens": 372,
+      "cache_write_input_tokens": 0
+    }
+  },
+  "cached_input_included_in_input": true,
+  "reasoning_is_separately_exposed_not_added_to_output": true,
+  "completeness": "Complete for matched recorded turn",
+  "final_total": 679574,
+  "method": "Sum unique (session, response_id) payload.usage; cumulative cross-check only",
+  "coverage": "One exactly matched project turn; external/unlogged calls cannot be established",
+  "sources": {
+    "~/.codex/sessions/2026/11/10/rollout-2026-11-10T10-09-40-01a1c638-e7d6-7841-9ef8-8b55c06cc03e.jsonl": {
+      "sha256_at_read": "fee8f76b92a2bbbad04877b047792e2254ba6d2fd2d70c94e0a904633b39cae4",
+      "issues": []
+    }
+  },
+  "warnings": [],
+  "estimated_cost": "Unavailable",
+  "billed_cost": "Unavailable"
+}
