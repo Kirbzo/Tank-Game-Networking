@@ -2,13 +2,78 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P083 and the next request is **P084**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P085 and the next request is **P086**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 19, 2026
+
+## P085 - Integrate Malik features while preserving rica moose
+
+Date: November 19, 2026.
+Time: 01:55:04 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Integrate Malik’s added features from `origin/game-intigration-malik` into my existing `rica` branch, preserving the moose behavior currently working on `rica`.
+>
+> The earlier comparison was investigation only; I have not run any implementation prompts since. This request authorizes implementation.
+>
+> Before editing:
+> - Read AGENTS.md, README.md, the referenced requirements, and relevant logs.
+> - Verify `rica` is checked out; otherwise report the branch and pause.
+> - Inspect git status and diffs, preserving existing changes.
+> - Refresh the source branch if possible. If fetching fails, use the available tracking snapshot and report its commit.
+>
+> Review the actual differences and integrate Malik’s added features, including:
+> - Harmless pre-match movement, aiming, and shooting, including the host playing alone.
+> - Two-player readiness and host-controlled Start.
+> - Opposing-tank damage, health, lives, death, protected respawning, and stale-state/prediction handling.
+> - Winner/results screen, gameplay freeze, and host-controlled Play Again without reconnecting.
+> - Lobby Exit returning to the main menu.
+> - Local Duel and existing power-up support.
+> - Any other added user-facing features identified in the comparison.
+>
+> Preserve the current `rica` moose movement, tank-contact behavior, projectile interactions, and effects. Inspect and briefly describe that baseline before editing. Adapt shared code so Malik’s features do not replace or regress it. Ask only if a genuine design conflict requires my decision; continue independent work.
+>
+> Reuse the client’s controls, scenes, assets, and gameplay design. Keep online outcomes host-authoritative and synchronized. Preview actions must remain harmless and must not leave unintended state after Start. Verify the extent of power-up networking; clearly report anything supported only offline or still incomplete.
+>
+> Integrate dependencies carefully rather than blindly replacing files or merging everything. Exclude unrelated editor caches and generated files. Preserve required licences, asset provenance, historical logs, and token attribution. Do not run historical token backfills. Follow protected-file rules and show any changes requiring approval in chat.
+>
+> Update protocol/discovery compatibility as needed. Map applicable changes to actual Framework Requirement IDs without modifying the requirements.
+>
+> Test preview → Ready → Start → combat → respawn → results → Play Again, including repeated matches. Recheck moose behavior, shooting, world resets, Local Duel, power-ups, Exit, disconnect/rejoin, full rooms, and compatibility. Perform graphical two-instance testing if supported. Distinguish automated passes from visually verified behavior; mark two-laptop LAN and latency/loss tests pending unless actually performed.
+>
+> Keep findings and the final summary in the Codex chat. Do not create extra reports, handoff documents, screenshots, recordings, or saved test-result artifacts unless I request them. Update only the required status.md/prompt_log.md entries concisely, with required timestamps and sourced token usage or “Unavailable.” If instructions require another artifact, identify that requirement in chat first. Do not delete existing reports or modify AGENTS.md.
+>
+> Finish with the source commit, features integrated, how moose behavior was preserved, files changed, actual test results, and remaining limitations/manual checks.
+>
+> Leave changes unstaged and uncommitted. Do not push.
+
+Associated status: S-2026-11-19-02/P085; follows P084 investigation S-2026-11-19-01. Source e88a1a531da3fa6c2d9ba6aa970b75384c80e564; fetch permission failure, tracking snapshot used. Implemented selected preview/Start, authoritative duel/respawn/results/replay, menu Exit, Local Duel and partial offline power-up support, preserving rica moose and provenance. Advanced Start epoch to isolate preview traffic; distinct discovery protocol. Current headless lifecycle/combat/regression and native-mouse graphical pair pass; exact commands, initial fixture failures, warnings and remaining physical/visual/power-up limits recorded in status.md. Protected docs/reports unchanged; no artifacts, backfills, commit or push. P084 existing changes preserved.
+
+P085 usage including all model/tool continuations: input **Unavailable**, cached input **Unavailable**, output **Unavailable**, exact model **Unavailable**, usage source **Unavailable** (no reliable complete per-request counters supplied). Cached-input inclusion unknown. Estimated cost and actual billing **Unavailable**; attributable usage/rates are unavailable. Historical attribution unchanged.
+
+## P084 - Compare Malik integration with rica
+
+Date: November 19, 2026.
+Time: 01:27:14 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request:
+
+> look into the the game-integration-malik branch compare the difference on my branch in terms of integration. discuss the summary
+
+Associated status snapshot: S-2026-11-19-01, P084 section. Compared rica f3ef77d with origin/game-intigration-malik e88a1a5 through Git objects, without checkout or merge. Discussed shared integration, automatic safe preview, LAN damage/lives/respawn/results/replay, local-only additions, menu return and incompatible discovery identifiers. Source branch test claims remain prior evidence; no runtime tests performed. Fetch failed on .git/FETCH_HEAD permissions, so comparison uses the available tracking ref. Only status.md and prompt_log.md changed. Existing stale protected documentation, asset attribution removal and source/test metadata deletions reported without repair.
+
+Validation: all 20 original requirement table IDs and 13 WP2 IDs retained; source SHA-256 checked against pre-review values; status/log snapshot association checked; local Markdown links scanned; git diff --check and file-boundary checks performed. Existing missing historical links are reported separately in the final review.
+
+Usage for P084, including all model/tool continuations: input tokens **Unavailable**; cached input tokens **Unavailable**; output tokens **Unavailable**; exact model **Unavailable**; usage source **Unavailable** (no reliable complete per-request accounting supplied). Cached-input inclusion unknown. Estimated monetary cost and actual billed charges **Unavailable** because complete attributable usage and applicable rates are unavailable.
 
 # November 17, 2026
 

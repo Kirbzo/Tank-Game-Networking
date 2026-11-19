@@ -29,16 +29,16 @@ func run() -> void:
 	if not check(await until(func(): return is_instance_valid(lobby.active_room) and lobby.active_room.player_names.size() == 2), "Joined"):
 		return
 	var room = lobby.active_room
-	mouse(room.artwork.to_global(Vector2(640, 612)), true)
-	mouse(room.artwork.to_global(Vector2(640, 612)), false)
-	if not check(not is_instance_valid(room.combat_view), "Pre-start mouse click has no gameplay effect"):
+	if not check(await until(func(): return room.phase == "ready"), "Automatic preview is ready"):
 		return
 	if hosting:
 		await create_timer(0.3).timeout
-		room.start_button.pressed.emit()
+		if not check(await until(func(): return room.phase == "ready"), "Readiness precedes bottom Start Game"):
+			return
+		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Started"):
 		return
-	if DisplayServer.get_name() != "headless":
+	if OS.get_cmdline_user_args().has("capture"):
 		capture_shots(room, "host" if hosting else "guest")
 	if not hosting:
 		if not check(await until(func(): return is_instance_valid(room.combat_view) and room.combat_view.shots_seen >= 1, 4.0), "Guest sees host mouse shot"):

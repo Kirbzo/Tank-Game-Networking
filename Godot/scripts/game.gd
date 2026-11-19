@@ -16,6 +16,9 @@ var world: Node2D
 var player: CharacterBody2D
 var player_two: CharacterBody2D
 var local_coop := false
+var local_duel := false
+var winner_number := 0
+var defeat_delay := 0.0
 var ui: CanvasLayer
 var panel: Control
 var hud: Label
@@ -189,6 +192,7 @@ func show_play() -> void:
 	label_in(box, "Clear the icy field alone or together.", 20)
 	button_in(box, "Solo Practice", start_game).grab_focus()
 	button_in(box, "Local Co-op / 2 Players", start_game.bind(true))
+	button_in(box, "Local Duel / 2 Players", start_game.bind(true, true))
 	label_in(box, "Local co-op shares one score and one objective.", 17, MINT)
 	button_in(box, "Host Game", func(): host_requested.emit())
 	button_in(box, "Join Game", func(): join_requested.emit())
@@ -231,7 +235,7 @@ func show_help() -> void:
 	label_in(box, "KEEP YOUR CREW ROLLING", 22, Color("#ffd890"))
 	label_in(box, "Each tank starts with 100 health and 3 lives.\nAt zero health, lose a life and respawn at full health.\nA tank with no lives is out; a surviving teammate can continue.\nThe round ends in defeat when no tanks have lives left.", 19)
 	label_in(box, "GIVE THE MOOSE SOME ROOM", 22, Color("#ffd890"))
-	label_in(box, "Roaming moose turn and bounce off obstacles.\nContact deals 20 damage and knocks your tank back.\nA gold ring means 2 seconds of protection; separate to re-hit.\nMoose yield to tanks. Snowballs pass through moose.\nTanks cannot damage each other.", 19)
+	label_in(box, "Roaming moose turn and bounce off obstacles.\nContact deals 20 damage and knocks your tank back.\nA gold ring means 2 seconds of protection; separate to re-hit.\nMoose yield; snowballs pass through them.\nDuel shots deal 20 damage; the last tank with lives wins.\nSolo/co-op shots cannot damage tanks.", 19)
 	button_in(box, "Controls", show_controls)
 	button_in(box, "Main Menu", show_menu).grab_focus()
 
@@ -243,11 +247,14 @@ func show_credits() -> void:
 	button_in(box, "Back to Menu", show_menu).grab_focus()
 
 func restart_game() -> void:
-	start_game(local_coop)
+	start_game(local_coop, local_duel)
 
-func start_game(coop: bool = false) -> void:
+func start_game(coop: bool = false, duel: bool = false) -> void:
 	sound.stop_gameplay()
-	local_coop = coop
+	local_duel = duel
+	local_coop = coop or duel
+	winner_number = 0
+	defeat_delay = 0.0
 	player_two = null
 	get_tree().paused = false
 	clear_panel()
@@ -283,8 +290,8 @@ func start_game(coop: bool = false) -> void:
 	player = Player.new()
 	player.position = Vector2(208, 612)
 	player.moose_hit.connect(sound.play_moose_contact)
-	player.exploded.connect(func(): sound.play("explosion"))
-	player.fired.connect(spawn_bullet)
+	player.exploded.connect(on_tank_exploded.bind(player))
+	player.fired.connect(spawn_bullet.bind(player))
 	player.vitals_changed.connect(update_hud)
 	player.lives_depleted.connect(on_lives_depleted)
 	world.add_child(player)
@@ -293,8 +300,8 @@ func start_game(coop: bool = false) -> void:
 		player_two.player_number = 2
 		player_two.position = Vector2(1072, 612)
 		player_two.moose_hit.connect(sound.play_moose_contact)
-		player_two.exploded.connect(func(): sound.play("explosion"))
-		player_two.fired.connect(spawn_bullet)
+		player_two.exploded.connect(on_tank_exploded.bind(player_two))
+		player_two.fired.connect(spawn_bullet.bind(player_two))
 		player_two.vitals_changed.connect(update_hud)
 		player_two.lives_depleted.connect(on_lives_depleted)
 		world.add_child(player_two)
@@ -366,7 +373,7 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 	if not reinforced:
 		remaining += 1
 
-func spawn_bullet(origin: Vector2, muzzle: Vector2, direction: Vector2) -> void:
+func spawn_bullet(origin: Vector2, muzzle: Vector2, direction: Vector2, shooter: Node = null) -> void:
 	if state != "playing":
 		return
 	var bullet := Bullet.new()
@@ -374,6 +381,10 @@ func spawn_bullet(origin: Vector2, muzzle: Vector2, direction: Vector2) -> void:
 	bullet.origin = origin
 	bullet.direction = direction
 	bullet.impact = burst
+	# Source duel behavior is opt-in; co-op and LAN retain their existing rules.
+	bullet.shooter = shooter
+	bullet.hits_tanks = local_duel and is_instance_valid(shooter)
+	bullet.heavy = local_duel and is_instance_valid(shooter) and shooter.shot_is_heavy
 	world.add_child(bullet)
 	shots += 1
 	sound.play("shoot")
@@ -383,7 +394,7 @@ func on_brick_destroyed(at: Vector2) -> void:
 	remaining -= 1
 	score += 100
 	burst(at)
-	if remaining == 0 and not finish_pending:
+	if remaining == 0 and not local_duel and not finish_pending:
 		finish_pending = true
 		finish_game.call_deferred()
 
@@ -392,6 +403,10 @@ func burst(at: Vector2) -> void:
 		particles.append({"position": at, "velocity": Vector2.from_angle(randf() * TAU) * randf_range(50, 190), "life": 0.5, "size": randf_range(2, 6)})
 
 func _process(delta: float) -> void:
+	if state == "dying":
+		defeat_delay -= delta
+		if defeat_delay <= 0.0 and not sound.voices.explosion.playing:
+			show_duel_victory()
 	var moving := false
 	var idle := false
 	if state == "playing":
@@ -400,7 +415,7 @@ func _process(delta: float) -> void:
 				var driving: bool = tank.get_real_velocity().length_squared() > 1.0
 				moving = moving or driving
 				idle = idle or not driving
-	sound.update_ambience(state == "playing", moving, idle, state == "paused")
+	sound.update_ambience(state == "playing", moving, idle, state == "paused", not local_duel or state not in ["dying", "results"])
 	if state == "playing":
 		elapsed += delta
 		update_hud()
@@ -415,7 +430,10 @@ func update_hud() -> void:
 		hud.text = "PLAYER 1 / SOLO\n%d HEALTH     %d LIVES" % [player.health, player.lives]
 		if local_coop and is_instance_valid(player_two):
 			hud.text = "P1: %d HEALTH / %d LIVES\nP2: %d HEALTH / %d LIVES" % [player.health, player.lives, player_two.health, player_two.lives]
-		hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["TEAM SCORE" if local_coop else "SCORE", score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+		if local_duel:
+			hud_stats.text = "TIME: %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % [int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+		else:
+			hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["TEAM SCORE" if local_coop else "SCORE", score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
@@ -447,6 +465,20 @@ func resume_game() -> void:
 		finish_game.call_deferred()
 
 func on_lives_depleted() -> void:
+	if local_duel:
+		if state != "playing":
+			return
+		winner_number = 1 if player.active else (2 if player_two.active else 0)
+		state = "dying"
+		defeat_delay = maxf(preload("res://scripts/tank_explosion.gd").DURATION, sound.voices.explosion.stream.get_length())
+		sound.stop_gameplay(["explosion", "moose_roar"])
+		sound.set_loop("music", false)
+		sound.last_played.erase("defeat")
+		sound.play("defeat")
+		defeat_delay = maxf(defeat_delay, sound.voices.defeat.stream.get_length())
+		get_tree().paused = true
+		pause_button.disabled = true
+		return
 	if local_coop and (player.active or player_two.active):
 		return
 	if state != "playing":
@@ -461,7 +493,7 @@ func on_lives_depleted() -> void:
 	button_in(box, "Main Menu", show_menu)
 
 func finish_game() -> void:
-	if state != "playing":
+	if state != "playing" or local_duel:
 		return
 	sound.stop_gameplay()
 	sound.play("victory")
@@ -477,11 +509,42 @@ func finish_game() -> void:
 	button_in(box, "Main Menu", show_menu)
 
 func results_summary(box: VBoxContainer) -> void:
-	label_in(box, "%s: %d points" % ["Shared team score" if local_coop else "Score", score], 26)
+	if not local_duel:
+		label_in(box, "%s: %d points" % ["Shared team score" if local_coop else "Score", score], 26)
 	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [total - remaining, total, shots, int(elapsed) / 60, int(elapsed) % 60], 21)
 	label_in(box, "Player 1: %d health / %d lives" % [player.health, player.lives], 20, Color("#8fd5ff"))
 	if local_coop:
 		label_in(box, "Player 2: %d health / %d lives" % [player_two.health, player_two.lives], 20, Color("#e3b7ff"))
+
+func on_tank_exploded(tank: Node2D) -> void:
+	sound.last_played.erase("explosion")
+	sound.play("explosion")
+	if not local_duel or tank.lives != 1:
+		return
+	# The imported player emits this before decrementing its final life.
+	tank.hide()
+	var effect := preload("res://scripts/tank_explosion.gd").new()
+	effect.position = tank.position
+	effect.game = self
+	world.add_child(effect)
+
+func show_duel_victory() -> void:
+	state = "results"
+	sound.stop_gameplay()
+	sound.set_loop("music", false)
+	sound.last_played.erase("victory")
+	sound.play("victory")
+	var box := overlay()
+	label_in(box, "PLAYER %d WINS!" % winner_number, 46, Color("#ffd890"))
+	label_in(box, "Winner: Player %d" % winner_number, 25, MINT)
+	label_in(box, "GAME OVER - PLAYER %d" % (3 - winner_number), 24, Color("#ff9cae"))
+	results_summary(box)
+	button_in(box, "Play Again", restart_game).grab_focus()
+	button_in(box, "Main Menu", show_menu)
+	var confetti := preload("res://scripts/confetti.gd").new()
+	confetti.name = "VictoryConfetti"
+	panel.add_child(confetti)
+	panel.move_child(confetti, 1)
 
 # Pure background drawing: no nodes, collisions, input, or gameplay state.
 func draw_holiday_border() -> void:

@@ -26,40 +26,66 @@ func run() -> void:
 		return
 	var room = lobby.active_room
 	var session = lobby.session
+	var solo_position := Vector2.ZERO
 	if hosting:
-		if not check(room.start_button.disabled and room.start_button.visible, "Solo host Start disabled"):
+		if not check(await until(func(): return room.phase == "ready"), "Solo host preview starts automatically"):
 			return
-		room.request_start()
-		if not check(room.phase == "waiting", "Solo Start rejected"):
+		room.begin_game()
+		if not check(room.phase == "ready" and room.bottom_start_button.disabled and room.find_child("StartButton", true, false) == null, "Only bottom Start remains; solo duel Start rejected"):
+			return
+		room.accept_fire_request(1, room.epoch, Vector2.RIGHT, 1)
+		if not check(room.combat.next_shot == 1 and not room.combat.interactions_enabled and room.combat.proxies[1].health == 100, "Solo host can aim/fire harmlessly before anyone joins"):
+			return
+		var initial: Vector2 = room.tank_world.positions[1]
+		key(KEY_W, true)
+		await create_timer(0.1).timeout
+		key(KEY_W, false)
+		solo_position = room.tank_world.positions[1]
+		if not check(room.tank_world.positions[1].y < initial.y, "Host moves before a guest connects"):
 			return
 	if not check(await until(func(): return room.player_names.size() == 2), "Both rooms loaded"):
 		return
 	if not await waiting_room_checks():
 		return
 	if hosting:
-		await create_timer(0.5).timeout
-		room.request_start()
+		if not check(room.tank_world.positions[1] == solo_position, "Guest join preserves the host's waiting-room position"):
+			return
+		# Force the existing timeout path; recovery must no longer need a first button.
 		var expired: int = room.epoch
+		room.phase = "preparing"
 		room.prepare_deadline = 0
 		room._physics_process(0.0)
 		room.acknowledge_ready(lobby.multiplayer.get_peers()[0], expired)
-		if not check(room.phase == "waiting" and not room.start_button.disabled and room.connection_event.text.contains("timed out"), "Readiness timeout permits retry; late acknowledgement rejected"):
-			return
-		room.start_button.pressed.emit()
-		if not check(room.phase == "preparing" and room.tank_world.tick == 0 and room.ready_peers.size() == 1, "Start waits for guest readiness"):
-			return
-		var guest: int = lobby.multiplayer.get_peers()[0]
-		room.accept_tank_input(guest, room.epoch, Vector2.RIGHT, 1)
-		if not check(room.tank_world.received_sequences.is_empty(), "Input blocked until both ready"):
+		if not check(room.phase == "waiting" and room.bottom_start_button.disabled and room.connection_event.text.contains("timed out"), "Timeout rejects old acknowledgement and schedules automatic retry"):
 			return
 	else:
-		if not check(not room.start_button.visible, "Guest has no Start control"):
+		if not check(not room.bottom_start_button.visible and room.find_child("StartButton", true, false) == null, "Guest has no Start control"):
 			return
 		room.request_start()
 		lobby.tank_ready.rpc_id(1, room.game_id, 999)
-		if not check(room.phase == "waiting", "Guest cannot start; premature readiness ignored"):
+	if not check(await until(func(): return room.phase == "ready"), "Both ready; second Start still required"):
+		return
+	if hosting:
+		if not check(room.bottom_start_button.visible and not room.bottom_start_button.disabled, "Bottom Start Game enabled only with both peers ready"):
 			return
-	if not check(await until(func(): return room.phase == "running"), "Both ready; running"):
+		var rect: Rect2 = room.bottom_start_button.get_global_rect()
+		if not check(rect.get_center().y > room.size.y * 0.7 and rect.end.y < room.size.y and not rect.intersects(room.game_id_label.get_global_rect()), "Second Start is near bottom without covering game ID"):
+			return
+	else:
+		room.begin_game()
+		if not check(room.phase == "ready" and not room.bottom_start_button.visible, "Guest cannot confirm Start Game"):
+			return
+	key(KEY_W, true)
+	await create_timer(0.2).timeout
+	key(KEY_W, false)
+	if not check(room.phase == "ready" and (room.tank_world.tick > 0 if hosting else room.tank_view.input_sequence > 0), "Movement is active between both Start clicks"):
+		return
+	if hosting:
+		await create_timer(0.2).timeout
+		room.bottom_start_button.pressed.emit()
+	if not check(await until(func(): return room.phase == "running"), "Second Start begins game for both players"):
+		return
+	if not check(not room.bottom_start_button.visible, "Start button hides during gameplay"):
 		return
 	if not check(lobby.session == session, "Start preserves ENet session"):
 		return
@@ -94,14 +120,16 @@ func run() -> void:
 		room.accept_tank_input(123, generation, Vector2.RIGHT, seq + 1)
 		if not check(room.tank_world.received_sequences[guest] == seq and room.tank_world.positions.size() == 2, "Reject nonfinite, excessive, replay, old-generation and unknown-player input"):
 			return
-		if not check(await until(func(): return room.phase == "waiting"), "Guest leaving freezes host and returns to waiting"):
+		if not check(await until(func(): return room.phase == "ready" and room.player_names.size() == 1), "Guest leaving restores solo preview automatically"):
 			return
-		if not check(room.start_button.disabled and lobby.session == session and room.player_names.size() == 1, "Departure retains room and disables Start"):
+		if not check(room.bottom_start_button.disabled and lobby.session == session and room.player_names.size() == 1, "Departure retains preview but disables duel Start"):
 			return
 		if not check(await until(func(): return room.player_names.size() == 2), "Guest rejoins waiting room"):
 			return
 		await create_timer(0.4).timeout
-		room.request_start()
+		if not check(await until(func(): return room.phase == "ready"), "Rejoin requires readiness again"):
+			return
+		room.bottom_start_button.pressed.emit()
 		if not check(await until(func(): return room.phase == "running"), "Readiness handshake works again after rejoin"):
 			return
 		await create_timer(0.5).timeout
@@ -123,7 +151,7 @@ func run() -> void:
 		if not check(await until(func(): return is_instance_valid(lobby.active_room)), "Rejoined"):
 			return
 		room = lobby.active_room
-		if not check(room.phase == "waiting", "Rejoin never auto-starts"):
+		if not check(room.phase != "running", "Rejoin enters preview without auto-starting duel"):
 			return
 		if not check(await until(func(): return room.phase == "running"), "Rejoined guest ready and running"):
 			return

@@ -42,7 +42,7 @@ def main():
     if engine.endswith("_console.exe"):
         engine = engine.removesuffix("_console.exe") + ".exe"
     processes = [(role, subprocess.Popen(
-        [engine, "--path", str(root / "Godot"), "--script", "res://tests/mouse_fire_smoke.gd",
+        [engine, "--path", str(root / "Godot"), "--log-file", "NUL", "--script", "res://tests/mouse_fire_smoke.gd",
          "--", role, "native"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         text=True, creationflags=subprocess.CREATE_NO_WINDOW)) for role in ["host", "guest"]]
 

@@ -9,6 +9,7 @@ var highest_shot := 0
 var shots_seen := 0
 var impacts: Array[Dictionary] = []
 var sound: Node
+var state := "playing"
 
 func _ready() -> void:
 	sound = preload("res://scripts/sound.gd").new()
@@ -32,6 +33,18 @@ func event(kind: String, data: Dictionary) -> void:
 	elif kind == "remove" and bullets.has(id):
 		bullets[id].queue_free()
 		bullets.erase(id)
+	elif kind == "explosion":
+		sound.last_played.erase("explosion")
+		sound.play("explosion")
+		var effect := preload("res://scripts/tank_explosion.gd").new()
+		effect.position = data.position
+		effect.game = self
+		add_child(effect)
+
+func clear_shots() -> void:
+	for bullet in bullets.values():
+		bullet.queue_free()
+	bullets.clear()
 
 func apply_snapshot(state: Dictionary) -> void:
 	# Late snapshots cannot recreate a despawned shot or create an unconfirmed one.

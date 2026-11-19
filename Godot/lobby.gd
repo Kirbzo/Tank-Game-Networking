@@ -1,4 +1,5 @@
 extends Control
+signal main_menu_requested
 
 const Discovery = preload("res://discovery.gd")
 const Usernames = preload("res://usernames.gd")
@@ -33,6 +34,12 @@ var room_return_message := ""
 var disconnected_screen: Control
 
 func _ready() -> void:
+	# Network combat must not depend on the optional offline client's menu setup.
+	if not InputMap.has_action("fire"):
+		InputMap.add_action("fire")
+		var fire_button := InputEventMouseButton.new()
+		fire_button.button_index = MOUSE_BUTTON_LEFT
+		InputMap.action_add_event("fire", fire_button)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "top", "right", "bottom"]:
@@ -65,7 +72,7 @@ func _ready() -> void:
 	join_button.tooltip_text = "Select a game or enter its ID to join."
 	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
-	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
+	exit_button.tooltip_text = "Disconnect and return to the main menu."
 	exit_button.pressed.connect(show_exit_screen)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -135,14 +142,24 @@ func update_session_feedback() -> bool:
 	return true
 
 func show_exit_screen() -> void:
-	if exit_screen != null:
+	if exiting:
 		return
 	exiting = true
+	if is_instance_valid(active_room):
+		active_room.leaving = true
+		remove_child(active_room)
+		active_room.queue_free()
+		active_room = null
 	leave_game()
-	exit_screen = preload("res://exit_screen.gd").new()
-	get_parent().add_child(exit_screen)
-	# Keep the application open for the future main-screen destination.
+	if is_instance_valid(disconnected_screen):
+		disconnected_screen.queue_free()
+		disconnected_screen = null
 	hide()
+	if main_menu_requested.has_connections():
+		main_menu_requested.emit()
+	else:
+		# Direct lobby-scene launches still return to the configured launch menu.
+		get_tree().call_deferred("change_scene_to_file", "res://application.tscn")
 
 func leave_game() -> void:
 	# Cancel a pending join before its deferred frame or timeout can resume it.
