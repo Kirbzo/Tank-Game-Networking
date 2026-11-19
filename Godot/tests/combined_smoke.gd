@@ -34,33 +34,21 @@ func enter_menu(hosting: bool) -> void:
 
 func waiting_room_checks() -> bool:
 	var room = lobby.active_room
+	if not check(await until(func(): return room.phase == "ready"), "Preview initializes automatically"):
+		return false
 	if not check(room.get_script() == load("res://client_waiting_room.gd"), "Combined Host/Join uses client waiting-room scene"):
 		return false
 	if not check(room.artwork.ice_count == 35 and room.artwork.members == room.player_names and room.status_message.text.contains("Waiting"), "Client arena layout and real membership in waiting state"):
 		return false
-	if not check(room.artwork.find_children("*", "CollisionObject2D", true, false).is_empty(), "Artwork contains no offline gameplay physics"):
-		return false
-	var positions := {}
-	for peer in room.artwork.tank_markers:
-		positions[peer] = room.artwork.tank_markers[peer].position
-	var key := InputEventKey.new()
-	key.physical_keycode = KEY_D
-	key.keycode = KEY_D
-	key.pressed = true
-	Input.parse_input_event(key)
-	Input.action_press("fire")
-	await create_timer(0.3).timeout
-	key.pressed = false
-	Input.parse_input_event(key)
-	Input.action_release("fire")
-	for peer in positions:
-		if not check(room.artwork.tank_markers[peer].position == positions[peer], "Tank markers stay stationary while waiting"):
+	for object in room.artwork.find_children("*", "CollisionObject2D", true, false):
+		if not check(object.collision_layer == 0, "Preview artwork does not decide collisions"):
 			return false
+	await create_timer(0.15).timeout
 	room.show_settings()
 	if not check(not paused and lobby.session != null, "Room overlay keeps session processing alive"):
 		return false
 	room.close_settings()
-	return check(room.world.tick == 0 and room.client_view.input_sequence == 0 and room.artwork.ice_count == 35, "Waiting does not simulate movement, send input or destroy bricks")
+	return check(room.artwork.ice_count == 35 and room.tank_world.removed_ice.is_empty(), "Automatic preview retains intact ice")
 
 func run() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -194,7 +182,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-6" # Previous build has no authoritative tank damage/results.
+	old.protocol = "moooze-combined-7" # Previous build requires a manual first Start.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()

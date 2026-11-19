@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P093 and the next request is **P094**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P098 and the next request is **P099**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -24,11 +24,11 @@ Actual request (copy/paste escape formatting normalized):
 >
 > In the actual playable integrated game, the tanks DO NOT SHOOT when I left-click after Ready/Start. The previous report claimed shooting tests passed, but this functionality is failing during my graphical testing.
 >
-> First reproduce and fix shooting through the normal Host → Join → Ready → Start flow. Trace the complete path from mouse input through match-start gating, player ownership, fire requests, host validation, projectile creation, synchronization, and rendering. Check for UI controls consuming mouse input and disabled or bypassed client scripts.
+> First reproduce and fix shooting through the normal Host â†’ Join â†’ Ready â†’ Start flow. Trace the complete path from mouse input through match-start gating, player ownership, fire requests, host validation, projectile creation, synchronization, and rendering. Check for UI controls consuming mouse input and disabled or bypassed client scripts.
 >
-> Verify that BOTH the host and joining player can fire visible projectiles from their own tank and that each shot appears on both screens. Use @Studio’s existing shooting implementation and visuals as the reference.
+> Verify that BOTH the host and joining player can fire visible projectiles from their own tank and that each shot appears on both screens. Use @Studioâ€™s existing shooting implementation and visuals as the reference.
 >
-> After shooting works, complete the client-design comparison, tank–moose interaction fixes, and validation of the token-usage file copied from Malik’s branch described below.
+> After shooting works, complete the client-design comparison, tankâ€“moose interaction fixes, and validation of the token-usage file copied from Malikâ€™s branch described below.
 >
 > Report exactly how shooting was verified. If graphical testing is unavailable, mark visible shooting as pending my verification and provide the steps to test it.
 
@@ -74,18 +74,18 @@ Actual request (copy/paste escape formatting normalized):
 >
 > Read AGENTS.md, README.md, the Framework Requirements in the requirements document referenced by AGENTS.md, and the relevant status and prompt logs. Inspect the integrated @Studio client under `Godot`, including the arena, tank and turret, input actions, projectile scenes, and any moose or other world-object scenes.
 >
-> Identify the exact Framework Requirement IDs for this milestone and map them to the client scenes and scripts you’ll use. Verify which interactions are in scope, especially whether tanks, shots, or both interact with the moose and what should happen in each case. If the requirements and client implementation disagree or leave a behavior undefined, flag the specific gap and continue with the confirmed behavior.
+> Identify the exact Framework Requirement IDs for this milestone and map them to the client scenes and scripts youâ€™ll use. Verify which interactions are in scope, especially whether tanks, shots, or both interact with the moose and what should happen in each case. If the requirements and client implementation disagree or leave a behavior undefined, flag the specific gap and continue with the confirmed behavior.
 >
-> Implement through the existing Host → Join → Ready → Start flow in the integrated @Studio arena.
+> Implement through the existing Host â†’ Join â†’ Ready â†’ Start flow in the integrated @Studio arena.
 >
-> - Reuse @Studio’s existing controls, scenes, nodes, and visuals where available. Each player aims and fires their own tank. Both players see the turret direction and each shot.
+> - Reuse @Studioâ€™s existing controls, scenes, nodes, and visuals where available. Each player aims and fires their own tank. Both players see the turret direction and each shot.
 > - Follow the existing host-authoritative networking model. Clients send aim and fire input. The host validates it, resolves projectile collisions and confirmed world interactions, and synchronizes the results. Each shot should appear exactly once on each screen.
 > - Enable aim and fire only after the match starts. Keep tank damage, scoring, and match reset for their scheduled milestones.
 > - Preserve the waiting room, host-only Start, networked movement, tank collisions, and leave/disconnect behavior.
 >
 > Test with two instances using the normal client entry point. Verify that the host and joining player can each aim and fire after Start, both see the same turret directions and shots, pre-start aim and fire have no gameplay effect, and both see the same outcome for every confirmed world interaction. Recheck Milestone 2 movement and disconnect behavior. Mark two-laptop LAN testing as pending unless it was actually performed.
 >
-> Follow the repo’s logging rules. Report the requirement IDs covered, files changed, actual test results, and any open @Studio or moose integration questions. Leave the changes uncommitted for my review.
+> Follow the repoâ€™s logging rules. Report the requirement IDs covered, files changed, actual test results, and any open @Studio or moose integration questions. Leave the changes uncommitted for my review.
 
 Status snapshot: S-2026-11-17-02 in status.md. Initial branch rica; staged and unstaged diffs empty, Milestone 2 already committed in 9785731. Read protected instructions/README, both source DOCXs, status/logs and imported client code before editing. Retained the existing application and lobby session.
 
@@ -148,7 +148,7 @@ Actual request:
 >
 > Yesterday Godot opened the client main menu. Today, launching from Godot Project Manager opens the Alpha Lobby directly, and Host still opens the rectangle room. Before changing code, check the current branch and diff, confirm the exact `Godot/project.godot` path I should open, and verify that its startup scene points to the combined application. Check whether the P077 waiting room changes are still present and wired into that application.
 >
-> If I’m launching the wrong copy, give me the exact project path to open. If the startup scene or room wiring is wrong in `rica`, fix it. Verify that running the whole project opens the client main menu, **Play → Host Game** opens the client waiting room, and a guest who joins sees the same room. Complete the P077 log if needed and leave the changes unstaged and uncommitted.
+> If Iâ€™m launching the wrong copy, give me the exact project path to open. If the startup scene or room wiring is wrong in `rica`, fix it. Verify that running the whole project opens the client main menu, **Play â†’ Host Game** opens the client waiting room, and a guest who joins sees the same room. Complete the P077 log if needed and leave the changes unstaged and uncommitted.
 
 Diagnosis before edits: branch rica at 8ceb25b, clean working tree. Godot/project.godot selected res://lobby.tscn at 1000x720. Application and waiting-room scenes/scripts, client imports and P076/P077 logs were absent from the working tree. GitHub Desktop's saved rica stash, `1c56969c54c8d0b7cfd5ec3177d3f3a27d2880ba` (stash@{0}, On rica: !!GitHub_Desktop<rica>), contained all that work. Reflog shows a rica-to-Allen-to-rica branch switch. This is saved uncommitted work not restored into the checkout, rather than evidence of a broken P077 room implementation. Godot's projects.cfg registers the exact repository Godot directory; its other entry C:/GameDemo is the unrelated MIDNIGHT MAZE project.
 
@@ -173,7 +173,7 @@ Godot 4.7.2 import/startup completed without reported script/parser errors; ordi
 
 Environment output: sandbox runs reported user-log/root-certificate access errors and import could not save external editor settings. Plain startup reported the previously observed two ObjectDB instances leaked at exit. No unrelated fixes made. Historical P076/P077 results are preserved separately; other standalone movement/offline gameplay/failure tests were not rerun for this recovery.
 
-Follow-up: on two laptops, open the exact restored project on matching rica builds, run F5, verify Play → Host Game and guest Join show the same waiting room/game ID/names/count. Verify guest leave/rejoin, third-instance full/reopened listing, host disconnection and reversed host roles. Physical LAN discovery/firewalls, abrupt network loss and graphical performance remain unverified. AGENTS/README documentation updates remain pending separate approval.
+Follow-up: on two laptops, open the exact restored project on matching rica builds, run F5, verify Play â†’ Host Game and guest Join show the same waiting room/game ID/names/count. Verify guest leave/rejoin, third-instance full/reopened listing, host disconnection and reversed host roles. Physical LAN discovery/firewalls, abrupt network loss and graphical performance remain unverified. AGENTS/README documentation updates remain pending separate approval.
 
 Associated [status.md](status.md): S-2026-11-11-01; resumes P077 and retains its completed historical record.
 
@@ -190,8 +190,8 @@ Receipt time: **Unavailable** (not supplied by chat metadata).
 Actual request:
 
 > Continue on my `rica` branch in `Tank-Game-Networking`. Before making any changes, read and follow `AGENTS.md` and read `README.md` for project context. Treat both files as read-only. Preserve my existing edits and verify that both files are byte-for-byte identical to their starting versions. Confirm this in your final summary.
-> **Host Game** currently starts a session and opens our rectangle placeholder room. After hosting succeeds, show the client team’s game room from the [Moooze Tanks client repo](https://github.com/AnnMaxine/Moooze-Tanks-Repository) inside the same live session. A guest who successfully joins should see the same room. Keep the room in a waiting state and preserve the game ID, player count, and leave/disconnect behavior.
-> First, check whether the client repo has a dedicated multiplayer room or whether the screen is part of its offline arena in `scripts/game.gd`. If there’s a dedicated room, integrate it. If you only find the offline arena, tell me which branch or scene you checked and what visuals can be reused before wiring it in. Keep the current networking active during the screen change.
+> **Host Game** currently starts a session and opens our rectangle placeholder room. After hosting succeeds, show the client teamâ€™s game room from the [Moooze Tanks client repo](https://github.com/AnnMaxine/Moooze-Tanks-Repository) inside the same live session. A guest who successfully joins should see the same room. Keep the room in a waiting state and preserve the game ID, player count, and leave/disconnect behavior.
+> First, check whether the client repo has a dedicated multiplayer room or whether the screen is part of its offline arena in `scripts/game.gd`. If thereâ€™s a dedicated room, integrate it. If you only find the offline arena, tell me which branch or scene you checked and what visuals can be reused before wiring it in. Keep the current networking active during the screen change.
 > Keep this scoped to the room shown after Host or Join. Leave the Available Games UI, Start behavior, and networked tank gameplay for later. Run the local Host and Join checks, report what still needs a two-laptop test, and leave the changes uncommitted.
 
 Confirmed branch rica; retained all starting uncommitted Milestone 1 changes, generated UIDs and the existing editor project_metadata.cfg edit. Read AGENTS.md, README.md, Godot/README.md, both source requirements and relevant status entries before editing. Captured protected file bytes and starting repository hashes/cache bytes for final preservation checks.
@@ -240,20 +240,20 @@ Actual request:
 
 > Implement **Milestone 1 only** from `Moooze_Tanks_Integration_Plan.docx` on my branch in `Tank-Game-Networking`. Use `Tank-Game-Networking/Godot` as the base for the combined build. Bring in the client menu and its required dependencies from the client revision reviewed in the plan.
 >
-> Before editing, **read and follow `AGENTS.md`**. Confirm the current branch and check for existing changes. If you’re on `main` or can’t confirm you’re on my branch, stop and tell me. Preserve my existing edits. Treat `AGENTS.md` and `README.md` as read-only. Record the starting contents of `AGENTS.md` so you can verify it is identical after implementation, including any edits that were already there.
+> Before editing, **read and follow `AGENTS.md`**. Confirm the current branch and check for existing changes. If youâ€™re on `main` or canâ€™t confirm youâ€™re on my branch, stop and tell me. Preserve my existing edits. Treat `AGENTS.md` and `README.md` as read-only. Record the starting contents of `AGENTS.md` so you can verify it is identical after implementation, including any edits that were already there.
 >
 > - **Host Game** starts hosting with one click through the existing `host_game()` flow and opens the multiplayer rectangle room. If hosting fails, show the existing error in the lobby.
-> - **Join Game** opens Available Games. Compatible full rooms stay visible as **2/2 · Full**. Preserve the **Room Full** response when someone tries to join. When a slot opens, update the listing and allow joining again.
+> - **Join Game** opens Available Games. Compatible full rooms stay visible as **2/2 Â· Full**. Preserve the **Room Full** response when someone tries to join. When a slot opens, update the listing and allow joining again.
 > - **Incompatible older builds** stay hidden from Available Games. Apply the compatibility check across automatic discovery, typed game ID, and manual IP lookup.
 > - Keep one persistent lobby instance so the connection survives screen changes. Preserve the existing rectangle room and connection flows. Leave Start and networked tank gameplay for later milestones.
 >
-> Run the checks you can locally and report the actual results. Summarize the files changed, confirm `AGENTS.md` is identical to its starting contents, and list the checks I still need to run on two laptops. Follow the repo’s logging instructions and leave the changes uncommitted for my review.
+> Run the checks you can locally and report the actual results. Summarize the files changed, confirm `AGENTS.md` is identical to its starting contents, and list the checks I still need to run on two laptops. Follow the repoâ€™s logging instructions and leave the changes uncommitted for my review.
 
 Implemented Milestone 1 on confirmed branch `rica`, starting from clean server commit `8ceb25b`. The plan was read from the downloaded Word document. Earlier review/plan requests deliberately left repository logs unchanged under their explicit read-only instruction; they have no assigned repository prompt IDs. This entry links the resulting implementation to that latest revised plan rather than inventing a historical ID.
 
 Imported the menu, six client scripts, scene, required textures/audio/import metadata and unchanged offline smoke test from client revision `167b4f6f8f56696efc7b80212fd32b8b7e011d8a`. Source SHA256 values and provenance are in [Godot/client_import.json](Godot/client_import.json). Only imported game.gd is adapted: Host/Join emit signals to the combined application. No client repository checkout was modified.
 
-Added application.gd/application.tscn with one persistent Application/AlphaLobby. Host Game calls existing host_game once; failure stays in the visible lobby. Join opens Available Games. Client CanvasLayer, input and sound are disabled during online presentation; discovery/ENet remain active. Existing room Back/Escape and lobby Exit behavior retained. The server project keeps its engine/renderer and adopts the client 1280x800 viewport. Full listings show `2/2 · Full`; existing fresh-full Room Full and retry/stale rules remain intact. New discovery protocol `moooze-combined-1` filters old automatic announcements and direct-IP replies before the ID cache; typed-ID joining resolves that cache. This is supported-path compatibility filtering, not a new ENet handshake or protection against a peer falsely claiming the version.
+Added application.gd/application.tscn with one persistent Application/AlphaLobby. Host Game calls existing host_game once; failure stays in the visible lobby. Join opens Available Games. Client CanvasLayer, input and sound are disabled during online presentation; discovery/ENet remain active. Existing room Back/Escape and lobby Exit behavior retained. The server project keeps its engine/renderer and adopts the client 1280x800 viewport. Full listings show `2/2 Â· Full`; existing fresh-full Room Full and retry/stale rules remain intact. New discovery protocol `moooze-combined-1` filters old automatic announcements and direct-IP replies before the ID cache; typed-ID joining resolves that cache. This is supported-path compatibility filtering, not a new ENet handshake or protection against a peer falsely claiming the version.
 
 Start, networked tank gameplay, combat, hit reconciliation and reset remain deferred. Imported offline modes are not evidence of completing server FR10-FR12. Client mapping: UI1 menu integration; existing R1-R9/UI2-UI5 offline behavior preserved, without changing source acceptance criteria.
 
@@ -852,7 +852,7 @@ Validation: rg filename/reference searches and source/requirements review; Pytho
 
 # October 27, 2026
 
-**Recorded times — newest first (America/Regina)**
+**Recorded times â€” newest first (America/Regina)**
 
 ## P044 - October 27, 2026
 
@@ -908,7 +908,7 @@ Actual request:
 Clarifications asked and actual answers:
 
 - Asked whether to preserve P001-P041 and qualify imported conflicting IDs, or renumber the whole log. Answer: "do #1 but consider that we would like the prompts to retain the current integrity of the PXXX for future prompt_log recording if possible".
-- Asked whether to use newest date first, sort recorded times, and group missing times by date. Answer: "Yes—group missing times by date (recommended)".
+- Asked whether to use newest date first, sort recorded times, and group missing times by date. Answer: "Yesâ€”group missing times by date (recommended)".
 
 Result: consolidated every prompt log present in all local and fetched origin branch-tip snapshots into this file. Preserved current P001-P041, assigned this request P042, and used branch-qualified IDs for 18 distinct imported prompts. Future local prompts continue at P043. Exact duplicates share provenance; all differing source versions are retained with explicit source labels and an audit snapshot. Original dates, recorded times, prompts, source IDs, results and status associations preserved; missing times were not inferred. Imported results remain historical source-branch claims, not current-checkout implementation or verification evidence. Source merge artifacts and conflicting historical status text are preserved as source versions, not silently resolved. No gameplay/code merge, branch switch, staging, commit or push.
 
@@ -1114,7 +1114,7 @@ Godot reported log-file writing and root-certificate-store errors, with no GDScr
 
 Merge provenance: `P029`; recorded in `refs/heads/malik-other-branch`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P040 - October 27, 2026
 
@@ -1214,7 +1214,7 @@ Merge provenance: `P027`; recorded in `refs/heads/malik-other-branch`, `refs/rem
 
 # October 26, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## MAIN-P021 - October 26, 2026
 
@@ -1321,7 +1321,7 @@ Actual request:
 
 > Continue investigating. I stopped because I thought my teammate had fixed it, but the problem still happens.
 >
-> When I click Join, I briefly see the Join page flash, then it disappears. Investigate the main menu’s Join button opening the Join page first; this happens before I can select a hosted game.
+> When I click Join, I briefly see the Join page flash, then it disappears. Investigate the main menuâ€™s Join button opening the Join page first; this happens before I can select a hosted game.
 >
 > Trace what happens immediately after the page opens. Check for another scene change, a visibility reset, overlapping button actions, or code that immediately returns to the menu. Add temporary diagnostic logging if needed to identify the actual sequence.
 >
@@ -1355,7 +1355,7 @@ Actual request:
 >
 > Read AGENTS.md, README.md, and the relevant code. Compare the current implementation with the last version where Join worked, including the merge and subsequent Exit changes. Identify the actual cause before editing.
 >
-> Restore Join’s previous working behavior while preserving Exit: clicking Exit opens a separate screen displaying “Exiting game...”, without automatically closing the application.
+> Restore Joinâ€™s previous working behavior while preserving Exit: clicking Exit opens a separate screen displaying â€œExiting game...â€, without automatically closing the application.
 >
 > Check button signals, handlers, scene paths, and any UI elements that could block clicks. Keep changes focused and avoid adding new Join functionality.
 >
@@ -1379,7 +1379,7 @@ Actual request:
 
 Clarification asked:
 
-> What happens when you try Join: is it disabled, does clicking do nothing, or does “Joining Game...” end in an error? Are host and client on one computer or separate laptops? Include any Godot error text.
+> What happens when you try Join: is it disabled, does clicking do nothing, or does â€œJoining Game...â€ end in an error? Are host and client on one computer or separate laptops? Include any Godot error text.
 
 Actual answer:
 
@@ -1401,9 +1401,9 @@ Original prompt ID: `P015`. Source: [refs/heads/main](https://github.com/Kirbzo/
 
 Actual request:
 
-> Implement the Exit button so that clicking it opens a separate screen displaying “Exiting game...”.
+> Implement the Exit button so that clicking it opens a separate screen displaying â€œExiting game...â€.
 >
-> Read AGENTS.md, README.md, and the relevant existing code before making changes. Follow the project’s existing Godot structure and coding style. Keep changes limited to this behavior and update the required project logs.
+> Read AGENTS.md, README.md, and the relevant existing code before making changes. Follow the projectâ€™s existing Godot structure and coding style. Keep changes limited to this behavior and update the required project logs.
 >
 > For now, only display the exit screen. Do not close the application automatically.
 
@@ -1539,7 +1539,7 @@ Validation: Godot 4.7.2 separate host/client processes passed a real connection 
 
 # October 23, 2026
 
-**Recorded times — newest first (America/Regina)**
+**Recorded times â€” newest first (America/Regina)**
 
 ## P026 - October 23, 2026
 
@@ -1598,7 +1598,7 @@ Validation: PowerShell invoked Python through `python -` to check all 20 require
 
 Merge provenance: `P020`; recorded in `refs/heads/Allen`, `refs/heads/malik-other-branch`, `refs/remotes/origin/Allen`, `refs/remotes/origin/malik-other-branch`, `refs/remotes/origin/rica`. See audit for commit/blob IDs.
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P024 - October 23, 2026
 
@@ -1769,7 +1769,7 @@ Merge provenance: `MAIN-P013`; recorded in `refs/heads/Allen`, `refs/heads/main`
 
 # October 20, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P013 - October 20, 2026
 
@@ -1807,7 +1807,7 @@ Validation: checked all 20 requirement IDs, local documentation links, prompt/st
 
 # October 19, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P012 - October 19, 2026
 
@@ -1914,7 +1914,7 @@ Actual implementation request (including the supplied plan):
 >
 > ## Assumptions
 >
-> “Any devices” means compatible devices running this project on the same Wi-Fi/Ethernet network. Firewall access and device-to-device network communication are required. “Same server” means the same advertised host session and endpoint; no central server or internet hosting is introduced.
+> â€œAny devicesâ€ means compatible devices running this project on the same Wi-Fi/Ethernet network. Firewall access and device-to-device network communication are required. â€œSame serverâ€ means the same advertised host session and endpoint; no central server or internet hosting is introduced.
 
 ID note: P006 records the original request and clarification answers as specified by the plan. This subsequent implementation prompt receives P007 to retain a unique ID for every new prompt. Both are associated with [status.md](status.md), revision S-2026-10-19-03.
 
@@ -1932,8 +1932,8 @@ Actual planning request:
 
 Clarifications asked and actual answers:
 
-- “Which devices should be able to discover the host?” Answer: “Same local network (Recommended)”.
-- “Should devices only see the same hosted session, or actually connect to it?” Answer: “Shared listing only (Recommended)”.
+- â€œWhich devices should be able to discover the host?â€ Answer: â€œSame local network (Recommended)â€.
+- â€œShould devices only see the same hosted session, or actually connect to it?â€ Answer: â€œShared listing only (Recommended)â€.
 
 Result: inspected the repository and produced the Consistent LAN lobby listings plan. No files were edited during that Plan Mode turn. This previously unlogged planning prompt is recorded now, preserving its actual date and wording.
 
@@ -1965,7 +1965,7 @@ Prompt:
 
 Clarification prompt (asked by the agent):
 
-> AR1 says Exit, while the overview says Leave. Should Exit close the application or leave a hosted session? I’ll keep it visibly disabled until this is resolved.
+> AR1 says Exit, while the overview says Leave. Should Exit close the application or leave a hosted session? Iâ€™ll keep it visibly disabled until this is resolved.
 
 Actual user answer:
 
@@ -1973,7 +1973,7 @@ Actual user answer:
 
 Result: created the Godot 4.7.2 GDScript alpha lobby under Godot/, with real hosted ENet endpoint and UDP local-network discovery, session IDs, selection/typed-ID identification, disabled Join/Exit, and explicitly explained incomplete joining/leaving. Updated README.md, AGENTS.md, status.md and this log. No non-alpha gameplay implemented.
 
-Associated status.md: [status.md](status.md), revision S-2026-10-19-01. AR1–AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; FR13–FR15 maintained; other framework behavior deferred.
+Associated status.md: [status.md](status.md), revision S-2026-10-19-01. AR1â€“AR4 partial pending visual/two-device review; AR5 complete by source review; FR2/FR3/FR5 partial; FR13â€“FR15 maintained; other framework behavior deferred.
 
 Validation: Godot 4.7.2 import and actual host/observer headless process tests passed initial empty lists, hosting, remote matching game ID, disabled controls, selection, typed/unknown IDs, and expiry after host shutdown. Sandbox user-log/certificate-store errors were reported; no script errors. Visual layout and two-physical-device LAN checks remain unverified. Checked all 20 requirement IDs, relative documentation links, source checksum and changed-file boundaries. Source DOCX SHA256 unchanged: 346A523B6F256666D798D44498277AC61D44C25CB93D633708C6E35C7621E48A.
 
@@ -2170,7 +2170,7 @@ Prompt:
 
 Permission question (asked by the agent):
 
-> May I edit the relevant GDScript files, tests, `status.md`, and `prompt_log.md`, and create `Godot/LAN_SETUP.txt`? I’m requesting permission because you explicitly asked me to ask before changing files. No files have been changed; README.md and AGENTS.md will remain untouched.
+> May I edit the relevant GDScript files, tests, `status.md`, and `prompt_log.md`, and create `Godot/LAN_SETUP.txt`? Iâ€™m requesting permission because you explicitly asked me to ask before changing files. No files have been changed; README.md and AGENTS.md will remain untouched.
 
 Actual user answer:
 
@@ -2200,7 +2200,7 @@ Prompt:
 Permission question (asked by the agent):
 
 &lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
-&gt; May I edit the relevant GDScript files, tests, `status.md`, and `prompt_log.md`, and create `Godot/LAN_SETUP.txt`? I’m requesting permission because you explicitly asked me to ask before changing files. No files have been changed; README.md and AGENTS.md will remain untouched.
+&gt; May I edit the relevant GDScript files, tests, `status.md`, and `prompt_log.md`, and create `Godot/LAN_SETUP.txt`? Iâ€™m requesting permission because you explicitly asked me to ask before changing files. No files have been changed; README.md and AGENTS.md will remain untouched.
 
 Actual user answer:
 
@@ -2216,7 +2216,7 @@ Validation: Godot 4.7.2 imported without script errors. Actual lobby host/observ
 
 # October 16, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P003 - October 16, 2026
 
@@ -2248,7 +2248,7 @@ Merge provenance: `P002`; recorded in `refs/heads/Allen`, `refs/heads/Jaden`, `r
 
 # October 13, 2026
 
-**Time unavailable — date known; exact time/order across branches unknown**
+**Time unavailable â€” date known; exact time/order across branches unknown**
 
 ## P001 ? October 13, 2026
 
@@ -2410,3 +2410,72 @@ Associated status snapshot: S-2026-11-17-14. Reused Local Duel player/bullet hea
 Final checks: all 20 actual LAN/regression processes PASS/exit 0; Local Duel test PASS; approved rendered-host/headless-guest UI pair PASS, health/result captures opened and inspected. Tests cover both winners, real shots across all lives, immunity, prediction correction, rejected guest restart/fire, stale data, replay and fresh replayed shots. Intermediate fixture snapshot/teardown issue and scope/visual/physical limits recorded in status.md. No physical two-device/human/latency-loss acceptance claimed. Protected README/AGENTS/requirements and game.gd preserved. Exact commands and cached evidence locations in status.md.
 
 Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; complete reliable request accounting across tools was not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without reliable usage/model/rates. No figures invented.
+## P094 - Inspect and prepare Local Duel Field Score removal
+
+Date: November 19, 2026.
+Time: 12:37:49 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> could you check the local duals inside the game and prepare to remove the Dual Field Score portion? Only effect the dual local coop and nothing else.
+
+Associated status snapshot: S-2026-11-19-01. Planning only: identify Local Duel HUD score at scripts/game.gd:433; propose local_duel-only presentation removal while retaining other HUD statistics, gameplay and Solo/regular Local Co-op/LAN. Distinguish separate results-page Field destruction score at line 509; not included in the proposed HUD change. No implementation edits or runtime tests, no new report documents; required status/prompt logs only. Existing cache change and protected docs/source requirements preserved. Subsequent implementation must receive its own prompt ID linked to P094.
+
+Input/cached input/output tokens, model, usage source and cached-input inclusion: **Unavailable**; reliable complete-request accounting not supplied. Estimated cost and actual billed charges: **Unavailable** without reliable usage/model/rates.
+## P095 - Remove Local Duel HUD and result score displays
+
+Date: November 19, 2026.
+Time: 12:40:58 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Remove the field destructions score from the results screen too
+
+Associated status snapshot: S-2026-11-19-02; implements P094's Local Duel HUD plan and this added results-screen removal. Changed only scripts/game.gd UI branches gated by local_duel, plus required status/prompt logs. Other statistics, modes, LAN and gameplay preserved. Actual Godot 4.7.2 three-mode UI probe PASS/exit 0; no script errors, existing environment/teardown warnings recorded in status.md. No broad gameplay/graphical tests required, new report documents or permanent tests. Protected docs/requirements unchanged. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, because reliable complete-request accounting/model/rates were not supplied.
+## P096 - Lobby Exit returns to launch main menu
+
+Date: November 19, 2026.
+Time: 12:56:40 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets now link up the exit button. When you exit out of a lobby, it currently shows the beta lobby screen. Lets make it so the exit button shows the main menu that displays when you lanch the game.
+
+Clarification: Should the room's back arrow/Escape and results-screen Return to Lobby also go straight to the main menu, or should only the lobby's Exit button do that?
+Actual answer:
+
+> Only the lobby Exit button goes to main menu
+
+Associated status snapshot: S-2026-11-19-03. Lobby Exit now performs existing disconnect/Join cancellation plus room cleanup and routes to canonical launch menu. Restores menu processing/input/audio and allows repeated Host/Join without restart. Room/notice/results return-to-lobby behavior preserved. Updated application.gd/lobby.gd, exit assertions in join_smoke.gd and added meaningful menu_exit_smoke.gd. All 11 Exit/navigation process checks pass; a paired fixture's initial-name timing issue corrected before final success. No gameplay changes/new report documents; required logs only. Existing game.gd/editor changes and protected docs/requirements preserved. Commands, evidence and graphical/physical limits in status.md. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request usage/model/rates.
+## P097 - Compare current Local Duel and connected LAN Duel
+
+Date: November 19, 2026.
+Time: 01:00:16 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> now can we compare the difference between the local dual mode and the current dual mode that our game has when you start one over a connection?
+
+Associated status snapshot: S-2026-11-19-04. Compared current game/player/bullet, authoritative room/world/view and menu code. Shared duel constants/rules confirmed by source; differences identified in controls/authority, start/replay, collision shape/chassis rotation, moose projectile reactions, pause/settings, HUD/results/audio and return destinations. Summary delivered in chat. No implementation edits or new tests/runtime claims; prior validation identified separately. Required status/prompt logs only, no new report document. Protected docs/requirements and existing user changes preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P098 - Remove first Start and enable immediate waiting-room movement
+
+Date: November 19, 2026.
+Time: 01:16:12 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can we remove the first start button from the flow and allow player movement inside the lobby?
+
+Clarification: Should the host be able to move around before the second player joins, or should movement begin once both players are connected?
+Actual answer:
+
+> Host can move while waiting, too
+
+Associated status snapshot: S-2026-11-19-05. Removed first Start; authoritative safe movement/shooting preview begins automatically for solo host and synchronizes joining guests. Preserves host position across membership changes, retries readiness automatically and retains only the bottom Start Game requiring both players ready. Local Duel/combat rules and navigation preserved. Discovery compatibility version 8 excludes older start-flow clients. Updated existing relevant smoke tests. Final 25 headless process checks and two graphical-probe processes PASS on Godot 4.7.2; solo/two-player screenshots inspected. Commands, initial obsolete-fixture correction, known warnings and physical-device limits recorded in status.md. Required logs only, no new report documents. Protected files/source requirements and existing user changes preserved.
+
+Input tokens, cached input tokens, output tokens, model, usage source and cached-input inclusion: **Unavailable**, because reliable complete-request usage accounting was not supplied. Estimated monetary cost and actual billed charges: **Unavailable** without reliable usage/model/rates.

@@ -94,7 +94,6 @@ func run() -> void:
 		return
 	var session = lobby.session
 	var guest: int = lobby.multiplayer.get_peers()[0]
-	room.start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "ready"), "Preview readiness"):
 		return
 	for animal in room.combat.moose:

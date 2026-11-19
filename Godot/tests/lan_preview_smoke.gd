@@ -25,9 +25,6 @@ func run() -> void:
 	if not check(await until(func(): return is_instance_valid(lobby.active_room) and lobby.active_room.player_names.size() == 2), "Two actual connected players"):
 		return
 	var room = lobby.active_room
-	if hosting:
-		await create_timer(0.3).timeout
-		room.start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "ready"), "First Start/readiness enters preview"):
 		return
 	if hosting:
@@ -60,10 +57,10 @@ func run() -> void:
 		return
 	if OS.get_cmdline_user_args().has("leave-preview"):
 		if hosting:
-			if not check(await until(func(): return room.phase == "waiting"), "Guest leaving preview resets host"):
+			if not check(await until(func(): return room.phase == "ready" and room.player_names.size() == 1), "Guest leaving preview restores solo host preview"):
 				return
 			room.begin_game()
-			if not check(room.phase == "waiting" and not room.bottom_start_button.visible and not is_instance_valid(room.combat), "Departure cancels preview and second Start"):
+			if not check(room.phase == "ready" and room.bottom_start_button.disabled and not room.combat.interactions_enabled, "Departure retains harmless preview and prevents duel Start"):
 				return
 			room.leave_room()
 		else:

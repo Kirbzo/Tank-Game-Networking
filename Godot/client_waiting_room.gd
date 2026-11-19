@@ -9,7 +9,6 @@ var phase := "waiting"
 var epoch := 0
 var ready_peers: Dictionary = {}
 var prepare_deadline := 0
-var start_button: Button
 var bottom_start_button: Button
 var duel_vitals: Dictionary = {}
 var vitals_revision := -1
@@ -38,13 +37,6 @@ func _ready() -> void:
 	fit_artwork()
 	sync_members()
 	game_id_label.tooltip_text = "Connected waiting room"
-	start_button = Button.new()
-	start_button.name = "StartButton"
-	start_button.text = "Start"
-	start_button.position = Vector2(150, 45)
-	start_button.size = Vector2(140, 45)
-	$HUD/Overlay.add_child(start_button)
-	start_button.pressed.connect(request_start)
 	bottom_start_button = Button.new()
 	bottom_start_button.name = "BottomStartGameButton"
 	bottom_start_button.text = "Start Game"
@@ -75,6 +67,8 @@ func _ready() -> void:
 	vitals_panel.add_child(vitals_label)
 	update_connection_status()
 	aim_pointer = get_viewport().get_mouse_position()
+	if multiplayer.is_server():
+		prepare_preview.call_deferred()
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
@@ -101,7 +95,7 @@ func _physics_process(delta: float) -> void:
 	if leaving or session_lobby == null or session_lobby.session == null:
 		return
 	if multiplayer.is_server() and phase == "preparing" and Time.get_ticks_msec() >= prepare_deadline:
-		cancel_start("Player readiness timed out. Try Start again.")
+		cancel_start("Player readiness timed out. Reconnecting...")
 	if not controls_active():
 		return
 	process_combat_input()
@@ -127,11 +121,19 @@ func _process(delta: float) -> void:
 		artwork.apply_positions(tank_view.advance(delta, Engine.get_physics_interpolation_fraction()))
 
 func can_start() -> bool:
-	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase in ["waiting", "finished"] and player_names.size() == 2 and multiplayer.get_peers().size() == 1
+	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase in ["waiting", "finished"] and not player_names.is_empty()
 
 func request_start() -> void:
 	if not can_start():
 		return
+	prepare_preview()
+
+func prepare_preview(preserve_positions := false, message := "") -> void:
+	if leaving or session_lobby == null or session_lobby.session == null or not multiplayer.is_server() or phase == "preparing" or phase == "running":
+		return
+	if phase == "ready" and same_preview_members():
+		return
+	var previous: Dictionary = tank_world.positions.duplicate() if preserve_positions else {}
 	epoch += 1
 	phase = "preparing"
 	ready_peers = {1: true}
@@ -140,10 +142,21 @@ func request_start() -> void:
 	tank_world = TankWorld.new()
 	for peer in player_names:
 		tank_world.add_player(peer)
+		if previous.has(peer):
+			tank_world.positions[peer] = previous[peer]
 	reset_combat(true)
 	artwork.apply_positions(tank_world.positions)
 	session_lobby.tank_state.rpc(game_id, epoch, "preparing", tank_world.positions)
+	if player_names.size() == 1:
+		phase = "ready"
+		combat.process_mode = Node.PROCESS_MODE_INHERIT
+	if not message.is_empty():
+		connection_event.text = message
+		connection_event.show()
 	update_connection_status()
+
+func same_preview_members() -> bool:
+	return tank_world.positions.size() == player_names.size() and player_names.keys().all(func(peer): return tank_world.positions.has(peer))
 
 func acknowledge_ready(peer: int, generation: int) -> void:
 	if phase != "preparing" or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
@@ -221,6 +234,7 @@ func cancel_start(reason: String) -> void:
 	update_connection_status()
 	connection_event.text = reason
 	connection_event.show()
+	prepare_preview.call_deferred(false, reason)
 
 func _draw() -> void:
 	# The artwork replaces rectangles; the inherited HUD remains above it.
@@ -236,14 +250,11 @@ func update_connection_status() -> void:
 		elif phase == "preparing":
 			status_message.text += "\nWaiting for player readiness..."
 		elif phase == "ready":
-			status_message.text += "\nMove and shoot · Waiting for host to press Start Game"
+			status_message.text += "\nMove and shoot · " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:
-			status_message.text += "\nWaiting for another player" if multiplayer.get_peers().is_empty() else "\nBoth players connected · Waiting for host to Start"
-	if is_instance_valid(start_button):
-		start_button.visible = multiplayer.is_server() and phase in ["waiting", "preparing"]
-		start_button.disabled = not can_start()
+			status_message.text += "\nSetting up the waiting room..."
 	if is_instance_valid(bottom_start_button):
-		bottom_start_button.visible = multiplayer.is_server() and phase == "ready"
+		bottom_start_button.visible = multiplayer.is_server() and phase in ["waiting", "preparing", "ready"]
 		bottom_start_button.disabled = not can_begin_game()
 	if is_instance_valid(vitals_panel):
 		vitals_panel.visible = phase in ["running", "finished"]
@@ -251,6 +262,8 @@ func update_connection_status() -> void:
 func add_world_player(peer: int, player_name: String) -> void:
 	super.add_world_player(peer, player_name)
 	sync_members()
+	if is_instance_valid(artwork) and multiplayer.is_server() and phase == "ready" and not same_preview_members():
+		prepare_preview.call_deferred(true)
 
 func receive_names(names: Dictionary) -> void:
 	super.receive_names(names)
@@ -258,8 +271,12 @@ func receive_names(names: Dictionary) -> void:
 
 func refresh_world_members() -> void:
 	super.refresh_world_members()
-	if multiplayer.is_server() and player_names.size() < 2 and phase != "waiting":
-		cancel_start(connection_event.text)
+	if multiplayer.is_server() and is_instance_valid(artwork) and not same_preview_members():
+		if is_instance_valid(combat):
+			combat.process_mode = Node.PROCESS_MODE_DISABLED
+		if phase in ["preparing", "running"]:
+			phase = "waiting"
+		prepare_preview.call_deferred(true, connection_event.text)
 	sync_members()
 
 func sync_members() -> void:
@@ -327,7 +344,7 @@ func process_combat_input() -> void:
 		session_lobby.combat_input.rpc_id(1, game_id, epoch, aim_direction, fire, combat_sequence)
 
 func pointer_over_room_button() -> bool:
-	for button in [leave_button, settings_button, start_button, bottom_start_button]:
+	for button in [leave_button, settings_button, bottom_start_button]:
 		if is_instance_valid(button) and button.is_visible_in_tree() and button.get_global_rect().has_point(aim_pointer):
 			return true
 	return false

@@ -430,7 +430,10 @@ func update_hud() -> void:
 		hud.text = "PLAYER 1 / SOLO\n%d HEALTH     %d LIVES" % [player.health, player.lives]
 		if local_coop and is_instance_valid(player_two):
 			hud.text = "P1: %d HEALTH / %d LIVES\nP2: %d HEALTH / %d LIVES" % [player.health, player.lives, player_two.health, player_two.lives]
-		hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["DUEL FIELD SCORE" if local_duel else ("TEAM SCORE" if local_coop else "SCORE"), score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+		if local_duel:
+			hud_stats.text = "TIME: %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % [int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+		else:
+			hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["TEAM SCORE" if local_coop else "SCORE", score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
@@ -506,7 +509,8 @@ func finish_game() -> void:
 	button_in(box, "Main Menu", show_menu)
 
 func results_summary(box: VBoxContainer) -> void:
-	label_in(box, "%s: %d points" % ["Field destruction score" if local_duel else ("Shared team score" if local_coop else "Score"), score], 26)
+	if not local_duel:
+		label_in(box, "%s: %d points" % ["Shared team score" if local_coop else "Score", score], 26)
 	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [total - remaining, total, shots, int(elapsed) / 60, int(elapsed) % 60], 21)
 	label_in(box, "Player 1: %d health / %d lives" % [player.health, player.lives], 20, Color("#8fd5ff"))
 	if local_coop:

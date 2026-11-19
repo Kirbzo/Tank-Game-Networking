@@ -38,15 +38,10 @@ func run() -> void:
 	var room = lobby.active_room
 	var peer: int = lobby.multiplayer.get_unique_id()
 	var session = lobby.session
-	aim(Vector2(640, 400))
-	await fire_once()
-	if not hosting:
-		lobby.combat_input.rpc_id(1, room.game_id, room.epoch, Vector2.UP, true, 200000)
-	if not check(room.phase == "waiting" and not is_instance_valid(room.combat_view) and room.artwork.tank_markers[peer].get_node("Turret").rotation == 0, "Pre-start aim/fire have no effect"):
+	if not check(await until(func(): return room.phase == "ready"), "Automatic preview is ready"):
 		return
 	if hosting:
 		await create_timer(0.4).timeout
-		room.start_button.pressed.emit()
 		if not check(await until(func(): return room.phase == "ready"), "Readiness precedes bottom Start Game"):
 			return
 		room.bottom_start_button.pressed.emit()
@@ -131,9 +126,9 @@ func run() -> void:
 		await create_timer(1.9).timeout
 		if not check(room.combat_view.shots_seen >= 7 and room.combat_view.shots_seen <= 8, "Imported .22s fire cadence; no duplicate shots"):
 			return
-		if not check(await until(func(): return room.phase == "waiting"), "Guest departure returns to waiting"):
+		if not check(await until(func(): return room.phase == "ready" and room.player_names.size() == 1), "Guest departure returns host to solo preview"):
 			return
-		if not check(not is_instance_valid(room.combat) and not is_instance_valid(room.combat_view) and lobby.session == session, "Departure clears combat and retains session"):
+		if not check(is_instance_valid(room.combat) and not room.combat.interactions_enabled and lobby.session == session, "Departure resets duel into harmless preview and retains session"):
 			return
 		room.leave_room()
 		print("PASS combat host: controls, authority, ice, moose contact, tank damage, cadence and cleanup")
