@@ -1,5 +1,6 @@
 extends SceneTree
 var lobby: Control
+var app: Node
 
 func trace_state(event: String) -> void:
 	print("TRACE %d %s: lobby=%s loading=%s joining=%s selected=%s connected=%s" % [
@@ -35,17 +36,19 @@ func click(control: Control, local_position := Vector2(-1, -1)) -> void:
 func exit_checks() -> bool:
 	var session: ENetMultiplayerPeer = lobby.session
 	await click(lobby.exit_button)
-	if not require(lobby.exit_screen != null and not lobby.visible and lobby.exit_screen.visible, "Mouse click on Exit must show a separate screen"):
+	if not require(not lobby.visible and app.client_menu.ui.visible and not app.online, "Mouse click on Exit returns to the launch main menu"):
 		return false
-	var labels: Array[Node] = lobby.exit_screen.find_children("*", "Label", true, false)
-	if not require(labels.size() == 1 and labels[0].text == "Exiting game...", "Exit text must match"):
+	var play := false
+	for node in app.client_menu.find_children("*", "Button", true, false):
+		if node.text == "Play":
+			play = true
+	if not require(play and lobby.exit_screen == null, "Original Play menu replaces the old exit placeholder"):
 		return false
 	await create_timer(0.3).timeout
-	var screen: Control = lobby.exit_screen
 	lobby.show_exit_screen()
 	lobby.host_game()
 	lobby.join_game()
-	return require(lobby.session == null and lobby.connected_game_id.is_empty() and lobby.discovery.hosted_game.is_empty() and not lobby.joining and lobby.exit_screen == screen and (session == null or session.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED), "Exit must close the session, clear membership, prevent reconnects and keep one exit screen alive")
+	return require(lobby.session == null and lobby.connected_game_id.is_empty() and lobby.discovery.hosted_game.is_empty() and not lobby.joining and app.client_menu.ui.visible and (session == null or session.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED), "Exit clears connection state, prevents late reconnects and retains main menu")
 
 func connected_lobby_checks(is_host: bool) -> bool:
 	var session: ENetMultiplayerPeer = lobby.session
@@ -71,10 +74,13 @@ func connected_lobby_checks(is_host: bool) -> bool:
 	return true
 
 func run() -> void:
-	lobby = load("res://lobby.tscn").instantiate()
+	app = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
+	lobby = app.get_node("AlphaLobby")
 	lobby.discovery.protocol = "moooze-join-smoke"
 	lobby.username = "BraveMoose" if OS.get_cmdline_user_args().has("host") else "LuckyOtter"
-	root.add_child(lobby)
+	root.add_child(app)
+	current_scene = app
+	app.show_available_games()
 	print("TRACE project=" + ProjectSettings.globalize_path("res://") + " scene=" + lobby.scene_file_path)
 	lobby.join_button.pressed.connect(func(): trace_state("Join pressed"))
 	lobby.multiplayer.connected_to_server.connect(func(): trace_state("connected_to_server"))
@@ -124,7 +130,7 @@ func run() -> void:
 		print("PASS host membership and 1/2 count after client Exit")
 		if not await exit_checks():
 			return
-		print("PASS host Exit closes hosting and retains the exit screen")
+		print("PASS host Exit closes hosting and returns to main menu")
 		quit()
 		return
 	if OS.get_cmdline_user_args().has("failure"):
@@ -219,7 +225,7 @@ func failure_checks() -> void:
 	lobby.join_game()
 	lobby.show_exit_screen()
 	await create_timer(0.3).timeout
-	if not require(lobby.session == null and not lobby.joining and lobby.exit_screen.visible and screen.timeout.is_stopped(), "Exit during pending Join must cancel the attempt and timeout"):
+	if not require(lobby.session == null and not lobby.joining and app.client_menu.ui.visible and not lobby.visible and screen.timeout.is_stopped(), "Exit during pending Join cancels attempt/timer and returns to main menu"):
 		return
 	silent_server.close()
 	print("PASS timeout, loading animation, duplicate-click guard, retry and back")

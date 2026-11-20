@@ -1,4 +1,5 @@
 extends Control
+signal main_menu_requested
 
 const Discovery = preload("res://discovery.gd")
 const Usernames = preload("res://usernames.gd")
@@ -6,6 +7,7 @@ const LanAddress = preload("res://lan_address.gd")
 var username: String = Usernames.generate()
 const JOIN_DELAY_SECONDS := 0.5
 const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+@export var room_scene: PackedScene = preload("res://game_room.tscn")
 var discovery := Discovery.new()
 var session: ENetMultiplayerPeer
 var host_button: Button
@@ -32,6 +34,12 @@ var room_return_message := ""
 var disconnected_screen: Control
 
 func _ready() -> void:
+	# Network combat must not depend on the optional offline client's menu setup.
+	if not InputMap.has_action("fire"):
+		InputMap.add_action("fire")
+		var fire_button := InputEventMouseButton.new()
+		fire_button.button_index = MOUSE_BUTTON_LEFT
+		InputMap.action_add_event("fire", fire_button)
 	var margin := MarginContainer.new()
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for side in ["left", "top", "right", "bottom"]:
@@ -64,13 +72,13 @@ func _ready() -> void:
 	join_button.tooltip_text = "Select a game or enter its ID to join."
 	join_button.pressed.connect(join_game)
 	exit_button = add_button(controls, "Exit")
-	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
+	exit_button.tooltip_text = "Disconnect and return to the main menu."
 	exit_button.pressed.connect(show_exit_screen)
 	var games_column := VBoxContainer.new()
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
 	lobby_row.add_child(games_column)
-	var games_title := add_label(games_column, "List of Games")
+	var games_title := add_label(games_column, "Available Games")
 	games_title.add_theme_font_size_override("font_size", 28)
 	game_list = ItemList.new()
 	game_list.custom_minimum_size = Vector2(0, 280)
@@ -134,14 +142,24 @@ func update_session_feedback() -> bool:
 	return true
 
 func show_exit_screen() -> void:
-	if exit_screen != null:
+	if exiting:
 		return
 	exiting = true
+	if is_instance_valid(active_room):
+		active_room.leaving = true
+		remove_child(active_room)
+		active_room.queue_free()
+		active_room = null
 	leave_game()
-	exit_screen = preload("res://exit_screen.gd").new()
-	get_parent().add_child(exit_screen)
-	# Keep the application open for the future main-screen destination.
+	if is_instance_valid(disconnected_screen):
+		disconnected_screen.queue_free()
+		disconnected_screen = null
 	hide()
+	if main_menu_requested.has_connections():
+		main_menu_requested.emit()
+	else:
+		# Direct lobby-scene launches still return to the configured launch menu.
+		get_tree().call_deferred("change_scene_to_file", "res://application.tscn")
 
 func leave_game() -> void:
 	# Cancel a pending join before its deferred frame or timeout can resume it.
@@ -169,7 +187,7 @@ func leave_game() -> void:
 func open_connected_room() -> void:
 	if is_instance_valid(active_room) or session == null:
 		return
-	active_room = preload("res://game_room.tscn").instantiate()
+	active_room = room_scene.instantiate()
 	active_room.game_id = str(discovery.hosted_game["id"]) if not discovery.hosted_game.is_empty() else connected_game_id
 	active_room.session_lobby = self
 	get_child(0).hide()
@@ -199,6 +217,52 @@ func room_input(direction: Vector2, sequence: int = 0) -> void:
 func room_snapshot(id: String, tick: int, positions: Dictionary, acknowledgements: Dictionary = {}) -> void:
 	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
 		active_room.receive_world(tick, positions, acknowledgements)
+
+func has_tank_room(id: String) -> bool:
+	return is_instance_valid(active_room) and active_room.game_id == id and active_room.has_method("receive_tank_state")
+
+@rpc("authority", "call_remote", "reliable")
+func tank_state(id: String, generation: int, state: String, positions: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id):
+		active_room.receive_tank_state(generation, state, positions)
+
+@rpc("any_peer", "call_remote", "reliable")
+func tank_ready(id: String, generation: int) -> void:
+	if multiplayer.is_server() and has_tank_room(id):
+		active_room.acknowledge_ready(multiplayer.get_remote_sender_id(), generation)
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
+func tank_input(id: String, generation: int, direction: Vector2, sequence: int) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and has_tank_room(id) and multiplayer.get_peers().has(sender):
+		active_room.accept_tank_input(sender, generation, direction, sequence)
+
+@rpc("authority", "call_remote", "unreliable_ordered", 2)
+func tank_snapshot(id: String, generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id):
+		active_room.receive_tank_snapshot(generation, tick, positions, acknowledgements)
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 3)
+func combat_input(id: String, generation: int, aim: Vector2, fire: bool, sequence: int) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and has_tank_room(id) and multiplayer.get_peers().has(sender):
+		active_room.accept_combat_input(sender, generation, aim, fire, sequence)
+
+@rpc("authority", "call_remote", "reliable")
+func combat_event(id: String, generation: int, sequence: int, kind: String, data: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id):
+		active_room.receive_combat_event(generation, sequence, kind, data)
+
+@rpc("any_peer", "call_remote", "reliable")
+func combat_fire(id: String, generation: int, aim: Vector2, sequence: int) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and has_tank_room(id) and multiplayer.get_peers().has(sender):
+		active_room.accept_fire_request(sender, generation, aim, sequence)
+
+@rpc("authority", "call_remote", "unreliable_ordered", 4)
+func combat_snapshot(id: String, generation: int, tick: int, state: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id) and active_room.epoch == generation:
+		active_room.apply_combat_snapshot(tick, state)
 
 func return_from_room(message := "You left the room.") -> void:
 	if not is_instance_valid(active_room):
@@ -278,6 +342,8 @@ func refresh_games() -> void:
 		listed_ids.append(str(id))
 		var players: int = entries[id].get("players", 0)
 		var count := "%d/2 players" % players if players > 0 else "?/2 players"
+		if players == 2:
+			count = "2/2 · Full"
 		game_list.add_item("%s  |  %s  |  %s" % [id, entries[id].get("username", "UnknownHost"), count])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)

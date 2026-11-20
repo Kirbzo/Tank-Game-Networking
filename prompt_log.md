@@ -2,13 +2,43 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P075 and the next request is **P076**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P088 and the next request is **P089**. P076-P087 are reserved for rica-side work and are not renumbered or copied into main by this transfer. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 20, 2026
+
+## P088 - Selective rica client integration into local main
+
+Date: November 20, 2026.
+Time: 11:14:05 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Bring only the client integration work that main is missing from my rica branch into local main. First, find where client integration actually left off on main.
+>
+> 1. Read the repo instructions, check git status, and fetch origin. Compare local main, origin/main, and rica. Check the commit history and code to identify the last client integration milestone already on main, including any changes that may have landed under a different commit SHA. If local main has diverged from origin/main, explain the difference before proceeding and preserve existing work.
+>
+> 2. Identify the client integration changes still missing from main and any dependencies they need. Check the lobby, Host/Join, waiting room, host-only Start after a guest joins, and pre-match movement for both players. Check whether the latest Start and movement fixes are committed on rica or still local. Use the actual code and diffs to decide what belongs. Preserve the existing moose behavior and leave unrelated changes out.
+>
+> 3. Apply only the relevant changes to local main. Cherry-pick complete commits when they contain only in-scope work. For mixed commits, apply and stage only the relevant changes. If needed work exists only in the working tree on rica, preserve that working tree and review those changes separately before transferring them. If a conflict or unclear dependency makes the scope uncertain, explain it in chat before committing that part. Do not merge the entire rica branch, reset existing work, or push.
+>
+> 4. Review the final diff. Run the available Godot checks and, if possible, test with two instances. Verify that a guest can join, both players can move before Start, and only the host can start once the guest has joined. Commit the verified integration changes on local main with a title that reflects what actually landed. If main already contains everything, report that without creating an empty commit.
+>
+> Summarize directly in Codex chat: where main left off, what you brought over, the resulting commit SHA(s), and what still needs a two-laptop LAN retest. Do not create a separate report file.
+
+Associated status.md: S-2026-11-20-03. Main retains its existing P044/P075 history; source work is rica P076-P087.
+
+Result: fetched origin (initial sandbox FETCH_HEAD denial, authorized retry succeeded); local main and origin/main both 5980b0d92f6aa65dc5bd8ad3d8df7f9d2e841833. Main's 512615a beta squash already has the 3738b97 networking code (byte-equivalent Godot source excluding editor metadata); 5980b0d adds the BETA LOBBY title. Rica is clean and its latest Start/movement fixes are committed in 92227d0 and 12c107e. Selected final runtime/resource/test changes from 9785731, f3ef77d, 6687e38, 92227d0 and 12c107e, preserving main's beta title. No whole-branch merge or wholesale source-log replacement. Mixed token tools, source log history, protected README/AGENTS edits, editor cache, unrelated UID-only additions and unused files excluded. Current client menu/shared player dependencies retain their existing offline modes and power-up APIs; no new power-up distribution added. Moose implementation remains exact to rica.
+
+Validation: imported on Godot 4.7.2; actual loopback host/guest Start/movement and leave-before-Start pairs pass, plus ten menu/Join/prediction/packet/offline checks. Discovery-dependent combined/combat/duel suites fail before membership, so physical LAN/discovery and those full multiplayer regressions remain unverified. Offline moose assertions pass with existing physics-space errors; engine environment warnings remain. See status snapshot for exact commands, roles and evidence. Requested focused integration commit on local main; no push or separate report. Rica branch unchanged.
+
+Token usage: input tokens, cached input tokens, output tokens, model and usage source **Unavailable** for the complete request; no reliable complete per-request record including continuations and final reply is available during this active turn. Cached-input inclusion cannot be established; no totals inferred. Estimated cost **Unavailable** (complete usage and applicable rates unavailable).
 
 # November 6, 2026
 

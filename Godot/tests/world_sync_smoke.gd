@@ -47,6 +47,8 @@ func run() -> void:
 	probe.name = "WorldProbe"
 	root.add_child(probe)
 	var lobby = load("res://lobby.tscn").instantiate()
+	# This regression targets the retained rectangle prototype, not LAN Duel.
+	lobby.room_scene = load("res://game_room.tscn")
 	lobby.username = "BraveMoose" if hosting else "LuckyOtter"
 	root.add_child(lobby)
 	current_scene = lobby
