@@ -101,6 +101,11 @@ func run() -> void:
 	if not check(room.epoch == generation, "Duplicate Start cannot reset match"):
 		return
 	# Both tanks move upward: host has an open lane; guest hits ice at y=576.
+	# Isolate wall acceptance from the now-solid roaming hazards.
+	if hosting:
+		for animal in room.combat.moose:
+			animal.set_physics_process(false)
+			animal.position = Vector2(-1000, -1000)
 	key(KEY_W, true)
 	await create_timer(2.4).timeout
 	key(KEY_W, false)

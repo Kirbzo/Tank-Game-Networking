@@ -102,7 +102,9 @@ func _physics_process(delta: float) -> void:
 	for tank in (tanks if authoritative_contacts else overlapping_tanks):
 		if not is_instance_valid(tank) or not tank.active:
 			continue
-		if global_position.distance_to(tank.global_position) < CONTACT_RADIUS:
+		# LAN's swept solver stops at the surface; include that contact boundary.
+		var contact_reach := CONTACT_RADIUS + (0.1 if authoritative_contacts else 0.0)
+		if global_position.distance_to(tank.global_position) < contact_reach:
 			charge_remaining = 0.0
 			charge_target = null
 			contacts.append(tank)

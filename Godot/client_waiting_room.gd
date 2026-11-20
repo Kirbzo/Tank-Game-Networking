@@ -100,6 +100,7 @@ func _physics_process(delta: float) -> void:
 		return
 	process_combat_input()
 	if multiplayer.is_server():
+		combat.refresh_collision_bodies()
 		tank_world.accept_input(1, movement_direction(), Time.get_ticks_msec())
 		tank_world.step(delta, Time.get_ticks_msec())
 		artwork.apply_positions(tank_world.positions)
@@ -195,9 +196,11 @@ func receive_tank_state(generation: int, state: String, positions: Dictionary) -
 	phase = state
 	if state == "preparing":
 		tank_world = TankWorld.new()
+		tank_world.positions = positions.duplicate()
 		reset_combat(false)
 		tank_view = View.new()
-		tank_view.movement_solver = tank_world.move_current
+		tank_world.prediction_peer = multiplayer.get_unique_id()
+		tank_view.movement_solver = tank_world.predict_movement
 		tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 		# Assets and the room are already loaded; initialize prediction before acknowledging.
 		tank_view.receive(0, positions, {}, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
@@ -216,9 +219,12 @@ func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence:
 func receive_tank_snapshot(generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
 	if not controls_active() or generation != epoch or positions.size() != 2:
 		return
+	if tick <= tank_view.latest_tick:
+		return
 	for peer in positions:
 		if not player_names.has(peer) or not positions[peer] is Vector2 or not positions[peer].is_finite():
 			return
+	tank_world.positions = positions.duplicate()
 	tank_view.receive(tick, positions, acknowledgements, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
 
 func cancel_start(reason: String) -> void:
@@ -399,7 +405,8 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 				var sequence: int = tank_view.input_sequence
 				tank_view = View.new()
 				tank_view.input_sequence = sequence
-				tank_view.movement_solver = tank_world.move_current
+				tank_world.prediction_peer = multiplayer.get_unique_id()
+				tank_view.movement_solver = tank_world.predict_movement
 				tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 				tank_view.receive(data.tick, data.positions, data.acks, peer, 1.0 / Engine.physics_ticks_per_second)
 	elif kind == "result":
@@ -424,6 +431,14 @@ func apply_combat_snapshot(tick: int, state: Dictionary) -> void:
 	if not controls_active() or tick <= last_combat_tick:
 		return
 	last_combat_tick = tick
+	if not multiplayer.is_server():
+		tank_world.moose_positions.clear()
+		for animal in state.moose:
+			tank_world.moose_positions.append(animal.position)
+		tank_world.inactive_peers.clear()
+		for peer in state.vitals:
+			if not state.vitals[peer].active:
+				tank_world.inactive_peers.append(peer)
 	apply_vitals(state)
 	artwork.apply_aims(state.aims)
 	combat_view.apply_snapshot(state)

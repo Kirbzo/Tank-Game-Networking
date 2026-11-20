@@ -24,6 +24,12 @@ var vitals_revision := 0
 var match_elapsed := 0.0
 var match_shots := 0
 
+class LanPlayer extends "res://scripts/player.gd":
+	func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
+		if respawn_protection > 0.0:
+			return false
+		return super.take_moose_hit(away_from_moose)
+
 func _ready() -> void:
 	# Authority coordinates never inherit the visual arena's viewport scaling.
 	top_level = true
@@ -36,7 +42,7 @@ func _ready() -> void:
 		add_brick(centers[id], id)
 	for peer in tanks.positions:
 		# Reuse Local Duel's actual tank damage/life logic, but never its local input.
-		var proxy := Player.new()
+		var proxy := LanPlayer.new()
 		proxy.position = tanks.positions[peer]
 		proxy.damage_enabled = interactions_enabled
 		add_child(proxy)
@@ -101,6 +107,15 @@ func accept_input(peer: int, direction: Vector2, fire: bool, sequence: int, now:
 	controls[peer] = {"sequence": sequence, "at": now, "fire": fire}
 	aims[peer] = direction.normalized()
 	return true
+
+func refresh_collision_bodies() -> void:
+	tanks.moose_positions.clear()
+	for animal in moose:
+		tanks.moose_positions.append(animal.position)
+	tanks.inactive_peers.clear()
+	for peer in proxies:
+		if not proxies[peer].active:
+			tanks.inactive_peers.append(peer)
 
 func _physics_process(delta: float) -> void:
 	if ended:
@@ -179,6 +194,7 @@ func report_vitals(peer: int) -> void:
 		tanks.positions[peer] = proxy.position
 		tanks.directions[peer] = Vector2.ZERO
 		tanks.hit_push.erase(peer)
+		tanks.bounce_push.erase(peer)
 		tanks.input_times.erase(peer)
 	confirmed.emit("vitals", {"vitals": vitals(), "revision": vitals_revision, "positions": tanks.positions.duplicate(), "tick": tanks.tick, "acks": tanks.processed_sequences.duplicate(), "respawn": peer if respawned else 0})
 

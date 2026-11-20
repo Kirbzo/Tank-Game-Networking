@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P107 and the next request is **P108**. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P108 and the next request is **P109**. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2542,3 +2542,18 @@ Actual prompt:
 > Lets also remove the Game Id when the game starts. So when the host presses start, it should disappear from view and after the lobby is remade, it reappears.
 
 Associated status snapshot: S-2026-11-20-05. Entire Game ID panel now hidden in running/finished and visible in waiting/preparing/ready. Existing phase synchronization covers host/guest and replay/recreated room; session/discovery IDs retained. Actual paired duel lifecycle with per-frame visibility assertions PASS on both peers. Commands/evidence/limits in status.md. Only client_waiting_room.gd and required logs changed; temporary cached probe, no permanent tests/report documents. Protected docs/requirements and unrelated user work preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P108 - LAN tank/body blocking and harmless bounce
+
+Date: November 20, 2026.
+Time: 11:47:58 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> lets now change how the tanks interact. The tanks currently are able to walk through eachother at any point in the game. The tanks can also move through the moose when their in the invincible state. Lets make it so they cant move through eachother and simply bounce off without taking damage.
+
+Clarification asked whether LAN-only and normal moose damage should remain while invincible tanks bounce without damage. Actual answer:
+
+> LAN only; keep normal moose damage
+
+Associated status snapshot: S-2026-11-20-06. Added host-authoritative swept tank/moose body blocking and decaying harmless tank bounce, independent of invulnerability; matching client prediction boundaries. Normal moose damage retained, LAN respawn-protection gate explicit, no local mode rule changes. Added body-contact test, isolated moose in prior wall-only fixture. Final 10 process checks PASS across combat/preview/duel/Start and body-contact pairs. Initial fixture failures/corrections, exact commands, files/evidence and physical/graphical limits in status.md. Protected docs/requirements and unrelated user changes preserved; required logs only, no report documents. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
