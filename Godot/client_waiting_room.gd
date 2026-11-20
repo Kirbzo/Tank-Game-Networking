@@ -169,11 +169,24 @@ func acknowledge_ready(peer: int, generation: int) -> void:
 		update_connection_status()
 
 func can_begin_game() -> bool:
-	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase == "ready" and ready_peers.size() == 2 and player_names.size() == 2 and multiplayer.get_peers().size() == 1
+	if leaving or session_lobby == null or session_lobby.session == null or not multiplayer.is_server() or phase not in ["waiting", "preparing", "ready"]:
+		return false
+	var peers := multiplayer.get_peers()
+	return peers.size() == 1 and player_names.size() == 2 and player_names.has(1) and player_names.has(peers[0])
 
 func begin_game() -> void:
 	if not can_begin_game():
 		return
+	# Membership authorizes Start; preview acknowledgements are not player consent.
+	# Keep initialization ordered on the same reliable RPC channel so a guest
+	# still preparing receives its existing pre-match setup before running.
+	if not same_preview_members():
+		phase = "waiting"
+	if phase == "waiting":
+		prepare_preview(true)
+	if phase == "preparing":
+		phase = "ready"
+		session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
 	# Preview projectiles cannot carry over into destructive gameplay.
 	combat.clear_shots()
 	# Reject delayed preview input/events after enabling real damage.
@@ -253,7 +266,7 @@ func update_connection_status() -> void:
 		elif phase == "finished":
 			status_message.text += "\nDuel finished"
 		elif phase == "preparing":
-			status_message.text += "\nWaiting for player readiness..."
+			status_message.text += "\nPreparing the preview · Waiting for host to press Start Game"
 		elif phase == "ready":
 			status_message.text += "\nMove and shoot · " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:

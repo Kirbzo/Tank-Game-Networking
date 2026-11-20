@@ -2,13 +2,39 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P085 and the next request is **P086**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P086 and the next request is **P087**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 20, 2026
+
+## P086 - Host Start uses connected membership without Ready
+
+Date: November 20, 2026.
+Time: 08:24:43 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Fix the Start button in the Moooze Tanks LAN waiting room.
+>
+> We tested on two laptops on the same LAN. Laptop A hosted and Laptop B successfully joined, but the host couldn’t click Start.
+>
+> Expected behavior: As soon as a second player successfully joins, Start becomes clickable for the host without either player having to click Ready. Only the host can start the match. When the host clicks Start, both players should enter the existing pre-match flow.
+>
+> Trace how the waiting room updates the connected player count and identifies the host. Check what controls the Start button and whether the match-start handler still requires Ready. Fix the logic so the button and handler both follow the expected behavior. Preserve the working Host/Join flow, pre-match behavior, and moose behavior.
+>
+> Test with two Godot instances if possible. Verify that Start is disabled while the host is alone, enables only for the host when the second player joins, disables again if that player leaves before the match starts, and starts the match for both players when clicked. Report the cause, fix, and test results in Codex chat, including anything that still needs a two-laptop LAN retest. Don’t create a separate report or commit the changes.
+
+Associated status.md: S-2026-11-20-01.
+
+Result: Start button and handler share a host-only, two-connected-members rule without phase-ready or ready_peers gating. The existing reliable preparation/ready/running messages initialize both peers in order; preview cleanup and moose code remain intact. Required status/log updates only; no separate report or commit. Validation recorded in the associated status snapshot.
+
+Token usage: input, cached input, output, model and usage source **Unavailable** for the complete request; no reliable complete per-request record including tool continuations/final reply is available during this active turn. Cached-input inclusion cannot be established; no totals or costs inferred. Estimated cost: **Unavailable** (complete usage and applicable rates unavailable).
 
 # November 19, 2026
 

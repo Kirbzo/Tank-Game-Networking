@@ -15,6 +15,13 @@ func run() -> void:
 	lobby = app.lobby
 	lobby.discovery.protocol = "moooze-tank-start-smoke-1"
 	enter_menu(hosting)
+	# Optional direct loopback fixture isolates Start from LAN discovery/firewalls.
+	var args := OS.get_cmdline_user_args()
+	if hosting and args.has("loopback"):
+		print("ENDPOINT ", lobby.discovery.hosted_game.id, " ", lobby.discovery.hosted_game.port)
+	if not hosting and args.has("loopback"):
+		var index := args.find("loopback")
+		lobby.discovery.remember_game(args[index + 1], "127.0.0.1", int(args[index + 2]), "TestHost", 1)
 	if not hosting:
 		if not check(await until(func(): return not lobby.discovery.games.is_empty()), "Discover host"):
 			return
@@ -47,6 +54,24 @@ func run() -> void:
 		return
 	if not await waiting_room_checks():
 		return
+	if args.has("leave-preview"):
+		if hosting:
+			if not check(not room.bottom_start_button.disabled, "Host Start enabled before departure"):
+				return
+			if not check(await until(func(): return room.player_names.size() == 1), "Guest leaves before Start"):
+				return
+			room.begin_game()
+			if not check(room.bottom_start_button.disabled and room.phase != "running", "Departure disables button and handler before match"):
+				return
+		else:
+			room.begin_game()
+			if not check(room.bottom_start_button.disabled and not room.bottom_start_button.visible and room.phase != "running", "Guest cannot start before leaving"):
+				return
+			await create_timer(0.8).timeout
+			room.leave_room()
+		print("PASS Start permissions and departure before match")
+		quit()
+		return
 	if hosting:
 		if not check(room.tank_world.positions[1] == solo_position, "Guest join preserves the host's waiting-room position"):
 			return
@@ -56,20 +81,20 @@ func run() -> void:
 		room.prepare_deadline = 0
 		room._physics_process(0.0)
 		room.acknowledge_ready(lobby.multiplayer.get_peers()[0], expired)
-		if not check(room.phase == "waiting" and room.bottom_start_button.disabled and room.connection_event.text.contains("timed out"), "Timeout rejects old acknowledgement and schedules automatic retry"):
+		if not check(room.phase == "waiting" and not room.bottom_start_button.disabled and room.connection_event.text.contains("timed out"), "Timeout rejects old acknowledgement without blocking host Start"):
 			return
 	else:
 		if not check(not room.bottom_start_button.visible and room.find_child("StartButton", true, false) == null, "Guest has no Start control"):
 			return
 		room.request_start()
 		lobby.tank_ready.rpc_id(1, room.game_id, 999)
-	if not check(await until(func(): return room.phase == "ready"), "Both ready; second Start still required"):
+	if not check(await until(func(): return room.phase == "ready"), "Automatic preview ready; host Start still required"):
 		return
 	if hosting:
-		if not check(room.bottom_start_button.visible and not room.bottom_start_button.disabled, "Bottom Start Game enabled only with both peers ready"):
+		if not check(room.bottom_start_button.visible and not room.bottom_start_button.disabled, "Bottom Start Game enabled for the connected host"):
 			return
 		var rect: Rect2 = room.bottom_start_button.get_global_rect()
-		if not check(rect.get_center().y > room.size.y * 0.7 and rect.end.y < room.size.y and not rect.intersects(room.game_id_label.get_global_rect()), "Second Start is near bottom without covering game ID"):
+		if not check(rect.get_center().y > room.size.y * 0.7 and rect.end.y < room.size.y and not rect.intersects(room.game_id_label.get_global_rect()), "Start is near bottom without covering game ID"):
 			return
 	else:
 		room.begin_game()
@@ -78,12 +103,20 @@ func run() -> void:
 	key(KEY_W, true)
 	await create_timer(0.2).timeout
 	key(KEY_W, false)
-	if not check(room.phase == "ready" and (room.tank_world.tick > 0 if hosting else room.tank_view.input_sequence > 0), "Movement is active between both Start clicks"):
+	if not check(room.phase == "ready" and (room.tank_world.tick > 0 if hosting else room.tank_view.input_sequence > 0), "Movement is active in the pre-match preview"):
 		return
 	if hosting:
 		await create_timer(0.2).timeout
+		# Recreate an outstanding automatic handshake, then click in the same frame.
+		# The old button and handler both blocked on ready_peers/phase here.
+		room.phase = "waiting"
+		room.prepare_preview(true)
+		room.ready_peers.clear()
+		room.update_connection_status()
+		if not check(room.phase == "preparing" and not room.bottom_start_button.disabled, "Connected host can Start without Ready acknowledgements"):
+			return
 		room.bottom_start_button.pressed.emit()
-	if not check(await until(func(): return room.phase == "running"), "Second Start begins game for both players"):
+	if not check(await until(func(): return room.phase == "running"), "Host Start begins game for both players"):
 		return
 	if not check(not room.bottom_start_button.visible, "Start button hides during gameplay"):
 		return
