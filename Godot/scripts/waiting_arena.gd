@@ -6,6 +6,7 @@ const TREE = preload("res://assets/forest_tree.svg")
 const TANK = preload("res://assets/tank.svg")
 const TURRET = preload("res://assets/turret.svg")
 var tank_markers: Dictionary = {}
+var name_labels: Dictionary = {}
 var members: Dictionary = {}
 var ice_count := 0
 var ice_sprites: Array[Sprite2D] = []
@@ -59,8 +60,11 @@ func set_members(names: Dictionary) -> void:
 		if not members.has(peer):
 			tank_markers[peer].free()
 			tank_markers.erase(peer)
+			name_labels[peer].free()
+			name_labels.erase(peer)
 	for peer in members:
 		if tank_markers.has(peer):
+			name_labels[peer].text = str(members[peer])
 			continue
 		var marker := TankVisual.new()
 		marker.player_number = 1 if peer == 1 else 2
@@ -68,9 +72,30 @@ func set_members(names: Dictionary) -> void:
 		marker.position = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
 		add_child(marker)
 		tank_markers[peer] = marker
+		var label := Label.new()
+		label.text = str(members[peer])
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Above tanks, moose, trees, bullets and explosions, below the room HUD.
+		label.z_index = 100
+		label.add_theme_font_size_override("font_size", 20)
+		label.add_theme_color_override("font_color", Color.WHITE)
+		label.add_theme_color_override("font_outline_color", Color.BLACK)
+		label.add_theme_constant_override("outline_size", 4)
+		add_child(label)
+		name_labels[peer] = label
+	update_name_labels()
 	queue_redraw()
 
+func update_name_labels() -> void:
+	for peer in name_labels:
+		var label: Label = name_labels[peer]
+		var marker: Node2D = tank_markers[peer]
+		label.visible = marker.visible
+		label.reset_size()
+		label.position = marker.position + Vector2(-label.size.x / 2.0, -64)
+
 func _process(delta: float) -> void:
+	update_name_labels()
 	for peer in contact_timers:
 		contact_timers[peer] = maxf(0, contact_timers[peer] - delta)
 	for flash in muzzle_flashes:
@@ -110,15 +135,5 @@ func _draw() -> void:
 	draw_rect(Rect2(62, 106, 1156, 648), Color("#91bcd3"), false, 2)
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), Color("#a6dfff"), 2)
-	for peer in tank_markers:
-		if not tank_markers[peer].visible:
-			continue
-		var label := str(members[peer])
-		var font := ThemeDB.fallback_font
-		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
-		var at: Vector2 = tank_markers[peer].position + Vector2(-width / 2, -42)
-		# White labels keep the existing named-room presentation on pale snow.
-		draw_rect(Rect2(at + Vector2(-6, -22), Vector2(width + 12, 30)), Color(0.04, 0.12, 0.16, 0.85))
-		draw_string(font, at, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
 	for flash in muzzle_flashes:
 		draw_circle(flash.position, 8, Color("#eefaff"))
