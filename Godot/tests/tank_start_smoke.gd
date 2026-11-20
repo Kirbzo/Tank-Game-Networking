@@ -7,6 +7,14 @@ func key(code: Key, pressed: bool) -> void:
 	event.pressed = pressed
 	Input.parse_input_event(event)
 
+func click_start(room: Control) -> void:
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.position = room.bottom_start_button.get_global_rect().get_center()
+		event.pressed = pressed
+		root.push_input(event, true)
+
 func run() -> void:
 	var hosting := OS.get_cmdline_user_args().has("host")
 	app = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
@@ -75,6 +83,11 @@ func run() -> void:
 	if hosting:
 		if not check(room.tank_world.positions[1] == solo_position, "Guest join preserves the host's waiting-room position"):
 			return
+		# Synchronous setup must enable movement before any guest acknowledgement.
+		room.phase = "waiting"
+		room.prepare_preview(true)
+		if not check(room.phase == "ready" and room.controls_active() and room.ready_peers.size() == 1, "Preview movement does not wait for a guest acknowledgement"):
+			return
 		# Force the existing timeout path; recovery must no longer need a first button.
 		var expired: int = room.epoch
 		room.phase = "preparing"
@@ -105,6 +118,13 @@ func run() -> void:
 	key(KEY_W, false)
 	if not check(room.phase == "ready" and (room.tank_world.tick > 0 if hosting else room.tank_view.input_sequence > 0), "Movement is active in the pre-match preview"):
 		return
+	if not check(await until(func():
+		var positions: Dictionary = room.tank_world.positions if hosting else (room.tank_view.snapshots[-1].positions if not room.tank_view.snapshots.is_empty() else {})
+		return positions.size() == 2 and positions.values().all(func(at): return at.y < 600.0)
+	), "Both peers observe both tanks moving before Start"):
+		return
+	if not check(await until(func(): return room.artwork.tank_markers.size() == 2 and room.artwork.tank_markers.values().all(func(marker): return marker.position.y < 600.0)), "Both tanks' rendered positions move in both previews"):
+		return
 	if hosting:
 		await create_timer(0.2).timeout
 		# Recreate an outstanding automatic handshake, then click in the same frame.
@@ -113,9 +133,9 @@ func run() -> void:
 		room.prepare_preview(true)
 		room.ready_peers.clear()
 		room.update_connection_status()
-		if not check(room.phase == "preparing" and not room.bottom_start_button.disabled, "Connected host can Start without Ready acknowledgements"):
+		if not check(room.phase == "ready" and not room.bottom_start_button.disabled, "Connected host can Start without Ready acknowledgements"):
 			return
-		room.bottom_start_button.pressed.emit()
+		click_start(room)
 	if not check(await until(func(): return room.phase == "running"), "Host Start begins game for both players"):
 		return
 	if not check(not room.bottom_start_button.visible, "Start button hides during gameplay"):
@@ -141,6 +161,10 @@ func run() -> void:
 	await create_timer(2.4).timeout
 	key(KEY_W, false)
 	await create_timer(0.6).timeout
+	if not check(room.duel_vitals.size() == 2 and room.duel_vitals.values().all(func(v): return v.health == 100 and v.lives == 3) and room.vitals_panel.is_visible_in_tree() and room.vitals_label.text.contains("100 HP / 3 lives"), "Both players have authoritative health/lives and visible HUD after Start"):
+		return
+	if not check(room.combat_view.animals.size() == 4 and room.combat_view.animals[0].position.distance_to(room.CombatWorld.CORNERS[0]) > 1.0, "Both players see moose movement after Start"):
+		return
 	if hosting:
 		var guest: int = lobby.multiplayer.get_peers()[0]
 		if not check(room.tank_world.positions[1].distance_to(Vector2(208, 176)) < 0.1 and room.tank_world.positions[guest].distance_to(Vector2(1072, 576)) < 0.1, "Host resolves perimeter and ice collisions for both tanks"):
@@ -162,7 +186,7 @@ func run() -> void:
 		await create_timer(0.4).timeout
 		if not check(await until(func(): return room.phase == "ready"), "Rejoin requires readiness again"):
 			return
-		room.bottom_start_button.pressed.emit()
+		click_start(room)
 		if not check(await until(func(): return room.phase == "running"), "Readiness handshake works again after rejoin"):
 			return
 		await create_timer(0.5).timeout

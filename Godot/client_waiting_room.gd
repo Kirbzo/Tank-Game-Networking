@@ -28,6 +28,8 @@ var aim_direction := Vector2.RIGHT
 var aim_pointer := Vector2.ZERO
 var fire_held := false
 var fire_sequence := 0
+var lan_debug := OS.get_cmdline_user_args().has("--lan-debug")
+var diagnostic_elapsed := 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -67,10 +69,19 @@ func _ready() -> void:
 	vitals_panel.add_child(vitals_label)
 	update_connection_status()
 	aim_pointer = get_viewport().get_mouse_position()
+	if lan_debug:
+		print("LAN_BUILD ", JSON.stringify({"engine": Engine.get_version_info().string,
+			"executable": OS.get_executable_path(), "project": ProjectSettings.globalize_path("res://"),
+			"arguments": OS.get_cmdline_args(), "scene": scene_file_path,
+			"room_sha256": FileAccess.get_sha256("res://client_waiting_room.gd"),
+			"combat_sha256": FileAccess.get_sha256("res://combat_world.gd")}))
+	trace_lan("room_entered")
 	if multiplayer.is_server():
 		prepare_preview.call_deferred()
 
 func _input(event: InputEvent) -> void:
+	if lan_debug and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and is_instance_valid(bottom_start_button) and bottom_start_button.get_global_rect().has_point(event.position):
+		trace_lan("start_pointer_down")
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		aim_pointer = event.position
 	if event.is_action_released("fire"):
@@ -117,6 +128,11 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	super._process(delta)
+	if lan_debug and not leaving and session_lobby != null and session_lobby.session != null:
+		diagnostic_elapsed += delta
+		if diagnostic_elapsed >= 2.0:
+			diagnostic_elapsed = 0.0
+			trace_lan("sample")
 	if controls_active() and not leaving and session_lobby.session != null and not multiplayer.is_server():
 		artwork.apply_positions(tank_view.advance(delta, Engine.get_physics_interpolation_fraction()))
 
@@ -147,26 +163,25 @@ func prepare_preview(preserve_positions := false, message := "") -> void:
 	reset_combat(true)
 	artwork.apply_positions(tank_world.positions)
 	session_lobby.tank_state.rpc(game_id, epoch, "preparing", tank_world.positions)
-	if player_names.size() == 1:
-		phase = "ready"
-		combat.process_mode = Node.PROCESS_MODE_INHERIT
+	# Initialization is synchronous; preview movement must not wait for a round trip.
+	# Both reliable states use the same channel, after room_names registration.
+	phase = "ready"
+	combat.process_mode = Node.PROCESS_MODE_INHERIT
+	session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
 	if not message.is_empty():
 		connection_event.text = message
 		connection_event.show()
 	update_connection_status()
+	trace_lan("preview_initialized")
 
 func same_preview_members() -> bool:
 	return tank_world.positions.size() == player_names.size() and player_names.keys().all(func(peer): return tank_world.positions.has(peer))
 
 func acknowledge_ready(peer: int, generation: int) -> void:
-	if phase != "preparing" or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
+	if phase not in ["preparing", "ready"] or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
 		return
 	ready_peers[peer] = true
-	if ready_peers.size() == 2 and player_names.size() == 2:
-		phase = "ready"
-		combat.process_mode = Node.PROCESS_MODE_INHERIT
-		session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
-		update_connection_status()
+	trace_lan("preview_acknowledged")
 
 func can_begin_game() -> bool:
 	if leaving or session_lobby == null or session_lobby.session == null or not multiplayer.is_server() or phase not in ["waiting", "preparing", "ready"]:
@@ -175,7 +190,9 @@ func can_begin_game() -> bool:
 	return peers.size() == 1 and player_names.size() == 2 and player_names.has(1) and player_names.has(peers[0])
 
 func begin_game() -> void:
+	trace_lan("start_handler")
 	if not can_begin_game():
+		trace_lan("start_rejected")
 		return
 	# Membership authorizes Start; preview acknowledgements are not player consent.
 	# Keep initialization ordered on the same reliable RPC channel so a guest
@@ -200,13 +217,18 @@ func begin_game() -> void:
 	snapshot_elapsed = 0.0
 	session_lobby.tank_state.rpc(game_id, epoch, "running", tank_world.positions)
 	update_connection_status()
+	trace_lan("match_started")
 
 func receive_tank_state(generation: int, state: String, positions: Dictionary) -> void:
+	trace_lan("state_received", {"incoming_phase": state, "incoming_epoch": generation})
 	if generation < epoch or state not in ["waiting", "preparing", "ready", "running"]:
+		trace_lan("state_rejected")
 		return
 	if state == "ready" and (phase != "preparing" or generation != epoch):
+		trace_lan("state_rejected")
 		return
 	if state == "running" and (phase != "ready" or generation <= epoch):
+		trace_lan("state_rejected")
 		return
 	epoch = generation
 	phase = state
@@ -226,6 +248,35 @@ func receive_tank_state(generation: int, state: String, positions: Dictionary) -
 		combat_view.clear_shots()
 	artwork.apply_positions(positions)
 	update_connection_status()
+	trace_lan("state_applied")
+
+func trace_lan(event: String, extra: Dictionary = {}) -> void:
+	if not lan_debug:
+		return
+	var data := {"event": event, "ms": Time.get_ticks_msec(), "game": game_id,
+		"protocol": session_lobby.discovery.protocol if session_lobby != null else "",
+		"peer": multiplayer.get_unique_id(), "host": multiplayer.is_server(),
+		"peers": multiplayer.get_peers(), "members": player_names.keys(), "phase": phase,
+		"epoch": epoch, "controls": controls_active(), "can_start": can_begin_game(),
+		"settings": settings_screen.visible, "focus": get_window().has_focus(),
+		"tick": tank_world.tick, "snapshot_tick": tank_view.latest_tick,
+		"positions": tank_world.positions if multiplayer.is_server() else (tank_view.snapshots[-1].positions if not tank_view.snapshots.is_empty() else {}),
+		"vitals": duel_vitals, "combat_tick": last_combat_tick}
+	if is_instance_valid(bottom_start_button):
+		data["start_disabled"] = bottom_start_button.disabled
+		data["start_visible"] = bottom_start_button.is_visible_in_tree()
+	if is_instance_valid(vitals_panel):
+		data["hud_visible"] = vitals_panel.is_visible_in_tree()
+		data["hud_text"] = vitals_label.text
+	if is_instance_valid(combat):
+		data["interactions"] = combat.interactions_enabled
+		data["combat_processing"] = combat.can_process()
+		data["authority_vitals"] = combat.vitals()
+		data["moose"] = combat.moose.map(func(animal): return {"position": animal.position, "processing": animal.is_physics_processing(), "delay": animal.emerge_delay})
+	if is_instance_valid(combat_view):
+		data["rendered_moose"] = combat_view.animals.map(func(animal): return animal.position)
+	data.merge(extra, true)
+	print("LAN_STATE ", JSON.stringify(data))
 
 func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence: int) -> void:
 	if controls_active() and generation == epoch and sequence > 0:

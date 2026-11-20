@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P086 and the next request is **P087**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P087 and the next request is **P088**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -11,6 +11,44 @@ Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge au
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
 
 # November 20, 2026
+
+## P087 - Host-dependent LAN investigation and immediate pre-match movement
+
+Date: November 20, 2026.
+Time: 08:58:03 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual request (copy/paste escape formatting normalized):
+
+> Investigate why LAN matches behave differently depending on which laptop hosts, and fix pre-match movement so both players can move before the host clicks Start.
+>
+> Two-laptop LAN results on the rica branch:
+>
+> | Host | Joined player | Result |
+> |------|---------------|--------|
+> | A    | B             | B joins, but A’s Start button doesn’t work. |
+> | B    | A             | Everything works. |
+> | B    | C             | Everything works. |
+> | C    | B             | Start works, but the moose doesn’t move and health/lives are missing. |
+>
+> Use the sessions hosted by B as the working baseline. First help me confirm what each laptop actually ran. Give me exact commands or Godot checks to compare the commit SHA, local changes, Godot version, project path, and whether each laptop ran from the editor or an exported build. All three laptops were on `rica`, but I haven’t verified that they ran identical code. If you need logs from the other laptops, tell me exactly what to collect from each host and joined player.
+>
+> Trace the join, pre-match, and match-start flow. For A hosting, determine whether Start stays disabled, the click is ignored, or the start handler runs but the transition fails. For C hosting, trace how the host starts the moose simulation and initializes and syncs health/lives. Check whether health/lives are missing from the game state or only from the HUD. Identify what the code or logs confirm and what still needs a LAN retest.
+>
+> Expected behavior:
+> - Start is available only to the host once a second player successfully joins.
+> - Before Start is clicked, both players can move their own tanks, and both laptops can see both tanks move. Keep the existing host-authoritative movement and collision rules.
+> - After the host clicks Start, both players enter the match with working moose movement and health/lives, regardless of which laptop hosts.
+>
+> Fix the pre-match movement issue and any confirmed causes of the host-dependent failures. Keep changes focused and preserve the existing moose behavior. Verify with two Godot instances if possible, test both player roles, and give me a short LAN retest checklist for the four pairings above.
+>
+> Summarize the cause or remaining unknowns, files changed, and actual test results directly in Codex chat. Don’t create a separate report or commit the changes.
+
+Associated status.md: S-2026-11-20-02; follows P086/S-2026-11-20-01.
+
+Result: preview initialization now enables movement without awaiting the guest acknowledgment; retained authoritative movement/collisions and host-only Start. Added opt-in --lan-debug state/build/click/transition/vitals/moose diagnostics, and extended the paired test for pre-match shared/rendered positions, real GUI input dispatch, post-Start health/lives/HUD and moose motion. Requested A/B/C checkout/runtime evidence in chat; B-hosted working runs are user-reported baseline, not yet available logs. A/C laptop-specific causes remain unconfirmed. Validation and limitations are in the associated status snapshot. No separate report or commit.
+
+Usage: input tokens, cached input tokens, output tokens, model and usage source **Unavailable** for this complete request: no reliable complete per-request usage record including all continuations/final reply is exposed during the active turn. Cached-input inclusion cannot be established; no totals inferred. Estimated cost **Unavailable** (usage/rates unavailable).
 
 ## P086 - Host Start uses connected membership without Ready
 
