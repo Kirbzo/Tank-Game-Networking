@@ -410,10 +410,13 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 		combat_view.sound.play("brick")
 	elif kind == "contact":
 		artwork.contact_timers[int(data.peer)] = 2.0
+		if artwork.tank_markers.has(int(data.peer)):
+			artwork.tank_markers[int(data.peer)].moose_cooldown = 2.0
 		combat_view.sound.play_moose_contact()
 	else:
 		if kind == "shot":
-			artwork.muzzle_flashes.append({"position": data.position + data.direction * 4.0, "life": 0.06})
+			if artwork.tank_markers.has(int(data.peer)):
+				artwork.tank_markers[int(data.peer)].shot_flash = 0.06
 		combat_view.event(kind, data)
 
 func apply_combat_snapshot(tick: int, state: Dictionary) -> void:
@@ -437,7 +440,7 @@ func apply_vitals(data: Dictionary) -> void:
 		var values: Dictionary = duel_vitals[peer]
 		lines.append("%s: %d HP / %d lives" % [str(player_names[peer]).left(18), values.health, values.lives])
 		if artwork.tank_markers.has(peer):
-			artwork.tank_markers[peer].visible = values.active
+			artwork.tank_markers[peer].apply_vitals(values)
 		if float(values.protection) > 0:
 			artwork.contact_timers[peer] = float(values.protection)
 	if is_instance_valid(vitals_label):

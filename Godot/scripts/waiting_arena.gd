@@ -11,6 +11,7 @@ var ice_count := 0
 var ice_sprites: Array[Sprite2D] = []
 var contact_timers: Dictionary = {}
 var muzzle_flashes: Array[Dictionary] = []
+const TankVisual = preload("res://scripts/lan_tank_visual.gd")
 
 func _ready() -> void:
 	# Same arena coordinates as the imported offline client; decoration only.
@@ -36,6 +37,8 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 func reset_ice() -> void:
 	contact_timers.clear()
 	muzzle_flashes.clear()
+	for marker in tank_markers.values():
+		marker.reset_visuals()
 	for sprite in ice_sprites:
 		sprite.show()
 	ice_count = ice_sprites.size()
@@ -59,21 +62,10 @@ func set_members(names: Dictionary) -> void:
 	for peer in members:
 		if tank_markers.has(peer):
 			continue
-		var marker := Node2D.new()
+		var marker := TankVisual.new()
+		marker.player_number = 1 if peer == 1 else 2
 		marker.z_index = 3 # Client tanks remain visible over foliage/moose.
 		marker.position = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
-		var chassis := Sprite2D.new()
-		chassis.texture = TANK
-		marker.add_child(chassis)
-		var turret := Node2D.new()
-		turret.name = "Turret"
-		var sprite := Sprite2D.new()
-		sprite.texture = TURRET
-		sprite.position = Vector2(12, 0)
-		turret.add_child(sprite)
-		marker.add_child(turret)
-		if peer != 1:
-			marker.modulate = Color(1.8, 0.65, 1.0)
 		add_child(marker)
 		tank_markers[peer] = marker
 	queue_redraw()
@@ -119,9 +111,8 @@ func _draw() -> void:
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), Color("#a6dfff"), 2)
 	for peer in tank_markers:
-		var remaining: float = contact_timers.get(peer, 0.0)
-		if remaining > 0:
-			draw_arc(tank_markers[peer].position, 34, 0, TAU, 48, Color("#ffbf69"), 3.0)
+		if not tank_markers[peer].visible:
+			continue
 		var label := str(members[peer])
 		var font := ThemeDB.fallback_font
 		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x

@@ -132,8 +132,8 @@ func shoot(peer: int) -> void:
 	next_shot += 1
 	var id := next_shot
 	var bullet := Bullet.new()
-	# Preview shots pass through tanks. Local Duel's swept collision owns real hits.
-	bullet.hits_moose = false
+	# Preview shots pass through tanks/moose; matches reuse local swept hit rules.
+	bullet.hits_moose = interactions_enabled
 	bullet.hits_tanks = interactions_enabled
 	bullet.shooter = proxies[peer]
 	bullet.origin = tanks.positions[peer]

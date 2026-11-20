@@ -96,10 +96,12 @@ func run() -> void:
 			return
 		if not check(not room.tank_world.moose_contact(1, Vector2.RIGHT), "Shared contact cooldown rejects repeated contact"):
 			return
-		# Moose remain pass-through; the opposing tank now receives an authoritative hit.
+		# Match Local Co-op: moose consumes the shot and charges a nearby tank.
 		animal.set_physics_process(false)
 		animal.position = Vector2(400, 612)
 		animal.heading = Vector2.RIGHT
+		await physics_frame
+		await physics_frame
 		aim(Vector2(1150, 612))
 		await fire_once()
 	else:
@@ -108,12 +110,15 @@ func run() -> void:
 		lobby.combat_input.rpc_id(1, room.game_id, room.epoch - 1, Vector2.RIGHT, true, 100000)
 		lobby.combat_fire.rpc_id(1, room.game_id, room.epoch, Vector2.RIGHT, 1)
 		lobby.combat_fire.rpc_id(1, room.game_id, room.epoch - 1, Vector2.RIGHT, 100000)
-	if not check(await until(func(): return room.combat_view.shots_seen == 3 and room.combat_view.bullets.is_empty()), "Opposing tank consumes shot after it passes moose"):
+	if not check(await until(func(): return room.combat_view.shots_seen == 3 and room.combat_view.bullets.is_empty()), "Moose consumes the authoritative shot"):
 		return
 	if not check(room.artwork.ice_count == 33 and room.combat_view.animals.size() == 4 and room.combat_view.animals[0].position == Vector2(400, 612), "Shared moose and border outcome"):
 		return
-	if not check(impacts.size() == 3 and impacts[-1].distance_to(Vector2(1048, 612)) < 0.1, "Both receive the host-confirmed tank hit"):
+	if not check(impacts.size() == 3 and impacts[-1].distance_to(Vector2(379, 612)) < 0.1, "Both receive the host-confirmed moose hit"):
 		return
+	if hosting:
+		if not check(room.combat.moose[0].charge_remaining > 0 and room.combat.moose[0].charge_target == room.combat.proxies[1], "Hit provokes the shared local moose charge toward nearest tank"):
+			return
 	if not hosting:
 		if not check(room.artwork.contact_timers.has(1) and room.tank_view.snapshots[-1].positions[1].x < 208 and room.duel_vitals[1].health == 80, "Guest receives contact damage, feedback and knocked-back position"):
 			return

@@ -8,6 +8,7 @@ var animals: Array = []
 var highest_shot := 0
 var shots_seen := 0
 var impacts: Array[Dictionary] = []
+var particles: Array[Dictionary] = []
 var sound: Node
 var state := "playing"
 
@@ -28,7 +29,9 @@ func event(kind: String, data: Dictionary) -> void:
 		bullet.set_physics_process(false)
 		bullets[id] = bullet
 	elif kind == "impact":
-		impacts.append({"position": data.position, "life": 0.2})
+		# Same count, motion, lifetime and shard drawing as Local Duel's burst().
+		for i in range(12):
+			particles.append({"position": data.position, "velocity": Vector2.from_angle(randf() * TAU) * randf_range(50, 190), "life": 0.5, "size": randf_range(2, 6)})
 		impact_confirmed.emit(data.position)
 	elif kind == "remove" and bullets.has(id):
 		bullets[id].queue_free()
@@ -74,8 +77,16 @@ func _process(delta: float) -> void:
 	for burst in impacts:
 		burst.life -= delta
 	impacts = impacts.filter(func(burst): return burst.life > 0)
+	for particle in particles:
+		particle.position += particle.velocity * delta
+		particle.life -= delta
+	particles = particles.filter(func(particle): return particle.life > 0)
 	queue_redraw()
 
 func _draw() -> void:
+	for particle in particles:
+		draw_circle(particle.position, particle.size, Color(0.98, 1.0, 1.0, particle.life * 2))
+		var shard := PackedVector2Array([particle.position + Vector2(0, -particle.size * 2), particle.position + Vector2(particle.size, 0), particle.position + Vector2(0, particle.size), particle.position + Vector2(-particle.size, 0)])
+		draw_colored_polygon(shard, Color(0.35, 0.72, 0.95, particle.life * 1.5))
 	for burst in impacts:
 		draw_circle(burst.position, 5 + (0.2 - burst.life) * 40, Color(0.9, 0.98, 1.0, burst.life * 5))
