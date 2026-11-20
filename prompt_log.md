@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P106 and the next request is **P107**. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P107 and the next request is **P108**. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2531,3 +2531,14 @@ Actual prompt:
 > Lets start working on minor revisions now. The usernames currently display through all objects. We want the username to be on a priority display over the objects so its visiable at all times. We also want to change the text from having a black background and white text to a white text and black border around the text.
 
 Associated status snapshot: S-2026-11-20-04. LAN arena username Labels now render above arena objects/effects with white text/black glyph outline and no rectangle. Preserve tracking, hidden/eliminated behavior, member cleanup and UI input. Temporary headless and graphical presentation probes PASS; overlap screenshot inspected. Commands/evidence/limits in status.md. Changed waiting_arena.gd plus required logs only, no report documents/permanent tests. Separate hint separator encoding artifact reported without unrelated repair. Protected docs/requirements and existing user work preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P107 - Hide Game ID after Start and restore in waiting room
+
+Date: November 20, 2026.
+Time: 11:33:21 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets also remove the Game Id when the game starts. So when the host presses start, it should disappear from view and after the lobby is remade, it reappears.
+
+Associated status snapshot: S-2026-11-20-05. Entire Game ID panel now hidden in running/finished and visible in waiting/preparing/ready. Existing phase synchronization covers host/guest and replay/recreated room; session/discovery IDs retained. Actual paired duel lifecycle with per-frame visibility assertions PASS on both peers. Commands/evidence/limits in status.md. Only client_waiting_room.gd and required logs changed; temporary cached probe, no permanent tests/report documents. Protected docs/requirements and unrelated user work preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.

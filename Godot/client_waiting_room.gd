@@ -242,6 +242,7 @@ func _draw() -> void:
 
 func update_connection_status() -> void:
 	super.update_connection_status()
+	$HUD/Overlay/GameIdPanel.visible = phase in ["waiting", "preparing", "ready"]
 	if session_lobby != null:
 		if phase == "running":
 			status_message.text += "\nMove: WASD / arrows Â· Aim: mouse Â· Fire: left click"
