@@ -38,7 +38,7 @@ func run() -> void:
 		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Started"):
 		return
-	if OS.get_cmdline_user_args().has("capture"):
+	if DisplayServer.get_name() != "headless":
 		capture_shots(room, "host" if hosting else "guest")
 	if not hosting:
 		if not check(await until(func(): return is_instance_valid(room.combat_view) and room.combat_view.shots_seen >= 1, 4.0), "Guest sees host mouse shot"):

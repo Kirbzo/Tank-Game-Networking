@@ -21,12 +21,14 @@ var interactions_enabled := true
 var ended := false
 var previous_lives: Dictionary = {}
 var vitals_revision := 0
+var match_elapsed := 0.0
+var match_shots := 0
 
-# Preserve rica's online moose contact: impulse/effects only, never health loss.
-class ContactPlayer extends Player:
-	var contact: Callable
-	func take_moose_hit(direction: Vector2 = Vector2.ZERO) -> bool:
-		return damage_enabled and active and contact.call(direction)
+class LanPlayer extends "res://scripts/player.gd":
+	func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
+		if respawn_protection > 0.0:
+			return false
+		return super.take_moose_hit(away_from_moose)
 
 func _ready() -> void:
 	# Authority coordinates never inherit the visual arena's viewport scaling.
@@ -40,12 +42,7 @@ func _ready() -> void:
 		add_brick(centers[id], id)
 	for peer in tanks.positions:
 		# Reuse Local Duel's actual tank damage/life logic, but never its local input.
-		var proxy := ContactPlayer.new()
-		proxy.contact = func(direction):
-			if tanks.moose_contact(peer, direction):
-				confirmed.emit("contact", {"peer": peer})
-				return true
-			return false
+		var proxy := LanPlayer.new()
 		proxy.position = tanks.positions[peer]
 		proxy.damage_enabled = interactions_enabled
 		add_child(proxy)
@@ -56,7 +53,10 @@ func _ready() -> void:
 		proxy.vitals_changed.connect(report_vitals.bind(peer))
 		proxy.exploded.connect(func(): confirmed.emit("explosion", {"position": proxy.position, "peer": peer}))
 		proxy.lives_depleted.connect(finish_duel)
-
+		proxy.moose_hit.connect(func():
+			tanks.hit_push[peer] = proxy.hit_push
+			tanks.contact_cooldowns[peer] = proxy.moose_cooldown
+			confirmed.emit("contact", {"peer": peer}))
 		aims[peer] = Vector2.RIGHT
 		cooldowns[peer] = 0.0
 	for i in range(CORNERS.size()):
@@ -65,6 +65,8 @@ func _ready() -> void:
 		animal.heading = Vector2.RIGHT if i % 2 == 0 else Vector2.LEFT
 		animal.emerge_delay = 0.6 + i * 0.25
 		animal.tanks = proxies.values()
+		# Logical host positions, not offline tank physics, determine contact here.
+		animal.authoritative_contacts = true
 		add_child(animal)
 		animal.set_physics_process(interactions_enabled)
 		moose.append(animal)
@@ -106,9 +108,20 @@ func accept_input(peer: int, direction: Vector2, fire: bool, sequence: int, now:
 	aims[peer] = direction.normalized()
 	return true
 
+func refresh_collision_bodies() -> void:
+	tanks.moose_positions.clear()
+	for animal in moose:
+		tanks.moose_positions.append(animal.position)
+	tanks.inactive_peers.clear()
+	for peer in proxies:
+		if not proxies[peer].active:
+			tanks.inactive_peers.append(peer)
+
 func _physics_process(delta: float) -> void:
 	if ended:
 		return
+	if interactions_enabled:
+		match_elapsed += delta
 	for peer in proxies:
 		proxies[peer].position = tanks.positions[peer]
 		proxies[peer].advance_vitals(delta)
@@ -134,12 +147,14 @@ func request_fire(peer: int, direction: Vector2, sequence: int) -> bool:
 	return true
 
 func shoot(peer: int) -> void:
+	if interactions_enabled:
+		match_shots += 1
 	cooldowns[peer] = FIRE_INTERVAL
 	next_shot += 1
 	var id := next_shot
 	var bullet := Bullet.new()
-	# Preview shots pass through tanks. Local Duel's swept collision owns real hits.
-	bullet.hits_moose = false
+	# Preview shots pass through tanks/moose; matches reuse local swept hit rules.
+	bullet.hits_moose = interactions_enabled
 	bullet.hits_tanks = interactions_enabled
 	bullet.shooter = proxies[peer]
 	bullet.origin = tanks.positions[peer]
@@ -179,6 +194,7 @@ func report_vitals(peer: int) -> void:
 		tanks.positions[peer] = proxy.position
 		tanks.directions[peer] = Vector2.ZERO
 		tanks.hit_push.erase(peer)
+		tanks.bounce_push.erase(peer)
 		tanks.input_times.erase(peer)
 	confirmed.emit("vitals", {"vitals": vitals(), "revision": vitals_revision, "positions": tanks.positions.duplicate(), "tick": tanks.tick, "acks": tanks.processed_sequences.duplicate(), "respawn": peer if respawned else 0})
 
@@ -192,5 +208,5 @@ func finish_duel() -> void:
 			winner = peer
 	set_interactions_enabled(false)
 	controls.clear()
-	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision})
+	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": tanks.removed_ice.size(), "total": TankWorld.ice_centers().size()}})
 	clear_shots.call_deferred()

@@ -235,7 +235,7 @@ func show_help() -> void:
 	label_in(box, "KEEP YOUR CREW ROLLING", 22, Color("#ffd890"))
 	label_in(box, "Each tank starts with 100 health and 3 lives.\nAt zero health, lose a life and respawn at full health.\nA tank with no lives is out; a surviving teammate can continue.\nThe round ends in defeat when no tanks have lives left.", 19)
 	label_in(box, "GIVE THE MOOSE SOME ROOM", 22, Color("#ffd890"))
-	label_in(box, "Roaming moose turn and bounce off obstacles.\nContact deals 20 damage and knocks your tank back.\nA gold ring means 2 seconds of protection; separate to re-hit.\nMoose yield; snowballs pass through them.\nDuel shots deal 20 damage; the last tank with lives wins.\nSolo/co-op shots cannot damage tanks.", 19)
+	label_in(box, "Roaming moose turn and bounce off obstacles.\nContact deals 20 damage and knocks your tank back.\nA gold ring means 2 seconds of protection; separate to re-hit.\nDuel shots deal 20 damage; the last tank with lives wins.\nSolo/co-op shots cannot damage tanks.", 19)
 	button_in(box, "Controls", show_controls)
 	button_in(box, "Main Menu", show_menu).grab_focus()
 

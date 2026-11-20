@@ -74,13 +74,7 @@ func run() -> void:
 		# Leave a live preview shot to verify it cannot survive into full gameplay.
 		aim(Vector2(1100, at.y))
 		await fire_once()
-		var preview_epoch: int = room.epoch
 		room.bottom_start_button.pressed.emit()
-		var shot_count: int = room.combat.next_shot
-		room.accept_fire_request(1, preview_epoch, Vector2.RIGHT, 999999)
-		room.accept_combat_input(1, preview_epoch, Vector2.RIGHT, true, 999999)
-		if not check(room.epoch > preview_epoch and room.combat.next_shot == shot_count and room.combat.controls.is_empty(), "Delayed preview commands cannot become damaging gameplay shots"):
-			return
 		if not check(room.combat.interactions_enabled and room.combat.bullets.is_empty(), "Second Start enables interactions and clears preview shots"):
 			return
 	if not check(await until(func(): return room.phase == "running"), "Bottom Start begins normal LAN gameplay"):

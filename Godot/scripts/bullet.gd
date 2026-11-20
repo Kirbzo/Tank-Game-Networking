@@ -12,7 +12,7 @@ var shooter: Node
 var heavy := false
 var heavy_impact: Callable
 var hits_tanks := false
-var hits_moose := false # rica: snowballs pass through roaming moose in every mode.
+var hits_moose := true
 
 func _ready() -> void:
 	var sprite := Sprite2D.new()

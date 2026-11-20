@@ -28,8 +28,6 @@ var aim_direction := Vector2.RIGHT
 var aim_pointer := Vector2.ZERO
 var fire_held := false
 var fire_sequence := 0
-var lan_debug := OS.get_cmdline_user_args().has("--lan-debug")
-var diagnostic_elapsed := 0.0
 
 func _ready() -> void:
 	super._ready()
@@ -69,19 +67,10 @@ func _ready() -> void:
 	vitals_panel.add_child(vitals_label)
 	update_connection_status()
 	aim_pointer = get_viewport().get_mouse_position()
-	if lan_debug:
-		print("LAN_BUILD ", JSON.stringify({"engine": Engine.get_version_info().string,
-			"executable": OS.get_executable_path(), "project": ProjectSettings.globalize_path("res://"),
-			"arguments": OS.get_cmdline_args(), "scene": scene_file_path,
-			"room_sha256": FileAccess.get_sha256("res://client_waiting_room.gd"),
-			"combat_sha256": FileAccess.get_sha256("res://combat_world.gd")}))
-	trace_lan("room_entered")
 	if multiplayer.is_server():
 		prepare_preview.call_deferred()
 
 func _input(event: InputEvent) -> void:
-	if lan_debug and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed and is_instance_valid(bottom_start_button) and bottom_start_button.get_global_rect().has_point(event.position):
-		trace_lan("start_pointer_down")
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		aim_pointer = event.position
 	if event.is_action_released("fire"):
@@ -111,6 +100,7 @@ func _physics_process(delta: float) -> void:
 		return
 	process_combat_input()
 	if multiplayer.is_server():
+		combat.refresh_collision_bodies()
 		tank_world.accept_input(1, movement_direction(), Time.get_ticks_msec())
 		tank_world.step(delta, Time.get_ticks_msec())
 		artwork.apply_positions(tank_world.positions)
@@ -128,11 +118,6 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	super._process(delta)
-	if lan_debug and not leaving and session_lobby != null and session_lobby.session != null:
-		diagnostic_elapsed += delta
-		if diagnostic_elapsed >= 2.0:
-			diagnostic_elapsed = 0.0
-			trace_lan("sample")
 	if controls_active() and not leaving and session_lobby.session != null and not multiplayer.is_server():
 		artwork.apply_positions(tank_view.advance(delta, Engine.get_physics_interpolation_fraction()))
 
@@ -163,53 +148,35 @@ func prepare_preview(preserve_positions := false, message := "") -> void:
 	reset_combat(true)
 	artwork.apply_positions(tank_world.positions)
 	session_lobby.tank_state.rpc(game_id, epoch, "preparing", tank_world.positions)
-	# Initialization is synchronous; preview movement must not wait for a round trip.
-	# Both reliable states use the same channel, after room_names registration.
-	phase = "ready"
-	combat.process_mode = Node.PROCESS_MODE_INHERIT
-	session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
+	if player_names.size() == 1:
+		phase = "ready"
+		combat.process_mode = Node.PROCESS_MODE_INHERIT
 	if not message.is_empty():
 		connection_event.text = message
 		connection_event.show()
 	update_connection_status()
-	trace_lan("preview_initialized")
 
 func same_preview_members() -> bool:
 	return tank_world.positions.size() == player_names.size() and player_names.keys().all(func(peer): return tank_world.positions.has(peer))
 
 func acknowledge_ready(peer: int, generation: int) -> void:
-	if phase not in ["preparing", "ready"] or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
+	if phase != "preparing" or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
 		return
 	ready_peers[peer] = true
-	trace_lan("preview_acknowledged")
+	if ready_peers.size() == 2 and player_names.size() == 2:
+		phase = "ready"
+		combat.process_mode = Node.PROCESS_MODE_INHERIT
+		session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
+		update_connection_status()
 
 func can_begin_game() -> bool:
-	if leaving or session_lobby == null or session_lobby.session == null or not multiplayer.is_server() or phase not in ["waiting", "preparing", "ready"]:
-		return false
-	var peers := multiplayer.get_peers()
-	return peers.size() == 1 and player_names.size() == 2 and player_names.has(1) and player_names.has(peers[0])
+	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase == "ready" and ready_peers.size() == 2 and player_names.size() == 2 and multiplayer.get_peers().size() == 1
 
 func begin_game() -> void:
-	trace_lan("start_handler")
 	if not can_begin_game():
-		trace_lan("start_rejected")
 		return
-	# Membership authorizes Start; preview acknowledgements are not player consent.
-	# Keep initialization ordered on the same reliable RPC channel so a guest
-	# still preparing receives its existing pre-match setup before running.
-	if not same_preview_members():
-		phase = "waiting"
-	if phase == "waiting":
-		prepare_preview(true)
-	if phase == "preparing":
-		phase = "ready"
-		session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
 	# Preview projectiles cannot carry over into destructive gameplay.
 	combat.clear_shots()
-	# Reject delayed preview input/events after enabling real damage.
-	epoch += 1
-	for peer in combat.cooldowns:
-		combat.cooldowns[peer] = 0.0
 	combat.set_interactions_enabled(true)
 	fire_held = false
 	phase = "running"
@@ -217,26 +184,23 @@ func begin_game() -> void:
 	snapshot_elapsed = 0.0
 	session_lobby.tank_state.rpc(game_id, epoch, "running", tank_world.positions)
 	update_connection_status()
-	trace_lan("match_started")
 
 func receive_tank_state(generation: int, state: String, positions: Dictionary) -> void:
-	trace_lan("state_received", {"incoming_phase": state, "incoming_epoch": generation})
 	if generation < epoch or state not in ["waiting", "preparing", "ready", "running"]:
-		trace_lan("state_rejected")
 		return
 	if state == "ready" and (phase != "preparing" or generation != epoch):
-		trace_lan("state_rejected")
 		return
-	if state == "running" and (phase != "ready" or generation <= epoch):
-		trace_lan("state_rejected")
+	if state == "running" and (phase != "ready" or generation != epoch):
 		return
 	epoch = generation
 	phase = state
 	if state == "preparing":
 		tank_world = TankWorld.new()
+		tank_world.positions = positions.duplicate()
 		reset_combat(false)
 		tank_view = View.new()
-		tank_view.movement_solver = tank_world.move_current
+		tank_world.prediction_peer = multiplayer.get_unique_id()
+		tank_view.movement_solver = tank_world.predict_movement
 		tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 		# Assets and the room are already loaded; initialize prediction before acknowledging.
 		tank_view.receive(0, positions, {}, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
@@ -245,38 +209,8 @@ func receive_tank_state(generation: int, state: String, positions: Dictionary) -
 		reset_combat(false, false)
 	elif state == "running":
 		fire_held = false
-		combat_view.clear_shots()
 	artwork.apply_positions(positions)
 	update_connection_status()
-	trace_lan("state_applied")
-
-func trace_lan(event: String, extra: Dictionary = {}) -> void:
-	if not lan_debug:
-		return
-	var data := {"event": event, "ms": Time.get_ticks_msec(), "game": game_id,
-		"protocol": session_lobby.discovery.protocol if session_lobby != null else "",
-		"peer": multiplayer.get_unique_id(), "host": multiplayer.is_server(),
-		"peers": multiplayer.get_peers(), "members": player_names.keys(), "phase": phase,
-		"epoch": epoch, "controls": controls_active(), "can_start": can_begin_game(),
-		"settings": settings_screen.visible, "focus": get_window().has_focus(),
-		"tick": tank_world.tick, "snapshot_tick": tank_view.latest_tick,
-		"positions": tank_world.positions if multiplayer.is_server() else (tank_view.snapshots[-1].positions if not tank_view.snapshots.is_empty() else {}),
-		"vitals": duel_vitals, "combat_tick": last_combat_tick}
-	if is_instance_valid(bottom_start_button):
-		data["start_disabled"] = bottom_start_button.disabled
-		data["start_visible"] = bottom_start_button.is_visible_in_tree()
-	if is_instance_valid(vitals_panel):
-		data["hud_visible"] = vitals_panel.is_visible_in_tree()
-		data["hud_text"] = vitals_label.text
-	if is_instance_valid(combat):
-		data["interactions"] = combat.interactions_enabled
-		data["combat_processing"] = combat.can_process()
-		data["authority_vitals"] = combat.vitals()
-		data["moose"] = combat.moose.map(func(animal): return {"position": animal.position, "processing": animal.is_physics_processing(), "delay": animal.emerge_delay})
-	if is_instance_valid(combat_view):
-		data["rendered_moose"] = combat_view.animals.map(func(animal): return animal.position)
-	data.merge(extra, true)
-	print("LAN_STATE ", JSON.stringify(data))
 
 func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence: int) -> void:
 	if controls_active() and generation == epoch and sequence > 0:
@@ -285,9 +219,12 @@ func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence:
 func receive_tank_snapshot(generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
 	if not controls_active() or generation != epoch or positions.size() != 2:
 		return
+	if tick <= tank_view.latest_tick:
+		return
 	for peer in positions:
 		if not player_names.has(peer) or not positions[peer] is Vector2 or not positions[peer].is_finite():
 			return
+	tank_world.positions = positions.duplicate()
 	tank_view.receive(tick, positions, acknowledgements, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
 
 func cancel_start(reason: String) -> void:
@@ -311,15 +248,16 @@ func _draw() -> void:
 
 func update_connection_status() -> void:
 	super.update_connection_status()
+	$HUD/Overlay/GameIdPanel.visible = phase in ["waiting", "preparing", "ready"]
 	if session_lobby != null:
 		if phase == "running":
-			status_message.text += "\nMove: WASD / arrows · Aim: mouse · Fire: left click"
+			status_message.text += "\nMove: WASD / arrows Â· Aim: mouse Â· Fire: left click"
 		elif phase == "finished":
 			status_message.text += "\nDuel finished"
 		elif phase == "preparing":
-			status_message.text += "\nPreparing the preview · Waiting for host to press Start Game"
+			status_message.text += "\nWaiting for player readiness..."
 		elif phase == "ready":
-			status_message.text += "\nMove and shoot · " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
+			status_message.text += "\nMove and shoot Â· " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:
 			status_message.text += "\nSetting up the waiting room..."
 	if is_instance_valid(bottom_start_button):
@@ -467,28 +405,40 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 				var sequence: int = tank_view.input_sequence
 				tank_view = View.new()
 				tank_view.input_sequence = sequence
-				tank_view.movement_solver = tank_world.move_current
+				tank_world.prediction_peer = multiplayer.get_unique_id()
+				tank_view.movement_solver = tank_world.predict_movement
 				tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 				tank_view.receive(data.tick, data.positions, data.acks, peer, 1.0 / Engine.physics_ticks_per_second)
 	elif kind == "result":
 		apply_vitals(data)
-		show_duel_result(int(data.winner))
+		show_duel_result(int(data.winner), data.get("summary", {}))
 	elif kind == "ice":
 		tank_world.removed_ice[int(data.id)] = true
 		artwork.remove_ice(int(data.id))
 		combat_view.sound.play("brick")
 	elif kind == "contact":
 		artwork.contact_timers[int(data.peer)] = 2.0
+		if artwork.tank_markers.has(int(data.peer)):
+			artwork.tank_markers[int(data.peer)].moose_cooldown = 2.0
 		combat_view.sound.play_moose_contact()
 	else:
 		if kind == "shot":
-			artwork.muzzle_flashes.append({"position": data.position + data.direction * 4.0, "life": 0.06})
+			if artwork.tank_markers.has(int(data.peer)):
+				artwork.tank_markers[int(data.peer)].shot_flash = 0.06
 		combat_view.event(kind, data)
 
 func apply_combat_snapshot(tick: int, state: Dictionary) -> void:
 	if not controls_active() or tick <= last_combat_tick:
 		return
 	last_combat_tick = tick
+	if not multiplayer.is_server():
+		tank_world.moose_positions.clear()
+		for animal in state.moose:
+			tank_world.moose_positions.append(animal.position)
+		tank_world.inactive_peers.clear()
+		for peer in state.vitals:
+			if not state.vitals[peer].active:
+				tank_world.inactive_peers.append(peer)
 	apply_vitals(state)
 	artwork.apply_aims(state.aims)
 	combat_view.apply_snapshot(state)
@@ -506,13 +456,13 @@ func apply_vitals(data: Dictionary) -> void:
 		var values: Dictionary = duel_vitals[peer]
 		lines.append("%s: %d HP / %d lives" % [str(player_names[peer]).left(18), values.health, values.lives])
 		if artwork.tank_markers.has(peer):
-			artwork.tank_markers[peer].visible = values.active
+			artwork.tank_markers[peer].apply_vitals(values)
 		if float(values.protection) > 0:
 			artwork.contact_timers[peer] = float(values.protection)
 	if is_instance_valid(vitals_label):
 		vitals_label.text = "\n".join(lines)
 
-func show_duel_result(winner: int) -> void:
+func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
 	if phase == "finished":
 		return
 	winner_peer = winner
@@ -520,41 +470,15 @@ func show_duel_result(winner: int) -> void:
 	fire_held = false
 	combat_view.clear_shots()
 	combat_view.sound.play("victory" if winner == multiplayer.get_unique_id() else "defeat")
-	result_overlay = Control.new()
+	result_overlay = preload("res://scripts/lan_results.gd").new()
 	$HUD.add_child(result_overlay)
-	result_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.07, 0.09, 0.85)
-	result_overlay.add_child(shade)
-	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var center := CenterContainer.new()
-	result_overlay.add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var card := PanelContainer.new()
-	center.add_child(card)
-	var column := VBoxContainer.new()
-	column.custom_minimum_size = Vector2(460, 0)
-	column.add_theme_constant_override("separation", 16)
-	card.add_child(column)
-	var title := Label.new()
-	title.text = "Winner: " + str(player_names.get(winner, "None"))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	column.add_child(title)
-	if multiplayer.is_server():
-		play_again_button = Button.new()
-		play_again_button.text = "Play Again"
-		play_again_button.pressed.connect(request_start)
-		column.add_child(play_again_button)
-	else:
-		var waiting := Label.new()
-		waiting.text = "Waiting for host to play again"
-		column.add_child(waiting)
-	var back := Button.new()
-	back.text = "Return to Lobby"
-	back.pressed.connect(leave_room)
-	column.add_child(back)
-	var confetti := preload("res://scripts/confetti.gd").new()
-	result_overlay.add_child(confetti)
-	result_overlay.move_child(confetti, 1)
+	var guest := 0
+	for peer in player_names:
+		if peer != 1:
+			guest = peer
+	var winner_number := 1 if winner == 1 else (2 if winner == guest and guest != 0 else 0)
+	result_overlay.build(winner_number, [duel_vitals.get(1, {}), duel_vitals.get(guest, {})], summary, multiplayer.is_server())
+	play_again_button = result_overlay.replay_button if multiplayer.is_server() else null
+	result_overlay.replay_requested.connect(request_start)
+	result_overlay.lobby_requested.connect(leave_room)
 	update_connection_status()

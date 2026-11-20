@@ -133,9 +133,6 @@ func packet_checks() -> void:
 	if not check(receiver.games[id]["address"] == lan_address, "LAN address must replace loopback"):
 		return
 	var prior_seen: int = receiver.games[id]["seen"]
-	# Local UDP can be consumed in the same millisecond as remember_game.
-	while Time.get_ticks_msec() <= prior_seen:
-		await process_frame
 	data["port"] = 32101
 	data["username"] = "LuckyOtter"
 	data["players"] = 2
