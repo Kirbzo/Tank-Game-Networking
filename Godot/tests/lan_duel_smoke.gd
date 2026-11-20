@@ -38,6 +38,13 @@ func lane() -> void:
 	room.tank_world.positions[guest] = Vector2(550, 430)
 	await create_timer(0.3).timeout
 
+func result_labels() -> Array[String]:
+	var labels: Array[String] = []
+	if is_instance_valid(room.result_overlay):
+		for node in room.result_overlay.find_children("*", "Label", true, false):
+			labels.append(node.text)
+	return labels
+
 func run() -> void:
 	var hosting := OS.get_cmdline_user_args().has("host")
 	app = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
@@ -87,7 +94,7 @@ func run() -> void:
 			if original_epoch >= 0 and room.epoch > original_epoch and room.phase == "ready":
 				room.receive_combat_event(original_epoch, 999999, "result", {"winner": 0})
 				stale_rejected = room.phase == "ready"
-			probe.report.rpc_id(1, {"vitals": room.duel_vitals, "phase": room.phase, "winner": room.winner_peer, "epoch": room.epoch, "replay_rejected": rejected, "stale_rejected": stale_rejected, "stale_vitals_rejected": stale_vitals_rejected, "position": room.tank_view.predicted_position})
+			probe.report.rpc_id(1, {"vitals": room.duel_vitals, "phase": room.phase, "winner": room.winner_peer, "epoch": room.epoch, "replay_rejected": rejected, "stale_rejected": stale_rejected, "stale_vitals_rejected": stale_vitals_rejected, "position": room.tank_view.predicted_position, "result_labels": result_labels()})
 			await create_timer(0.05).timeout
 		print("PASS LAN duel guest: authoritative vitals, result, guest replay rejection, reset and stale epoch")
 		quit()
@@ -132,6 +139,12 @@ func run() -> void:
 				return
 			await create_timer(2.1).timeout
 	if not check(await until(func(): return room.phase == "finished" and probe.observed.get("phase") == "finished" and probe.observed.get("winner") == winner), "Both see the same winner"):
+		return
+	var labels := result_labels()
+	var winner_number := 1 if winner == 1 else 2
+	if not check(labels == probe.observed.result_labels and labels.has("PLAYER %d WINS!" % winner_number) and labels.has("GAME OVER - PLAYER %d" % (3 - winner_number)), "Both results map Player 1 to host and Player 2 to guest"):
+		return
+	if not check(labels[3].contains("17 shots fired") and labels[3].contains("0 / 35 bricks cleared") and room.combat.match_shots == 17, "Host summary excludes preview shots and matches both screens"):
 		return
 	var shots: int = room.combat.next_shot
 	var tick: int = room.tank_world.tick

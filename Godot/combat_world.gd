@@ -21,6 +21,8 @@ var interactions_enabled := true
 var ended := false
 var previous_lives: Dictionary = {}
 var vitals_revision := 0
+var match_elapsed := 0.0
+var match_shots := 0
 
 func _ready() -> void:
 	# Authority coordinates never inherit the visual arena's viewport scaling.
@@ -103,6 +105,8 @@ func accept_input(peer: int, direction: Vector2, fire: bool, sequence: int, now:
 func _physics_process(delta: float) -> void:
 	if ended:
 		return
+	if interactions_enabled:
+		match_elapsed += delta
 	for peer in proxies:
 		proxies[peer].position = tanks.positions[peer]
 		proxies[peer].advance_vitals(delta)
@@ -128,6 +132,8 @@ func request_fire(peer: int, direction: Vector2, sequence: int) -> bool:
 	return true
 
 func shoot(peer: int) -> void:
+	if interactions_enabled:
+		match_shots += 1
 	cooldowns[peer] = FIRE_INTERVAL
 	next_shot += 1
 	var id := next_shot
@@ -186,5 +192,5 @@ func finish_duel() -> void:
 			winner = peer
 	set_interactions_enabled(false)
 	controls.clear()
-	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision})
+	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": tanks.removed_ice.size(), "total": TankWorld.ice_centers().size()}})
 	clear_shots.call_deferred()

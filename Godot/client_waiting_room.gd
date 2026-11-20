@@ -244,13 +244,13 @@ func update_connection_status() -> void:
 	super.update_connection_status()
 	if session_lobby != null:
 		if phase == "running":
-			status_message.text += "\nMove: WASD / arrows · Aim: mouse · Fire: left click"
+			status_message.text += "\nMove: WASD / arrows Â· Aim: mouse Â· Fire: left click"
 		elif phase == "finished":
 			status_message.text += "\nDuel finished"
 		elif phase == "preparing":
 			status_message.text += "\nWaiting for player readiness..."
 		elif phase == "ready":
-			status_message.text += "\nMove and shoot · " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
+			status_message.text += "\nMove and shoot Â· " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:
 			status_message.text += "\nSetting up the waiting room..."
 	if is_instance_valid(bottom_start_button):
@@ -403,7 +403,7 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 				tank_view.receive(data.tick, data.positions, data.acks, peer, 1.0 / Engine.physics_ticks_per_second)
 	elif kind == "result":
 		apply_vitals(data)
-		show_duel_result(int(data.winner))
+		show_duel_result(int(data.winner), data.get("summary", {}))
 	elif kind == "ice":
 		tank_world.removed_ice[int(data.id)] = true
 		artwork.remove_ice(int(data.id))
@@ -446,7 +446,7 @@ func apply_vitals(data: Dictionary) -> void:
 	if is_instance_valid(vitals_label):
 		vitals_label.text = "\n".join(lines)
 
-func show_duel_result(winner: int) -> void:
+func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
 	if phase == "finished":
 		return
 	winner_peer = winner
@@ -454,41 +454,15 @@ func show_duel_result(winner: int) -> void:
 	fire_held = false
 	combat_view.clear_shots()
 	combat_view.sound.play("victory" if winner == multiplayer.get_unique_id() else "defeat")
-	result_overlay = Control.new()
+	result_overlay = preload("res://scripts/lan_results.gd").new()
 	$HUD.add_child(result_overlay)
-	result_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.07, 0.09, 0.85)
-	result_overlay.add_child(shade)
-	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var center := CenterContainer.new()
-	result_overlay.add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var card := PanelContainer.new()
-	center.add_child(card)
-	var column := VBoxContainer.new()
-	column.custom_minimum_size = Vector2(460, 0)
-	column.add_theme_constant_override("separation", 16)
-	card.add_child(column)
-	var title := Label.new()
-	title.text = "Winner: " + str(player_names.get(winner, "None"))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	column.add_child(title)
-	if multiplayer.is_server():
-		play_again_button = Button.new()
-		play_again_button.text = "Play Again"
-		play_again_button.pressed.connect(request_start)
-		column.add_child(play_again_button)
-	else:
-		var waiting := Label.new()
-		waiting.text = "Waiting for host to play again"
-		column.add_child(waiting)
-	var back := Button.new()
-	back.text = "Return to Lobby"
-	back.pressed.connect(leave_room)
-	column.add_child(back)
-	var confetti := preload("res://scripts/confetti.gd").new()
-	result_overlay.add_child(confetti)
-	result_overlay.move_child(confetti, 1)
+	var guest := 0
+	for peer in player_names:
+		if peer != 1:
+			guest = peer
+	var winner_number := 1 if winner == 1 else (2 if winner == guest and guest != 0 else 0)
+	result_overlay.build(winner_number, [duel_vitals.get(1, {}), duel_vitals.get(guest, {})], summary, multiplayer.is_server())
+	play_again_button = result_overlay.replay_button if multiplayer.is_server() else null
+	result_overlay.replay_requested.connect(request_start)
+	result_overlay.lobby_requested.connect(leave_room)
 	update_connection_status()
