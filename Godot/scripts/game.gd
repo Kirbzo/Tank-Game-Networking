@@ -247,7 +247,7 @@ func show_menu() -> void:
 	title.add_theme_color_override("font_outline_color", Color("#022139"))
 	title.add_theme_constant_override("outline_size", 6)
 	label_in(box, "Snowy trails. Big antlers. Tiny tanks.", 18, MINT)
-	mode_button(box, "Play", "Solo practice and local play.", show_play).grab_focus()
+	mode_button(box, "Solo", "Practice on the winter field.", start_game).grab_focus()
 	mode_button(box, "Multiplayer", "Gather your crew in the lobby.", func(): join_requested.emit(), true)
 	var options := [
 		["Controls", show_controls, preload("res://assets/menu_controls.svg")],
@@ -262,18 +262,6 @@ func show_menu() -> void:
 		button.expand_icon = true
 		button.add_theme_constant_override("icon_max_width", 26)
 	queue_redraw()
-
-func show_play() -> void:
-	var box := overlay()
-	label_in(box, "CHOOSE YOUR CREW", 36, MINT)
-	label_in(box, "Clear the icy field alone or together.", 20)
-	button_in(box, "Solo Practice", start_game).grab_focus()
-	button_in(box, "Local Co-op / 2 Players", start_game.bind(true))
-	button_in(box, "Local Duel / 2 Players", start_game.bind(true, true))
-	label_in(box, "Local co-op shares one score and one objective.", 17, MINT)
-	button_in(box, "Host Game", func(): host_requested.emit())
-	button_in(box, "Join Game", func(): join_requested.emit())
-	button_in(box, "Main Menu", show_menu)
 
 func show_controls() -> void:
 	var box := overlay()

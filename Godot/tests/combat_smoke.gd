@@ -1,5 +1,5 @@
 extends "res://tests/combined_smoke.gd"
-## Paired actual ENet test via application.tscn, Play, Host/Join, Ready and Start.
+## Paired actual ENet test via application.tscn, Multiplayer lobby, Ready and Start.
 func aim(at: Vector2) -> void:
 	var motion := InputEventMouseMotion.new()
 	motion.position = lobby.active_room.artwork.to_global(at)

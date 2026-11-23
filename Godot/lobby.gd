@@ -32,6 +32,7 @@ var exiting := false
 var active_room: Control
 var room_return_message := ""
 var disconnected_screen: Control
+var local_modes: HBoxContainer
 
 func _ready() -> void:
 	# Network combat must not depend on the optional offline client's menu setup.
@@ -95,7 +96,7 @@ func _ready() -> void:
 	var games_title := add_label(games_column, "Available Games")
 	games_title.add_theme_font_size_override("font_size", 28)
 	game_list = ItemList.new()
-	game_list.custom_minimum_size = Vector2(0, 280)
+	game_list.custom_minimum_size = Vector2(0, 210)
 	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	game_list.item_selected.connect(select_game)
 	games_column.add_child(game_list)
@@ -115,6 +116,9 @@ func _ready() -> void:
 	column.add_child(network_address)
 	network_status = add_label(column, "")
 	network_status.hide()
+	local_modes = HBoxContainer.new()
+	local_modes.add_theme_constant_override("separation", 12)
+	column.add_child(local_modes)
 	discovery.games_changed.connect(refresh_games)
 	discovery.discovery_failed.connect(discovery_error)
 	discovery.network_warning.connect(show_network_status)
@@ -126,6 +130,15 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(join_server_disconnected)
 	multiplayer.peer_connected.connect(session_peers_changed)
 	multiplayer.peer_disconnected.connect(session_peers_changed)
+
+func add_local_game_buttons(start_local: Callable) -> void:
+	for entry in [["Local Duel / 2 Players", true], ["Local Co-op / 2 Players", false]]:
+		var button := Button.new()
+		button.text = entry[0]
+		button.custom_minimum_size.y = 48
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.pressed.connect(start_local.bind(entry[1]))
+		local_modes.add_child(button)
 
 func session_peers_changed(_peer_id: int) -> void:
 	# Read the peer list after Godot finishes processing the connection event.

@@ -40,10 +40,14 @@ func run() -> void:
 	root.add_child(app)
 	current_scene = app
 	game = app.client_menu
-	button("Play").pressed.emit()
-	if not check(button("Local Co-op / 2 Players") != null and button("Host Game") != null, "Existing Play choices retained"):
+	button("Multiplayer").pressed.emit()
+	var duel_button: Button
+	for control in app.lobby.local_modes.get_children():
+		if control.text == "Local Duel / 2 Players":
+			duel_button = control
+	if not check(duel_button != null and app.lobby.local_modes.get_child_count() == 2, "Local modes available directly in multiplayer lobby"):
 		return
-	button("Local Duel / 2 Players").pressed.emit()
+	duel_button.pressed.emit()
 	await isolate()
 	if not check(game.local_duel and app.lobby.session == null and not app.lobby.visible, "Duel starts from menu without a network session"):
 		return

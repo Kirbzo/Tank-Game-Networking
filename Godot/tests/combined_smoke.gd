@@ -29,8 +29,9 @@ func button(text: String) -> Button:
 	return null
 
 func enter_menu(hosting: bool) -> void:
-	button("Play").pressed.emit()
-	button("Host Game" if hosting else "Join Game").pressed.emit()
+	button("Multiplayer").pressed.emit()
+	if hosting:
+		lobby.host_button.pressed.emit()
 
 func waiting_room_checks() -> bool:
 	var room = lobby.active_room

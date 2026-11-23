@@ -36,7 +36,7 @@ func run() -> void:
 				return
 			lobby.exit_button.pressed.emit()
 			await process_frame
-			if not check(at_main_menu() and peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED and button("Play") != null, "Lobby Exit restores main menu and closes previous peer"):
+			if not check(at_main_menu() and peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED and button("Solo") != null, "Lobby Exit restores main menu and closes previous peer"):
 				return
 			lobby.show_exit_screen()
 			if not check(at_main_menu(), "Repeated Exit is safe"):
