@@ -45,14 +45,28 @@ func _ready() -> void:
 	for side in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 32)
 	add_child(margin)
+	var backdrop := TextureRect.new()
+	backdrop.texture = preload("res://assets/menu_winter.svg")
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(backdrop)
+	var card := PanelContainer.new()
+	var card_texture := StyleBoxTexture.new()
+	card_texture.texture = preload("res://assets/menu_panel.svg")
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		card_texture.set_texture_margin(side, 32)
+		card_texture.set_content_margin(side, 24)
+	card.add_theme_stylebox_override("panel", card_texture)
+	margin.add_child(card)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	margin.add_child(scroll)
+	card.add_child(scroll)
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 14)
 	scroll.add_child(column)
-	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
+	var title := add_label(column, "MOOOZE TANKS MULTIPLAYER LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")

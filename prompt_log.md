@@ -2611,3 +2611,37 @@ Clarification asked current game transfer versus latest collision commit only. A
 > Bring current game into main
 
 Associated status snapshot: S-2026-11-20-07. Transfer source game-intigration-malik 343c406 current Godot game into main on top of 2baa608, retaining protected docs, license, main UID and unrelated tools/reports. Source branch untouched; no push. Preserved main log history and imported source request/status history with distinct branch-qualified P088. Eight main runtime processes PASS plus import; exact commands, protected hashes, sandbox warnings, source equality and physical/graphical limits in status.md. Commit title Beta QOL Fixes v1.0. No new report documents. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P110 - Inspect GitHub course reference
+
+Date: November 23, 2026.
+Time: 08:46:22 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> [https://github.com/AnnMaxine/github-actions-course-main](https://github.com/AnnMaxine/github-actions-course-main)\
+> Just look at this repository and make sure our game also look like this !!
+
+Associated status snapshot: S-2026-11-23-01. Reference contents could not be retrieved through web open/search or Git HTTPS; no comparison or implementation claimed. Local checkout has no .github directory. Requested accessible reference and clarification of Actions/repository structure versus game appearance. Only required logs changed. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion, and monetary cost: **Unavailable**; reliable full-request usage and applicable pricing records are unavailable.
+
+## P111 - Correct reference and match game presentation
+
+Date: November 23, 2026.
+Time: 09:05:45 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual correction:
+
+> im sorry i gave you wrong link
+
+Actual prompt:
+
+> ere is the correct one [https://github.com/AnnMaxine/Moooze-Tanks-Repository](https://github.com/AnnMaxine/Moooze-Tanks-Repository)
+
+Clarification asked: I’m treating “look like this” as matching the menu and gameplay visuals while preserving our LAN features. Is that the scope you want?
+
+Actual answer:
+
+> Match visuals; preserve LAN features
+
+Associated status snapshot: S-2026-11-23-02; continues P110 with corrected reference. Inspected reference c941c4028b61efba68340baead6f9341e8f41a08 and applied its winter menu/button assets, presentation helpers and compact tank vitals. Retained current local modes, working LAN, authority and username visibility. Current graphical probe plus five regression test processes passed; source documents/protected docs unchanged. Commands, changed-file scope and limitations in status.md. No commit or push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and monetary cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.

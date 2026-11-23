@@ -92,7 +92,7 @@ func update_name_labels() -> void:
 		var marker: Node2D = tank_markers[peer]
 		label.visible = marker.visible
 		label.reset_size()
-		label.position = marker.position + Vector2(-label.size.x / 2.0, -64)
+		label.position = marker.position + Vector2(-label.size.x / 2.0, -86)
 
 func _process(delta: float) -> void:
 	update_name_labels()

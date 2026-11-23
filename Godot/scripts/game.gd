@@ -63,6 +63,24 @@ func build_theme() -> void:
 	theme.default_font_size = 19
 	theme.set_color("font_color", "Label", CREAM)
 	for key in ["normal", "hover", "pressed", "focus", "disabled"]:
+		if key in ["normal", "hover", "pressed", "disabled"]:
+			var textured := StyleBoxTexture.new()
+			textured.texture = preload("res://assets/menu_button.svg")
+			textured.texture_margin_left = 16
+			textured.texture_margin_right = 16
+			textured.texture_margin_top = 12
+			textured.texture_margin_bottom = 12
+			textured.content_margin_left = 22
+			textured.content_margin_right = 22
+			textured.content_margin_top = 8
+			textured.content_margin_bottom = 8
+			textured.modulate_color = Color("#b7efff") if key == "hover" else Color.WHITE
+			if key == "pressed":
+				textured.modulate_color = Color("#85accc")
+			if key == "disabled":
+				textured.modulate_color = Color(0.45, 0.55, 0.65)
+			theme.set_stylebox(key, "Button", textured)
+			continue
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color("#214d50") if key == "normal" else Color("#356e71")
 		if key == "disabled":
@@ -100,6 +118,14 @@ func overlay() -> VBoxContainer:
 	shade.color = Color(0.025, 0.07, 0.09, 0.78)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(shade)
+	if state == "menu":
+		var backdrop := TextureRect.new()
+		backdrop.texture = preload("res://assets/menu_winter.svg")
+		backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.add_child(backdrop)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(center)
@@ -112,18 +138,17 @@ func overlay() -> VBoxContainer:
 	card.add_child(box)
 	return box
 
-func card_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#102f3c")
-	style.border_color = Color("#7fb9c9")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(18)
+func card_style() -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = preload("res://assets/menu_panel.svg")
+	style.texture_margin_left = 32
+	style.texture_margin_right = 32
+	style.texture_margin_top = 32
+	style.texture_margin_bottom = 16
 	style.content_margin_left = 32
 	style.content_margin_right = 32
 	style.content_margin_top = 24
 	style.content_margin_bottom = 24
-	style.shadow_color = Color(0, 0, 0, 0.3)
-	style.shadow_size = 12
 	return style
 
 func logo_in(box: VBoxContainer, height: float) -> void:
@@ -155,6 +180,47 @@ func button_in(box: VBoxContainer, text: String, callback: Callable, disabled: b
 	box.add_child(button)
 	return button
 
+func mode_button(box: VBoxContainer, title: String, description: String, callback: Callable, multiplayer_mode: bool = false) -> Button:
+	var button := button_in(box, title, callback)
+	button.custom_minimum_size.y = 88
+	# Retain the accessible button name; visible content uses a title and subtitle.
+	for color in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		button.add_theme_color_override(color, Color.TRANSPARENT)
+	var icon := TextureRect.new()
+	icon.texture = preload("res://assets/menu_tank.svg")
+	icon.position = Vector2(22, 14)
+	icon.size = Vector2(100, 58)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(icon)
+	if multiplayer_mode:
+		var second := icon.duplicate() as TextureRect
+		second.position += Vector2(28, 5)
+		second.modulate = Color("#ffaaaa")
+		button.add_child(second)
+	var heading := Label.new()
+	heading.text = title.to_upper()
+	heading.position = Vector2(162, 9)
+	heading.add_theme_font_size_override("font_size", 28)
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(heading)
+	var subtitle := Label.new()
+	subtitle.text = description
+	subtitle.position = Vector2(162, 47)
+	subtitle.add_theme_font_size_override("font_size", 16)
+	subtitle.add_theme_color_override("font_color", MINT)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(subtitle)
+	var arrow := Label.new()
+	arrow.text = "»"
+	arrow.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	arrow.position = Vector2(-46, 20)
+	arrow.add_theme_font_size_override("font_size", 34)
+	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(arrow)
+	return button
+
 func show_menu() -> void:
 	get_tree().paused = false
 	state = "menu"
@@ -168,22 +234,31 @@ func show_menu() -> void:
 		pause_button.queue_free()
 	particles.clear()
 	var box := overlay()
-	logo_in(box, 118)
-	label_in(box, "MOOOZE TANKS", 46)
-	label_in(box, "Snowy trails. Big antlers. Tiny tanks.", 19, MINT)
-	button_in(box, "Play", show_play).grab_focus()
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	box.add_child(row)
-	for entry in [["Controls", show_controls], ["Help", show_help]]:
-		var column := VBoxContainer.new()
-		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(column)
-		button_in(column, entry[0], entry[1])
-	button_in(box, "Sound", show_sound)
-	button_in(box, "Credits", show_credits)
-	button_in(box, "Exit", func(): get_tree().quit())
-	label_in(box, "A winter field adventure for one or two players", 16, MINT)
+	box.custom_minimum_size.x = 640
+	box.add_theme_constant_override("separation", 10)
+	logo_in(box, 92)
+	var title := label_in(box, "MOOOZE TANKS", 44)
+	var title_font := SystemFont.new()
+	title_font.font_names = PackedStringArray(["Arial Black", "Arial"])
+	title_font.font_weight = 900
+	title.add_theme_font_override("font", title_font)
+	title.add_theme_color_override("font_outline_color", Color("#022139"))
+	title.add_theme_constant_override("outline_size", 6)
+	label_in(box, "Snowy trails. Big antlers. Tiny tanks.", 18, MINT)
+	mode_button(box, "Play", "Solo practice and local play.", show_play).grab_focus()
+	mode_button(box, "Multiplayer", "Gather your crew in the lobby.", func(): join_requested.emit(), true)
+	var options := [
+		["Controls", show_controls, preload("res://assets/menu_controls.svg")],
+		["Sound", show_sound, preload("res://assets/menu_sound.svg")],
+		["Credits", show_credits, preload("res://assets/menu_credits.svg")],
+		["Exit", func(): get_tree().quit(), preload("res://assets/menu_exit.svg")],
+	]
+	for option in options:
+		var button := button_in(box, option[0], option[1])
+		button.icon = option[2]
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 26)
 	queue_redraw()
 
 func show_play() -> void:

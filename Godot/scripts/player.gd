@@ -15,6 +15,11 @@ var recovery_time := 0.0
 var shot_is_heavy := false
 var respawn_protection := 0.0
 var player_number := 1
+var user_id := ""
+var vitals_display: Control
+var user_id_label: Label
+var health_bar: ProgressBar
+var lives_label: Label
 var health := MAX_HEALTH
 var lives := STARTING_LIVES
 var spawn_position := Vector2.ZERO
@@ -60,6 +65,81 @@ func _ready() -> void:
 	turret.add_child(sprite)
 	if player_number == 2:
 		sprite.modulate = Color(1.8, 0.65, 1.0)
+
+	build_vitals_display()
+	vitals_changed.connect(update_vitals_display)
+	update_vitals_display()
+
+func build_vitals_display() -> void:
+	vitals_display = Control.new()
+	vitals_display.name = "TankVitals"
+	vitals_display.position = Vector2(-96, -76)
+	vitals_display.z_index = 10
+	vitals_display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(vitals_display)
+	var plate := Control.new()
+	plate.name = "CompactVitals"
+	plate.position = Vector2(42, 0)
+	plate.size = Vector2(144, 48)
+	vitals_display.add_child(plate)
+	user_id_label = Label.new()
+	user_id_label.position = Vector2(0, 0)
+	user_id_label.size = Vector2(144, 23)
+	user_id_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	user_id_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	user_id_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	user_id_label.add_theme_font_size_override("font_size", 16)
+	user_id_label.add_theme_color_override("font_color", Color("#eefaff"))
+	user_id_label.add_theme_color_override("font_outline_color", Color("#082641"))
+	user_id_label.add_theme_constant_override("outline_size", 4)
+	plate.add_child(user_id_label)
+	user_id_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	health_bar = ProgressBar.new()
+	health_bar.name = "HealthBar"
+	health_bar.position = Vector2(0, 24)
+	health_bar.size = Vector2(144, 20)
+	health_bar.max_value = MAX_HEALTH
+	health_bar.show_percentage = false
+	health_bar.add_theme_font_size_override("font_size", 12)
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color("#061e2d")
+	background.border_color = Color("#8eefff")
+	background.set_border_width_all(2)
+	health_bar.add_theme_stylebox_override("background", background)
+	var fill := StyleBoxTexture.new()
+	fill.texture = preload("res://assets/vitals_fill.svg")
+	health_bar.add_theme_stylebox_override("fill", fill)
+	health_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	plate.add_child(health_bar)
+	# Apply after styles/percentage so the default theme minimum cannot enlarge it.
+	health_bar.size = Vector2(144, 20)
+	var heart := TextureRect.new()
+	heart.name = "LivesHeart"
+	heart.texture = preload("res://assets/vitals_heart.svg")
+	heart.position = Vector2(0, 15)
+	heart.size = Vector2(48, 46)
+	heart.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	heart.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	vitals_display.add_child(heart)
+	lives_label = Label.new()
+	lives_label.position = Vector2(8, 20)
+	lives_label.size = Vector2(32, 27)
+	lives_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lives_label.add_theme_font_size_override("font_size", 22)
+	lives_label.add_theme_color_override("font_outline_color", Color("#102f3c"))
+	lives_label.add_theme_constant_override("outline_size", 5)
+	vitals_display.add_child(lives_label)
+	for control in vitals_display.get_children():
+		control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func update_vitals_display() -> void:
+	if not is_instance_valid(health_bar):
+		return
+	# Local fallback only; the server can assign user_id without a networking contract.
+	user_id_label.text = user_id if not user_id.is_empty() else "Player %d" % player_number
+	user_id_label.tooltip_text = user_id_label.text
+	health_bar.value = health
+	lives_label.text = str(lives)
 
 func _physics_process(delta: float) -> void:
 	if not active:

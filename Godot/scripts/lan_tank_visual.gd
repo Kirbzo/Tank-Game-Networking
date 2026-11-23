@@ -9,6 +9,8 @@ func _ready() -> void:
 	collision_mask = 0
 	damage_enabled = false
 	set_physics_process(false)
+	# The arena owns the always-visible assigned username above this plate.
+	user_id_label.hide()
 	previous_position = position
 
 func _process(delta: float) -> void:
@@ -35,6 +37,7 @@ func apply_vitals(values: Dictionary) -> void:
 	active = bool(values.active)
 	visible = active
 	respawn_protection = float(values.protection)
+	update_vitals_display()
 
 func reset_visuals() -> void:
 	health = MAX_HEALTH
@@ -48,3 +51,4 @@ func reset_visuals() -> void:
 	modulate = Color.WHITE
 	chassis.rotation = 0.0
 	previous_position = position
+	update_vitals_display()
