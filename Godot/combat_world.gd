@@ -6,6 +6,7 @@ const Brick = preload("res://scripts/brick.gd")
 const Moose = preload("res://scripts/moose.gd")
 const TankWorld = preload("res://tank_world.gd")
 const Player = preload("res://scripts/player.gd")
+const Powerups = preload("res://scripts/powerups.gd")
 const FIRE_INTERVAL = preload("res://scripts/player.gd").FIRE_INTERVAL
 const CORNERS = preload("res://scripts/game.gd").CORNERS
 var tanks: RefCounted
@@ -23,6 +24,9 @@ var previous_lives: Dictionary = {}
 var vitals_revision := 0
 var match_elapsed := 0.0
 var match_shots := 0
+var next_ice := 35
+var ice_revision := 0
+var cleared_ice := 0
 
 class LanPlayer extends "res://scripts/player.gd":
 	func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
@@ -51,6 +55,7 @@ func _ready() -> void:
 		proxies[peer] = proxy
 		previous_lives[peer] = proxy.lives
 		proxy.vitals_changed.connect(report_vitals.bind(peer))
+		proxy.damaged.connect(func(): confirmed.emit("tank_hit", {"peer": peer}))
 		proxy.exploded.connect(func(): confirmed.emit("explosion", {"position": proxy.position, "peer": peer}))
 		proxy.lives_depleted.connect(finish_duel)
 		proxy.moose_hit.connect(func():
@@ -67,6 +72,8 @@ func _ready() -> void:
 		animal.tanks = proxies.values()
 		# Logical host positions, not offline tank physics, determine contact here.
 		animal.authoritative_contacts = true
+		animal.provoked.connect(func(): confirmed.emit("moose_angry", {}))
+		animal.emerged.connect(func(): confirmed.emit("moose_roar", {}))
 		add_child(animal)
 		animal.set_physics_process(interactions_enabled)
 		moose.append(animal)
@@ -92,10 +99,60 @@ func add_brick(at: Vector2, id: int) -> void:
 	brick.reinforced = id < 0 or not interactions_enabled
 	brick.set_meta("ice_id", id)
 	if id >= 0:
+		if id < 32 and id % 4 == 2:
+			brick.powerup = Powerups.TYPES[(id / 4) % Powerups.TYPES.size()]
+		elif id >= 35 and randf() < 8.0 / 35.0:
+			brick.powerup = Powerups.TYPES.pick_random()
+		brick.powerup_released.connect(award_powerup.bind(at))
 		brick.destroyed.connect(func(_at):
-			tanks.removed_ice[id] = true
-			confirmed.emit("ice", {"id": id}))
+			if id < 35:
+				tanks.removed_ice[id] = true
+			cleared_ice += 1
+			tanks.extra_ice.erase(id)
+			ice_revision += 1
+			confirmed.emit("ice", {"id": id, "revision": ice_revision})
+			replace_brick.call_deferred(at))
 	add_child(brick)
+
+func award_powerup(kind: String, recipient: Node, at: Vector2) -> void:
+	if not interactions_enabled or ended or recipient not in proxies.values() or not recipient.active:
+		return
+	recipient.apply_powerup(kind)
+	confirmed.emit("powerup", {"kind": kind, "position": at})
+
+func heavy_blast(at: Vector2, shooter: Node) -> void:
+	if not interactions_enabled or ended:
+		return
+	for brick in get_children():
+		if brick is Brick and not brick.reinforced and not brick.broken and brick.position.distance_to(at) <= Powerups.BLAST_RADIUS:
+			brick.hit(shooter)
+
+func replace_brick(previous_position: Vector2) -> void:
+	if not interactions_enabled or ended:
+		return
+	var locations: Array[Vector2] = []
+	for column in range(20):
+		for row in range(12):
+			locations.append(Vector2(184 + column * 48, 212 + row * 40))
+	locations.shuffle()
+	for location in locations:
+		if location.distance_to(previous_position) < 96.0 or location.distance_to(Vector2(208, 612)) < 90.0 or location.distance_to(Vector2(1072, 612)) < 90.0:
+			continue
+		var clear := true
+		for body in get_children():
+			if body is Brick and not body.broken:
+				if absf(body.position.x - location.x) < 52.0 and absf(body.position.y - location.y) < 44.0:
+					clear = false
+			elif body is PhysicsBody2D and body.position.distance_to(location) < 90.0:
+				clear = false
+		if clear:
+			var id := next_ice
+			next_ice += 1
+			tanks.extra_ice[id] = location
+			add_brick(location, id)
+			ice_revision += 1
+			confirmed.emit("ice_spawn", {"id": id, "position": location, "revision": ice_revision})
+			return
 
 func accept_input(peer: int, direction: Vector2, fire: bool, sequence: int, now: int) -> bool:
 	if ended or not proxies.has(peer) or not proxies[peer].active:
@@ -114,6 +171,7 @@ func refresh_collision_bodies() -> void:
 		tanks.moose_positions.append(animal.position)
 	tanks.inactive_peers.clear()
 	for peer in proxies:
+		tanks.speed_multipliers[peer] = Powerups.SPEED_MULTIPLIER if proxies[peer].speed_time > 0.0 else 1.0
 		if not proxies[peer].active:
 			tanks.inactive_peers.append(peer)
 
@@ -157,6 +215,8 @@ func shoot(peer: int) -> void:
 	bullet.hits_moose = interactions_enabled
 	bullet.hits_tanks = interactions_enabled
 	bullet.shooter = proxies[peer]
+	bullet.heavy = interactions_enabled and proxies[peer].heavy_time > 0.0
+	bullet.heavy_impact = heavy_blast
 	bullet.origin = tanks.positions[peer]
 	bullet.direction = aims[peer]
 	bullet.position = bullet.origin + bullet.direction * 50.0
@@ -167,7 +227,7 @@ func shoot(peer: int) -> void:
 			confirmed.emit("remove", {"id": id}))
 	bullets[id] = bullet
 	add_child(bullet)
-	confirmed.emit("shot", {"id": id, "peer": peer, "position": bullet.position, "direction": bullet.direction})
+	confirmed.emit("shot", {"id": id, "peer": peer, "position": bullet.position, "direction": bullet.direction, "heavy": bullet.heavy})
 
 func snapshot() -> Dictionary:
 	var shots := {}
@@ -175,14 +235,14 @@ func snapshot() -> Dictionary:
 		shots[id] = bullets[id].position
 	var animals := []
 	for animal in moose:
-		animals.append({"position": animal.position, "heading": animal.heading, "gait": animal.gait})
-	return {"aims": aims.duplicate(), "shots": shots, "moose": animals, "vitals": vitals(), "revision": vitals_revision}
+		animals.append({"position": animal.position, "heading": animal.heading, "gait": animal.gait, "anger": animal.anger_remaining, "sprite_position": animal.sprite.position, "sprite_rotation": animal.sprite.rotation})
+	return {"aims": aims.duplicate(), "shots": shots, "moose": animals, "vitals": vitals(), "revision": vitals_revision, "ice_revision": ice_revision, "removed_ice": tanks.removed_ice.duplicate(), "extra_ice": tanks.extra_ice.duplicate()}
 
 func vitals() -> Dictionary:
 	var result := {}
 	for peer in proxies:
 		var proxy = proxies[peer]
-		result[peer] = {"health": proxy.health, "lives": proxy.lives, "active": proxy.active, "protection": proxy.respawn_protection}
+		result[peer] = {"health": proxy.health, "lives": proxy.lives, "active": proxy.active, "protection": proxy.respawn_protection, "heavy": proxy.heavy_time, "shield": proxy.shield_time, "speed": proxy.speed_time, "recovery": proxy.recovery_time}
 	return result
 
 func report_vitals(peer: int) -> void:
@@ -208,5 +268,5 @@ func finish_duel() -> void:
 			winner = peer
 	set_interactions_enabled(false)
 	controls.clear()
-	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": tanks.removed_ice.size(), "total": TankWorld.ice_centers().size()}})
+	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": cleared_ice, "total": maxi(35, cleared_ice)}})
 	clear_shots.call_deferred()

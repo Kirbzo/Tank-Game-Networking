@@ -6,6 +6,7 @@ extends Node
 var online := false
 
 func _ready() -> void:
+	lobby.theme = client_menu.get_meta("ui_theme")
 	lobby.hide()
 	# Offline pause must not suspend discovery or an online connection.
 	lobby.process_mode = Node.PROCESS_MODE_ALWAYS

@@ -1,0 +1,12 @@
+The new music.wav, idle.wav, moose_blast.wav, moose_roar.wav and victory.wav
+are original mathematical synthesis created for Moooze Tanks, with no sampled
+recordings or third-party compositions. Dedicated to the public domain under
+CC0-1.0: free to use, modify and redistribute, including commercially, without
+attribution. Generator: tools/generate_audio.py (also CC0-1.0).
+
+Existing shoot.wav, engine.wav, brick.wav, explosion.wav and click.wav are
+preserved project-original synthesized assets, as documented in README.md.
+
+moose_angry.wav and tank_hit.wav imported from AnnMaxine/Moooze-Tanks-Repository
+commit c941c4028b61efba68340baead6f9341e8f41a08 are original procedural synthesis,
+CC0-1.0. Generator: tools/generate_impact_audio.py (standard Python, no samples).
