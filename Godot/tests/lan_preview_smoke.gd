@@ -82,7 +82,7 @@ func run() -> void:
 	await create_timer(0.2).timeout
 	aim(Vector2(424, 532) if hosting else Vector2(1048, 532))
 	await fire_once()
-	if not check(await until(func(): return room.artwork.ice_count == 33), "Normal ice destruction resumes only after second Start"):
+	if not check(await until(func(): return (room.artwork.ice_count == 35 and room.tank_world.removed_ice.size() >= 2)), "Ice destruction and replacement resume only after second Start"):
 		return
 	if hosting:
 		await create_timer(0.5).timeout

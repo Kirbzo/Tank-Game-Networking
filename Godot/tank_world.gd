@@ -5,6 +5,8 @@ const TANK_SPEED := 235.0
 const HALF := Vector2(24, 24)
 const CENTER_BOUNDS := Rect2(136, 176, 1008, 512)
 var removed_ice: Dictionary = {}
+var extra_ice: Dictionary = {}
+var speed_multipliers: Dictionary = {}
 const Player = preload("res://scripts/player.gd")
 var hit_push: Dictionary = {}
 var contact_cooldowns: Dictionary = {}
@@ -53,7 +55,7 @@ func step(delta: float, now: int) -> void:
 		if now - int(input_times.get(peer, -INPUT_TIMEOUT_MS)) > INPUT_TIMEOUT_MS:
 			direction = Vector2.ZERO
 		var bounce: Vector2 = bounce_push.get(peer, Vector2.ZERO)
-		var motion := direction * TANK_SPEED * delta + bounce * delta
+		var motion := direction * TANK_SPEED * clampf(float(speed_multipliers.get(peer, 1.0)), 1.0, 1.5) * delta + bounce * delta
 		var push: Vector2 = hit_push.get(peer, Vector2.ZERO)
 		if push != Vector2.ZERO:
 			motion += push * delta
@@ -69,10 +71,10 @@ func step(delta: float, now: int) -> void:
 	tick += 1
 
 func move_current(at: Vector2, direction: Vector2, delta: float) -> Vector2:
-	return move_tank(at, direction, delta, removed_ice)
+	return move_tank(at, direction, delta, removed_ice, extra_ice)
 
 func predict_movement(at: Vector2, direction: Vector2, delta: float) -> Vector2:
-	return move_body(prediction_peer, at, direction.limit_length() * TANK_SPEED * delta).position
+	return move_body(prediction_peer, at, direction.limit_length() * TANK_SPEED * clampf(float(speed_multipliers.get(prediction_peer, 1.0)), 1.0, 1.5) * delta).position
 
 func move_body(peer: int, at: Vector2, motion: Vector2) -> Dictionary:
 	var bodies: Array[Dictionary] = []
@@ -122,17 +124,21 @@ func move_body(peer: int, at: Vector2, motion: Vector2) -> Dictionary:
 		motion = (travel * (1.0 - earliest)).slide(normal)
 	return {"position": at, "normal": normal, "peer": collided_peer}
 
-static func move_tank(at: Vector2, direction: Vector2, delta: float, destroyed: Dictionary = {}) -> Vector2:
+static func move_tank(at: Vector2, direction: Vector2, delta: float, destroyed: Dictionary = {}, extra: Dictionary = {}) -> Vector2:
 	# Swept axis movement prevents tunnelling, sliding along the blocked edge.
 	var travel := direction.limit_length() * TANK_SPEED * delta
 	for axis in range(2):
 		var other := 1 - axis
 		var target := clampf(at[axis] + travel[axis], CENTER_BOUNDS.position[axis], CENTER_BOUNDS.end[axis])
-		var centers := ice_centers()
-		for id in range(centers.size()):
+		var centers := {}
+		var initial := ice_centers()
+		for id in range(initial.size()):
+			centers[id] = initial[id]
+		centers.merge(extra, true)
+		for id in centers:
 			if destroyed.has(id):
 				continue
-			var center := centers[id]
+			var center: Vector2 = centers[id]
 			var extent := Vector2(24, 20) + HALF
 			if at[other] <= center[other] - extent[other] or at[other] >= center[other] + extent[other]:
 				continue

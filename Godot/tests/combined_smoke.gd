@@ -182,7 +182,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-7" # Previous build requires a manual first Start.
+	old.protocol = "moooze-combined-8" # Previous build lacks replicated powers and compressed snapshots.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()

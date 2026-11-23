@@ -24,6 +24,7 @@ var combat_view: Node2D
 var combat_sequence := 0
 var event_sequence := 0
 var last_combat_tick := -1
+var ice_revision := -1
 var aim_direction := Vector2.RIGHT
 var aim_pointer := Vector2.ZERO
 var fire_held := false
@@ -56,6 +57,7 @@ func _ready() -> void:
 	vitals_panel.offset_top = -112
 	vitals_panel.offset_bottom = -40
 	vitals_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vitals_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	var background := StyleBoxFlat.new()
 	background.bg_color = Color(0.04, 0.12, 0.16, 0.9)
 	background.content_margin_left = 10
@@ -63,6 +65,8 @@ func _ready() -> void:
 	vitals_panel.add_theme_stylebox_override("panel", background)
 	vitals_label = Label.new()
 	vitals_label.add_theme_font_size_override("font_size", 14)
+	vitals_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vitals_label.custom_minimum_size.x = 280
 	vitals_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vitals_panel.add_child(vitals_label)
 	update_connection_status()
@@ -110,7 +114,7 @@ func _physics_process(delta: float) -> void:
 			session_lobby.tank_snapshot.rpc(game_id, epoch, tank_world.tick, tank_world.positions, tank_world.processed_sequences)
 			var state: Dictionary = combat.snapshot()
 			apply_combat_snapshot(tank_world.tick, state)
-			session_lobby.combat_snapshot.rpc(game_id, epoch, tank_world.tick, state)
+			session_lobby.combat_snapshot.rpc(game_id, epoch, tank_world.tick, var_to_bytes(state).compress(FileAccess.COMPRESSION_DEFLATE))
 	else:
 		var sequence := tank_view.predict(movement_direction(), delta)
 		if sequence > 0:
@@ -314,6 +318,7 @@ func reset_combat(authority: bool, create_view := true) -> void:
 	fire_held = false
 	event_sequence = 0
 	last_combat_tick = -1
+	ice_revision = -1
 	aim_direction = Vector2.RIGHT
 	artwork.reset_ice()
 	var directions := {}
@@ -323,6 +328,9 @@ func reset_combat(authority: bool, create_view := true) -> void:
 	if create_view:
 		combat_view = CombatView.new()
 		artwork.add_child(combat_view)
+		var menu := session_lobby.get_parent().get_node_or_null("MooozeTanks")
+		if menu != null:
+			combat_view.sound.set_volume(menu.sound.volume)
 	if authority:
 		combat = CombatWorld.new()
 		combat.tanks = tank_world
@@ -412,15 +420,22 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 	elif kind == "result":
 		apply_vitals(data)
 		show_duel_result(int(data.winner), data.get("summary", {}))
-	elif kind == "ice":
-		tank_world.removed_ice[int(data.id)] = true
-		artwork.remove_ice(int(data.id))
-		combat_view.sound.play("brick")
+	elif kind in ["ice", "ice_spawn"]:
+		if int(data.get("revision", ice_revision + 1)) <= ice_revision:
+			return
+		ice_revision = int(data.get("revision", ice_revision + 1))
+		if kind == "ice":
+			tank_world.removed_ice[int(data.id)] = true
+			tank_world.extra_ice.erase(int(data.id))
+			artwork.remove_ice(int(data.id))
+			combat_view.sound.play("brick")
+		else:
+			tank_world.extra_ice[int(data.id)] = data.position
+			artwork.spawn_ice(int(data.id), data.position)
 	elif kind == "contact":
 		artwork.contact_timers[int(data.peer)] = 2.0
 		if artwork.tank_markers.has(int(data.peer)):
 			artwork.tank_markers[int(data.peer)].moose_cooldown = 2.0
-		combat_view.sound.play_moose_contact()
 	else:
 		if kind == "shot":
 			if artwork.tank_markers.has(int(data.peer)):
@@ -431,6 +446,11 @@ func apply_combat_snapshot(tick: int, state: Dictionary) -> void:
 	if not controls_active() or tick <= last_combat_tick:
 		return
 	last_combat_tick = tick
+	if int(state.get("ice_revision", -1)) >= ice_revision:
+		ice_revision = int(state.get("ice_revision", -1))
+		tank_world.removed_ice = state.get("removed_ice", tank_world.removed_ice).duplicate()
+		tank_world.extra_ice = state.get("extra_ice", tank_world.extra_ice).duplicate()
+		artwork.apply_ice_state(tank_world.removed_ice, tank_world.extra_ice)
 	if not multiplayer.is_server():
 		tank_world.moose_positions.clear()
 		for animal in state.moose:
@@ -454,15 +474,21 @@ func apply_vitals(data: Dictionary) -> void:
 		if not duel_vitals.has(peer):
 			continue
 		var values: Dictionary = duel_vitals[peer]
+		tank_world.speed_multipliers[peer] = 1.5 if float(values.get("speed", 0.0)) > 0.0 else 1.0
 		lines.append("%s: %d HP / %d lives" % [str(player_names[peer]).left(18), values.health, values.lives])
 		if artwork.tank_markers.has(peer):
 			artwork.tank_markers[peer].apply_vitals(values)
+			var effect: String = artwork.tank_markers[peer].powerup_status()
+			if effect != "No power-up":
+				lines.append(effect)
 		if float(values.protection) > 0:
 			artwork.contact_timers[peer] = float(values.protection)
 	if is_instance_valid(vitals_label):
 		vitals_label.text = "\n".join(lines)
 
 func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
+	for marker in artwork.tank_markers.values():
+		marker.effects_running = false
 	if phase == "finished":
 		return
 	winner_peer = winner

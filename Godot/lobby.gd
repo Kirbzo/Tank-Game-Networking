@@ -274,7 +274,15 @@ func combat_fire(id: String, generation: int, aim: Vector2, sequence: int) -> vo
 		active_room.accept_fire_request(sender, generation, aim, sequence)
 
 @rpc("authority", "call_remote", "unreliable_ordered", 4)
-func combat_snapshot(id: String, generation: int, tick: int, state: Dictionary) -> void:
+func combat_snapshot(id: String, generation: int, tick: int, payload: PackedByteArray) -> void:
+	if payload.size() > 8192:
+		return
+	var decoded := payload.decompress_dynamic(65536, FileAccess.COMPRESSION_DEFLATE)
+	if decoded.is_empty():
+		return
+	var state = bytes_to_var(decoded)
+	if not state is Dictionary:
+		return
 	if not multiplayer.is_server() and has_tank_room(id) and active_room.epoch == generation:
 		active_room.apply_combat_snapshot(tick, state)
 

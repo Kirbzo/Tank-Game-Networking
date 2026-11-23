@@ -2645,3 +2645,15 @@ Actual answer:
 > Match visuals; preserve LAN features
 
 Associated status snapshot: S-2026-11-23-02; continues P110 with corrected reference. Inspected reference c941c4028b61efba68340baead6f9341e8f41a08 and applied its winter menu/button assets, presentation helpers and compact tank vitals. Retained current local modes, working LAN, authority and username visibility. Current graphical probe plus five regression test processes passed; source documents/protected docs unchanged. Commands, changed-file scope and limitations in status.md. No commit or push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and monetary cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P112 - Add missing reference gameplay features
+
+Date: November 23, 2026.
+Time: 09:17:10 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> update the features of the game to include the one which are present in repository and not in this game!
+
+Associated status snapshot: S-2026-11-23-03; extends P111 beyond presentation. Compared reference AnnMaxine/Moooze-Tanks-Repository c941c4028b61efba68340baead6f9341e8f41a08 with clean local 1a05688. Added hidden rewards, thirty-second timers/radial indicators, unlimited timed heavy fire/blasts, shield/speed/healing, replacement ice, moose warning/impact sounds, grass, larger snowballs, complete reference credits and solo result/defeat feedback. Adapted missing gameplay to host-authoritative LAN with replicated state, prediction geometry/speed, bounded compressed snapshots and protocol 9. Preserved co-op, local duel and working LAN/menu lifecycle; kept LAN usernames always visible. Added source-derived offline regression tests and a real paired LAN feature suite. Current relevant checks pass; physical two-device, perceptual audio/balance and graphical performance acceptance remain unverified. Protected README/AGENTS/source requirements unchanged; no commit/push. Exact commands, initial failures/corrections, file scope and evidence in status.md. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.

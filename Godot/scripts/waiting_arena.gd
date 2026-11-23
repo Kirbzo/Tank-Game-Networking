@@ -10,6 +10,7 @@ var name_labels: Dictionary = {}
 var members: Dictionary = {}
 var ice_count := 0
 var ice_sprites: Array[Sprite2D] = []
+var extra_ice_sprites: Dictionary = {}
 var contact_timers: Dictionary = {}
 var muzzle_flashes: Array[Dictionary] = []
 const TankVisual = preload("res://scripts/lan_tank_visual.gd")
@@ -36,6 +37,9 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 		ice_sprites.append(sprite)
 
 func reset_ice() -> void:
+	for sprite in extra_ice_sprites.values():
+		sprite.free()
+	extra_ice_sprites.clear()
 	contact_timers.clear()
 	muzzle_flashes.clear()
 	for marker in tank_markers.values():
@@ -45,9 +49,37 @@ func reset_ice() -> void:
 	ice_count = ice_sprites.size()
 
 func remove_ice(id: int) -> void:
+	if extra_ice_sprites.has(id):
+		extra_ice_sprites[id].free()
+		extra_ice_sprites.erase(id)
+		ice_count -= 1
 	if id >= 0 and id < ice_sprites.size() and ice_sprites[id].visible:
 		ice_sprites[id].hide()
 		ice_count -= 1
+
+func spawn_ice(id: int, at: Vector2) -> void:
+	if extra_ice_sprites.has(id):
+		return
+	var sprite := Sprite2D.new()
+	sprite.texture = ICE
+	sprite.position = at
+	add_child(sprite)
+	extra_ice_sprites[id] = sprite
+	ice_count += 1
+
+func apply_ice_state(removed: Dictionary, extra: Dictionary) -> void:
+	for id in range(ice_sprites.size()):
+		ice_sprites[id].visible = not removed.has(id)
+	for id in extra_ice_sprites.keys():
+		if not extra.has(id):
+			extra_ice_sprites[id].free()
+			extra_ice_sprites.erase(id)
+	for id in extra:
+		spawn_ice(id, extra[id])
+	ice_count = extra_ice_sprites.size()
+	for sprite in ice_sprites:
+		if sprite.visible:
+			ice_count += 1
 
 func apply_aims(aims: Dictionary) -> void:
 	for peer in aims:
@@ -133,7 +165,22 @@ func _draw() -> void:
 			draw_line(at - Vector2(5, 0), at + Vector2(5, 0), Color.WHITE, 1.2, true)
 			draw_line(at - Vector2(0, 5), at + Vector2(0, 5), Color.WHITE, 1.2, true)
 	draw_rect(Rect2(62, 106, 1156, 648), Color("#91bcd3"), false, 2)
+	draw_border_grass()
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), Color("#a6dfff"), 2)
 	for flash in muzzle_flashes:
 		draw_circle(flash.position, 8, Color("#eefaff"))
+
+func draw_border_grass() -> void:
+	for i in range(85):
+		for bottom in [false, true]:
+			draw_grass_tuft(Vector2(18 + i * 15, (754 if bottom else 150) + (i % 3) * 2), i)
+	for i in range(43):
+		for right in [false, true]:
+			draw_grass_tuft(Vector2(1170 if right else 110, 164 + i * 13), i)
+
+func draw_grass_tuft(at: Vector2, variation: int) -> void:
+	for blade in range(5):
+		var tip := at + Vector2((blade - 2) * 3, -6 - (variation + blade * 3) % 9)
+		draw_line(at, tip, Color("#52895c") if blade % 2 == 0 else Color("#94ad72"), 1.8, true)
+	draw_line(at + Vector2(-4, 1), at + Vector2(4, 1), Color("#dceee8"), 2.0, true)
