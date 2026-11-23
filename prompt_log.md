@@ -2611,3 +2611,85 @@ Clarification asked current game transfer versus latest collision commit only. A
 > Bring current game into main
 
 Associated status snapshot: S-2026-11-20-07. Transfer source game-intigration-malik 343c406 current Godot game into main on top of 2baa608, retaining protected docs, license, main UID and unrelated tools/reports. Source branch untouched; no push. Preserved main log history and imported source request/status history with distinct branch-qualified P088. Eight main runtime processes PASS plus import; exact commands, protected hashes, sandbox warnings, source equality and physical/graphical limits in status.md. Commit title Beta QOL Fixes v1.0. No new report documents. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P110 - Inspect GitHub course reference
+
+Date: November 23, 2026.
+Time: 08:46:22 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> [https://github.com/AnnMaxine/github-actions-course-main](https://github.com/AnnMaxine/github-actions-course-main)\
+> Just look at this repository and make sure our game also look like this !!
+
+Associated status snapshot: S-2026-11-23-01. Reference contents could not be retrieved through web open/search or Git HTTPS; no comparison or implementation claimed. Local checkout has no .github directory. Requested accessible reference and clarification of Actions/repository structure versus game appearance. Only required logs changed. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion, and monetary cost: **Unavailable**; reliable full-request usage and applicable pricing records are unavailable.
+
+## P111 - Correct reference and match game presentation
+
+Date: November 23, 2026.
+Time: 09:05:45 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual correction:
+
+> im sorry i gave you wrong link
+
+Actual prompt:
+
+> ere is the correct one [https://github.com/AnnMaxine/Moooze-Tanks-Repository](https://github.com/AnnMaxine/Moooze-Tanks-Repository)
+
+Clarification asked: I’m treating “look like this” as matching the menu and gameplay visuals while preserving our LAN features. Is that the scope you want?
+
+Actual answer:
+
+> Match visuals; preserve LAN features
+
+Associated status snapshot: S-2026-11-23-02; continues P110 with corrected reference. Inspected reference c941c4028b61efba68340baead6f9341e8f41a08 and applied its winter menu/button assets, presentation helpers and compact tank vitals. Retained current local modes, working LAN, authority and username visibility. Current graphical probe plus five regression test processes passed; source documents/protected docs unchanged. Commands, changed-file scope and limitations in status.md. No commit or push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and monetary cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P112 - Add missing reference gameplay features
+
+Date: November 23, 2026.
+Time: 09:17:10 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> update the features of the game to include the one which are present in repository and not in this game!
+
+Associated status snapshot: S-2026-11-23-03; extends P111 beyond presentation. Compared reference AnnMaxine/Moooze-Tanks-Repository c941c4028b61efba68340baead6f9341e8f41a08 with clean local 1a05688. Added hidden rewards, thirty-second timers/radial indicators, unlimited timed heavy fire/blasts, shield/speed/healing, replacement ice, moose warning/impact sounds, grass, larger snowballs, complete reference credits and solo result/defeat feedback. Adapted missing gameplay to host-authoritative LAN with replicated state, prediction geometry/speed, bounded compressed snapshots and protocol 9. Preserved co-op, local duel and working LAN/menu lifecycle; kept LAN usernames always visible. Added source-derived offline regression tests and a real paired LAN feature suite. Current relevant checks pass; physical two-device, perceptual audio/balance and graphical performance acceptance remain unverified. Protected README/AGENTS/source requirements unchanged; no commit/push. Exact commands, initial failures/corrections, file scope and evidence in status.md. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P113 - Match reference main-menu routing and remove submenu
+
+Date: November 23, 2026.
+Time: 09:37:24 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> copy the funcationality of main menue of repository and remove the sub menue from this game!
+
+Associated status snapshot: S-2026-11-23-04. Solo starts immediately; Multiplayer opens the real lobby, matching reference c941c40. Removed Choose Your Crew/show_play; retained Controls/Sound/Credits/Exit and placed local Duel/Co-op directly in lobby. Updated route-dependent regression tests. Current graphical routing probe, local duel, local Exit/cancellation and isolated actual host/guest reentry PASS. Initial paired run overlapped same-protocol local test and failed reconnect; isolated rerun passed without networking changes. Protected docs/source requirements unchanged; no commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P114 - Remove local modes from lobby
+
+Date: November 23, 2026.
+Time: 09:43:12 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> In the lobby just remove the local co-op & local duel modes!
+
+Associated status snapshot: S-2026-11-23-05. Removed local Co-op/Duel lobby row and its application routing. Local gameplay implementation retained; local-duel regression fixture invokes it directly. Current graphical lobby probe and actual host/guest reentry PASS. Only application.gd, lobby.gd, local_duel_smoke.gd and required logs changed. Protected docs/source requirements unchanged. No commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request usage/pricing records unavailable.
+
+## P115 - Merge today's Allen commits into main
+
+Date: November 23, 2026.
+Time: 09:48:40 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> merge the commits that have happened today on this branch into main!
+
+Associated status snapshot: S-2026-11-23-06. Merged four November 23 America/Regina commits from Allen (1a05688, 0e19a14, beda618, ee05f84) into local main, preserving commits with a merge commit and including required P115 logs. Initial worktree clean; no conflicts; implementation matches Allen. Current main actual host/guest Exit/reentry/reconnect test PASS. Allen and protected docs/source requirements unchanged. No push requested or performed. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request accounting/rates unavailable.

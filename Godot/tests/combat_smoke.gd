@@ -1,5 +1,5 @@
 extends "res://tests/combined_smoke.gd"
-## Paired actual ENet test via application.tscn, Play, Host/Join, Ready and Start.
+## Paired actual ENet test via application.tscn, Multiplayer lobby, Ready and Start.
 func aim(at: Vector2) -> void:
 	var motion := InputEventMouseMotion.new()
 	motion.position = lobby.active_room.artwork.to_global(at)
@@ -53,7 +53,7 @@ func run() -> void:
 	await create_timer(0.15).timeout
 	await fire_once()
 	await create_timer(0.6).timeout
-	if not check(await until(func(): return room.artwork.ice_count == 33 and room.combat_view.shots_seen == 2), "Exactly two shots and two identical ice removals"):
+	if not check(await until(func(): return (room.artwork.ice_count == 35 and room.tank_world.removed_ice.size() >= 2) and room.combat_view.shots_seen == 2), "Exactly two shots, matching destruction and replacement field"):
 		return
 	var expected_host := (Vector2(424, 532) - Vector2(208, 612)).angle()
 	var expected_guest := (Vector2(1048, 532) - Vector2(1072, 612)).angle()
@@ -112,7 +112,7 @@ func run() -> void:
 		lobby.combat_fire.rpc_id(1, room.game_id, room.epoch - 1, Vector2.RIGHT, 100000)
 	if not check(await until(func(): return room.combat_view.shots_seen == 3 and room.combat_view.bullets.is_empty()), "Moose consumes the authoritative shot"):
 		return
-	if not check(room.artwork.ice_count == 33 and room.combat_view.animals.size() == 4 and room.combat_view.animals[0].position == Vector2(400, 612), "Shared moose and border outcome"):
+	if not check((room.artwork.ice_count == 35 and room.tank_world.removed_ice.size() >= 2) and room.combat_view.animals.size() == 4 and room.combat_view.animals[0].position == Vector2(400, 612), "Shared moose and border outcome"):
 		return
 	if not check(impacts.size() == 3 and impacts[-1].distance_to(Vector2(379, 612)) < 0.1, "Both receive the host-confirmed moose hit"):
 		return
@@ -145,7 +145,7 @@ func run() -> void:
 		if not check(room.combat_view.shots_seen == before, "Duplicate and stale events ignored"):
 			return
 		await create_timer(4.0).timeout
-		if not check(room.combat_view.shots_seen >= 7 and room.combat_view.shots_seen <= 8 and room.artwork.ice_count == 33 and room.combat_view.bullets.is_empty(), "Guest sees matching repeated shots and final world state"):
+		if not check(room.combat_view.shots_seen >= 7 and room.combat_view.shots_seen <= 8 and (room.artwork.ice_count == 35 and room.tank_world.removed_ice.size() >= 2) and room.combat_view.bullets.is_empty(), "Guest sees matching repeated shots and final world state"):
 			return
 		room.leave_room()
 		print("PASS combat guest: pre-start gating, aim, single shot presentation, shared interactions, deduplication and leave")

@@ -25,6 +25,7 @@ func event(kind: String, data: Dictionary) -> void:
 		var bullet := Bullet.new()
 		bullet.position = data.position
 		bullet.direction = data.direction
+		bullet.heavy = data.get("heavy", false)
 		add_child(bullet)
 		bullet.set_physics_process(false)
 		bullets[id] = bullet
@@ -36,6 +37,13 @@ func event(kind: String, data: Dictionary) -> void:
 	elif kind == "remove" and bullets.has(id):
 		bullets[id].queue_free()
 		bullets.erase(id)
+	elif kind in ["tank_hit", "moose_angry", "moose_roar"]:
+		sound.play(kind)
+	elif kind == "powerup":
+		var reveal := preload("res://scripts/powerup_reveal.gd").new()
+		reveal.texture = preload("res://scripts/powerups.gd").ICONS[data.kind]
+		reveal.position = data.position
+		add_child(reveal)
 	elif kind == "explosion":
 		sound.last_played.erase("explosion")
 		sound.play("explosion")
@@ -66,8 +74,11 @@ func apply_snapshot(state: Dictionary) -> void:
 		animals[i].position = sample.position
 		animals[i].heading = sample.heading
 		animals[i].gait = sample.gait
+		animals[i].anger_remaining = float(sample.get("anger", 0.0))
 		animals[i].sprite.flip_h = sample.heading.x < 0
-		animals[i].sprite.position.y = sin(sample.gait * 2.0) * 1.5
+		animals[i].sprite.position = sample.get("sprite_position", Vector2(0, sin(sample.gait * 2.0) * 1.5))
+		animals[i].sprite.rotation = float(sample.get("sprite_rotation", 0.0))
+		animals[i].sprite.modulate = Color(1.4, 0.6, 0.45) if animals[i].anger_remaining > 0.0 else Color.WHITE
 		animals[i].queue_redraw()
 
 func _process(delta: float) -> void:
