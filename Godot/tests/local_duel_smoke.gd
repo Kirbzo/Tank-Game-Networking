@@ -40,16 +40,10 @@ func run() -> void:
 	root.add_child(app)
 	current_scene = app
 	game = app.client_menu
-	button("Multiplayer").pressed.emit()
-	var duel_button: Button
-	for control in app.lobby.local_modes.get_children():
-		if control.text == "Local Duel / 2 Players":
-			duel_button = control
-	if not check(duel_button != null and app.lobby.local_modes.get_child_count() == 2, "Local modes available directly in multiplayer lobby"):
-		return
-	duel_button.pressed.emit()
+	# Local modes remain callable for gameplay regression, without lobby entries.
+	game.start_game(true, true)
 	await isolate()
-	if not check(game.local_duel and app.lobby.session == null and not app.lobby.visible, "Duel starts from menu without a network session"):
+	if not check(game.local_duel and app.lobby.session == null and not app.lobby.visible, "Direct duel fixture has no network session"):
 		return
 	await fire(game.player, 0)
 	if not check(game.player.health == 100 and game.player_two.health == 80 and game.hud.text.contains("80 HEALTH"), "P1 projectile damages only P2 by 20 and updates HUD"):

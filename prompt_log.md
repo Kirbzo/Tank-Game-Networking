@@ -2669,3 +2669,15 @@ Actual prompt:
 > copy the funcationality of main menue of repository and remove the sub menue from this game!
 
 Associated status snapshot: S-2026-11-23-04. Solo starts immediately; Multiplayer opens the real lobby, matching reference c941c40. Removed Choose Your Crew/show_play; retained Controls/Sound/Credits/Exit and placed local Duel/Co-op directly in lobby. Updated route-dependent regression tests. Current graphical routing probe, local duel, local Exit/cancellation and isolated actual host/guest reentry PASS. Initial paired run overlapped same-protocol local test and failed reconnect; isolated rerun passed without networking changes. Protected docs/source requirements unchanged; no commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P114 - Remove local modes from lobby
+
+Date: November 23, 2026.
+Time: 09:43:12 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> In the lobby just remove the local co-op & local duel modes!
+
+Associated status snapshot: S-2026-11-23-05. Removed local Co-op/Duel lobby row and its application routing. Local gameplay implementation retained; local-duel regression fixture invokes it directly. Current graphical lobby probe and actual host/guest reentry PASS. Only application.gd, lobby.gd, local_duel_smoke.gd and required logs changed. Protected docs/source requirements unchanged. No commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request usage/pricing records unavailable.
