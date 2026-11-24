@@ -1,4 +1,5 @@
 extends Control
+signal local_duel_requested
 signal main_menu_requested
 
 const Discovery = preload("res://discovery.gd")
@@ -45,14 +46,39 @@ func _ready() -> void:
 	for side in ["left", "top", "right", "bottom"]:
 		margin.add_theme_constant_override("margin_" + side, 32)
 	add_child(margin)
+	var backdrop := TextureRect.new()
+	backdrop.texture = preload("res://assets/menu_winter.svg")
+	backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(backdrop)
+	var card := PanelContainer.new()
+	var card_texture := StyleBoxTexture.new()
+	card_texture.texture = preload("res://assets/menu_panel.svg")
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		card_texture.set_texture_margin(side, 32)
+		card_texture.set_content_margin(side, 24)
+	card.add_theme_stylebox_override("panel", card_texture)
+	margin.add_child(card)
 	var scroll := ScrollContainer.new()
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	margin.add_child(scroll)
+	card.add_child(scroll)
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 14)
 	scroll.add_child(column)
-	var title := add_label(column, "MOOOZE TANKS  /  ALPHA LOBBY")
+	var title_row := HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 16)
+	column.add_child(title_row)
+	var logo := TextureRect.new()
+	logo.texture = preload("res://assets/menu_logo.png")
+	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	logo.custom_minimum_size = Vector2(64, 64)
+	title_row.add_child(logo)
+	var title := add_label(title_row, "MOOOZE TANKS MULTIPLAYER LOBBY")
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
@@ -78,10 +104,16 @@ func _ready() -> void:
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
 	lobby_row.add_child(games_column)
+	var local_duel := Button.new()
+	local_duel.text = "Local Duel / 2 Players"
+	controls.add_child(local_duel)
+	local_duel.pressed.connect(func():
+		if session == null and not joining:
+			local_duel_requested.emit())
 	var games_title := add_label(games_column, "Available Games")
 	games_title.add_theme_font_size_override("font_size", 28)
 	game_list = ItemList.new()
-	game_list.custom_minimum_size = Vector2(0, 280)
+	game_list.custom_minimum_size = Vector2(0, 210)
 	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	game_list.item_selected.connect(select_game)
 	games_column.add_child(game_list)
@@ -131,12 +163,12 @@ func refresh_session_players() -> void:
 func update_session_feedback() -> bool:
 	if session == null or joining:
 		return false
-	var explanation := " Host and Join are disabled while in a session. Game start is not implemented."
+	var explanation := " Host and Join are disabled while in a session. The host can start from the room once both players connect."
 	if not discovery.hosted_game.is_empty():
 		var players := 1 + multiplayer.get_peers().size()
 		feedback.text = "Hosting game %s. Players: %d/2. %s" % [discovery.hosted_game["id"], players, "Client connected." if players == 2 else "Waiting for a client."] + explanation
 	elif not connected_game_id.is_empty():
-		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id + explanation
+		feedback.text = "Connected to game %s. Enter the game room to play." % connected_game_id + explanation
 	else:
 		return false
 	return true
@@ -260,7 +292,15 @@ func combat_fire(id: String, generation: int, aim: Vector2, sequence: int) -> vo
 		active_room.accept_fire_request(sender, generation, aim, sequence)
 
 @rpc("authority", "call_remote", "unreliable_ordered", 4)
-func combat_snapshot(id: String, generation: int, tick: int, state: Dictionary) -> void:
+func combat_snapshot(id: String, generation: int, tick: int, payload: PackedByteArray) -> void:
+	if payload.size() > 8192:
+		return
+	var decoded := payload.decompress_dynamic(65536, FileAccess.COMPRESSION_DEFLATE)
+	if decoded.is_empty():
+		return
+	var state = bytes_to_var(decoded)
+	if not state is Dictionary:
+		return
 	if not multiplayer.is_server() and has_tank_room(id) and active_room.epoch == generation:
 		active_room.apply_combat_snapshot(tick, state)
 

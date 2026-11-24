@@ -6,12 +6,16 @@ extends Node
 var online := false
 
 func _ready() -> void:
+	lobby.theme = client_menu.get_meta("ui_theme")
 	lobby.hide()
 	# Offline pause must not suspend discovery or an online connection.
 	lobby.process_mode = Node.PROCESS_MODE_ALWAYS
 	client_menu.host_requested.connect(host_game)
 	client_menu.join_requested.connect(show_available_games)
 	lobby.main_menu_requested.connect(show_main_menu)
+	lobby.local_duel_requested.connect(func():
+		show_main_menu()
+		client_menu.start_game(true))
 
 func show_available_games() -> void:
 	if online:

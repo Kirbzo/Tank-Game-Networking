@@ -47,6 +47,7 @@ func run() -> void:
 		lobby.username = "BraveMoose"
 	root.add_child(lobby)
 	await process_frame
+	print("DISCOVERY_SLOT ", "host" if args.has("host") else "observer", " ", lobby.discovery.bound_port)
 	if OS.get_cmdline_user_args().has("unicast"):
 		# Disable announcements on both processes: only request/reply can discover.
 		lobby.discovery.broadcast_enabled = false

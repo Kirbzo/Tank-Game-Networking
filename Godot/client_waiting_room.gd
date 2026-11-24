@@ -24,6 +24,8 @@ var combat_view: Node2D
 var combat_sequence := 0
 var event_sequence := 0
 var last_combat_tick := -1
+var ice_revision := -1
+var match_stats: Dictionary = {}
 var aim_direction := Vector2.RIGHT
 var aim_pointer := Vector2.ZERO
 var fire_held := false
@@ -57,6 +59,7 @@ func _ready() -> void:
 	vitals_panel.offset_right = -24
 	vitals_panel.offset_top = -112
 	vitals_panel.offset_bottom = -40
+	vitals_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
 	vitals_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var background := StyleBoxFlat.new()
 	background.bg_color = Color(0.04, 0.12, 0.16, 0.9)
@@ -65,6 +68,8 @@ func _ready() -> void:
 	vitals_panel.add_theme_stylebox_override("panel", background)
 	vitals_label = Label.new()
 	vitals_label.add_theme_font_size_override("font_size", 14)
+	vitals_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vitals_label.custom_minimum_size.x = 280
 	vitals_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vitals_panel.add_child(vitals_label)
 	update_connection_status()
@@ -111,6 +116,7 @@ func _physics_process(delta: float) -> void:
 		return
 	process_combat_input()
 	if multiplayer.is_server():
+		combat.refresh_collision_bodies()
 		tank_world.accept_input(1, movement_direction(), Time.get_ticks_msec())
 		tank_world.step(delta, Time.get_ticks_msec())
 		artwork.apply_positions(tank_world.positions)
@@ -120,7 +126,7 @@ func _physics_process(delta: float) -> void:
 			session_lobby.tank_snapshot.rpc(game_id, epoch, tank_world.tick, tank_world.positions, tank_world.processed_sequences)
 			var state: Dictionary = combat.snapshot()
 			apply_combat_snapshot(tank_world.tick, state)
-			session_lobby.combat_snapshot.rpc(game_id, epoch, tank_world.tick, state)
+			session_lobby.combat_snapshot.rpc(game_id, epoch, tank_world.tick, var_to_bytes(state).compress(FileAccess.COMPRESSION_DEFLATE))
 	else:
 		var sequence := tank_view.predict(movement_direction(), delta)
 		if sequence > 0:
@@ -236,7 +242,8 @@ func receive_tank_state(generation: int, state: String, positions: Dictionary) -
 		tank_world = TankWorld.new()
 		reset_combat(false)
 		tank_view = View.new()
-		tank_view.movement_solver = tank_world.move_current
+		tank_world.prediction_peer = multiplayer.get_unique_id()
+		tank_view.movement_solver = tank_world.predict_movement
 		tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 		# Assets and the room are already loaded; initialize prediction before acknowledging.
 		tank_view.receive(0, positions, {}, multiplayer.get_unique_id(), 1.0 / Engine.physics_ticks_per_second)
@@ -284,6 +291,8 @@ func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence:
 
 func receive_tank_snapshot(generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
 	if not controls_active() or generation != epoch or positions.size() != 2:
+		return
+	if tick <= tank_view.latest_tick:
 		return
 	for peer in positions:
 		if not player_names.has(peer) or not positions[peer] is Vector2 or not positions[peer].is_finite():
@@ -361,6 +370,7 @@ func reset_combat(authority: bool, create_view := true) -> void:
 	play_again_button = null
 	winner_peer = 0
 	duel_vitals.clear()
+	match_stats.clear()
 	vitals_revision = -1
 	for marker in artwork.tank_markers.values():
 		marker.show()
@@ -376,6 +386,7 @@ func reset_combat(authority: bool, create_view := true) -> void:
 	fire_held = false
 	event_sequence = 0
 	last_combat_tick = -1
+	ice_revision = -1
 	aim_direction = Vector2.RIGHT
 	artwork.reset_ice()
 	var directions := {}
@@ -385,6 +396,9 @@ func reset_combat(authority: bool, create_view := true) -> void:
 	if create_view:
 		combat_view = CombatView.new()
 		artwork.add_child(combat_view)
+		var menu := session_lobby.get_parent().get_node_or_null("MooozeTanks")
+		if menu != null:
+			combat_view.sound.set_volume(menu.sound.volume)
 	if authority:
 		combat = CombatWorld.new()
 		combat.tanks = tank_world
@@ -467,28 +481,51 @@ func apply_combat_event(kind: String, data: Dictionary) -> void:
 				var sequence: int = tank_view.input_sequence
 				tank_view = View.new()
 				tank_view.input_sequence = sequence
-				tank_view.movement_solver = tank_world.move_current
+				tank_world.prediction_peer = multiplayer.get_unique_id()
+				tank_view.movement_solver = tank_world.predict_movement
 				tank_view.display_bounds = TankWorld.CENTER_BOUNDS
 				tank_view.receive(data.tick, data.positions, data.acks, peer, 1.0 / Engine.physics_ticks_per_second)
 	elif kind == "result":
 		apply_vitals(data)
-		show_duel_result(int(data.winner))
-	elif kind == "ice":
-		tank_world.removed_ice[int(data.id)] = true
-		artwork.remove_ice(int(data.id))
-		combat_view.sound.play("brick")
+		show_duel_result(int(data.winner), data.get("summary", {}))
+	elif kind in ["ice", "ice_spawn"]:
+		if int(data.get("revision", ice_revision + 1)) <= ice_revision:
+			return
+		ice_revision = int(data.get("revision", ice_revision + 1))
+		if kind == "ice":
+			if int(data.id) < 35:
+				tank_world.removed_ice[int(data.id)] = true
+			tank_world.extra_ice.erase(int(data.id))
+			artwork.remove_ice(int(data.id))
+			combat_view.sound.play("brick")
+		else:
+			tank_world.extra_ice[int(data.id)] = data.position
+			artwork.spawn_ice(int(data.id), data.position)
 	elif kind == "contact":
 		artwork.contact_timers[int(data.peer)] = 2.0
-		combat_view.sound.play_moose_contact()
+		if artwork.tank_markers.has(int(data.peer)):
+			artwork.tank_markers[int(data.peer)].moose_cooldown = 2.0
 	else:
 		if kind == "shot":
-			artwork.muzzle_flashes.append({"position": data.position + data.direction * 4.0, "life": 0.06})
+			if artwork.tank_markers.has(int(data.peer)):
+				artwork.tank_markers[int(data.peer)].shot_flash = 0.06
 		combat_view.event(kind, data)
 
 func apply_combat_snapshot(tick: int, state: Dictionary) -> void:
 	if not controls_active() or tick <= last_combat_tick:
 		return
 	last_combat_tick = tick
+	if int(state.get("ice_revision", -1)) >= ice_revision:
+		ice_revision = int(state.get("ice_revision", -1))
+		tank_world.removed_ice = state.get("removed_ice", tank_world.removed_ice).duplicate()
+		tank_world.extra_ice = state.get("extra_ice", tank_world.extra_ice).duplicate()
+		artwork.apply_ice_state(tank_world.removed_ice, tank_world.extra_ice)
+	if not multiplayer.is_server():
+		tank_world.inactive_peers.clear()
+		for peer in state.vitals:
+			if not state.vitals[peer].active:
+				tank_world.inactive_peers.append(peer)
+	match_stats = state.get("summary", {}).duplicate()
 	apply_vitals(state)
 	artwork.apply_aims(state.aims)
 	combat_view.apply_snapshot(state)
@@ -500,61 +537,53 @@ func apply_vitals(data: Dictionary) -> void:
 	vitals_revision = revision
 	duel_vitals = data.get("vitals", {}).duplicate(true)
 	var lines: PackedStringArray = []
+	if not match_stats.is_empty():
+		var seconds := int(match_stats.get("elapsed", 0))
+		lines.append("SCORE: %d | %02d:%02d | SHOTS: %d" % [int(match_stats.get("score", 0)), seconds / 60, seconds % 60, int(match_stats.get("shots", 0))])
 	for peer in player_names:
 		if not duel_vitals.has(peer):
 			continue
 		var values: Dictionary = duel_vitals[peer]
+		tank_world.speed_multipliers[peer] = 1.5 if float(values.get("speed", 0.0)) > 0.0 else 1.0
 		lines.append("%s: %d HP / %d lives" % [str(player_names[peer]).left(18), values.health, values.lives])
 		if artwork.tank_markers.has(peer):
-			artwork.tank_markers[peer].visible = values.active
+			artwork.tank_markers[peer].apply_vitals(values)
+			var effect: String = artwork.tank_markers[peer].powerup_status()
+			if effect != "No power-up":
+				lines.append(effect)
 		if float(values.protection) > 0:
 			artwork.contact_timers[peer] = float(values.protection)
 	if is_instance_valid(vitals_label):
 		vitals_label.text = "\n".join(lines)
 
-func show_duel_result(winner: int) -> void:
+func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
+	for marker in artwork.tank_markers.values():
+		marker.effects_running = false
 	if phase == "finished":
 		return
 	winner_peer = winner
 	phase = "finished"
 	fire_held = false
 	combat_view.clear_shots()
+	combat_view.gameplay_active = false
+	combat_view.sound.stop_gameplay(["explosion", "tank_hit"])
+	combat_view.sound.set_loop("music", false)
+	# Freeze immediately, but let the final explosion finish before covering the arena.
+	var result_epoch := epoch
+	update_connection_status()
+	await get_tree().create_timer(maxf(preload("res://scripts/tank_explosion.gd").DURATION, combat_view.sound.voices.explosion.stream.get_length())).timeout
+	if leaving or not is_inside_tree() or epoch != result_epoch or phase != "finished":
+		return
 	combat_view.sound.play("victory" if winner == multiplayer.get_unique_id() else "defeat")
-	result_overlay = Control.new()
+	result_overlay = preload("res://scripts/lan_results.gd").new()
 	$HUD.add_child(result_overlay)
-	result_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.07, 0.09, 0.85)
-	result_overlay.add_child(shade)
-	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var center := CenterContainer.new()
-	result_overlay.add_child(center)
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var card := PanelContainer.new()
-	center.add_child(card)
-	var column := VBoxContainer.new()
-	column.custom_minimum_size = Vector2(460, 0)
-	column.add_theme_constant_override("separation", 16)
-	card.add_child(column)
-	var title := Label.new()
-	title.text = "Winner: " + str(player_names.get(winner, "None"))
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 28)
-	column.add_child(title)
-	if multiplayer.is_server():
-		play_again_button = Button.new()
-		play_again_button.text = "Play Again"
-		play_again_button.pressed.connect(request_start)
-		column.add_child(play_again_button)
-	else:
-		var waiting := Label.new()
-		waiting.text = "Waiting for host to play again"
-		column.add_child(waiting)
-	var back := Button.new()
-	back.text = "Return to Lobby"
-	back.pressed.connect(leave_room)
-	column.add_child(back)
-	var confetti := preload("res://scripts/confetti.gd").new()
-	result_overlay.add_child(confetti)
-	result_overlay.move_child(confetti, 1)
+	var guest := 0
+	for peer in player_names:
+		if peer != 1:
+			guest = peer
+	var winner_number := 1 if winner == 1 else (2 if winner == guest and guest != 0 else 0)
+	result_overlay.build(winner_number, [duel_vitals.get(1, {}), duel_vitals.get(guest, {})], summary, multiplayer.is_server(), [player_names.get(1, "Host"), player_names.get(guest, "Guest")])
+	play_again_button = result_overlay.replay_button if multiplayer.is_server() else null
+	result_overlay.replay_requested.connect(request_start)
+	result_overlay.lobby_requested.connect(leave_room)
 	update_connection_status()

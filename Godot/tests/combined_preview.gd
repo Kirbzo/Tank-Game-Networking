@@ -18,7 +18,7 @@ func run() -> void:
 	root.add_child(app)
 	current_scene = app
 	await capture("menu")
-	app.client_menu.show_play()
+	app.client_menu.show_lobby()
 	await capture("play")
 	app.show_available_games()
 	await capture("lobby")

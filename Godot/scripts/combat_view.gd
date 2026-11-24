@@ -8,8 +8,11 @@ var animals: Array = []
 var highest_shot := 0
 var shots_seen := 0
 var impacts: Array[Dictionary] = []
+var particles: Array[Dictionary] = []
 var sound: Node
 var state := "playing"
+var previous_tanks: Dictionary = {}
+var gameplay_active := true
 
 func _ready() -> void:
 	sound = preload("res://scripts/sound.gd").new()
@@ -24,15 +27,25 @@ func event(kind: String, data: Dictionary) -> void:
 		var bullet := Bullet.new()
 		bullet.position = data.position
 		bullet.direction = data.direction
+		bullet.heavy = data.get("heavy", false)
 		add_child(bullet)
 		bullet.set_physics_process(false)
 		bullets[id] = bullet
 	elif kind == "impact":
-		impacts.append({"position": data.position, "life": 0.2})
+		# Same count, motion, lifetime and shard drawing as Local Duel's burst().
+		for i in range(12):
+			particles.append({"position": data.position, "velocity": Vector2.from_angle(randf() * TAU) * randf_range(50, 190), "life": 0.5, "size": randf_range(2, 6)})
 		impact_confirmed.emit(data.position)
 	elif kind == "remove" and bullets.has(id):
 		bullets[id].queue_free()
 		bullets.erase(id)
+	elif kind in ["tank_hit", "moose_angry", "moose_roar"]:
+		sound.play(kind)
+	elif kind == "powerup":
+		var reveal := preload("res://scripts/powerup_reveal.gd").new()
+		reveal.texture = preload("res://scripts/powerups.gd").ICONS[data.kind]
+		reveal.position = data.position
+		add_child(reveal)
 	elif kind == "explosion":
 		sound.last_played.erase("explosion")
 		sound.play("explosion")
@@ -63,19 +76,40 @@ func apply_snapshot(state: Dictionary) -> void:
 		animals[i].position = sample.position
 		animals[i].heading = sample.heading
 		animals[i].gait = sample.gait
+		animals[i].anger_remaining = float(sample.get("anger", 0.0))
 		animals[i].sprite.flip_h = sample.heading.x < 0
-		animals[i].sprite.position.y = sin(sample.gait * 2.0) * 1.5
+		animals[i].sprite.position = sample.get("sprite_position", Vector2(0, sin(sample.gait * 2.0) * 1.5))
+		animals[i].sprite.rotation = float(sample.get("sprite_rotation", 0.0))
+		animals[i].sprite.modulate = Color(1.4, 0.6, 0.45) if animals[i].anger_remaining > 0.0 else Color.WHITE
 		animals[i].queue_redraw()
 
 func _process(delta: float) -> void:
+	var moving := false
+	var idle := false
+	for peer in get_parent().tank_markers:
+		var tank = get_parent().tank_markers[peer]
+		if tank.visible:
+			var driving: bool = tank.position.distance_squared_to(previous_tanks.get(peer, tank.position)) > 0.01
+			moving = moving or driving
+			idle = idle or not driving
+		previous_tanks[peer] = tank.position
+	sound.update_ambience(gameplay_active, moving, idle, false, gameplay_active)
 	# Cosmetic travel only; lifetime and collision removal always come from the host.
 	for bullet in bullets.values():
 		bullet.position += bullet.direction * Bullet.SPEED * minf(delta, 0.05)
 	for burst in impacts:
 		burst.life -= delta
 	impacts = impacts.filter(func(burst): return burst.life > 0)
+	for particle in particles:
+		particle.position += particle.velocity * delta
+		particle.life -= delta
+	particles = particles.filter(func(particle): return particle.life > 0)
 	queue_redraw()
 
 func _draw() -> void:
+	for particle in particles:
+		draw_circle(particle.position, particle.size, Color(0.98, 1.0, 1.0, particle.life * 2))
+		var shard := PackedVector2Array([particle.position + Vector2(0, -particle.size * 2), particle.position + Vector2(particle.size, 0), particle.position + Vector2(0, particle.size), particle.position + Vector2(-particle.size, 0)])
+		draw_colored_polygon(shard, Color(0.35, 0.72, 0.95, particle.life * 1.5))
 	for burst in impacts:
 		draw_circle(burst.position, 5 + (0.2 - burst.life) * 40, Color(0.9, 0.98, 1.0, burst.life * 5))

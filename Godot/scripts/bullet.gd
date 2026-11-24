@@ -12,13 +12,15 @@ var shooter: Node
 var heavy := false
 var heavy_impact: Callable
 var hits_tanks := false
-var hits_moose := false # rica: snowballs pass through roaming moose in every mode.
+var hits_moose := true
 
 func _ready() -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = preload("res://assets/bullet.svg")
+	# Enlarge only artwork; swept hit detection stays unchanged.
+	sprite.scale = Vector2.ONE * 2.0
 	if heavy:
-		sprite.scale = Vector2.ONE * 1.6
+		sprite.scale *= 1.6
 		sprite.modulate = Color("#ffae45")
 	add_child(sprite)
 	rotation = direction.angle()

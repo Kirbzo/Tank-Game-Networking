@@ -8,7 +8,7 @@ const FIRST_PORT := 49140
 const SLOT_COUNT := 16
 # Combined builds share a stable Application/AlphaLobby RPC path.
 # Broadcast and direct-IP replies pass this check before ID cache lookup.
-const PROTOCOL := "moooze-rica-duel-1"
+const PROTOCOL := "moooze-rica-client-c941c40-1"
 var protocol := PROTOCOL
 const EXPIRY_MS := 4000
 var instance_id := Crypto.new().generate_random_bytes(12).hex_encode()

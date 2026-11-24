@@ -1,4 +1,4 @@
-extends "res://tests/combat_smoke.gd"
+extends "res://tests/combat_test_base.gd"
 ## Actual LAN-room preview: movement/fire after first Start, no world interactions.
 func key(pressed: bool) -> void:
 	var event := InputEventKey.new()

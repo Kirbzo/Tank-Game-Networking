@@ -2,13 +2,164 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P087 and the next request is **P088**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P091 and the next request is **P092**. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
 - **Source preservation:** original IDs, prompts, dates, source status references and results remain available. The [merge audit](prompt_log_merge_audit.json) stores all original source-log bytes, SHA256/Git blob IDs, branch commits and entry mappings. Existing local entry text is unchanged. Imported display text only normalizes trailing whitespace and narrative link destinations; original bytes are retained. Isolated non-UTF-8 source punctuation is decoded for display. Merge markers and conflicting notes are shown only inside clearly labelled source-version blocks.
 - **Coverage:** all five local branches and six remote-tracking branch refs were inspected after fetching origin, including differing local/remote TestBranch1 snapshots and remote-only rica. Symbolic origin/HEAD is an alias, not an additional branch. Only logs present at those branch tips are included; deleted/unlogged history cannot be reconstructed.
 - **Usage:** imported entries without reliable token/cost records remain unavailable; no figures were estimated or invented.
+
+# November 24, 2026
+
+## P091 - Resume and complete full client integration
+
+Date: November 24, 2026.
+Time: 08:59:48 AM (recording time; America/Regina).
+
+Actual prompt:
+
+> Continue the full client-server integration according to our previous plan.
+>
+> The previous session was interrupted due to the usage limit. Review the current working tree, completed changes, pending tasks, and test results before resuming. Do not undo or duplicate completed work.
+>
+> Continue from where you stopped until the full integration is complete, following all previously established requirements, restrictions, and testing instructions.
+>
+> Do not commit or push. Provide a concise summary directly in the Codex chat without creating additional report documents.
+
+Associated status.md: [status.md](status.md), revision S-2026-11-24-02. Continues P090 without replacing prior work.
+
+Result: resumed without replacing completed work; verified latest client remains c941c40. Completed full integration, optimized authoritative collision allocations, finalized lobby/audio/results presentation and corrected test fixture startup/cleanup. Real ENet combat, 30-second powerups, Start/rejoin/host-loss, two complete rounds/replays, real discovery/direct-IP and three-process capacity checks passed; graphical route/layout checks passed. Detailed commands, failed intermediate checks, timings and remaining warnings are in status revision S-2026-11-24-02. All work remains uncommitted on rica; main/client repository and README/AGENTS unchanged. No added report documents. Physical two-laptop, Wi-Fi/latency, sustained graphical FPS and human audio/balance acceptance remain unverified. Existing server square collision footprint retained; no active client feature omitted. Token/cost unavailable below.
+
+Token usage: input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; no reliable complete records matched to this request, including tool continuations. Cached-input inclusion: **Unavailable**. Estimated monetary cost: **Unavailable**, no matched usage/rates.
+
+# November 23, 2026
+
+## P090 - Full latest-client integration
+
+Date: November 23, 2026 (receipt date).
+Recording date: November 24, 2026.
+Time: 08:59:48 AM (recording time; America/Regina; receipt time unavailable).
+
+Actual prompt (paragraph whitespace normalized):
+
+> Perform a complete client-server integration on my `rica` branch using the latest version of the client repository:
+>
+> [https://github.com/AnnMaxine/Moooze-Tanks-Repository](https://github.com/AnnMaxine/Moooze-Tanks-Repository)
+>
+> The goal is to have a fully integrated, playable version of Moooze Tanks that reflects the latest client-side design and gameplay while retaining our existing server-side framework, performance improvements, and bug fixes.
+>
+> **Integration scope**
+>
+> - Main menu, navigation, and all menu options.
+> - Multiplayer lobby, Host, Join, and game room.
+> - Arena, graphics, assets, animations, sound effects, and music.
+> - Complete moose behavior, movement, attacks, and interactions.
+> - Ice blocks, obstacles, destruction, respawning, and environmental behavior.
+> - Tank movement, aiming, shooting, collisions, and damage.
+> - Player usernames, health bars, lives, and tank respawning.
+> - Complete power-up system, including spawning, collection, effects, duration, expiration, and visual indicators.
+> - Scoring, match progression, win/loss conditions, and results screen.
+> - All other features implemented in the latest client repository, even if not explicitly listed above.
+>
+> Review and compare both implementations before making changes. Some client features and assets are already integrated into `rica`, so reuse or update them where appropriate instead of creating duplicates.
+>
+> **Preserve server-side functionality**
+>
+> - LAN discovery, networking, and multiplayer synchronization.
+> - Host-authoritative gameplay and state management.
+> - Existing FPS settings, physics tick rates, network update rates, and performance optimizations.
+> - Host-only Start, immediate pre-match movement, and existing connection, departure, and rejoin fixes.
+> - Network compression, client prediction, diagnostics, and other existing server-side improvements.
+>
+> Use the client repository as the source of truth for intended design and gameplay behavior, and `rica` as the source of truth for networking, server architecture, and performance improvements.
+>
+> Adapt client-side gameplay logic to our multiplayer framework rather than blindly replacing existing scripts. Ensure both players experience consistent gameplay, including moose behavior, environmental changes, shooting, damage, health, lives, and power-ups. Gameplay-affecting events must remain server-authoritative.
+>
+> **Execution and validation**
+>
+> Perform the full integration in logical stages within this task. Test each stage before proceeding, but do not stop after producing a plan or completing only the visual integration.
+>
+> Run available regression and multiplayer tests covering the complete flow from the main menu through match completion and results. Check for performance regressions, synchronization issues, duplicate events, and broken functionality.
+>
+> Ask me only if a significant conflict cannot be resolved without compromising intended gameplay or existing server functionality.
+>
+> **Restrictions**
+>
+> - Keep all changes on `rica`.
+> - Do not modify the client repository or `main`.
+> - Do not modify AGENTS.md or README.md&#x20;
+> - Do not commit or push without my approval.
+> - Follow existing repository logging instructions.
+> - Do not create additional report, planning, or summary documents.
+>
+> Provide a concise final summary directly in the Codex chat covering completed integration, preserved server-side functionality, test results, remaining issues, and anything requiring manual two-laptop testing. Clearly identify any client features that could not be fully integrated.
+
+Associated status.md: [status.md](status.md), snapshot S-2026-11-24-01; continued by P091/S-2026-11-24-02.
+
+Compared latest client c941c4028b61efba68340baead6f9341e8f41a08 (fetched read-only) with rica 12c107e plus existing uncommitted P088/P089 work and origin/main. Read both source requirements. Integrated client scripts/assets in place; client_import.json records provenance. Preserved application/session architecture and adapted gameplay to authoritative combat_world, replicated presentation, prediction, epochs and compression. Latest client uses Solo and Local Duel (the legacy local_coop variable denotes Duel); Help and old Play submenu are removed at source. Rewards are granted to the shooter breaking hidden-powerup ice, not collected by driving over pickups. Host owns reward choice, 30-second effect timers, heavy blast, shield, speed, recovery, moose warning/charge/contact damage, replacement ice and field score. Solo clears 35 blocks; duels end on eliminated lives. Results wait for the final explosion and allow host-only replay. Usernames, vitals, sounds/music, original client menu options and connected lobby/local Duel routing integrated. No commit/push or protected-document edits. P091 continues validation after interruption.
+
+P090 validation performed before resumption: Godot 4.7.2.stable.official.ed1daf0bf. Client smoke 33, UI 52, powerups 45, duel 32, tank_vitals 27, brick_respawn 16, moose_charge 21, powerup_duration 17 (real 30 seconds), sound 37, forest 19 (30-second roam), knockback 14 and mechanics 20 assertions passed after fixture adaptations. Imported UI initially timed out with viewport coordinates interpreted as screen coordinates; root.push_input(event, true) fixed the test, then all UI assertions passed. Mechanics initially failed an obsolete field-clear-duel assumption; changed its results-clock fixture to Solo, retaining current client duel behavior. Initial lobby parser error (actions vs controls) corrected before stage tests. Combined menus/protocol filtering, menu_exit local/standalone, Join Cancel/Delay, room_view, alpha packet/failure, animations and results checks passed. Actual ENet pairs: feature fixture JD21R7:64490 passed after an earlier unexplained timed-out run 86FYRY:50785; strengthened real-projectile moose attack/score/music fixture WM0SB7:52796 passed. Start pair 59DLRP:54237 and two-round duel/replay pair FBRDZL:59041 passed both processes. Initial graphical integration_ui_smoke passed via OpenGL/NVIDIA RTX 2050; menu/lobby/room/results captures inspected in ignored .godot/integration cache. Same-machine tests, not physical LAN acceptance.
+
+Performance baseline from a reversible pre-P090 source snapshot in ignored .godot/integration: isolated 2400-tick two-player authority/compression benchmark median 36 us, p95 98 us, max 334 us, snapshot 208 compressed/732 raw bytes. Initial full integration median 75 us, p95 260 us, max 3540 us, snapshot 366/1572 bytes. 60 Hz physics, uncapped FPS and 20 Hz snapshots preserved; these are component timings, not graphical frame-rate acceptance. P091 addresses allocation overhead and finishes regression checks.
+
+Commands: git fetch https://github.com/AnnMaxine/Moooze-Tanks-Repository.git HEAD; git show/ls-tree/diff and Python source comparisons. Engine executable C:/Users/ricaa/Downloads/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe. Test form: & '<engine>' --headless --path Godot --log-file NUL --script res://tests/<suite>.gd -- <args>. Client suites use client/<name>. Paired scripts used host loopback and loopback <actual-id> <actual-port>; runner now available as python Godot/tests/run_integration.py --godot '<engine>' --pair <suite>. Graphical command: & '<engine>' --path Godot --log-file NUL --position -2000,-2000 --script res://tests/integration_ui_smoke.gd; hidden startup via Python. Asset import: & '<engine>' --headless --path Godot --log-file NUL --editor --import. Restricted NUL-log/certificate/editor-settings/cache messages and 2-8 ObjectDB shutdown leaks occurred; paired successful runs had no script errors. No human audio/balance or physical two-laptop acceptance claimed.
+
+Token usage: input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; no reliable complete records matched to this request, including tool continuations. Cached-input inclusion: **Unavailable**. Estimated monetary cost: **Unavailable**, no matched usage/rates.
+
+## P089 - Selective integration of main into rica
+
+Date: November 23, 2026.
+Time: 11:46:10 PM (recording time; America/Regina).
+
+Actual prompt (received truncated):
+
+> Proceed with the selective integration of `origin/main` into `rica` based on your p
+
+Clarification asked: Your message appears cut off after “based on your p”. Should I proceed with the recommended presentation/network integration while preserving rica’s Start fixes and leaving the gameplay-rule and local-mode changes out?
+
+Actual answer:
+
+> Proceed with that scope
+
+Associated status.md: [status.md](status.md), revision S-2026-11-23-02. Implements P088 recommendations.
+
+Result: Selectively integrated origin/main 3590653 into rica working tree at 12c107e, following P088 and explicit scope confirmation. Added textured menu/lobby styling, arena decoration, tank vitals/animations, assigned-name result summary/replay UI, hit audio with source/license, compressed combat snapshots with bounded decoding, and stale movement snapshot rejection. Result counters observe host events. Preserved immediate preview, membership-authorized Start, Start epoch protection, LAN diagnostics, authoritative movement/prediction, non-damaging LAN moose contact, original offline heavy-ammo rules and local modes. Protocol moooze-rica-duel-2 isolates this combined build from both previous builds; both laptops must run matching builds. Excluded new charging/damaging moose rules, solid-body collisions, powerup distribution/duration changes, brick respawn, local-mode removal, token-tool deletions and editor caches. No commit, merge commit or push; no standalone report. Existing P088 status/log edits preserved.
+
+Current validation: Godot 4.7.2.stable.official.ed1daf0bf. Executable: C:/Users/ricaa/Downloads/Godot_v4.7.2-stable_win64.exe/Godot_v4.7.2-stable_win64_console.exe. Exact command form: & '<executable>' --headless --path Godot --log-file NUL --script res://tests/<test>.gd -- <arguments>. Python subprocess with CREATE_NO_WINDOW ran tests with bounded waits and captured outputs in memory.
+
+- lan_animation_smoke, lan_results_smoke: exit 0; visual isolation, confirmed effects/reset, names/results/role mapping and lobby return. Results rerun after preserving assigned winner name also passed.
+- local_duel_smoke: exit 0; local modes, combat, winners/reset and solo/co-op isolation.
+- powerup_moose_smoke: assertions passed/exit 0, with four body_test_motion body->get_space() errors matching prior recorded fixture errors; not clean runtime acceptance.
+- join_cancel_smoke, join_delay_smoke: exit 0; cancel/countdown/timeout/retry/delay and capacity refresh. Join measured 510 ms, Retry 503 ms.
+- join_smoke -- failure: exit 0; loading, duplicate-click guard, timeout, Retry/Back.
+- combined_smoke -- local and -- failure: exit 0; retained mode routing/protocol-filter listing fixtures and forced hosting failure. Listing fixtures do not prove discovery.
+- tank_start_smoke -- host loopback --lan-debug paired with -- loopback 3HNZ2K 65309 --lan-debug: both exit 0; immediate preview, GUI Start, permissions, validation/collisions, shared vitals/moose, departure/rejoin/host loss.
+- tank_start_smoke -- host loopback --lan-debug leave-preview paired with -- loopback NMK9CG 53303 --lan-debug leave-preview: both exit 0; departure disables Start.
+- lan_duel_smoke -- host loopback paired with -- loopback BA09HO 54610: both exit 0; shots, shared compressed state, damage/lives, respawn reconciliation, both winners, guest replay rejection, two complete rounds/replays. Added optional loopback endpoint fixture to the existing test. These paired tests establish real same-machine ENet sessions while bypassing broadcast discovery.
+
+NUL-log/certificate-store messages appeared in all runs; some standalone fixtures reported 2-4 ObjectDB shutdown leaks. Paired runs reported no script errors. No graphical/native-device or physical two-device acceptance performed. Initial integration helper stopped at missing Godot/tools before runtime edits; created directory and resumed. Initial --headless --path Godot --log-file NUL --editor --import exited 0 for assets with restricted editor-settings-save messages; this preceded final runtime edits. No unrelated warnings repaired.
+
+Static checks: git diff --check, preserved-function comparisons for prepare_preview/acknowledge_ready/can_begin_game/begin_game/receive_tank_state/trace_lan, unchanged movement/moose/bullet/powerup sources and tank_start_smoke, all 33 AR/FR/LR/GR IDs, source DOCX hashes, new local links and matching status/log revisions. Initial byte comparison against Git failed on CRLF checkout normalization; Git-normalized unchanged-file checks passed. Protected README/AGENTS and token handoff unchanged. Requirement statuses unchanged; FR15 obsolete scope remains pending separately approved documentation updates. Historical runtime evidence is not attributed to this request.
+
+Token usage: input tokens, cached input tokens, output tokens, model, usage source: **Unavailable**, no reliable complete per-request usage records. Cached-input inclusion: **Unavailable**. Estimated monetary cost: **Unavailable**, no matched usage/rates.
+
+## P088 - Fetch main and compare with rica
+
+Date: November 23, 2026.
+Time: 11:37:12 PM (recording time; America/Regina).
+
+Actual prompt:
+
+> Update rica branch by fetching the latest changes from the main branch. Compare rica and main branch considering commit history and actual code differences. Recommend which changes should be integrated and which should be preserved or excluded. DO not create a report document just give me the summarized result here
+
+Associated status.md: [status.md](status.md), revision S-2026-11-23-01.
+
+Result: Fetched origin successfully; rica remains 12c107e and origin/main is 3590653. History has 49 rica-only and 8 main-only commits; tip content differs in 142 files (4915 insertions, 2862 deletions). Main commit 2baa608 selectively imported rica through 12c107e, so ancestry counts do not measure missing functionality. Recommend selective integration of main presentation/audio/results and cohesive network improvements; preserve rica immediate preview, membership-based host Start, epoch transition, LAN diagnostics and stronger Start tests. Main restores readiness gating and removes those diagnostics/tests. Gameplay changes (damaging/charging moose, solid body contacts, powerups, brick respawn) and local-mode menu removal need deliberate scope decisions. Preserve token tools/handoff, historical logs and source documents; exclude editor-cache churn. Snapshot compression/RPC and discovery protocol must move together with matching peer builds. No merge, implementation edits, commit or push; user requested comparison/recommendations. No standalone report. Protected README changes remain approval-dependent.
+
+Validation: git fetch origin initially failed to write FETCH_HEAD under sandbox permissions; elevated retry succeeded. git rev-list --left-right --count rica...origin/main, git log --oneline rica..origin/main, git diff --shortstat rica origin/main and targeted git diff/show inspections completed. Requirements DOCX files read and hashes checked. No gameplay tests run for this comparison; prior runtime evidence is historical. Requirement statuses remain unchanged.
+
+Token usage: input tokens, cached input tokens, output tokens, model and usage source: **Unavailable**; no reliable complete per-request usage record provided. Cached-input inclusion: **Unavailable**. Estimated monetary cost: **Unavailable**, no matched usage/rates.
 
 # November 20, 2026
 

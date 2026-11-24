@@ -1,6 +1,5 @@
 extends Node2D
 
-# The combined application owns the persistent multiplayer lobby.
 signal host_requested
 signal join_requested
 
@@ -9,6 +8,7 @@ const Player = preload("res://scripts/player.gd")
 const Moose = preload("res://scripts/moose.gd")
 const CORNERS := [Vector2(166, 206), Vector2(1114, 206), Vector2(166, 662), Vector2(1114, 662)]
 const Bullet = preload("res://scripts/bullet.gd")
+const Powerups = preload("res://scripts/powerups.gd")
 const MINT := Color("#a6dfff")
 const CREAM := Color("#eef8ff")
 var sound: Node
@@ -16,14 +16,11 @@ var world: Node2D
 var player: CharacterBody2D
 var player_two: CharacterBody2D
 var local_coop := false
-var local_duel := false
-var winner_number := 0
-var defeat_delay := 0.0
 var ui: CanvasLayer
 var panel: Control
-var hud: Label
 var hud_root: Panel
 var hud_stats: Label
+var hud_powerups: Label
 var pause_button: Button
 var remaining := 0
 var total := 0
@@ -33,6 +30,8 @@ var elapsed := 0.0
 var state := "menu"
 var particles: Array[Dictionary] = []
 var finish_pending := false
+var defeat_delay := 0.0
+var winner_number := 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -63,6 +62,24 @@ func build_theme() -> void:
 	theme.default_font_size = 19
 	theme.set_color("font_color", "Label", CREAM)
 	for key in ["normal", "hover", "pressed", "focus", "disabled"]:
+		if key in ["normal", "hover", "pressed", "disabled"]:
+			var textured := StyleBoxTexture.new()
+			textured.texture = preload("res://assets/menu_button.svg")
+			textured.texture_margin_left = 16
+			textured.texture_margin_right = 16
+			textured.texture_margin_top = 12
+			textured.texture_margin_bottom = 12
+			textured.content_margin_left = 22
+			textured.content_margin_right = 22
+			textured.content_margin_top = 8
+			textured.content_margin_bottom = 8
+			textured.modulate_color = Color("#b7efff") if key == "hover" else Color.WHITE
+			if key == "pressed":
+				textured.modulate_color = Color("#85accc")
+			if key == "disabled":
+				textured.modulate_color = Color(0.45, 0.55, 0.65)
+			theme.set_stylebox(key, "Button", textured)
+			continue
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color("#214d50") if key == "normal" else Color("#356e71")
 		if key == "disabled":
@@ -100,6 +117,14 @@ func overlay() -> VBoxContainer:
 	shade.color = Color(0.025, 0.07, 0.09, 0.78)
 	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(shade)
+	if state == "menu":
+		var backdrop := TextureRect.new()
+		backdrop.texture = preload("res://assets/menu_winter.svg")
+		backdrop.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		backdrop.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		panel.add_child(backdrop)
 	var center := CenterContainer.new()
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel.add_child(center)
@@ -112,22 +137,22 @@ func overlay() -> VBoxContainer:
 	card.add_child(box)
 	return box
 
-func card_style() -> StyleBoxFlat:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color("#102f3c")
-	style.border_color = Color("#7fb9c9")
-	style.set_border_width_all(2)
-	style.set_corner_radius_all(18)
+func card_style() -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = preload("res://assets/menu_panel.svg")
+	style.texture_margin_left = 32
+	style.texture_margin_right = 32
+	style.texture_margin_top = 32
+	style.texture_margin_bottom = 16
 	style.content_margin_left = 32
 	style.content_margin_right = 32
 	style.content_margin_top = 24
 	style.content_margin_bottom = 24
-	style.shadow_color = Color(0, 0, 0, 0.3)
-	style.shadow_size = 12
 	return style
 
 func logo_in(box: VBoxContainer, height: float) -> void:
 	var logo := TextureRect.new()
+	logo.name = "MenuLogo"
 	logo.texture = preload("res://assets/menu_logo.png")
 	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -155,6 +180,47 @@ func button_in(box: VBoxContainer, text: String, callback: Callable, disabled: b
 	box.add_child(button)
 	return button
 
+func mode_button(box: VBoxContainer, title: String, description: String, callback: Callable, multiplayer_mode: bool = false) -> Button:
+	var button := button_in(box, title, callback)
+	button.custom_minimum_size.y = 88
+	# Retain the accessible button name; visible content uses a title and subtitle.
+	for color in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color"]:
+		button.add_theme_color_override(color, Color.TRANSPARENT)
+	var icon := TextureRect.new()
+	icon.texture = preload("res://assets/menu_tank.svg")
+	icon.position = Vector2(22, 14)
+	icon.size = Vector2(100, 58)
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(icon)
+	if multiplayer_mode:
+		var second := icon.duplicate() as TextureRect
+		second.position += Vector2(28, 5)
+		second.modulate = Color("#ffaaaa")
+		button.add_child(second)
+	var heading := Label.new()
+	heading.text = title.to_upper()
+	heading.position = Vector2(162, 9)
+	heading.add_theme_font_size_override("font_size", 28)
+	heading.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(heading)
+	var subtitle := Label.new()
+	subtitle.text = description
+	subtitle.position = Vector2(162, 47)
+	subtitle.add_theme_font_size_override("font_size", 16)
+	subtitle.add_theme_color_override("font_color", MINT)
+	subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(subtitle)
+	var arrow := Label.new()
+	arrow.text = "»"
+	arrow.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	arrow.position = Vector2(-46, 20)
+	arrow.add_theme_font_size_override("font_size", 34)
+	arrow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(arrow)
+	return button
+
 func show_menu() -> void:
 	get_tree().paused = false
 	state = "menu"
@@ -168,35 +234,72 @@ func show_menu() -> void:
 		pause_button.queue_free()
 	particles.clear()
 	var box := overlay()
-	logo_in(box, 118)
-	label_in(box, "MOOOZE TANKS", 46)
-	label_in(box, "Snowy trails. Big antlers. Tiny tanks.", 19, MINT)
-	button_in(box, "Play", show_play).grab_focus()
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 12)
-	box.add_child(row)
-	for entry in [["Controls", show_controls], ["Help", show_help]]:
-		var column := VBoxContainer.new()
-		column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		row.add_child(column)
-		button_in(column, entry[0], entry[1])
-	button_in(box, "Sound", show_sound)
-	button_in(box, "Credits", show_credits)
-	button_in(box, "Exit", func(): get_tree().quit())
-	label_in(box, "A winter field adventure for one or two players", 16, MINT)
+	box.custom_minimum_size.x = 640
+	box.add_theme_constant_override("separation", 10)
+	logo_in(box, 92)
+	var title := label_in(box, "MOOOZE TANKS", 44)
+	var title_font := SystemFont.new()
+	title_font.font_names = PackedStringArray(["Arial Black", "Arial"])
+	title_font.font_weight = 900
+	title.add_theme_font_override("font", title_font)
+	title.add_theme_color_override("font_outline_color", Color("#022139"))
+	title.add_theme_constant_override("outline_size", 6)
+	label_in(box, "Snowy trails. Big antlers. Tiny tanks.", 18, MINT)
+	mode_button(box, "Solo", "Practice on the winter field.", start_game).grab_focus()
+	mode_button(box, "Multiplayer", "Gather your crew in the lobby.", show_lobby, true)
+	var options := [
+		["Controls", show_controls, preload("res://assets/menu_controls.svg")],
+		["Sound", show_sound, preload("res://assets/menu_sound.svg")],
+		["Credits", show_credits, preload("res://assets/menu_credits.svg")],
+		["Exit", func(): get_tree().quit(), preload("res://assets/menu_exit.svg")],
+	]
+	for option in options:
+		var button := button_in(box, option[0], option[1])
+		button.icon = option[2]
+		button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		button.expand_icon = true
+		button.add_theme_constant_override("icon_max_width", 26)
 	queue_redraw()
 
-func show_play() -> void:
+func show_lobby() -> void:
+	if join_requested.has_connections():
+		join_requested.emit()
+		return
 	var box := overlay()
-	label_in(box, "CHOOSE YOUR CREW", 36, MINT)
-	label_in(box, "Clear the icy field alone or together.", 20)
-	button_in(box, "Solo Practice", start_game).grab_focus()
-	button_in(box, "Local Co-op / 2 Players", start_game.bind(true))
-	button_in(box, "Local Duel / 2 Players", start_game.bind(true, true))
-	label_in(box, "Local co-op shares one score and one objective.", 17, MINT)
-	button_in(box, "Host Game", func(): host_requested.emit())
-	button_in(box, "Join Game", func(): join_requested.emit())
-	button_in(box, "Main Menu", show_menu)
+	box.custom_minimum_size.x = 960
+	logo_in(box, 86)
+	label_in(box, "MOOOZE TANKS MULTIPLAYER LOBBY", 34, MINT)
+	label_in(box, "Snowy trails. Gather your crew.", 19)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 24)
+	box.add_child(row)
+	var actions := VBoxContainer.new()
+	actions.custom_minimum_size.x = 190
+	actions.add_theme_constant_override("separation", 12)
+	row.add_child(actions)
+	# Network controls remain unavailable until the server project is connected.
+	for title in ["Host", "Join"]:
+		var action := button_in(actions, title, Callable(), true)
+		action.tooltip_text = "Multiplayer services are not connected yet."
+	button_in(actions, "Exit", show_menu).grab_focus()
+	var games := VBoxContainer.new()
+	games.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(games)
+	label_in(games, "AVAILABLE GAMES", 24, MINT)
+	var list := ItemList.new()
+	list.name = "AvailableGames"
+	list.custom_minimum_size.y = 210
+	list.add_theme_stylebox_override("panel", card_style())
+	games.add_child(list)
+	var game_id := LineEdit.new()
+	game_id.name = "GameId"
+	game_id.placeholder_text = "Game ID or host address (not connected)"
+	game_id.editable = false
+	game_id.custom_minimum_size.y = 44
+	games.add_child(game_id)
+	label_in(box, "No games available. Multiplayer services are not connected yet.", 18, MINT)
+	label_in(box, "On the same computer? Play the existing two-player duel.", 18)
+	button_in(box, "Local Duel / 2 Players", start_game.bind(true))
 
 func show_controls() -> void:
 	var box := overlay()
@@ -206,7 +309,6 @@ func show_controls() -> void:
 	label_in(box, "PLAYER 2  /  PURPLE TANK", 23, Color("#e3b7ff"))
 	label_in(box, "Move: Arrow keys\nAim: T up / F left / G down / H right\nShoot: J (hold to repeat)", 21)
 	label_in(box, "Combine aim keys for diagonals; release to keep your aim.\nMove and aim independently. Esc pauses or resumes.", 17, MINT)
-	button_in(box, "Help", show_help)
 	button_in(box, "Main Menu", show_menu).grab_focus()
 
 func show_sound() -> void:
@@ -227,34 +329,18 @@ func show_sound() -> void:
 	button_in(box, "Back to Menu", show_menu)
 	slider.grab_focus()
 
-func show_help() -> void:
-	var box := overlay()
-	label_in(box, "FIELD GUIDE", 40, MINT)
-	label_in(box, "CLEAR THE WINTER FIELD", 22, Color("#ffd890"))
-	label_in(box, "Shoot all 35 icy bricks to win. Each earns 100 points.\nThe forest border is indestructible. Slide along walls to pass.\nIn local co-op, both players share the score and victory.", 19)
-	label_in(box, "KEEP YOUR CREW ROLLING", 22, Color("#ffd890"))
-	label_in(box, "Each tank starts with 100 health and 3 lives.\nAt zero health, lose a life and respawn at full health.\nA tank with no lives is out; a surviving teammate can continue.\nThe round ends in defeat when no tanks have lives left.", 19)
-	label_in(box, "GIVE THE MOOSE SOME ROOM", 22, Color("#ffd890"))
-	label_in(box, "Roaming moose turn and bounce off obstacles.\nContact deals 20 damage and knocks your tank back.\nA gold ring means 2 seconds of protection; separate to re-hit.\nMoose yield; snowballs pass through them.\nDuel shots deal 20 damage; the last tank with lives wins.\nSolo/co-op shots cannot damage tanks.", 19)
-	button_in(box, "Controls", show_controls)
-	button_in(box, "Main Menu", show_menu).grab_focus()
-
 func show_credits() -> void:
 	var box := overlay()
-	label_in(box, "JDAT STUDIOS", 40, MINT)
-	label_in(box, "@Studio - Client-Side Development\nOlaniyi Tolulope - Product Design & Business Analysis\nAnna-Marie Oyemiren - Game Design & Project Operations", 19)
-	label_in(box, "Server-side project partner: Ctrl-Alt-Elite\nOriginal vector artwork created for Moooze Tanks.", 17)
+	label_in(box, "CREDITS", 40, MINT)
+	label_in(box, "@Studio - Client-Side Development\nAnna-Marie Oyemiren\nOlaniyi Tolulope\n\nCtrl-Alt-Elite - Server-side project\nJaden Dijkstra\nHarsh Patel\nMalik Sultan\nRica Vicente\n\nAssets generated by Codex", 19)
 	button_in(box, "Back to Menu", show_menu).grab_focus()
 
 func restart_game() -> void:
-	start_game(local_coop, local_duel)
+	start_game(local_coop)
 
-func start_game(coop: bool = false, duel: bool = false) -> void:
+func start_game(coop: bool = false) -> void:
 	sound.stop_gameplay()
-	local_duel = duel
-	local_coop = coop or duel
-	winner_number = 0
-	defeat_delay = 0.0
+	local_coop = coop
 	player_two = null
 	get_tree().paused = false
 	clear_panel()
@@ -273,6 +359,7 @@ func start_game(coop: bool = false, duel: bool = false) -> void:
 	shots = 0
 	elapsed = 0.0
 	finish_pending = false
+	winner_number = 0
 	particles.clear()
 	for col in range(24):
 		add_brick(Vector2(88 + col * 48, 132), true)
@@ -289,7 +376,7 @@ func start_game(coop: bool = false, duel: bool = false) -> void:
 	total = remaining
 	player = Player.new()
 	player.position = Vector2(208, 612)
-	player.moose_hit.connect(sound.play_moose_contact)
+	player.damaged.connect(sound.play.bind("tank_hit"))
 	player.exploded.connect(on_tank_exploded.bind(player))
 	player.fired.connect(spawn_bullet.bind(player))
 	player.vitals_changed.connect(update_hud)
@@ -299,7 +386,7 @@ func start_game(coop: bool = false, duel: bool = false) -> void:
 		player_two = Player.new()
 		player_two.player_number = 2
 		player_two.position = Vector2(1072, 612)
-		player_two.moose_hit.connect(sound.play_moose_contact)
+		player_two.damaged.connect(sound.play.bind("tank_hit"))
 		player_two.exploded.connect(on_tank_exploded.bind(player_two))
 		player_two.fired.connect(spawn_bullet.bind(player_two))
 		player_two.vitals_changed.connect(update_hud)
@@ -315,6 +402,7 @@ func start_game(coop: bool = false, duel: bool = false) -> void:
 		if local_coop:
 			moose.tanks.append(player_two)
 		moose.emerged.connect(func(): sound.play("moose_roar"))
+		moose.provoked.connect(sound.play.bind("moose_angry"))
 		world.add_child(moose)
 	build_hud()
 	state = "playing"
@@ -344,16 +432,19 @@ func build_hud() -> void:
 	brand.position = Vector2(7, 58)
 	brand.add_theme_font_size_override("font_size", 12)
 	hud_root.add_child(brand)
-	hud = Label.new()
-	hud.position = Vector2(118, 10)
-	hud.add_theme_font_size_override("font_size", 20)
-	hud.add_theme_color_override("font_color", CREAM)
-	hud_root.add_child(hud)
 	hud_stats = Label.new()
-	hud_stats.position = Vector2(550, 12)
+	hud_stats.position = Vector2(550, 2)
 	hud_stats.add_theme_font_size_override("font_size", 17)
 	hud_stats.add_theme_color_override("font_color", Color("#ffd890"))
 	hud_root.add_child(hud_stats)
+	hud_powerups = Label.new()
+	hud_powerups.name = "PowerupStatus"
+	hud_powerups.position = Vector2(118, 58)
+	hud_powerups.add_theme_font_size_override("font_size", 13)
+	hud_powerups.add_theme_color_override("font_color", CREAM)
+	hud_powerups.add_theme_color_override("font_outline_color", Color("#102f3c"))
+	hud_powerups.add_theme_constant_override("outline_size", 5)
+	hud_root.add_child(hud_powerups)
 	pause_button = Button.new()
 	pause_button.theme = get_meta("ui_theme")
 	pause_button.focus_mode = Control.FOCUS_NONE
@@ -364,14 +455,49 @@ func build_hud() -> void:
 	pause_button.pressed.connect(pause_game)
 	hud_root.add_child(pause_button)
 
-func add_brick(at: Vector2, reinforced: bool) -> void:
+func add_brick(at: Vector2, reinforced: bool, replacement: bool = false) -> void:
 	var brick := Brick.new()
 	brick.position = at
 	brick.reinforced = reinforced
+	# Eight hidden rewards, two of each type, spread across the four clusters.
+	if replacement:
+		if randf() < 8.0 / 35.0:
+			brick.powerup = Powerups.TYPES.pick_random()
+	elif not reinforced and remaining < 32 and remaining % 4 == 2:
+		brick.powerup = Powerups.TYPES[(remaining / 4) % Powerups.TYPES.size()]
+	brick.powerup_released.connect(on_powerup_released.bind(at))
 	brick.destroyed.connect(on_brick_destroyed)
 	world.add_child(brick)
-	if not reinforced:
+	if not reinforced and not replacement:
 		remaining += 1
+
+func replace_brick(previous_position: Vector2, source_world: Node2D) -> void:
+	# Deferred until the impact/blast finishes; never populate a restarted match.
+	if not is_instance_valid(source_world) or source_world != world or state != "playing" or finish_pending:
+		return
+	var locations: Array[Vector2] = []
+	for column in range(20):
+		for row in range(12):
+			locations.append(Vector2(184 + column * 48, 212 + row * 40))
+	locations.shuffle()
+	for location in locations:
+		if location.distance_to(previous_position) < 96.0:
+			continue
+		# Keep both respawn points clear even when their tanks are elsewhere.
+		if location.distance_to(Vector2(208, 612)) < 90.0 or location.distance_to(Vector2(1072, 612)) < 90.0:
+			continue
+		var clear := true
+		for body in world.get_children():
+			if body is Brick:
+				if not body.broken and absf(body.position.x - location.x) < 52.0 and absf(body.position.y - location.y) < 44.0:
+					clear = false
+					break
+			elif body is PhysicsBody2D and body.position.distance_to(location) < 90.0:
+				clear = false
+				break
+		if clear:
+			add_brick(location, false, true)
+			return
 
 func spawn_bullet(origin: Vector2, muzzle: Vector2, direction: Vector2, shooter: Node = null) -> void:
 	if state != "playing":
@@ -381,22 +507,42 @@ func spawn_bullet(origin: Vector2, muzzle: Vector2, direction: Vector2, shooter:
 	bullet.origin = origin
 	bullet.direction = direction
 	bullet.impact = burst
-	# Source duel behavior is opt-in; co-op and LAN retain their existing rules.
 	bullet.shooter = shooter
-	bullet.hits_tanks = local_duel and is_instance_valid(shooter)
-	bullet.heavy = local_duel and is_instance_valid(shooter) and shooter.shot_is_heavy
+	bullet.hits_tanks = local_coop and is_instance_valid(shooter)
+	bullet.heavy = is_instance_valid(shooter) and shooter.shot_is_heavy
+	bullet.heavy_impact = on_heavy_impact
 	world.add_child(bullet)
 	shots += 1
 	sound.play("shoot")
 
+func on_powerup_released(kind: String, recipient: Node, at: Vector2) -> void:
+	if state == "playing" and is_instance_valid(recipient) and recipient.active:
+		recipient.apply_powerup(kind)
+		var reveal := preload("res://scripts/powerup_reveal.gd").new()
+		reveal.texture = Powerups.ICONS[kind]
+		reveal.position = at
+		world.add_child(reveal)
+
+func on_heavy_impact(at: Vector2, shooter: Node) -> void:
+	# Only a hit on a destructible block starts a blast; perimeter/moose stay intact.
+	for brick in world.get_children():
+		if brick is Brick and not brick.reinforced and not brick.broken:
+			if brick.global_position.distance_to(at) <= Powerups.BLAST_RADIUS:
+				brick.hit(shooter)
+	burst(at)
+
 func on_brick_destroyed(at: Vector2) -> void:
+	if finish_pending:
+		return
 	sound.play("brick")
-	remaining -= 1
+	remaining = maxi(0, remaining - 1)
 	score += 100
 	burst(at)
-	if remaining == 0 and not local_duel and not finish_pending:
+	if remaining == 0 and not local_coop and not finish_pending:
 		finish_pending = true
 		finish_game.call_deferred()
+	else:
+		replace_brick.call_deferred(at, world)
 
 func burst(at: Vector2) -> void:
 	for i in range(12):
@@ -406,7 +552,10 @@ func _process(delta: float) -> void:
 	if state == "dying":
 		defeat_delay -= delta
 		if defeat_delay <= 0.0 and not sound.voices.explosion.playing:
-			show_duel_victory()
+			if winner_number > 0:
+				show_duel_victory()
+			else:
+				show_game_over()
 	var moving := false
 	var idle := false
 	if state == "playing":
@@ -415,7 +564,7 @@ func _process(delta: float) -> void:
 				var driving: bool = tank.get_real_velocity().length_squared() > 1.0
 				moving = moving or driving
 				idle = idle or not driving
-	sound.update_ambience(state == "playing", moving, idle, state == "paused", not local_duel or state not in ["dying", "results"])
+	sound.update_ambience(state == "playing", moving, idle, state == "paused", state not in ["dying", "results"])
 	if state == "playing":
 		elapsed += delta
 		update_hud()
@@ -426,14 +575,14 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 func update_hud() -> void:
-	if is_instance_valid(hud):
-		hud.text = "PLAYER 1 / SOLO\n%d HEALTH     %d LIVES" % [player.health, player.lives]
+	if is_instance_valid(hud_root):
+		for tank in [player, player_two]:
+			if is_instance_valid(tank):
+				tank.update_vitals_display()
+		hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["FIELD SCORE" if local_coop else "SCORE", score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+		hud_powerups.text = "P1: " + player.powerup_status()
 		if local_coop and is_instance_valid(player_two):
-			hud.text = "P1: %d HEALTH / %d LIVES\nP2: %d HEALTH / %d LIVES" % [player.health, player.lives, player_two.health, player_two.lives]
-		if local_duel:
-			hud_stats.text = "TIME: %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % [int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
-		else:
-			hud_stats.text = "%s: %04d POINTS   |   %02d:%02d\nICE LEFT: %d / %d   |   SHOTS: %d" % ["TEAM SCORE" if local_coop else "SCORE", score, int(elapsed) / 60, int(elapsed) % 60, remaining, total, shots]
+			hud_powerups.text += "     |     P2: " + player_two.powerup_status()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
@@ -461,30 +610,44 @@ func resume_game() -> void:
 	clear_panel()
 	state = "playing"
 	get_tree().paused = false
-	if remaining == 0:
+	if remaining == 0 and not local_coop:
 		finish_game.call_deferred()
 
+func on_tank_exploded(tank: Node2D) -> void:
+	# The signal precedes the life decrement and respawn.
+	sound.last_played.erase("explosion")
+	sound.play("explosion")
+	if tank.lives != 1:
+		return
+	tank.hide()
+	var effect := preload("res://scripts/tank_explosion.gd").new()
+	effect.position = tank.position
+	effect.game = self
+	world.add_child(effect)
+
 func on_lives_depleted() -> void:
-	if local_duel:
-		if state != "playing":
-			return
+	if state != "playing":
+		return
+	if local_coop:
 		winner_number = 1 if player.active else (2 if player_two.active else 0)
-		state = "dying"
-		defeat_delay = maxf(preload("res://scripts/tank_explosion.gd").DURATION, sound.voices.explosion.stream.get_length())
-		sound.stop_gameplay(["explosion", "moose_roar"])
-		sound.set_loop("music", false)
+	state = "dying"
+	defeat_delay = maxf(preload("res://scripts/tank_explosion.gd").DURATION, sound.voices.explosion.stream.get_length())
+	sound.stop_gameplay(["explosion", "tank_hit"])
+	sound.set_loop("music", false)
+	if winner_number > 0:
+		# A short loss cue precedes the winner's celebration on the shared screen.
 		sound.last_played.erase("defeat")
 		sound.play("defeat")
 		defeat_delay = maxf(defeat_delay, sound.voices.defeat.stream.get_length())
-		get_tree().paused = true
-		pause_button.disabled = true
-		return
-	if local_coop and (player.active or player_two.active):
-		return
-	if state != "playing":
-		return
-	state = "results"
 	get_tree().paused = true
+	pause_button.disabled = true
+
+func show_game_over() -> void:
+	state = "results"
+	sound.stop_gameplay()
+	sound.set_loop("music", false)
+	sound.last_played.erase("defeat")
+	sound.play("defeat")
 	var box := overlay()
 	label_in(box, "GAME OVER", 48, MINT)
 	label_in(box, "Winner: None - no lives remaining", 23, Color("#ffd890"))
@@ -493,40 +656,30 @@ func on_lives_depleted() -> void:
 	button_in(box, "Main Menu", show_menu)
 
 func finish_game() -> void:
-	if state != "playing" or local_duel:
+	if state != "playing" or local_coop:
 		return
-	sound.stop_gameplay()
+	sound.stop_gameplay(["brick"])
 	sound.play("victory")
 	update_hud()
 	state = "results"
+	winner_number = 1
+	sound.set_loop("music", false)
 	get_tree().paused = true
 	var box := overlay()
-	label_in(box, "FIELD CLEARED", 48, MINT)
-	label_in(box, "Winner: Team P1 + P2" if local_coop else "Winner: Player 1", 25, Color("#ffd890"))
-	label_in(box, "Local co-op complete" if local_coop else "Solo practice complete", 19, MINT)
+	label_in(box, "YOU WIN!", 48, Color("#ffd890"))
+	label_in(box, "Winner: Player 1", 25, Color("#ffd890"))
+	label_in(box, "FIELD CLEARED - Solo practice complete", 19, MINT)
 	results_summary(box)
 	button_in(box, "Play Again", restart_game).grab_focus()
 	button_in(box, "Main Menu", show_menu)
+	add_confetti()
 
-func results_summary(box: VBoxContainer) -> void:
-	if not local_duel:
-		label_in(box, "%s: %d points" % ["Shared team score" if local_coop else "Score", score], 26)
-	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [total - remaining, total, shots, int(elapsed) / 60, int(elapsed) % 60], 21)
-	label_in(box, "Player 1: %d health / %d lives" % [player.health, player.lives], 20, Color("#8fd5ff"))
-	if local_coop:
-		label_in(box, "Player 2: %d health / %d lives" % [player_two.health, player_two.lives], 20, Color("#e3b7ff"))
-
-func on_tank_exploded(tank: Node2D) -> void:
-	sound.last_played.erase("explosion")
-	sound.play("explosion")
-	if not local_duel or tank.lives != 1:
-		return
-	# The imported player emits this before decrementing its final life.
-	tank.hide()
-	var effect := preload("res://scripts/tank_explosion.gd").new()
-	effect.position = tank.position
-	effect.game = self
-	world.add_child(effect)
+func add_confetti() -> void:
+	var confetti := preload("res://scripts/confetti.gd").new()
+	confetti.name = "VictoryConfetti"
+	panel.add_child(confetti)
+	# Above the shade but behind the card, keeping text and buttons readable.
+	panel.move_child(confetti, 1)
 
 func show_duel_victory() -> void:
 	state = "results"
@@ -538,15 +691,34 @@ func show_duel_victory() -> void:
 	label_in(box, "PLAYER %d WINS!" % winner_number, 46, Color("#ffd890"))
 	label_in(box, "Winner: Player %d" % winner_number, 25, MINT)
 	label_in(box, "GAME OVER - PLAYER %d" % (3 - winner_number), 24, Color("#ff9cae"))
+	label_in(box, "All hearts lost. The duel is over.", 19)
 	results_summary(box)
 	button_in(box, "Play Again", restart_game).grab_focus()
 	button_in(box, "Main Menu", show_menu)
-	var confetti := preload("res://scripts/confetti.gd").new()
-	confetti.name = "VictoryConfetti"
-	panel.add_child(confetti)
-	panel.move_child(confetti, 1)
+	add_confetti()
 
-# Pure background drawing: no nodes, collisions, input, or gameplay state.
+func results_summary(box: VBoxContainer) -> void:
+	label_in(box, "%s: %d points" % ["Field destruction score" if local_coop else "Score", score], 26)
+	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [total - remaining, total, shots, int(elapsed) / 60, int(elapsed) % 60], 21)
+	label_in(box, "Player 1: %d health / %d lives" % [player.health, player.lives], 20, Color("#8fd5ff"))
+	if local_coop:
+		label_in(box, "Player 2: %d health / %d lives" % [player_two.health, player_two.lives], 20, Color("#e3b7ff"))
+
+# Decorative grass adds no collisions or gameplay state.
+func draw_border_grass() -> void:
+	for i in range(85):
+		for bottom in [false, true]:
+			draw_grass_tuft(Vector2(18 + i * 15, (754 if bottom else 150) + (i % 3) * 2), i)
+	for i in range(43):
+		for right in [false, true]:
+			draw_grass_tuft(Vector2(1170 if right else 110, 164 + i * 13), i)
+
+func draw_grass_tuft(at: Vector2, variation: int) -> void:
+	for blade in range(5):
+		var tip := at + Vector2((blade - 2) * 3, -6 - (variation + blade * 3) % 9)
+		draw_line(at, tip, Color("#52895c") if blade % 2 == 0 else Color("#94ad72"), 1.8, true)
+	draw_line(at + Vector2(-4, 1), at + Vector2(4, 1), Color("#dceee8"), 2.0, true)
+
 func draw_holiday_border() -> void:
 	var festive := [Color("#ef5360"), Color("#62d29a"), Color("#ffd66b"), Color("#67c9ff"), Color("#f5fbff")]
 	# Lights frame the field without covering the HUD or brick perimeter.
@@ -579,6 +751,7 @@ func _draw() -> void:
 			draw_line(at - Vector2(5, 0), at + Vector2(5, 0), Color.WHITE, 1.2, true)
 			draw_line(at - Vector2(0, 5), at + Vector2(0, 5), Color.WHITE, 1.2, true)
 	draw_rect(Rect2(62, 106, 1156, 648), Color("#91bcd3"), false, 2)
+	draw_border_grass()
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), MINT, 2)
 	for particle in particles:

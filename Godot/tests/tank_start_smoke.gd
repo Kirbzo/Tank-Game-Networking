@@ -147,6 +147,7 @@ func run() -> void:
 		# combat_smoke separately verifies actual contact impulses and shared results.
 		for member in room.player_names:
 			room.tank_world.contact_cooldowns[member] = 1000.0
+			room.combat.proxies[member].moose_cooldown = 1000.0
 	if not hosting:
 		# Invalid commands traverse the same RPC boundary as genuine input.
 		lobby.tank_input.rpc_id(1, room.game_id, room.epoch, Vector2(INF, 0), 100000)

@@ -1,4 +1,4 @@
-extends "res://tests/combat_smoke.gd"
+extends "res://tests/combat_test_base.gd"
 ## Two actual ENet instances; only fixture positioning/hazard isolation is injected.
 var probe: Node
 var room: Control
@@ -50,6 +50,13 @@ func run() -> void:
 	probe.test = self
 	root.add_child(probe)
 	enter_menu(hosting)
+	# Optional real loopback connection isolates combat from broadcast availability.
+	var args := OS.get_cmdline_user_args()
+	if hosting and args.has("loopback"):
+		print("ENDPOINT ", lobby.discovery.hosted_game.id, " ", lobby.discovery.hosted_game.port)
+	if not hosting and args.has("loopback"):
+		var index := args.find("loopback")
+		lobby.discovery.remember_game(args[index + 1], "127.0.0.1", int(args[index + 2]), "TestHost", 1)
 	if not hosting:
 		if not check(await until(func(): return not lobby.discovery.games.is_empty()), "Duel discovery"):
 			return
@@ -141,6 +148,8 @@ func run() -> void:
 		if not check(room.combat.next_shot == shots and room.tank_world.tick == tick and probe.observed.replay_rejected and probe.observed.stale_vitals_rejected, "Result freezes simulation; stale health and client restart/fire rejected"):
 			return
 		var old_epoch: int = room.epoch
+		if not check(await until(func(): return is_instance_valid(room.play_again_button)), "Final explosion precedes replay controls"):
+			return
 		room.play_again_button.pressed.emit()
 		if not check(await until(func(): return room.phase == "ready" and probe.observed.get("epoch", 0) > old_epoch and probe.observed.get("stale_rejected", false)), "Host replay resets both peers and ignores old result"):
 			return

@@ -19,6 +19,13 @@ func run() -> void:
 	lobby = app.lobby
 	lobby.discovery.protocol = "mouse-fire-test-1"
 	enter_menu(hosting)
+	# Optional real loopback connection isolates combat from broadcast availability.
+	var args := OS.get_cmdline_user_args()
+	if hosting and args.has("loopback"):
+		print("ENDPOINT ", lobby.discovery.hosted_game.id, " ", lobby.discovery.hosted_game.port)
+	if not hosting and args.has("loopback"):
+		var index := args.find("loopback")
+		lobby.discovery.remember_game(args[index + 1], "127.0.0.1", int(args[index + 2]), "TestHost", 1)
 	if not hosting:
 		if not check(await until(func(): return not lobby.discovery.games.is_empty()), "Discover"):
 			return

@@ -6,11 +6,15 @@ const TREE = preload("res://assets/forest_tree.svg")
 const TANK = preload("res://assets/tank.svg")
 const TURRET = preload("res://assets/turret.svg")
 var tank_markers: Dictionary = {}
+var name_labels: Dictionary = {}
 var members: Dictionary = {}
 var ice_count := 0
 var ice_sprites: Array[Sprite2D] = []
+var border_sprites: Array[Sprite2D] = []
+var extra_ice_sprites: Dictionary = {}
 var contact_timers: Dictionary = {}
 var muzzle_flashes: Array[Dictionary] = []
+const TankVisual = preload("res://scripts/lan_tank_visual.gd")
 
 func _ready() -> void:
 	# Same arena coordinates as the imported offline client; decoration only.
@@ -29,21 +33,56 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 	sprite.texture = TREE if reinforced else ICE
 	sprite.position = at + (Vector2(0, -8) if reinforced else Vector2.ZERO)
 	add_child(sprite)
+	if reinforced:
+		border_sprites.append(sprite)
 	if not reinforced:
 		ice_count += 1
 		ice_sprites.append(sprite)
 
 func reset_ice() -> void:
+	for sprite in extra_ice_sprites.values():
+		sprite.free()
+	extra_ice_sprites.clear()
 	contact_timers.clear()
 	muzzle_flashes.clear()
+	for marker in tank_markers.values():
+		marker.reset_visuals()
 	for sprite in ice_sprites:
 		sprite.show()
 	ice_count = ice_sprites.size()
 
 func remove_ice(id: int) -> void:
+	if extra_ice_sprites.has(id):
+		extra_ice_sprites[id].free()
+		extra_ice_sprites.erase(id)
+		ice_count -= 1
 	if id >= 0 and id < ice_sprites.size() and ice_sprites[id].visible:
 		ice_sprites[id].hide()
 		ice_count -= 1
+
+func spawn_ice(id: int, at: Vector2) -> void:
+	if extra_ice_sprites.has(id):
+		return
+	var sprite := Sprite2D.new()
+	sprite.texture = ICE
+	sprite.position = at
+	add_child(sprite)
+	extra_ice_sprites[id] = sprite
+	ice_count += 1
+
+func apply_ice_state(removed: Dictionary, extra: Dictionary) -> void:
+	for id in range(ice_sprites.size()):
+		ice_sprites[id].visible = not removed.has(id)
+	for id in extra_ice_sprites.keys():
+		if not extra.has(id):
+			extra_ice_sprites[id].free()
+			extra_ice_sprites.erase(id)
+	for id in extra:
+		spawn_ice(id, extra[id])
+	ice_count = extra_ice_sprites.size()
+	for sprite in ice_sprites:
+		if sprite.visible:
+			ice_count += 1
 
 func apply_aims(aims: Dictionary) -> void:
 	for peer in aims:
@@ -56,29 +95,42 @@ func set_members(names: Dictionary) -> void:
 		if not members.has(peer):
 			tank_markers[peer].free()
 			tank_markers.erase(peer)
+			name_labels[peer].free()
+			name_labels.erase(peer)
 	for peer in members:
 		if tank_markers.has(peer):
+			name_labels[peer].text = str(members[peer])
 			continue
-		var marker := Node2D.new()
+		var marker := TankVisual.new()
+		marker.player_number = 1 if peer == 1 else 2
 		marker.z_index = 3 # Client tanks remain visible over foliage/moose.
 		marker.position = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
-		var chassis := Sprite2D.new()
-		chassis.texture = TANK
-		marker.add_child(chassis)
-		var turret := Node2D.new()
-		turret.name = "Turret"
-		var sprite := Sprite2D.new()
-		sprite.texture = TURRET
-		sprite.position = Vector2(12, 0)
-		turret.add_child(sprite)
-		marker.add_child(turret)
-		if peer != 1:
-			marker.modulate = Color(1.8, 0.65, 1.0)
 		add_child(marker)
 		tank_markers[peer] = marker
+		var label := Label.new()
+		label.text = str(members[peer])
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Above tanks, moose, trees, bullets and explosions, below the room HUD.
+		label.z_index = 100
+		label.add_theme_font_size_override("font_size", 20)
+		label.add_theme_color_override("font_color", Color.WHITE)
+		label.add_theme_color_override("font_outline_color", Color.BLACK)
+		label.add_theme_constant_override("outline_size", 4)
+		add_child(label)
+		name_labels[peer] = label
+	update_name_labels()
 	queue_redraw()
 
+func update_name_labels() -> void:
+	for peer in name_labels:
+		var label: Label = name_labels[peer]
+		var marker: Node2D = tank_markers[peer]
+		label.visible = marker.visible
+		label.reset_size()
+		label.position = marker.position + Vector2(-label.size.x / 2.0, -86)
+
 func _process(delta: float) -> void:
+	update_name_labels()
 	for peer in contact_timers:
 		contact_timers[peer] = maxf(0, contact_timers[peer] - delta)
 	for flash in muzzle_flashes:
@@ -116,18 +168,22 @@ func _draw() -> void:
 			draw_line(at - Vector2(5, 0), at + Vector2(5, 0), Color.WHITE, 1.2, true)
 			draw_line(at - Vector2(0, 5), at + Vector2(0, 5), Color.WHITE, 1.2, true)
 	draw_rect(Rect2(62, 106, 1156, 648), Color("#91bcd3"), false, 2)
+	draw_border_grass()
 	draw_holiday_border()
 	draw_line(Vector2(64, 91), Vector2(1216, 91), Color("#a6dfff"), 2)
-	for peer in tank_markers:
-		var remaining: float = contact_timers.get(peer, 0.0)
-		if remaining > 0:
-			draw_arc(tank_markers[peer].position, 34, 0, TAU, 48, Color("#ffbf69"), 3.0)
-		var label := str(members[peer])
-		var font := ThemeDB.fallback_font
-		var width := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20).x
-		var at: Vector2 = tank_markers[peer].position + Vector2(-width / 2, -42)
-		# White labels keep the existing named-room presentation on pale snow.
-		draw_rect(Rect2(at + Vector2(-6, -22), Vector2(width + 12, 30)), Color(0.04, 0.12, 0.16, 0.85))
-		draw_string(font, at, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
 	for flash in muzzle_flashes:
 		draw_circle(flash.position, 8, Color("#eefaff"))
+
+func draw_border_grass() -> void:
+	for i in range(85):
+		for bottom in [false, true]:
+			draw_grass_tuft(Vector2(18 + i * 15, (754 if bottom else 150) + (i % 3) * 2), i)
+	for i in range(43):
+		for right in [false, true]:
+			draw_grass_tuft(Vector2(1170 if right else 110, 164 + i * 13), i)
+
+func draw_grass_tuft(at: Vector2, variation: int) -> void:
+	for blade in range(5):
+		var tip := at + Vector2((blade - 2) * 3, -6 - (variation + blade * 3) % 9)
+		draw_line(at, tip, Color("#52895c") if blade % 2 == 0 else Color("#94ad72"), 1.8, true)
+	draw_line(at + Vector2(-4, 1), at + Vector2(4, 1), Color("#dceee8"), 2.0, true)
