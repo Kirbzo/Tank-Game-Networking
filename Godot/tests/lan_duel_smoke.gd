@@ -1,4 +1,4 @@
-extends "res://tests/combat_test_base.gd"
+extends "res://tests/combat_smoke.gd"
 ## Two actual ENet instances; only fixture positioning/hazard isolation is injected.
 var probe: Node
 var room: Control
@@ -38,6 +38,13 @@ func lane() -> void:
 	room.tank_world.positions[guest] = Vector2(550, 430)
 	await create_timer(0.3).timeout
 
+func result_labels() -> Array[String]:
+	var labels: Array[String] = []
+	if is_instance_valid(room.result_overlay):
+		for node in room.result_overlay.find_children("*", "Label", true, false):
+			labels.append(node.text)
+	return labels
+
 func run() -> void:
 	var hosting := OS.get_cmdline_user_args().has("host")
 	app = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
@@ -50,13 +57,6 @@ func run() -> void:
 	probe.test = self
 	root.add_child(probe)
 	enter_menu(hosting)
-	# Optional real loopback connection isolates combat from broadcast availability.
-	var args := OS.get_cmdline_user_args()
-	if hosting and args.has("loopback"):
-		print("ENDPOINT ", lobby.discovery.hosted_game.id, " ", lobby.discovery.hosted_game.port)
-	if not hosting and args.has("loopback"):
-		var index := args.find("loopback")
-		lobby.discovery.remember_game(args[index + 1], "127.0.0.1", int(args[index + 2]), "TestHost", 1)
 	if not hosting:
 		if not check(await until(func(): return not lobby.discovery.games.is_empty()), "Duel discovery"):
 			return
@@ -94,7 +94,7 @@ func run() -> void:
 			if original_epoch >= 0 and room.epoch > original_epoch and room.phase == "ready":
 				room.receive_combat_event(original_epoch, 999999, "result", {"winner": 0})
 				stale_rejected = room.phase == "ready"
-			probe.report.rpc_id(1, {"vitals": room.duel_vitals, "phase": room.phase, "winner": room.winner_peer, "epoch": room.epoch, "replay_rejected": rejected, "stale_rejected": stale_rejected, "stale_vitals_rejected": stale_vitals_rejected, "position": room.tank_view.predicted_position})
+			probe.report.rpc_id(1, {"vitals": room.duel_vitals, "phase": room.phase, "winner": room.winner_peer, "epoch": room.epoch, "replay_rejected": rejected, "stale_rejected": stale_rejected, "stale_vitals_rejected": stale_vitals_rejected, "position": room.tank_view.predicted_position, "result_labels": result_labels()})
 			await create_timer(0.05).timeout
 		print("PASS LAN duel guest: authoritative vitals, result, guest replay rejection, reset and stale epoch")
 		quit()
@@ -114,57 +114,60 @@ func run() -> void:
 		animal.set_physics_process(false)
 	if not check(await until(func(): return probe.observed.get("phase") == "running"), "Both in authoritative duel"):
 		return
-	for round_index in range(2):
-		var loser: int = guest if round_index == 0 else 1
-		var winner: int = guest if loser == 1 else 1
-		for life in range(3):
+	var loser: int = 1 if OS.get_cmdline_user_args().has("host-loses") else guest
+	var winner: int = guest if loser == 1 else 1
+	for life in range(3):
+		await lane()
+		for shot in range(5):
+			await shoot_at(winner, loser)
+			var expected_health: int = 100 - (shot + 1) * 20
+			var expected_lives: int = 3 - life
+			if shot == 4:
+				expected_lives -= 1
+				expected_health = 100 if expected_lives > 0 else 0
+			if not check(await until(func(): return shared_health(loser, expected_health, expected_lives)), "Both instances reconcile real projectile damage/life loss"):
+				return
+		if life < 2:
+			if not check(room.tank_world.positions[loser] == room.combat.proxies[loser].spawn_position, "Host restores authoritative spawn"):
+				return
+			if loser == guest:
+				if not check(await until(func(): return probe.observed.position.distance_to(room.combat.proxies[loser].spawn_position) < 1), "Guest prediction reconciles respawn"):
+					return
 			await lane()
-			for shot in range(5):
-				await shoot_at(winner, loser)
-				var expected_health: int = 100 - (shot + 1) * 20
-				var expected_lives: int = 3 - life
-				if shot == 4:
-					expected_lives -= 1
-					expected_health = 100 if expected_lives > 0 else 0
-				if not check(await until(func(): return shared_health(loser, expected_health, expected_lives)), "Both instances reconcile real projectile damage/life loss"):
-					return
-			if life < 2:
-				if not check(room.tank_world.positions[loser] == room.combat.proxies[loser].spawn_position, "Host restores authoritative spawn"):
-					return
-				if loser == guest:
-					if not check(await until(func(): return probe.observed.position.distance_to(room.combat.proxies[loser].spawn_position) < 1), "Guest prediction reconciles respawn"):
-						return
-				await lane()
-				await shoot_at(winner, loser)
-				if not check(shared_health(loser, 100, 2 - life), "Real projectile cannot damage respawn protection"):
-					return
-				await create_timer(2.1).timeout
-		if not check(await until(func(): return room.phase == "finished" and probe.observed.get("phase") == "finished" and probe.observed.get("winner") == winner), "Both see the same winner"):
-			return
-		var shots: int = room.combat.next_shot
-		var tick: int = room.tank_world.tick
-		room.accept_fire_request(winner, room.epoch, Vector2.RIGHT, 200000)
-		await create_timer(0.3).timeout
-		if not check(room.combat.next_shot == shots and room.tank_world.tick == tick and probe.observed.replay_rejected and probe.observed.stale_vitals_rejected, "Result freezes simulation; stale health and client restart/fire rejected"):
-			return
-		var old_epoch: int = room.epoch
-		if not check(await until(func(): return is_instance_valid(room.play_again_button)), "Final explosion precedes replay controls"):
-			return
-		room.play_again_button.pressed.emit()
-		if not check(await until(func(): return room.phase == "ready" and probe.observed.get("epoch", 0) > old_epoch and probe.observed.get("stale_rejected", false)), "Host replay resets both peers and ignores old result"):
-			return
-		if not check(await until(func(): return shared_health(1, 100, 3) and shared_health(guest, 100, 3)) and room.artwork.ice_count == 35 and not is_instance_valid(room.result_overlay) and lobby.session == session, "Replay restores vitals/field while retaining ENet"):
-			return
-		room.bottom_start_button.pressed.emit()
-		for animal in room.combat.moose:
-			animal.set_physics_process(false)
-		if not check(await until(func(): return probe.observed.get("phase") == "running"), "Replayed round starts on the same session"):
-			return
+			await shoot_at(winner, loser)
+			if not check(shared_health(loser, 100, 2 - life), "Real projectile cannot damage respawn protection"):
+				return
+			await create_timer(2.1).timeout
+	if not check(await until(func(): return room.phase == "finished" and probe.observed.get("phase") == "finished" and probe.observed.get("winner") == winner), "Both see the same winner"):
+		return
+	var labels := result_labels()
+	var winner_number := 1 if winner == 1 else 2
+	if not check(labels == probe.observed.result_labels and labels.has("PLAYER %d WINS!" % winner_number) and labels.has("GAME OVER - PLAYER %d" % (3 - winner_number)), "Both results map Player 1 to host and Player 2 to guest"):
+		return
+	if not check(labels[3].contains("17 shots fired") and labels[3].contains("0 / 35 bricks cleared") and room.combat.match_shots == 17, "Host summary excludes preview shots and matches both screens"):
+		return
+	var shots: int = room.combat.next_shot
+	var tick: int = room.tank_world.tick
+	room.accept_fire_request(winner, room.epoch, Vector2.RIGHT, 200000)
+	await create_timer(0.3).timeout
+	if not check(room.combat.next_shot == shots and room.tank_world.tick == tick and probe.observed.replay_rejected and probe.observed.stale_vitals_rejected, "Result freezes simulation; stale health and client restart/fire rejected"):
+		return
+	var old_epoch: int = room.epoch
+	room.play_again_button.pressed.emit()
+	if not check(await until(func(): return room.phase == "ready" and probe.observed.get("epoch", 0) > old_epoch and probe.observed.get("stale_rejected", false)), "Host replay resets both peers and ignores old result"):
+		return
+	if not check(await until(func(): return shared_health(1, 100, 3) and shared_health(guest, 100, 3)) and room.artwork.ice_count == 35 and not is_instance_valid(room.result_overlay) and lobby.session == session, "Replay restores vitals/field while retaining ENet"):
+		return
+	room.bottom_start_button.pressed.emit()
+	for animal in room.combat.moose:
+		animal.set_physics_process(false)
+	if not check(await until(func(): return probe.observed.get("phase") == "running"), "Replayed round starts on the same session"):
+		return
 	await lane()
 	await shoot_at(1, guest)
 	if not check(await until(func(): return shared_health(guest, 80, 3)), "Replayed round accepts real shots and reconciles fresh health"):
 		return
 	probe.finish.rpc_id(guest)
 	await create_timer(0.5).timeout
-	print("PASS LAN duel host: real shots, shared damage/lives, respawn immunity/reconciliation, both winners, freeze and two complete rounds/replays")
+	print("PASS LAN duel host: real shots, shared damage/lives, respawn immunity/reconciliation, winner, freeze and authoritative replay")
 	quit()

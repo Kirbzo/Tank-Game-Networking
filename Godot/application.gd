@@ -13,9 +13,6 @@ func _ready() -> void:
 	client_menu.host_requested.connect(host_game)
 	client_menu.join_requested.connect(show_available_games)
 	lobby.main_menu_requested.connect(show_main_menu)
-	lobby.local_duel_requested.connect(func():
-		show_main_menu()
-		client_menu.start_game(true))
 
 func show_available_games() -> void:
 	if online:

@@ -11,8 +11,6 @@ var impacts: Array[Dictionary] = []
 var particles: Array[Dictionary] = []
 var sound: Node
 var state := "playing"
-var previous_tanks: Dictionary = {}
-var gameplay_active := true
 
 func _ready() -> void:
 	sound = preload("res://scripts/sound.gd").new()
@@ -84,16 +82,6 @@ func apply_snapshot(state: Dictionary) -> void:
 		animals[i].queue_redraw()
 
 func _process(delta: float) -> void:
-	var moving := false
-	var idle := false
-	for peer in get_parent().tank_markers:
-		var tank = get_parent().tank_markers[peer]
-		if tank.visible:
-			var driving: bool = tank.position.distance_squared_to(previous_tanks.get(peer, tank.position)) > 0.01
-			moving = moving or driving
-			idle = idle or not driving
-		previous_tanks[peer] = tank.position
-	sound.update_ambience(gameplay_active, moving, idle, false, gameplay_active)
 	# Cosmetic travel only; lifetime and collision removal always come from the host.
 	for bullet in bullets.values():
 		bullet.position += bullet.direction * Bullet.SPEED * minf(delta, 0.05)

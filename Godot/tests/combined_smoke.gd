@@ -183,7 +183,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-4" # Previous rica build.
+	old.protocol = "moooze-combined-8" # Previous build lacks replicated powers and compressed snapshots.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()
@@ -221,12 +221,6 @@ func local_checks() -> void:
 	compatible.broadcast_enabled = true
 	compatible.advertise()
 	if not check(await until(func(): return lobby.discovery.games.has("NEW002"), 3.0), "Compatible automatic announcements accepted"):
-		return
-	# Malik has different moose outcomes; reject its otherwise similar duel build too.
-	old.protocol = "moooze-combined-8"
-	old.send_packet("127.0.0.1", lobby.discovery.bound_port, old.announcement())
-	await create_timer(0.2).timeout
-	if not check(not lobby.discovery.games.has("OLD001"), "Unadapted Malik build rejected"):
 		return
 	old.queue_free()
 	compatible.queue_free()

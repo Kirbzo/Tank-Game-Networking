@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 		chassis.rotation = lerp_angle(chassis.rotation, travel.angle() + PI / 2.0, minf(delta * 14.0, 1.0))
 	var nearby := false
 	if travel.length_squared() > 0.01:
-		for sprite in get_parent().ice_sprites + get_parent().border_sprites + get_parent().extra_ice_sprites.values():
+		for sprite in get_parent().ice_sprites + get_parent().extra_ice_sprites.values():
 			nearby = nearby or (sprite.visible and position.distance_squared_to(sprite.position) < VITALS_FADE_DISTANCE * VITALS_FADE_DISTANCE)
 		for animal in get_tree().get_nodes_in_group("moose"):
 			if animal.get_parent().get_parent() == get_parent():
@@ -47,7 +47,6 @@ func apply_vitals(values: Dictionary) -> void:
 	active = bool(values.active)
 	visible = active
 	respawn_protection = float(values.protection)
-	moose_cooldown = float(values.get("contact", 0.0))
 	heavy_time = float(values.get("heavy", 0.0))
 	shield_time = float(values.get("shield", 0.0))
 	speed_time = float(values.get("speed", 0.0))

@@ -47,7 +47,6 @@ func run() -> void:
 		lobby.username = "BraveMoose"
 	root.add_child(lobby)
 	await process_frame
-	print("DISCOVERY_SLOT ", "host" if args.has("host") else "observer", " ", lobby.discovery.bound_port)
 	if OS.get_cmdline_user_args().has("unicast"):
 		# Disable announcements on both processes: only request/reply can discover.
 		lobby.discovery.broadcast_enabled = false
@@ -134,9 +133,6 @@ func packet_checks() -> void:
 	if not check(receiver.games[id]["address"] == lan_address, "LAN address must replace loopback"):
 		return
 	var prior_seen: int = receiver.games[id]["seen"]
-	# Local UDP can be consumed in the same millisecond as remember_game.
-	while Time.get_ticks_msec() <= prior_seen:
-		await process_frame
 	data["port"] = 32101
 	data["username"] = "LuckyOtter"
 	data["players"] = 2

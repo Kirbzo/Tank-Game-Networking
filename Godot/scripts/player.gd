@@ -186,6 +186,14 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 # Shared by every moose, independently for each tank. Existing damage API stays intact.
+func advance_vitals(delta: float) -> void:
+	moose_cooldown = maxf(0.0, moose_cooldown - delta)
+	respawn_protection = maxf(0.0, respawn_protection - delta)
+	heavy_time = maxf(0.0, heavy_time - delta)
+	shield_time = maxf(0.0, shield_time - delta)
+	speed_time = maxf(0.0, speed_time - delta)
+	recovery_time = maxf(0.0, recovery_time - delta)
+
 func take_moose_hit(away_from_moose: Vector2 = Vector2.ZERO) -> bool:
 	if not damage_enabled or moose_cooldown > 0.0 or shield_time > 0.0 or not active or get_tree().paused:
 		return false
@@ -336,11 +344,3 @@ func _draw() -> void:
 	if shot_flash > 0.0 and is_instance_valid(turret):
 		var direction := Vector2.RIGHT.rotated(turret.rotation)
 		draw_circle(direction * 54, 8, Color("#eefaff"))
-
-func advance_vitals(delta: float) -> void:
-	moose_cooldown = maxf(0.0, moose_cooldown - delta)
-	respawn_protection = maxf(0.0, respawn_protection - delta)
-	heavy_time = maxf(0.0, heavy_time - delta)
-	shield_time = maxf(0.0, shield_time - delta)
-	speed_time = maxf(0.0, speed_time - delta)
-	recovery_time = maxf(0.0, recovery_time - delta)

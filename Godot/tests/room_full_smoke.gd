@@ -19,10 +19,8 @@ func run() -> void:
 	root.add_child(lobby)
 	current_scene = lobby
 	lobby.discovery.protocol = "moooze-room-full-test"
-	print("CAPACITY_READY")
 	if args.has("host"):
 		lobby.host_game()
-		print("CAPACITY_HOST_READY")
 		for i in range(300):
 			if lobby.multiplayer.get_peers().size() == 1:
 				break

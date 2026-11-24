@@ -20,7 +20,7 @@ func button_in(box: VBoxContainer, text: String) -> Button:
 	box.add_child(button)
 	return button
 
-func build(winner: int, players: Array, summary: Dictionary, hosting: bool, names: Array = []) -> void:
+func build(winner: int, players: Array, summary: Dictionary, hosting: bool) -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	theme = Theme.new()
 	theme.default_font_size = 19
@@ -67,11 +67,10 @@ func build(winner: int, players: Array, summary: Dictionary, hosting: bool, name
 	box.add_theme_constant_override("separation", 12)
 	card.add_child(box)
 	label_in(box, "PLAYER %d WINS!" % winner if winner > 0 else "GAME OVER", 46, Color("#ffd890"))
-	label_in(box, "Winner: " + str(names[winner - 1]) if winner > 0 and names.size() >= winner else ("Winner: Player %d" % winner if winner > 0 else "Winner: None"), 25, Color("#a6dfff"))
+	label_in(box, "Winner: Player %d" % winner if winner > 0 else "Winner: None", 25, Color("#a6dfff"))
 	label_in(box, "GAME OVER - PLAYER %d" % (3 - winner) if winner > 0 else "NO LIVES REMAINING", 24, Color("#ff9cae"))
 	var seconds := int(summary.get("elapsed", 0))
 	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [int(summary.get("cleared", 0)), int(summary.get("total", 35)), int(summary.get("shots", 0)), seconds / 60, seconds % 60], 21)
-	label_in(box, "Field destruction score: %d points" % int(summary.get("score", 0)), 22)
 	for i in range(players.size()):
 		var values: Dictionary = players[i]
 		label_in(box, "Player %d: %d health / %d lives" % [i + 1, int(values.get("health", 0)), int(values.get("lives", 0))], 20, Color("#8fd5ff") if i == 0 else Color("#e3b7ff"))

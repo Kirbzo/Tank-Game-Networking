@@ -19,13 +19,6 @@ func run() -> void:
 	lobby = app.lobby
 	lobby.discovery.protocol = "mouse-fire-test-1"
 	enter_menu(hosting)
-	# Optional real loopback connection isolates combat from broadcast availability.
-	var args := OS.get_cmdline_user_args()
-	if hosting and args.has("loopback"):
-		print("ENDPOINT ", lobby.discovery.hosted_game.id, " ", lobby.discovery.hosted_game.port)
-	if not hosting and args.has("loopback"):
-		var index := args.find("loopback")
-		lobby.discovery.remember_game(args[index + 1], "127.0.0.1", int(args[index + 2]), "TestHost", 1)
 	if not hosting:
 		if not check(await until(func(): return not lobby.discovery.games.is_empty()), "Discover"):
 			return
@@ -45,7 +38,7 @@ func run() -> void:
 		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Started"):
 		return
-	if OS.get_cmdline_user_args().has("capture"):
+	if DisplayServer.get_name() != "headless":
 		capture_shots(room, "host" if hosting else "guest")
 	if not hosting:
 		if not check(await until(func(): return is_instance_valid(room.combat_view) and room.combat_view.shots_seen >= 1, 4.0), "Guest sees host mouse shot"):

@@ -10,7 +10,6 @@ var name_labels: Dictionary = {}
 var members: Dictionary = {}
 var ice_count := 0
 var ice_sprites: Array[Sprite2D] = []
-var border_sprites: Array[Sprite2D] = []
 var extra_ice_sprites: Dictionary = {}
 var contact_timers: Dictionary = {}
 var muzzle_flashes: Array[Dictionary] = []
@@ -33,8 +32,6 @@ func add_brick(at: Vector2, reinforced: bool) -> void:
 	sprite.texture = TREE if reinforced else ICE
 	sprite.position = at + (Vector2(0, -8) if reinforced else Vector2.ZERO)
 	add_child(sprite)
-	if reinforced:
-		border_sprites.append(sprite)
 	if not reinforced:
 		ice_count += 1
 		ice_sprites.append(sprite)

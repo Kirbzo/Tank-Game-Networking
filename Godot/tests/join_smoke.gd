@@ -40,9 +40,9 @@ func exit_checks() -> bool:
 		return false
 	var play := false
 	for node in app.client_menu.find_children("*", "Button", true, false):
-		if node.text == "Play":
+		if node.text == "Solo":
 			play = true
-	if not require(play and lobby.exit_screen == null, "Original Play menu replaces the old exit placeholder"):
+	if not require(play and lobby.exit_screen == null, "Direct Solo menu replaces the old exit placeholder"):
 		return false
 	await create_timer(0.3).timeout
 	lobby.show_exit_screen()

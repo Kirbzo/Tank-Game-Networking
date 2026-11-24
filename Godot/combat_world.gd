@@ -51,7 +51,6 @@ func _ready() -> void:
 		proxy.damage_enabled = interactions_enabled
 		add_child(proxy)
 		proxy.set_physics_process(false)
-		proxy.user_id = str(peer)
 		proxy.collision_mask = 0
 		proxies[peer] = proxy
 		previous_lives[peer] = proxy.lives
@@ -167,6 +166,9 @@ func accept_input(peer: int, direction: Vector2, fire: bool, sequence: int, now:
 	return true
 
 func refresh_collision_bodies() -> void:
+	tanks.moose_positions.clear()
+	for animal in moose:
+		tanks.moose_positions.append(animal.position)
 	tanks.inactive_peers.clear()
 	for peer in proxies:
 		tanks.speed_multipliers[peer] = Powerups.SPEED_MULTIPLIER if proxies[peer].speed_time > 0.0 else 1.0
@@ -234,13 +236,13 @@ func snapshot() -> Dictionary:
 	var animals := []
 	for animal in moose:
 		animals.append({"position": animal.position, "heading": animal.heading, "gait": animal.gait, "anger": animal.anger_remaining, "sprite_position": animal.sprite.position, "sprite_rotation": animal.sprite.rotation})
-	return {"aims": aims.duplicate(), "shots": shots, "moose": animals, "vitals": vitals(), "revision": vitals_revision, "ice_revision": ice_revision, "removed_ice": tanks.removed_ice.duplicate(), "extra_ice": tanks.extra_ice.duplicate(), "summary": match_summary()}
+	return {"aims": aims.duplicate(), "shots": shots, "moose": animals, "vitals": vitals(), "revision": vitals_revision, "ice_revision": ice_revision, "removed_ice": tanks.removed_ice.duplicate(), "extra_ice": tanks.extra_ice.duplicate()}
 
 func vitals() -> Dictionary:
 	var result := {}
 	for peer in proxies:
 		var proxy = proxies[peer]
-		result[peer] = {"health": proxy.health, "lives": proxy.lives, "active": proxy.active, "protection": proxy.respawn_protection, "heavy": proxy.heavy_time, "shield": proxy.shield_time, "speed": proxy.speed_time, "recovery": proxy.recovery_time, "contact": proxy.moose_cooldown}
+		result[peer] = {"health": proxy.health, "lives": proxy.lives, "active": proxy.active, "protection": proxy.respawn_protection, "heavy": proxy.heavy_time, "shield": proxy.shield_time, "speed": proxy.speed_time, "recovery": proxy.recovery_time}
 	return result
 
 func report_vitals(peer: int) -> void:
@@ -252,6 +254,7 @@ func report_vitals(peer: int) -> void:
 		tanks.positions[peer] = proxy.position
 		tanks.directions[peer] = Vector2.ZERO
 		tanks.hit_push.erase(peer)
+		tanks.bounce_push.erase(peer)
 		tanks.input_times.erase(peer)
 	confirmed.emit("vitals", {"vitals": vitals(), "revision": vitals_revision, "positions": tanks.positions.duplicate(), "tick": tanks.tick, "acks": tanks.processed_sequences.duplicate(), "respawn": peer if respawned else 0})
 
@@ -265,8 +268,5 @@ func finish_duel() -> void:
 			winner = peer
 	set_interactions_enabled(false)
 	controls.clear()
-	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": match_summary()})
+	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": cleared_ice, "total": maxi(35, cleared_ice)}})
 	clear_shots.call_deferred()
-
-func match_summary() -> Dictionary:
-	return {"elapsed": match_elapsed, "shots": match_shots, "cleared": mini(35, cleared_ice), "total": 35, "score": cleared_ice * 100}

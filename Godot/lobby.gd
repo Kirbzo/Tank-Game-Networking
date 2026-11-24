@@ -1,5 +1,4 @@
 extends Control
-signal local_duel_requested
 signal main_menu_requested
 
 const Discovery = preload("res://discovery.gd")
@@ -67,18 +66,7 @@ func _ready() -> void:
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	column.add_theme_constant_override("separation", 14)
 	scroll.add_child(column)
-	var title_row := HBoxContainer.new()
-	title_row.add_theme_constant_override("separation", 16)
-	column.add_child(title_row)
-	var logo := TextureRect.new()
-	logo.texture = preload("res://assets/menu_logo.png")
-	logo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	logo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	logo.custom_minimum_size = Vector2(64, 64)
-	title_row.add_child(logo)
-	var title := add_label(title_row, "MOOOZE TANKS MULTIPLAYER LOBBY")
-	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	var title := add_label(column, "MOOOZE TANKS MULTIPLAYER LOBBY")
 	title.add_theme_font_size_override("font_size", 30)
 	add_label(column, "Your username: " + username)
 	add_label(column, "Host a local session. Discover games on this computer or local network.")
@@ -104,12 +92,6 @@ func _ready() -> void:
 	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	games_column.add_theme_constant_override("separation", 12)
 	lobby_row.add_child(games_column)
-	var local_duel := Button.new()
-	local_duel.text = "Local Duel / 2 Players"
-	controls.add_child(local_duel)
-	local_duel.pressed.connect(func():
-		if session == null and not joining:
-			local_duel_requested.emit())
 	var games_title := add_label(games_column, "Available Games")
 	games_title.add_theme_font_size_override("font_size", 28)
 	game_list = ItemList.new()
@@ -163,12 +145,12 @@ func refresh_session_players() -> void:
 func update_session_feedback() -> bool:
 	if session == null or joining:
 		return false
-	var explanation := " Host and Join are disabled while in a session. The host can start from the room once both players connect."
+	var explanation := " Host and Join are disabled while in a session. Game start is not implemented."
 	if not discovery.hosted_game.is_empty():
 		var players := 1 + multiplayer.get_peers().size()
 		feedback.text = "Hosting game %s. Players: %d/2. %s" % [discovery.hosted_game["id"], players, "Client connected." if players == 2 else "Waiting for a client."] + explanation
 	elif not connected_game_id.is_empty():
-		feedback.text = "Connected to game %s. Enter the game room to play." % connected_game_id + explanation
+		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id + explanation
 	else:
 		return false
 	return true
