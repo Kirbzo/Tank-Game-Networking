@@ -98,7 +98,7 @@ func run() -> void:
 			return
 		if not check(await until(func(): return lobby.active_room.player_names.size() == 2), "Names RPC reaches stable lobby path"):
 			return
-		if not check(lobby.active_room.artwork.tank_markers.size() == 2 and lobby.active_room.status_message.text.contains("2/2"), "Host displays both waiting members"):
+		if not check(lobby.active_room.artwork.tank_markers.size() == 2 and lobby.active_room.status_message.text.contains("2/3"), "Host displays both waiting members"):
 			return
 		await create_timer(1.0).timeout
 		lobby.active_room.leave_room()
@@ -114,16 +114,13 @@ func run() -> void:
 		return
 	var id: String = lobby.discovery.games.keys()[0]
 	if args.has("third"):
-		if not check(await until(func(): return lobby.discovery.games.get(id, {}).get("players", 0) == 2), "Full room remains discoverable"):
+		if not check(await until(func(): return lobby.discovery.games.get(id, {}).get("players", 0) == 2), "Two-player room remains discoverable"):
 			return
 		lobby.game_id.text = id
 		lobby.identify_game(id)
-		if not check(lobby.game_list.get_item_text(lobby.listed_ids.find(id)).contains("2/2 · Full") and not lobby.join_button.disabled, "Full row visible and selectable"):
+		if not check(lobby.game_list.get_item_text(lobby.listed_ids.find(id)).contains("2/3 players") and not lobby.join_button.disabled, "Third slot remains available with two players"):
 			return
-		lobby.join_button.pressed.emit()
-		if not check(is_instance_valid(lobby.disconnected_screen) and lobby.disconnected_screen.title.text == "Room Full" and lobby.session == null, "Full Join retains Room Full response"):
-			return
-		lobby.disconnected_screen.return_button.pressed.emit()
+		# Keep this legacy lifecycle sequential; three_player_smoke tests capacity.
 		if not check(await until(func(): return lobby.discovery.games.get(id, {}).get("players", 0) == 1), "Freed slot updates listing"):
 			return
 		lobby.game_id.text = id
@@ -183,7 +180,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-8" # Previous build lacks replicated powers and compressed snapshots.
+	old.protocol = "moooze-combined-9" # Previous build uses two-player lobby capacity.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()

@@ -4,6 +4,7 @@ extends Control
 const PLAYER_SIZE := Vector2(32, 32)
 const MOVE_SPEED := 220.0
 const LOBBY_SCENE := "res://lobby.tscn"
+const MAX_PLAYERS = preload("res://discovery.gd").MAX_PLAYERS
 
 @export var game_id := "PREVIEW"
 var session_lobby: Node
@@ -65,7 +66,7 @@ func update_connection_status() -> void:
 		return
 	var hosting: bool = not session_lobby.discovery.hosted_game.is_empty()
 	var count := 1 + multiplayer.get_peers().size()
-	status_message.text = "%s | %d/2 players connected" % ["Hosting" if hosting else "Connected", count]
+	status_message.text = "%s | %d/%d players connected" % ["Hosting" if hosting else "Connected", count, MAX_PLAYERS]
 	status_message.show()
 
 func layout_room() -> void:
@@ -158,7 +159,7 @@ func broadcast_world() -> void:
 			session_lobby.room_snapshot.rpc_id(peer, game_id, world.tick, world.positions, world.processed_sequences)
 
 func receive_world(tick: int, positions: Dictionary, acknowledgements: Dictionary = {}) -> void:
-	if tick <= world_tick or positions.size() > 2:
+	if tick <= world_tick or positions.size() > MAX_PLAYERS:
 		return
 	for peer in positions:
 		if not peer is int or not positions[peer] is Vector2 or not positions[peer].is_finite() or not arena.encloses(Rect2(positions[peer], PLAYER_SIZE)):

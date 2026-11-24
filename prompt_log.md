@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P108 and the next request is **P109**. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P113 and the next request is **P114**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2557,3 +2557,52 @@ Clarification asked whether LAN-only and normal moose damage should remain while
 > LAN only; keep normal moose damage
 
 Associated status snapshot: S-2026-11-20-06. Added host-authoritative swept tank/moose body blocking and decaying harmless tank bounce, independent of invulnerability; matching client prediction boundaries. Normal moose damage retained, LAN respawn-protection gate explicit, no local mode rule changes. Added body-contact test, isolated moose in prior wall-only fixture. Final 10 process checks PASS across combat/preview/duel/Start and body-contact pairs. Initial fixture failures/corrections, exact commands, files/evidence and physical/graphical limits in status.md. Protected docs/requirements and unrelated user changes preserved; required logs only, no report documents. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P110 - Review current server/network bugs and reproduction steps
+
+Date: November 23, 2026.
+Time: 02:59:46 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can you check the current game code for any bugs/concerns about the server side of this game (such as connection) and if found, list the steps nessisary to recreate the issue.
+
+Associated status snapshot: S-2026-11-23-01. Investigation of current game-intigration-malik d867980, no implementation edits. Reproduced unregistered connected guest reserving full room after deadline; alternate-ID listing connecting to wrong-ID endpoint and leaving room waiting; unbounded removed-ice history exceeding current snapshot codec receive limits (synthetic stress). Normal Join/Cancel/Retry/menu and three-peer lifecycle checks pass. New feature suite failed twice/passed twice; reported intermittent assertion/cleanup failure with root cause unconfirmed. Exact reproduction commands, findings, priorities, code lines, current-versus-prior evidence and physical/graphical limitations in status.md and chat. Only required logs updated, temporary ignored probes, no report document or permanent tests. Protected docs/requirements and unrelated user changes preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P111 - Likelihood of server bugs from P110
+
+Date: November 24, 2026.
+Time: 10:58:11 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> are any of the bugs you found likely to be triggered?
+
+Associated status snapshot: S-2026-11-24-01. Explained likely conditions and test-versus-player probability distinction based on prior P110 review. Normal short matches with correct clients unlikely to hit controlled reproduction cases. No new implementation or tests. Clarification recorded with next work request; prior receipt time not inferred. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+
+## P112 - Assess assets/code for four-player lobbies
+
+Date: November 24, 2026.
+Time: 10:58:11 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Do we have the assests and code in our current game to up the player count per lobby up to 4 people?
+
+Associated status snapshot: S-2026-11-24-02. Read-only feasibility: art and generic host/per-peer gameplay foundations reusable; current explicit two-player transport/discovery/readiness/snapshot limits, shared guest spawn/tint, two-person results and first-elimination match end need changes. Four-player behavior not implemented/tested. Existing requirements remain two-player; future implementation would expand scope. Only existing required logs updated, no report document; protected docs/requirements and prior user/log changes preserved. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P113 - Three-player LAN rooms with harmless preview
+
+Date: November 24, 2026.
+Time: 11:14:12 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets start with the connection of 3 players, then move from there. Currently allow 3 players to be in a room at the same time. Do not allow the current game to start after 3 people have joined since we dont have any logic for the game ending. This means allowing the movement and shooting in the lobby.
+
+Clarification asked whether Start should be disabled for all LAN rooms or existing two-person duels retained. Actual answer:
+
+> Keep duels available with exactly two players
+
+Associated status snapshot: S-2026-11-24-03. Implemented host + two guests, /3 discovery/full checks and generalized waiting-room readiness/snapshots; three distinct spawns and guest tints. Three-player Start blocked by UI and authority, preview movement/shooting harmless. A third joining an existing duel returns it to safe preview; leaving restores two-player eligibility. Protocol 10 requires matching updated builds. Existing local modes and match-ending logic unchanged. New actual four-process test plus visual four-process run PASS; 14 final regression processes PASS (22 final checks total), initial fixture timing corrections documented. Exact commands/limits/source preservation in status.md. Required logs only, no report documents. Protected docs/requirements and prior user/log work preserved; no commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.

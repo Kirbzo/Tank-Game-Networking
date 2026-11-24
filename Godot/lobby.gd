@@ -145,10 +145,10 @@ func refresh_session_players() -> void:
 func update_session_feedback() -> bool:
 	if session == null or joining:
 		return false
-	var explanation := " Host and Join are disabled while in a session. Game start is not implemented."
+	var explanation := " Host and Join are disabled while in a session. Duels require exactly two players."
 	if not discovery.hosted_game.is_empty():
 		var players := 1 + multiplayer.get_peers().size()
-		feedback.text = "Hosting game %s. Players: %d/2. %s" % [discovery.hosted_game["id"], players, "Client connected." if players == 2 else "Waiting for a client."] + explanation
+		feedback.text = "Hosting game %s. Players: %d/%d. %s" % [discovery.hosted_game["id"], players, Discovery.MAX_PLAYERS, "Guests connected." if players > 1 else "Waiting for guests."] + explanation
 	elif not connected_game_id.is_empty():
 		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id + explanation
 	else:
@@ -342,7 +342,7 @@ func host_game() -> void:
 	open_connected_room()
 
 func create_host_session() -> Error:
-	return session.create_server(0, 1)
+	return session.create_server(0, Discovery.MAX_PLAYERS - 1)
 
 func generate_session_id() -> String:
 	var id := ""
@@ -363,9 +363,9 @@ func refresh_games() -> void:
 	for id in ids:
 		listed_ids.append(str(id))
 		var players: int = entries[id].get("players", 0)
-		var count := "%d/2 players" % players if players > 0 else "?/2 players"
-		if players == 2:
-			count = "2/2 · Full"
+		var count := "%d/%d players" % [players, Discovery.MAX_PLAYERS] if players > 0 else "?/%d players" % Discovery.MAX_PLAYERS
+		if players >= Discovery.MAX_PLAYERS:
+			count = "%d/%d - Full" % [players, Discovery.MAX_PLAYERS]
 		game_list.add_item("%s  |  %s  |  %s" % [id, entries[id].get("username", "UnknownHost"), count])
 		if id == selected:
 			game_list.select(game_list.item_count - 1)
@@ -532,7 +532,7 @@ func join_server_disconnected() -> void:
 func room_is_full() -> bool:
 	# A cached retry target alone cannot prove that a room is still full.
 	var listing: Dictionary = discovery.games.get(join_target.get("id", ""), {})
-	return not listing.is_empty() and listing.get("players", 0) == 2 and Time.get_ticks_msec() - int(listing.get("seen", -Discovery.EXPIRY_MS - 1)) <= Discovery.EXPIRY_MS
+	return not listing.is_empty() and listing.get("players", 0) >= Discovery.MAX_PLAYERS and Time.get_ticks_msec() - int(listing.get("seen", -Discovery.EXPIRY_MS - 1)) <= Discovery.EXPIRY_MS
 
 func show_room_full() -> void:
 	# A successful connection takes precedence over a late discovery update.
@@ -540,7 +540,7 @@ func show_room_full() -> void:
 		return
 	if session != null and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
 		return
-	show_connection_notice("Room Full", "This room already has two players.", "Return to the lobby to choose another room.")
+	show_connection_notice("Room Full", "This room already has %d players." % Discovery.MAX_PLAYERS, "Return to the lobby to choose another room.")
 
 func show_disconnected() -> void:
 	show_connection_notice("Disconnected", "The host disconnected or closed the room.", "Return to the lobby to join another room.")

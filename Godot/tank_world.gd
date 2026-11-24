@@ -4,6 +4,7 @@ extends "res://room_world.gd"
 const TANK_SPEED := 235.0
 const HALF := Vector2(24, 24)
 const CENTER_BOUNDS := Rect2(136, 176, 1008, 512)
+const SPAWN_POINTS := [Vector2(208, 612), Vector2(1072, 612), Vector2(208, 360)]
 var removed_ice: Dictionary = {}
 var extra_ice: Dictionary = {}
 var speed_multipliers: Dictionary = {}
@@ -45,7 +46,14 @@ static func ice_centers() -> Array[Vector2]:
 
 func add_player(peer: int) -> void:
 	if not positions.has(peer):
-		positions[peer] = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
+		var preferred := 0 if peer == 1 else mini(positions.size(), SPAWN_POINTS.size() - 1)
+		var spawn: Vector2 = SPAWN_POINTS[preferred]
+		for offset in range(SPAWN_POINTS.size()):
+			var candidate: Vector2 = SPAWN_POINTS[(preferred + offset) % SPAWN_POINTS.size()]
+			if positions.values().all(func(at): return candidate.distance_to(at) >= 72.0):
+				spawn = candidate
+				break
+		positions[peer] = spawn
 		directions[peer] = Vector2.ZERO
 
 func step(delta: float, now: int) -> void:

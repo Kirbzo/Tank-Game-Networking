@@ -167,7 +167,7 @@ func acknowledge_ready(peer: int, generation: int) -> void:
 	if phase != "preparing" or generation != epoch or not player_names.has(peer) or not multiplayer.get_peers().has(peer):
 		return
 	ready_peers[peer] = true
-	if ready_peers.size() == 2 and player_names.size() == 2:
+	if ready_peers.size() == player_names.size() and player_names.size() >= 2:
 		phase = "ready"
 		combat.process_mode = Node.PROCESS_MODE_INHERIT
 		session_lobby.tank_state.rpc(game_id, epoch, "ready", tank_world.positions)
@@ -221,7 +221,7 @@ func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence:
 		tank_world.accept_input(peer, direction, Time.get_ticks_msec(), sequence)
 
 func receive_tank_snapshot(generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
-	if not controls_active() or generation != epoch or positions.size() != 2:
+	if not controls_active() or generation != epoch or positions.is_empty() or positions.size() > MAX_PLAYERS or positions.size() != player_names.size():
 		return
 	if tick <= tank_view.latest_tick:
 		return
@@ -261,7 +261,10 @@ func update_connection_status() -> void:
 		elif phase == "preparing":
 			status_message.text += "\nWaiting for player readiness..."
 		elif phase == "ready":
-			status_message.text += "\nMove and shoot Â· " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
+			if player_names.size() > 2:
+				status_message.text += "\nThree-player lobby: move and shoot - match start disabled"
+			else:
+				status_message.text += "\nMove and shoot - " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:
 			status_message.text += "\nSetting up the waiting room..."
 	if is_instance_valid(bottom_start_button):
@@ -273,7 +276,12 @@ func update_connection_status() -> void:
 func add_world_player(peer: int, player_name: String) -> void:
 	super.add_world_player(peer, player_name)
 	sync_members()
-	if is_instance_valid(artwork) and multiplayer.is_server() and phase == "ready" and not same_preview_members():
+	if is_instance_valid(artwork) and multiplayer.is_server() and not same_preview_members():
+		# A new third member must never inherit an active two-player duel.
+		if is_instance_valid(combat):
+			combat.process_mode = Node.PROCESS_MODE_DISABLED
+		if phase != "ready":
+			phase = "waiting"
 		prepare_preview.call_deferred(true)
 
 func receive_names(names: Dictionary) -> void:
@@ -282,7 +290,7 @@ func receive_names(names: Dictionary) -> void:
 
 func refresh_world_members() -> void:
 	super.refresh_world_members()
-	if multiplayer.is_server() and is_instance_valid(artwork) and not same_preview_members():
+	if multiplayer.is_server() and is_instance_valid(artwork) and (not same_preview_members() or (phase == "running" and multiplayer.get_peers().size() != 1)):
 		if is_instance_valid(combat):
 			combat.process_mode = Node.PROCESS_MODE_DISABLED
 		if phase in ["preparing", "running"]:

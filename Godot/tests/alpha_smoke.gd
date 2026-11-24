@@ -77,7 +77,7 @@ func run() -> void:
 			return
 		if not check(lobby.session == original_session and int(lobby.discovery.hosted_game["port"]) == port, "Repeated Host must keep one server and stable endpoint"):
 			return
-		if not check(lobby.hosted.text == "HOSTED SESSION  |  %s" % original_id and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % original_id, "Host status must show only session ID; game row must retain username and player count"):
+		if not check(lobby.hosted.text == "HOSTED SESSION  |  %s" % original_id and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/3 players" % original_id, "Host status must show only session ID; game row must retain username and player count"):
 			return
 		print("HOST_STARTED %s %d" % [lobby.discovery.hosted_game["id"], port])
 		await create_timer(4.0).timeout
@@ -91,7 +91,7 @@ func run() -> void:
 		return
 	var id: String = lobby.listed_ids[0]
 	var port: int = lobby.discovery.games[id]["port"]
-	if not check(lobby.discovery.games[id]["username"] == "BraveMoose" and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/2 players" % id, "Observer must show advertised host username instead of endpoint"):
+	if not check(lobby.discovery.games[id]["username"] == "BraveMoose" and lobby.game_list.get_item_text(0) == "%s  |  BraveMoose  |  1/3 players" % id, "Observer must show advertised host username instead of endpoint"):
 		return
 	lobby.game_list.item_selected.emit(0)
 	if not check(lobby.game_id.text == id and lobby.feedback.text.contains("Select Join") and not lobby.join_button.disabled, "Selection must identify without joining"):
@@ -133,6 +133,8 @@ func packet_checks() -> void:
 	if not check(receiver.games[id]["address"] == lan_address, "LAN address must replace loopback"):
 		return
 	var prior_seen: int = receiver.games[id]["seen"]
+	# A refresh received in the same millisecond legitimately keeps the timestamp.
+	await create_timer(0.02).timeout
 	data["port"] = 32101
 	data["username"] = "LuckyOtter"
 	data["players"] = 2
@@ -160,7 +162,12 @@ func packet_checks() -> void:
 	await create_timer(0.1).timeout
 	if not check(receiver.games[id]["players"] == 0, "Legacy count must remain unknown"):
 		return
-	for invalid_count in [-1, 0, 3, 1.5, true, "2"]:
+	data["players"] = 3
+	sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+	await create_timer(0.1).timeout
+	if not check(receiver.games[id]["players"] == 3, "Three-player capacity is accepted"):
+		return
+	for invalid_count in [-1, 0, 4, 1.5, true, "2"]:
 		data["players"] = invalid_count
 		sender.put_packet(JSON.stringify(data).to_utf8_buffer())
 		await create_timer(0.1).timeout
