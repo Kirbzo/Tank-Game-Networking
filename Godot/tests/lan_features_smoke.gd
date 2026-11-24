@@ -82,6 +82,8 @@ func run() -> void:
 	if not check(rewards == 8, "Eight hidden authoritative rewards"):
 		return
 	room.begin_game()
+	if not check(await until(func(): return room.phase == "running"), "Countdown completes before feature fixtures"):
+		return
 	for animal in room.combat.moose:
 		animal.set_physics_process(false)
 	var proxy = room.combat.proxies[guest]

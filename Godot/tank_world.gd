@@ -43,9 +43,13 @@ static func ice_centers() -> Array[Vector2]:
 		result.append(Vector2(616, 292 + row * 40))
 	return result
 
+static func spawn_position(peer: int) -> Vector2:
+	# Clear central lanes, over 330 pixels from the nearest moose corner.
+	return Vector2(440, 412) if peer == 1 else Vector2(840, 412)
+
 func add_player(peer: int) -> void:
 	if not positions.has(peer):
-		positions[peer] = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
+		positions[peer] = spawn_position(peer)
 		directions[peer] = Vector2.ZERO
 
 func step(delta: float, now: int) -> void:

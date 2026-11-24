@@ -241,6 +241,16 @@ func tank_state(id: String, generation: int, state: String, positions: Dictionar
 		active_room.receive_tank_state(generation, state, positions)
 
 @rpc("any_peer", "call_remote", "reliable")
+func room_pause_request(id: String, generation: int, revision: int, paused: bool) -> void:
+	if multiplayer.is_server() and has_tank_room(id):
+		active_room.accept_pause(multiplayer.get_remote_sender_id(), generation, revision, paused)
+
+@rpc("authority", "call_remote", "reliable")
+func room_control(id: String, generation: int, revision: int, phase: String, number: int, tick: int, positions: Dictionary, acknowledgements: Dictionary, state: Dictionary) -> void:
+	if not multiplayer.is_server() and has_tank_room(id):
+		active_room.receive_control(generation, revision, phase, number, tick, positions, acknowledgements, state)
+
+@rpc("any_peer", "call_remote", "reliable")
 func tank_ready(id: String, generation: int) -> void:
 	if multiplayer.is_server() and has_tank_room(id):
 		active_room.acknowledge_ready(multiplayer.get_remote_sender_id(), generation)

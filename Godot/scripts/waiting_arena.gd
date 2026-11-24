@@ -101,7 +101,7 @@ func set_members(names: Dictionary) -> void:
 		var marker := TankVisual.new()
 		marker.player_number = 1 if peer == 1 else 2
 		marker.z_index = 3 # Client tanks remain visible over foliage/moose.
-		marker.position = Vector2(208, 612) if peer == 1 else Vector2(1072, 612)
+		marker.position = preload("res://tank_world.gd").spawn_position(peer)
 		add_child(marker)
 		tank_markers[peer] = marker
 		var label := Label.new()

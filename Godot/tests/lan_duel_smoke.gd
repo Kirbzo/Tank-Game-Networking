@@ -110,10 +110,10 @@ func run() -> void:
 	if not check(await until(func(): return shared_health(guest, 100, 3)), "Preview projectile cannot damage tank"):
 		return
 	room.bottom_start_button.pressed.emit()
-	for animal in room.combat.moose:
-		animal.set_physics_process(false)
 	if not check(await until(func(): return probe.observed.get("phase") == "running"), "Both in authoritative duel"):
 		return
+	for animal in room.combat.moose:
+		animal.set_physics_process(false)
 	var loser: int = 1 if OS.get_cmdline_user_args().has("host-loses") else guest
 	var winner: int = guest if loser == 1 else 1
 	for life in range(3):
@@ -159,10 +159,10 @@ func run() -> void:
 	if not check(await until(func(): return shared_health(1, 100, 3) and shared_health(guest, 100, 3)) and room.artwork.ice_count == 35 and not is_instance_valid(room.result_overlay) and lobby.session == session, "Replay restores vitals/field while retaining ENet"):
 		return
 	room.bottom_start_button.pressed.emit()
-	for animal in room.combat.moose:
-		animal.set_physics_process(false)
 	if not check(await until(func(): return probe.observed.get("phase") == "running"), "Replayed round starts on the same session"):
 		return
+	for animal in room.combat.moose:
+		animal.set_physics_process(false)
 	await lane()
 	await shoot_at(1, guest)
 	if not check(await until(func(): return shared_health(guest, 80, 3)), "Replayed round accepts real shots and reconciles fresh health"):

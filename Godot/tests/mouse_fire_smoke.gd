@@ -58,11 +58,13 @@ func run() -> void:
 		return
 	await create_timer(0.5).timeout
 	room.show_settings()
+	if not check(await until(func(): return room.phase == "paused"), "Shared Pause reaches this player"):
+		return
 	var before: int = room.combat_view.shots_seen
 	mouse(at, true)
 	mouse(at, false)
 	await create_timer(0.1).timeout
-	if not check(room.combat_view.shots_seen == before, "Settings consumes clicks without firing"):
+	if not check(room.combat_view.shots_seen == before, "Shared Pause consumes clicks without firing"):
 		return
 	room.close_settings()
 	if hosting:

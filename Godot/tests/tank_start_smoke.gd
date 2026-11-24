@@ -100,7 +100,7 @@ func run() -> void:
 	room.request_start()
 	if not check(room.epoch == generation, "Duplicate Start cannot reset match"):
 		return
-	# Both tanks move upward: host has an open lane; guest hits ice at y=576.
+	# Both central spawns hit the upper ice clusters at y=336.
 	# Isolate wall acceptance from the now-solid roaming hazards.
 	if hosting:
 		for animal in room.combat.moose:
@@ -112,7 +112,7 @@ func run() -> void:
 	await create_timer(0.6).timeout
 	if hosting:
 		var guest: int = lobby.multiplayer.get_peers()[0]
-		if not check(room.tank_world.positions[1].distance_to(Vector2(208, 176)) < 0.1 and room.tank_world.positions[guest].distance_to(Vector2(1072, 576)) < 0.1, "Host resolves perimeter and ice collisions for both tanks"):
+		if not check(room.tank_world.positions[1].distance_to(Vector2(440, 336)) < 0.1 and room.tank_world.positions[guest].distance_to(Vector2(840, 336)) < 0.1, "Host resolves perimeter and ice collisions for both tanks"):
 			return
 		var seq: int = room.tank_world.received_sequences.get(guest, 0)
 		room.accept_tank_input(guest, generation, Vector2(INF, 0), seq + 1)
@@ -140,7 +140,7 @@ func run() -> void:
 	else:
 		var peer: int = lobby.multiplayer.get_unique_id()
 		var positions: Dictionary = room.tank_view.snapshots[-1].positions
-		if not check(positions[1].distance_to(Vector2(208, 176)) < 0.1 and positions[peer].distance_to(Vector2(1072, 576)) < 0.1, "Guest receives identical authoritative positions"):
+		if not check(positions[1].distance_to(Vector2(440, 336)) < 0.1 and positions[peer].distance_to(Vector2(840, 336)) < 0.1, "Guest receives identical authoritative positions"):
 			return
 		if not check(room.artwork.tank_markers[peer].position.distance_to(positions[peer]) < 1.0 and room.tank_view.latest_ack > 0, "Prediction reconciles; tank artwork displays movement"):
 			return

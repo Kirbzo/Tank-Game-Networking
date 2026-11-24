@@ -65,6 +65,8 @@ func run() -> void:
 	for stage in range(2):
 		if stage == 1:
 			room.begin_game()
+			if not check(await until(func(): return room.phase == "running"), "Countdown completes before contact fixtures"):
+				return
 			for animal in room.combat.moose:
 				animal.set_physics_process(false)
 		room.tank_world.positions[1] = Vector2(400, 430)

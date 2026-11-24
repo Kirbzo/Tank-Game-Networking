@@ -3289,3 +3289,51 @@ Actual prompt:
 > Our team has decided to use the latest integrated version in `main`. Update my `rica` branch accordingly.
 
 Associated status snapshot: S-2026-11-24-01. Resolved the existing main merge using fetched origin/main 3590653 for the game implementation. Preserved both branches' historical log text, protected documentation and rica-specific tooling. Saved merge-state and full tracked-game backups under ignored Godot/.godot. Local merge commit; no push requested. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and monetary cost: **Unavailable**; reliable complete-request telemetry/rates unavailable.
+
+## P117 - Game Room improvements (interrupted)
+
+Date: November 24, 2026.
+Time: 02:39:30 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Implement the following Game Room improvements on my `rica` branch:
+>
+> 1. **Pause button:** Replace the Settings button with a Pause button that pauses the game and allows it to resume. Ensure the pause state is synchronized across both players.
+> 2. **Start countdown:** After the host clicks Start, display a synchronized 3–2–1 countdown before active gameplay begins. Match the countdown's design and animation to the existing Moooze Tanks aesthetic.
+> 3. **Movement instructions:** Remove the movement controls instruction line from the Game Room.
+> 4. **Player status panel:** Remove the HP and lives panel at the bottom-right corner. Retain the health and lives indicators above each tank.
+> 5. **Crosshair:** Make the aiming crosshair visible during gameplay and ensure it accurately follows the player's mouse position.
+> 6. **Game logo:** Add the existing Moooze Tanks logo to the Game Room. Position and size it appropriately without obstructing gameplay.
+> 7. **Player spawn positions:** Adjust player spawn locations so that tanks spawn farther away from the moose, with sufficient distance for players to prepare before encountering it.
+>
+> Maintain the existing game aesthetic, assets, networking, server-authoritative gameplay, FPS settings, and performance optimizations. Preserve existing working features and avoid unrelated changes.
+>
+> Test all changes for both host and guest, particularly pause synchronization, countdown timing, aiming, and spawn positions.
+>
+> Do not modify AGENTS.md or README.md, commit, or push without my approval. Follow existing logging instructions and provide a concise summary directly in the Codex chat. Do not create additional report documents.
+
+Associated status snapshot: S-2026-11-24-02. Reviewed requirements, implementation and existing tests. Began room_overlay.gd for countdown/reticle artwork; interrupted before integration or runtime checks. Continued under P118. No commit/push or protected-document edits.
+
+Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated monetary cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.
+
+## P118 - Continue Game Room improvements
+
+Date: November 24, 2026.
+Time: 02:39:30 PM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Continue implementing the Game Room improvements according to our previous prompt. The previous session was interrupted due to the usage limit.
+>
+> Review the current changes and test results, then resume from where you stopped. Do not undo or duplicate completed work.
+>
+> Complete all remaining changes and regression tests while following our previously established restrictions and logging instructions.
+>
+> Do not commit or push. Provide a concise summary directly in the Codex chat without creating additional report documents.
+
+Associated status snapshot: S-2026-11-24-03. Resumed the existing overlay without discarding it. Completed all seven requested changes. Godot 4.7.2 paired headless and graphical controls tests, native mouse clicks, countdown cancellation/host loss, readiness/rejoin, combat, both duel winner/replay paths, power-ups, body contacts, menu lifecycle, result UI and prediction regressions passed. Source/protected files unchanged; physical two-device and performance acceptance remain unverified. Exact commands, initial failures/fixes and file scope are recorded in the associated status snapshot; no additional report document, commit or push.
+
+Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated monetary cost: **Unavailable**; reliable complete-request telemetry and applicable rates are unavailable.

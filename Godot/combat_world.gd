@@ -136,7 +136,7 @@ func replace_brick(previous_position: Vector2) -> void:
 			locations.append(Vector2(184 + column * 48, 212 + row * 40))
 	locations.shuffle()
 	for location in locations:
-		if location.distance_to(previous_position) < 96.0 or location.distance_to(Vector2(208, 612)) < 90.0 or location.distance_to(Vector2(1072, 612)) < 90.0:
+		if location.distance_to(previous_position) < 96.0 or location.distance_to(TankWorld.spawn_position(1)) < 90.0 or location.distance_to(TankWorld.spawn_position(2)) < 90.0:
 			continue
 		var clear := true
 		for body in get_children():

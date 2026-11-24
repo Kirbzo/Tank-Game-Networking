@@ -47,6 +47,11 @@ func run() -> void:
 		room.bottom_start_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "running"), "Ready then Start"):
 		return
+	# Preserve this test's known projectile/contact lanes independently of safe match spawns.
+	if hosting:
+		room.tank_world.positions[1] = Vector2(208, 612)
+		room.tank_world.positions[lobby.multiplayer.get_peers()[0]] = Vector2(1072, 612)
+	await create_timer(0.3).timeout
 	var impacts: Array[Vector2] = []
 	room.combat_view.impact_confirmed.connect(func(at): impacts.append(at))
 	aim(Vector2(424, 532) if hosting else Vector2(1048, 532))
@@ -55,8 +60,8 @@ func run() -> void:
 	await create_timer(0.6).timeout
 	if not check(await until(func(): return (room.artwork.ice_count == 35 and room.tank_world.removed_ice.size() >= 2) and room.combat_view.shots_seen == 2), "Exactly two shots, matching destruction and replacement field"):
 		return
-	var expected_host := (Vector2(424, 532) - Vector2(208, 612)).angle()
-	var expected_guest := (Vector2(1048, 532) - Vector2(1072, 612)).angle()
+	var expected_host: float = (Vector2(424, 532) - Vector2(208, 612)).angle()
+	var expected_guest: float = (Vector2(1048, 532) - Vector2(1072, 612)).angle()
 	for member in room.player_names:
 		if not check(absf(angle_difference(room.artwork.tank_markers[member].get_node("Turret").rotation, expected_host if member == 1 else expected_guest)) < 0.01, "Both turret directions synchronized"):
 			return

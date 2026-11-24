@@ -75,7 +75,7 @@ func run() -> void:
 		aim(Vector2(1100, at.y))
 		await fire_once()
 		room.bottom_start_button.pressed.emit()
-		if not check(room.combat.interactions_enabled and room.combat.bullets.is_empty(), "Second Start enables interactions and clears preview shots"):
+		if not check(room.phase == "countdown" and not room.combat.interactions_enabled and room.combat.bullets.is_empty(), "Second Start freezes interactions and clears preview shots for countdown"):
 			return
 	if not check(await until(func(): return room.phase == "running"), "Bottom Start begins normal LAN gameplay"):
 		return
