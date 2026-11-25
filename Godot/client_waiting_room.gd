@@ -141,6 +141,7 @@ func prepare_preview(preserve_positions := false, message := "") -> void:
 	var previous: Dictionary = tank_world.positions.duplicate() if preserve_positions else {}
 	epoch += 1
 	phase = "preparing"
+	session_lobby.set_match_started(false)
 	ready_peers = {1: true}
 	connection_event.hide()
 	prepare_deadline = Time.get_ticks_msec() + 10000
@@ -174,7 +175,7 @@ func acknowledge_ready(peer: int, generation: int) -> void:
 		update_connection_status()
 
 func can_begin_game() -> bool:
-	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase == "ready" and ready_peers.size() == 2 and player_names.size() == 2 and multiplayer.get_peers().size() == 1
+	return not leaving and session_lobby != null and session_lobby.session != null and multiplayer.is_server() and phase == "ready" and player_names.size() >= 2 and player_names.size() <= MAX_PLAYERS and ready_peers.size() == player_names.size() and multiplayer.get_peers().size() + 1 == player_names.size()
 
 func begin_game() -> void:
 	if not can_begin_game():
@@ -184,6 +185,7 @@ func begin_game() -> void:
 	combat.set_interactions_enabled(true)
 	fire_held = false
 	phase = "running"
+	session_lobby.set_match_started(true)
 	combat.process_mode = Node.PROCESS_MODE_INHERIT
 	snapshot_elapsed = 0.0
 	session_lobby.tank_state.rpc(game_id, epoch, "running", tank_world.positions)
@@ -218,6 +220,8 @@ func receive_tank_state(generation: int, state: String, positions: Dictionary) -
 
 func accept_tank_input(peer: int, generation: int, direction: Vector2, sequence: int) -> void:
 	if controls_active() and generation == epoch and sequence > 0:
+		if is_instance_valid(combat) and combat.proxies.has(peer) and not combat.proxies[peer].active:
+			return
 		tank_world.accept_input(peer, direction, Time.get_ticks_msec(), sequence)
 
 func receive_tank_snapshot(generation: int, tick: int, positions: Dictionary, acknowledgements: Dictionary) -> void:
@@ -261,10 +265,7 @@ func update_connection_status() -> void:
 		elif phase == "preparing":
 			status_message.text += "\nWaiting for player readiness..."
 		elif phase == "ready":
-			if player_names.size() > 2:
-				status_message.text += "\nThree-player lobby: move and shoot - match start disabled"
-			else:
-				status_message.text += "\nMove and shoot - " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
+			status_message.text += "\nMove and shoot - " + ("Waiting for another player" if player_names.size() == 1 else "Waiting for host to press Start Game")
 		else:
 			status_message.text += "\nSetting up the waiting room..."
 	if is_instance_valid(bottom_start_button):
@@ -290,7 +291,7 @@ func receive_names(names: Dictionary) -> void:
 
 func refresh_world_members() -> void:
 	super.refresh_world_members()
-	if multiplayer.is_server() and is_instance_valid(artwork) and (not same_preview_members() or (phase == "running" and multiplayer.get_peers().size() != 1)):
+	if multiplayer.is_server() and is_instance_valid(artwork) and not same_preview_members():
 		if is_instance_valid(combat):
 			combat.process_mode = Node.PROCESS_MODE_DISABLED
 		if phase in ["preparing", "running"]:
@@ -501,17 +502,22 @@ func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
 		return
 	winner_peer = winner
 	phase = "finished"
+	if multiplayer.is_server():
+		session_lobby.set_match_started(false)
 	fire_held = false
 	combat_view.clear_shots()
 	combat_view.sound.play("victory" if winner == multiplayer.get_unique_id() else "defeat")
 	result_overlay = preload("res://scripts/lan_results.gd").new()
 	$HUD.add_child(result_overlay)
-	var guest := 0
+	var peers: Array = [1]
 	for peer in player_names:
 		if peer != 1:
-			guest = peer
-	var winner_number := 1 if winner == 1 else (2 if winner == guest and guest != 0 else 0)
-	result_overlay.build(winner_number, [duel_vitals.get(1, {}), duel_vitals.get(guest, {})], summary, multiplayer.is_server())
+			peers.append(peer)
+	var winner_number := peers.find(winner) + 1
+	var players: Array = []
+	for peer in peers:
+		players.append(duel_vitals.get(peer, {}))
+	result_overlay.build(winner_number, players, summary, multiplayer.is_server())
 	play_again_button = result_overlay.replay_button if multiplayer.is_server() else null
 	result_overlay.replay_requested.connect(request_start)
 	result_overlay.lobby_requested.connect(leave_room)

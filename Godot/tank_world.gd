@@ -58,6 +58,10 @@ func add_player(peer: int) -> void:
 
 func step(delta: float, now: int) -> void:
 	for peer in positions:
+		if inactive_peers.has(peer):
+			directions[peer] = Vector2.ZERO
+			processed_sequences[peer] = received_sequences.get(peer, 0)
+			continue
 		contact_cooldowns[peer] = maxf(0.0, float(contact_cooldowns.get(peer, 0.0)) - delta)
 		var direction: Vector2 = directions[peer]
 		if now - int(input_times.get(peer, -INPUT_TIMEOUT_MS)) > INPUT_TIMEOUT_MS:

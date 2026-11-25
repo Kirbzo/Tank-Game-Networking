@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P113 and the next request is **P114**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P115 and the next request is **P116**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2606,3 +2606,29 @@ Clarification asked whether Start should be disabled for all LAN rooms or existi
 > Keep duels available with exactly two players
 
 Associated status snapshot: S-2026-11-24-03. Implemented host + two guests, /3 discovery/full checks and generalized waiting-room readiness/snapshots; three distinct spawns and guest tints. Three-player Start blocked by UI and authority, preview movement/shooting harmless. A third joining an existing duel returns it to safe preview; leaving restores two-player eligibility. Protocol 10 requires matching updated builds. Existing local modes and match-ending logic unchanged. New actual four-process test plus visual four-process run PASS; 14 final regression processes PASS (22 final checks total), initial fixture timing corrections documented. Exact commands/limits/source preservation in status.md. Required logs only, no report documents. Protected docs/requirements and prior user/log work preserved; no commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P114 - Started-room admission block and Retry notice
+
+Date: November 25, 2026.
+Time: 08:27:56 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets have it so when a host starts a game, it removes the possibility to join the lobby. It should display a new error screen that the lobby has already started and to wait until the game has ended. Then there should be a retry button to joim the room or to return back to the lobby screen.
+
+Associated status snapshot: S-2026-11-25-01. Added advertised started state and authoritative admission approval before opening room; blocks fresh/stale/racing late joins without interrupting duel. New Game already started screen explains waiting and offers Retry/Return to Lobby; retry target retained, timers/transports cleaned, post-end Retry joins normally. Reopens at result/preview, keeps three-player harmless waiting room and two-person duel. Protocol 11 requires matching builds. 25 final process checks PASS across dedicated headless/graphical flow and regressions; first temporary runner parse issue corrected before engine tests. Exact commands, changed files, screenshot and physical/embedded limits recorded in status.md. Required logs only, no report documents. Protected docs/source requirements and prior user history preserved; no commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+## P115 - Last player standing and winner-focused LAN results
+
+Date: November 25, 2026.
+Time: 08:53:18 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Lets continue with the match now. Include logic for the game to end when the last player standing instead of the first player eliminated. Lets also display the winner only instead of the GAME OVER screen.
+
+Clarification asked winner/buttons only versus keeping statistics and removing GAME OVER/loser text. Actual answer:
+
+> Keep statistics; remove GAME OVER text
+
+Associated status snapshot: S-2026-11-25-02. Enabled two/three-player host Start and authoritative final-survivor ending; first eliminated player stays connected and cannot move/fire/block shots. Host can be eliminated while server continues. Winner-focused card retains all three player stats and existing buttons/confetti, removes GAME OVER/loser line; same-session replay restores all. Matching-build protocol 12. Final 29 selected process checks PASS, including actual three-player eliminations with host/guest wins and graphical Player 3 winner. Test isolation/teardown corrections and final held-fire safeguard covered; commands/evidence/limits in status.md. Prior P114 uncommitted work, protected docs/requirements and historical entries preserved. No report documents/commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.

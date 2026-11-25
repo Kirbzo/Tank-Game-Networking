@@ -15,7 +15,7 @@ func run() -> void:
 	var labels: Array[String] = []
 	for node in room.result_overlay.find_children("*", "Label", true, false):
 		labels.append(node.text)
-	if not check(labels.has("PLAYER 1 WINS!") and labels.has("Player 1: 80 health / 3 lives") and labels.has("Player 2: 0 health / 0 lives") and labels[3].contains("Time played: 00:09"), "Screenshot design content and host mapping"):
+	if not check(labels.has("PLAYER 1 WINS!") and labels.has("Player 1: 80 health / 3 lives") and labels.has("Player 2: 0 health / 0 lives") and labels[2].contains("Time played: 00:09") and labels.all(func(text): return not text.contains("GAME OVER")), "Winner-focused design, statistics and host mapping"):
 		return
 	if not check(room.play_again_button.has_focus() and not room.play_again_button.disabled and not paused, "Host replay focus and active network tree"):
 		return

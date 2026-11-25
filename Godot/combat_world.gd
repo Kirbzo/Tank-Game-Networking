@@ -205,6 +205,8 @@ func request_fire(peer: int, direction: Vector2, sequence: int) -> bool:
 	return true
 
 func shoot(peer: int) -> void:
+	if ended or not proxies.has(peer) or not proxies[peer].active:
+		return
 	if interactions_enabled:
 		match_shots += 1
 	cooldowns[peer] = FIRE_INTERVAL
@@ -249,6 +251,12 @@ func report_vitals(peer: int) -> void:
 	vitals_revision += 1
 	var proxy = proxies[peer]
 	var respawned: bool = proxy.lives < int(previous_lives[peer]) and proxy.active
+	if not proxy.active:
+		controls.erase(peer)
+		proxy.set_deferred("collision_layer", 0)
+		tanks.directions[peer] = Vector2.ZERO
+		tanks.hit_push.erase(peer)
+		tanks.bounce_push.erase(peer)
 	previous_lives[peer] = proxy.lives
 	if respawned:
 		tanks.positions[peer] = proxy.position
@@ -259,13 +267,16 @@ func report_vitals(peer: int) -> void:
 	confirmed.emit("vitals", {"vitals": vitals(), "revision": vitals_revision, "positions": tanks.positions.duplicate(), "tick": tanks.tick, "acks": tanks.processed_sequences.duplicate(), "respawn": peer if respawned else 0})
 
 func finish_duel() -> void:
-	if ended:
+	if ended or not interactions_enabled:
+		return
+	var survivors: Array[int] = []
+	for peer in proxies:
+		if proxies[peer].active and proxies[peer].lives > 0:
+			survivors.append(peer)
+	if survivors.size() > 1:
 		return
 	ended = true
-	var winner := 0
-	for peer in proxies:
-		if proxies[peer].active:
-			winner = peer
+	var winner: int = survivors[0] if survivors.size() == 1 else 0
 	set_interactions_enabled(false)
 	controls.clear()
 	confirmed.emit("result", {"winner": winner, "vitals": vitals(), "revision": vitals_revision, "summary": {"elapsed": match_elapsed, "shots": match_shots, "cleared": cleared_ice, "total": maxi(35, cleared_ice)}})

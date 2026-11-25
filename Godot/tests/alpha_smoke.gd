@@ -167,6 +167,17 @@ func packet_checks() -> void:
 	await create_timer(0.1).timeout
 	if not check(receiver.games[id]["players"] == 3, "Three-player capacity is accepted"):
 		return
+	data["started"] = true
+	sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+	await create_timer(0.1).timeout
+	if not check(receiver.games[id]["started"], "Started status is discovered"):
+		return
+	for status in [false, 1, "true", [], {}]:
+		data["started"] = status
+		sender.put_packet(JSON.stringify(data).to_utf8_buffer())
+		await create_timer(0.1).timeout
+		if not check(not receiver.games[id]["started"], "Ended or malformed started flag is not treated as running"):
+			return
 	for invalid_count in [-1, 0, 4, 1.5, true, "2"]:
 		data["players"] = invalid_count
 		sender.put_packet(JSON.stringify(data).to_utf8_buffer())

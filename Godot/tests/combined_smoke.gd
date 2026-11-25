@@ -180,7 +180,7 @@ func run() -> void:
 func local_checks() -> void:
 	enter_menu(false)
 	var old = load("res://discovery.gd").new()
-	old.protocol = "moooze-combined-9" # Previous build uses two-player lobby capacity.
+	old.protocol = "moooze-combined-11" # Previous build cannot start/end a three-player match.
 	old.hosted_game = {"id": "OLD001", "port": 54321, "username": "OldMoose", "players": 1}
 	root.add_child(old)
 	old.advertise()

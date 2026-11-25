@@ -1,6 +1,9 @@
 extends Control
 ## Shared full-screen notice for a lost connection or advertised full room.
 signal lobby_requested
+signal retry_requested
+var retry_enabled := false
+var retry_button: Button
 var heading := "Disconnected"
 var hint := "Return to the lobby to join another room."
 var message := "The host disconnected or closed the room."
@@ -30,9 +33,17 @@ func _ready() -> void:
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(explanation)
+	if retry_enabled:
+		retry_button = Button.new()
+		retry_button.text = "Retry"
+		retry_button.custom_minimum_size.y = 56
+		retry_button.pressed.connect(func(): retry_requested.emit())
+		column.add_child(retry_button)
 	return_button = Button.new()
 	return_button.text = "Return to Lobby"
 	return_button.custom_minimum_size.y = 56
 	return_button.pressed.connect(func(): lobby_requested.emit())
 	column.add_child(return_button)
 	return_button.grab_focus()
+	if retry_enabled:
+		retry_button.grab_focus()

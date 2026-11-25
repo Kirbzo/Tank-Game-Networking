@@ -165,7 +165,9 @@ func run() -> void:
 	var blocked: Vector2 = room.tank_world.move_current(at - Vector2(90, 0), Vector2.RIGHT, 1.0)
 	if not check(blocked.x <= at.x - 48.0, "Replacement blocks authoritative movement"):
 		return
-	room.combat.finish_duel()
+	proxy.clear_powerups()
+	proxy.lives = 1
+	proxy.take_damage(100)
 	await create_timer(0.2).timeout
 	room.play_again_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "ready" and probe.observed.get("phase") == "ready" and probe.observed.get("extra", {}).is_empty()), "Replay clears powers and replacement geometry"):

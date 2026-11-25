@@ -59,7 +59,7 @@ func run() -> void:
 			return
 		var id: String = lobby.discovery.games.keys()[0]
 		if role == "second":
-			if not check(await until(func(): return stage(PHASE_FILE) == "duel"), "Wait for existing duel"):
+			if not check(await until(func(): return stage(PHASE_FILE) == "waiting-room"), "Wait for two-player preview"):
 				return
 		elif role == "fourth":
 			if not check(await until(func(): return stage(PHASE_FILE) == "three" and lobby.discovery.games.get(id,{}).get("players",0) == 3), "3/3 full listing"):
@@ -111,16 +111,10 @@ func run() -> void:
 	var room = lobby.active_room
 	if not check(room.can_begin_game(), "Two-player duel still allowed"):
 		return
-	room.begin_game()
-	if not check(room.phase == "running", "Two-player duel starts"):
+	set_stage(PHASE_FILE,"waiting-room")
+	if not check(await until(func(): return shared(3)), "Third joins shared safe preview"):
 		return
-	set_stage(PHASE_FILE,"duel")
-	if not check(await until(func(): return shared(3)), "Third join interrupts duel into shared safe preview"):
-		return
-	if not check(room.status_message.text.contains("3/3") and room.bottom_start_button.disabled and not room.combat.interactions_enabled and room.artwork.tank_markers.size() == 3, "Three-player lobby blocks match start"):
-		return
-	room.begin_game()
-	if not check(room.phase == "ready" and not room.combat.interactions_enabled, "Direct Start is also rejected"):
+	if not check(room.status_message.text.contains("3/3") and not room.bottom_start_button.disabled and not room.combat.interactions_enabled and room.artwork.tank_markers.size() == 3, "Three-player lobby stays harmless until host Start"):
 		return
 	var before: Dictionary = room.tank_world.positions.duplicate()
 	if args.has("render"):
@@ -160,9 +154,9 @@ func run() -> void:
 	set_stage(PHASE_FILE,"slot-open")
 	if not check(await until(func(): return shared(3)), "Fourth guest fills reopened slot"):
 		return
-	if not check(not room.can_begin_game(), "Reopened three-player room cannot start"):
+	if not check(room.can_begin_game(), "Reopened three-player room is eligible to start"):
 		return
 	room.leave_room()
 	await create_timer(0.3).timeout
-	print("PASS three-player host: duel interruption, movement/shots, safe preview, capacity and rejoin")
+	print("PASS three-player host: waiting-room admission, movement/shots, safe preview, capacity and rejoin")
 	quit()

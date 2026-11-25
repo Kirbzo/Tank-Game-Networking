@@ -65,7 +65,7 @@ func update_connection_status() -> void:
 	if session_lobby == null:
 		return
 	var hosting: bool = not session_lobby.discovery.hosted_game.is_empty()
-	var count := 1 + multiplayer.get_peers().size()
+	var count := player_names.size() if not player_names.is_empty() else 1 + multiplayer.get_peers().size()
 	status_message.text = "%s | %d/%d players connected" % ["Hosting" if hosting else "Connected", count, MAX_PLAYERS]
 	status_message.show()
 

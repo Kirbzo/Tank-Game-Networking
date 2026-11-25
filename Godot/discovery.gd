@@ -8,7 +8,7 @@ const FIRST_PORT := 49140
 const SLOT_COUNT := 16
 # Combined builds share a stable Application/AlphaLobby RPC path.
 # Broadcast and direct-IP replies pass this check before ID cache lookup.
-const PROTOCOL := "moooze-combined-10"
+const PROTOCOL := "moooze-combined-12"
 const MAX_PLAYERS := 3
 var protocol := PROTOCOL
 const EXPIRY_MS := 4000
@@ -60,7 +60,8 @@ func _process(delta: float) -> void:
 			continue
 		if not valid_session_id(id):
 			continue
-		remember_game(id, address, port, clean_username(data.get("username", "")), clean_players(data.get("players")))
+		var started: bool = data.get("started", false) is bool and data.get("started", false)
+		remember_game(id, address, port, clean_username(data.get("username", "")), clean_players(data.get("players")), started)
 	var expired: Array = []
 	for id in games:
 		if Time.get_ticks_msec() - int(games[id]["seen"]) > EXPIRY_MS:
@@ -100,13 +101,13 @@ func clean_players(value: Variant) -> int:
 		return 0
 	return int(value)
 
-func remember_game(id: String, address: String, port: int, username: String = "UnknownHost", players: int = 0) -> void:
+func remember_game(id: String, address: String, port: int, username: String = "UnknownHost", players: int = 0, started := false) -> void:
 	# Announcements and replies describe one session; prefer LAN to loopback.
 	var previous: Dictionary = games.get(id, {})
 	if address.begins_with("127.") and not previous.is_empty() and not str(previous["address"]).begins_with("127."):
 		address = previous["address"]
-	var changed: bool = previous.is_empty() or previous["address"] != address or int(previous["port"]) != port or previous.get("username", "UnknownHost") != username or int(previous.get("players", 0)) != players
-	games[id] = {"players": players, "username": username, "id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
+	var changed: bool = previous.is_empty() or previous["address"] != address or int(previous["port"]) != port or previous.get("username", "UnknownHost") != username or int(previous.get("players", 0)) != players or previous.get("started", false) != started
+	games[id] = {"players": players, "started": started, "username": username, "id": id, "address": address, "port": port, "seen": Time.get_ticks_msec()}
 	if changed:
 		games_changed.emit()
 
