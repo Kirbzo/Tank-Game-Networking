@@ -2681,3 +2681,15 @@ Actual prompt:
 > In the lobby just remove the local co-op & local duel modes!
 
 Associated status snapshot: S-2026-11-23-05. Removed local Co-op/Duel lobby row and its application routing. Local gameplay implementation retained; local-duel regression fixture invokes it directly. Current graphical lobby probe and actual host/guest reentry PASS. Only application.gd, lobby.gd, local_duel_smoke.gd and required logs changed. Protected docs/source requirements unchanged. No commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable complete-request usage/pricing records unavailable.
+
+## P116 - Restore music in lobby and connected game room
+
+Date: November 25, 2026.
+Time: 08:52:13 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> GET THE MUSIC TO WORK IN THE LOBBY AND THE GAME ROOM!
+
+Associated status snapshot: S-2026-11-25-01. Found Multiplayer stopped/disabled the menu sound player while the room never started background music. Preserve one persistent music voice across online lobby, joining and room; volume/mute/unmute retained and other offline cues stopped. Added focused music regression suite. Graphical local music/volume/routing test PASS, actual host/guest full duel/replay with continuous single-music assertions both PASS. Initial test callback return type corrected before passing runs. Only application.gd, tests/lobby_music_smoke.gd and required logs changed. Source documents/protected docs unchanged. P115 exists on main's merge history; P116 avoids reusing that ID on Allen. No commit/push. Input tokens, cached input tokens, output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**; reliable full-request usage/pricing records unavailable.

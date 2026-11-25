@@ -28,11 +28,20 @@ func show_available_games() -> void:
 	client_menu.hide()
 	client_menu.set_process(false)
 	client_menu.set_process_unhandled_input(false)
-	for voice in client_menu.sound.voices.values():
-		voice.stop()
-	client_menu.sound.process_mode = Node.PROCESS_MODE_DISABLED
+	for cue in client_menu.sound.voices:
+		if cue != "music":
+			client_menu.sound.voices[cue].stop()
+	client_menu.sound.process_mode = Node.PROCESS_MODE_ALWAYS
+	client_menu.sound.voices.music.stream_paused = false
+	client_menu.sound.set_loop("music", true)
 	lobby.show()
 	lobby.game_id.grab_focus()
+
+func _process(_delta: float) -> void:
+	if online:
+		# One persistent music voice covers lobby, joins and the connected room.
+		# The hidden offline game no longer runs its ambience updater.
+		client_menu.sound.set_loop("music", true)
 
 func host_game() -> void:
 	if online:
