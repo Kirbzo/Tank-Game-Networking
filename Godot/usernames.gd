@@ -15,6 +15,7 @@ const NOUNS: Array[String] = [
 	"Robin", "Sparrow", "Panda", "Tiger", "Lion", "Zebra",
 	"Horse", "Mouse", "Beaver", "Badger", "Squirrel", "Turtle",
 	"Frog", "Seal", "Whale", "Dolphin", "Penguin", "Falcon",
+	"Gavin","Nick"
 ]
 
 static func generate() -> String:
