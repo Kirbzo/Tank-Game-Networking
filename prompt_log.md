@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P117 and the next request is **P118**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P118 and the next request is **P119**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2654,3 +2654,15 @@ Actual prompt:
 > Lets go ahead and start adding 4 player logic. Try to keep it consistent with what we had for our 3 players.
 
 Associated status snapshot: S-2026-11-27-02. Expanded shared capacity to four with integral discovery counts 1-4, fourth spawn/orange tint/results row, protected spawn zones and protocol 13. Existing authority, safe preview, two-/three-player play, last-standing wins, active-match join block and replay retained. Added generalized four-player capacity/match fixtures and reused three-player subset tests. All selected final 37 checks PASS including actual four-person host/guest wins, fifth rejection/rejoin, visual lobby/results, older player-count regressions and admission gate. Initial admission fixture count reset correction, exact commands, files, screenshots and physical/latency limits in status.md. Protected docs/requirements and prior user/history changes preserved; required logs only, no report documents/commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion and estimated/billed cost: **Unavailable**, without reliable complete-request accounting/model/rates.
+
+## P118 - Replace numbered LAN results with usernames
+
+Date: November 27, 2026.
+Time: 10:25:09 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> lets replace the current "player 1" message with the usernames of the players instead
+
+Associated status snapshot: S-2026-11-27-03. Winner headline, Winner line and all LAN result health/lives rows now use authoritative roster usernames; wrapped long text, kept existing colors/buttons/rules and local mode. All 10 current headless process checks PASS across two-/three-/four-player matches and result UI, including guest/host winners and replay. Commands, files and unverified graphical/physical checks recorded in status.md. Required logs only, no new report documents, commit or push; protected docs/source requirements and user changes preserved. Input tokens, cached input tokens, output tokens, model, usage source, whether input includes cached input, estimated monetary cost and billed charges: **Unavailable**; reliable per-request usage/model/rates are not exposed, so complete model/tool-continuation accounting cannot be determined.

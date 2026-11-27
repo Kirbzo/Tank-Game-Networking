@@ -516,7 +516,9 @@ func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
 	var winner_number := peers.find(winner) + 1
 	var players: Array = []
 	for peer in peers:
-		players.append(duel_vitals.get(peer, {}))
+		var values: Dictionary = duel_vitals.get(peer, {}).duplicate()
+		values["username"] = str(player_names.get(peer, "Unknown player"))
+		players.append(values)
 	result_overlay.build(winner_number, players, summary, multiplayer.is_server())
 	play_again_button = result_overlay.replay_button if multiplayer.is_server() else null
 	result_overlay.replay_requested.connect(request_start)

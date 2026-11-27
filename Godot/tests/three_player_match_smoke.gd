@@ -129,11 +129,11 @@ func run() -> void:
 			await create_timer(0.2).timeout
 			if not check(room.tank_world.positions[loser] == at and room.combat.next_shot == count and room.combat.proxies[loser].collision_layer == 0,"Eliminated tank cannot move/fire/block shots"):
 				return
-	var win_number: int = roster.find(winner)+1
+	var winner_name: String = room.player_names[winner]
 	if not check(await until(func(): return room.phase == "finished" and probe.observed.values().all(func(sample): return sample.phase == "finished" and sample.winner == winner)),"Only final survivor wins for every player"):
 		return
 	var texts := labels()
-	if not check(texts.has("PLAYER %d WINS!"%win_number) and texts.size() == desired_players() + 3 and texts.all(func(text): return not text.contains("GAME OVER")) and probe.observed.values().all(func(sample): return sample.labels == texts),"Three-player winner mapping and all statistics match"):
+	if not check(texts.has("%s WINS!" % winner_name) and texts.has("Winner: %s" % winner_name) and texts.size() == desired_players() + 3 and texts.all(func(text): return not text.contains("GAME OVER")) and probe.observed.values().all(func(sample): return sample.labels == texts),"Username winner mapping and all statistics match"):
 		return
 	if args.has("render"):
 		await RenderingServer.frame_post_draw

@@ -15,7 +15,7 @@ func run() -> void:
 	var labels: Array[String] = []
 	for node in room.result_overlay.find_children("*", "Label", true, false):
 		labels.append(node.text)
-	if not check(labels.has("PLAYER 1 WINS!") and labels.has("Player 1: 80 health / 3 lives") and labels.has("Player 2: 0 health / 0 lives") and labels[2].contains("Time played: 00:09") and labels.all(func(text): return not text.contains("GAME OVER")), "Winner-focused design, statistics and host mapping"):
+	if not check(labels.has("TestHost WINS!") and labels.has("Winner: TestHost") and labels.has("TestHost: 80 health / 3 lives") and labels.has("TestGuest: 0 health / 0 lives") and labels[2].contains("Time played: 00:09") and labels.all(func(text): return not text.contains("GAME OVER")), "Winner-focused design, username statistics and host mapping"):
 		return
 	if not check(room.play_again_button.has_focus() and not room.play_again_button.disabled and not paused, "Host replay focus and active network tree"):
 		return
@@ -33,7 +33,12 @@ func run() -> void:
 		return
 	var guest_card = preload("res://scripts/lan_results.gd").new()
 	root.add_child(guest_card)
-	guest_card.build(2, [{"health": 0, "lives": 0}, {"health": 100, "lives": 1}], {"elapsed": 65, "shots": 17, "cleared": 2, "total": 35}, false)
+	guest_card.build(2, [{"username": "TestHost", "health": 0, "lives": 0}, {"username": "TestGuest", "health": 100, "lives": 1}], {"elapsed": 65, "shots": 17, "cleared": 2, "total": 35}, false)
+	var guest_labels: Array[String] = []
+	for node in guest_card.find_children("*", "Label", true, false):
+		guest_labels.append(node.text)
+	if not check(guest_labels.has("TestGuest WINS!") and guest_labels.has("Winner: TestGuest"), "Guest winner uses username"):
+		return
 	if not check(guest_card.replay_button.disabled, "Guest replay disabled"):
 		return
 	print("PASS LAN results layout, role mapping, summary, permissions and lobby destination")
