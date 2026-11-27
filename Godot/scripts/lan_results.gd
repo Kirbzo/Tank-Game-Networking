@@ -7,6 +7,8 @@ var replay_button: Button
 func label_in(box: VBoxContainer, text: String, size: int, color := Color("#eef8ff")) -> Label:
 	var label := Label.new()
 	label.text = text
+	label.custom_minimum_size.x = 560
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.add_theme_font_size_override("font_size", size)
 	label.add_theme_color_override("font_color", color)
@@ -66,14 +68,15 @@ func build(winner: int, players: Array, summary: Dictionary, hosting: bool) -> v
 	box.custom_minimum_size.x = 560
 	box.add_theme_constant_override("separation", 12)
 	card.add_child(box)
-	label_in(box, "PLAYER %d WINS!" % winner if winner > 0 else "GAME OVER", 46, Color("#ffd890"))
-	label_in(box, "Winner: Player %d" % winner if winner > 0 else "Winner: None", 25, Color("#a6dfff"))
-	label_in(box, "GAME OVER - PLAYER %d" % (3 - winner) if winner > 0 else "NO LIVES REMAINING", 24, Color("#ff9cae"))
+	var winner_name := str(players[winner - 1].get("username", "Unknown player")) if winner > 0 and winner <= players.size() else ""
+	label_in(box, "%s WINS!" % winner_name if not winner_name.is_empty() else "NO WINNER", 46, Color("#ffd890"))
+	label_in(box, "Winner: %s" % winner_name if not winner_name.is_empty() else "Winner: None", 25, Color("#a6dfff"))
 	var seconds := int(summary.get("elapsed", 0))
 	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [int(summary.get("cleared", 0)), int(summary.get("total", 35)), int(summary.get("shots", 0)), seconds / 60, seconds % 60], 21)
 	for i in range(players.size()):
 		var values: Dictionary = players[i]
-		label_in(box, "Player %d: %d health / %d lives" % [i + 1, int(values.get("health", 0)), int(values.get("lives", 0))], 20, Color("#8fd5ff") if i == 0 else Color("#e3b7ff"))
+		var colors := [Color("#8fd5ff"), Color("#e3b7ff"), Color("#9aff7a"), Color("#ffb86b")]
+		label_in(box, "%s: %d health / %d lives" % [str(values.get("username", "Unknown player")), int(values.get("health", 0)), int(values.get("lives", 0))], 20, colors[mini(i, colors.size() - 1)])
 	replay_button = button_in(box, "Play Again")
 	replay_button.disabled = not hosting
 	replay_button.tooltip_text = "" if hosting else "Waiting for host to play again"

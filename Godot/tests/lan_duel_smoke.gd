@@ -141,10 +141,10 @@ func run() -> void:
 	if not check(await until(func(): return room.phase == "finished" and probe.observed.get("phase") == "finished" and probe.observed.get("winner") == winner), "Both see the same winner"):
 		return
 	var labels := result_labels()
-	var winner_number := 1 if winner == 1 else 2
-	if not check(labels == probe.observed.result_labels and labels.has("PLAYER %d WINS!" % winner_number) and labels.has("GAME OVER - PLAYER %d" % (3 - winner_number)), "Both results map Player 1 to host and Player 2 to guest"):
+	var winner_name: String = room.player_names[winner]
+	if not check(labels == probe.observed.result_labels and labels.has("%s WINS!" % winner_name) and labels.all(func(text): return not text.contains("GAME OVER")), "Both results show username winner without GAME OVER"):
 		return
-	if not check(labels[3].contains("17 shots fired") and labels[3].contains("0 / 35 bricks cleared") and room.combat.match_shots == 17, "Host summary excludes preview shots and matches both screens"):
+	if not check(labels[2].contains("17 shots fired") and labels[2].contains("0 / 35 bricks cleared") and room.combat.match_shots == 17, "Host summary excludes preview shots and matches both screens"):
 		return
 	var shots: int = room.combat.next_shot
 	var tick: int = room.tank_world.tick
