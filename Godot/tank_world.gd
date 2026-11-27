@@ -4,7 +4,7 @@ extends "res://room_world.gd"
 const TANK_SPEED := 235.0
 const HALF := Vector2(24, 24)
 const CENTER_BOUNDS := Rect2(136, 176, 1008, 512)
-const SPAWN_POINTS := [Vector2(208, 612), Vector2(1072, 612), Vector2(208, 360)]
+const SPAWN_POINTS := [Vector2(208, 612), Vector2(1072, 612), Vector2(208, 360), Vector2(1072, 360)]
 var removed_ice: Dictionary = {}
 var extra_ice: Dictionary = {}
 var speed_multipliers: Dictionary = {}

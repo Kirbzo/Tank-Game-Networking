@@ -37,6 +37,8 @@ func run() -> void:
 		lobby.identify_game(id)
 		if not check(lobby.game_list.get_item_text(lobby.listed_ids.find(id)).contains("Game started"), "Started listing remains selectable"):
 			return
+		# Started takes precedence even when a full-capacity count is advertised.
+		lobby.discovery.games[id].players = lobby.Discovery.MAX_PLAYERS
 		lobby.join_button.pressed.emit()
 		if not check(started_notice(), "Fresh listing shows started notice with Retry and Return"):
 			return
@@ -51,6 +53,7 @@ func run() -> void:
 			return
 		# Host starts during the pre-connect delay: latest listing prevents ENet startup.
 		lobby.discovery.set_process(false)
+		lobby.discovery.games[id].players = 2
 		lobby.discovery.games[id].started = false
 		lobby.join_game()
 		await create_timer(0.1).timeout

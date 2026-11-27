@@ -72,7 +72,7 @@ func build(winner: int, players: Array, summary: Dictionary, hosting: bool) -> v
 	label_in(box, "%d / %d bricks cleared   |   %d shots fired\nTime played: %02d:%02d" % [int(summary.get("cleared", 0)), int(summary.get("total", 35)), int(summary.get("shots", 0)), seconds / 60, seconds % 60], 21)
 	for i in range(players.size()):
 		var values: Dictionary = players[i]
-		var colors := [Color("#8fd5ff"), Color("#e3b7ff"), Color("#9aff7a")]
+		var colors := [Color("#8fd5ff"), Color("#e3b7ff"), Color("#9aff7a"), Color("#ffb86b")]
 		label_in(box, "Player %d: %d health / %d lives" % [i + 1, int(values.get("health", 0)), int(values.get("lives", 0))], 20, colors[mini(i, colors.size() - 1)])
 	replay_button = button_in(box, "Play Again")
 	replay_button.disabled = not hosting

@@ -8,8 +8,8 @@ const FIRST_PORT := 49140
 const SLOT_COUNT := 16
 # Combined builds share a stable Application/AlphaLobby RPC path.
 # Broadcast and direct-IP replies pass this check before ID cache lookup.
-const PROTOCOL := "moooze-combined-12"
-const MAX_PLAYERS := 3
+const PROTOCOL := "moooze-combined-13"
+const MAX_PLAYERS := 4
 var protocol := PROTOCOL
 const EXPIRY_MS := 4000
 var instance_id := Crypto.new().generate_random_bytes(12).hex_encode()
@@ -97,7 +97,7 @@ func clean_players(value: Variant) -> int:
 	# Zero means unknown for older hosts or malformed announcements.
 	if not (value is int or value is float):
 		return 0
-	if value != 1 and value != 2 and value != MAX_PLAYERS:
+	if value < 1 or value > MAX_PLAYERS or float(value) != floorf(float(value)):
 		return 0
 	return int(value)
 

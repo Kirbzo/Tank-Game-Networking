@@ -11,7 +11,7 @@ func check(value: bool, message: String) -> bool:
 
 func full_notice(lobby: Control) -> bool:
 	var notice = lobby.disconnected_screen
-	return is_instance_valid(notice) and notice.is_visible_in_tree() and notice.title.text == "Room Full" and notice.explanation.text.contains("already has 3 players") and notice.return_button.text == "Return to Lobby" and lobby.session == null and not lobby.joining
+	return is_instance_valid(notice) and notice.is_visible_in_tree() and notice.title.text == "Room Full" and notice.explanation.text.contains("already has 4 players") and notice.return_button.text == "Return to Lobby" and lobby.session == null and not lobby.joining
 
 func run() -> void:
 	var args := OS.get_cmdline_user_args()
@@ -22,13 +22,13 @@ func run() -> void:
 	if args.has("host"):
 		lobby.host_game()
 		for i in range(300):
-			if lobby.multiplayer.get_peers().size() == 2:
+			if lobby.multiplayer.get_peers().size() == 3:
 				break
 			await create_timer(0.05).timeout
-		if not check(lobby.multiplayer.get_peers().size() == 2, "Two guests fill actual host"):
+		if not check(lobby.multiplayer.get_peers().size() == 3, "Three guests fill actual host"):
 			return
 		await create_timer(3.0).timeout
-		if not check(lobby.multiplayer.get_peers().size() == 2 and lobby.discovery.hosted_game["players"] == 3, "Blocked player does not disturb occupied room"):
+		if not check(lobby.multiplayer.get_peers().size() == 3 and lobby.discovery.hosted_game["players"] == 4, "Blocked player does not disturb occupied room"):
 			return
 		for i in range(200):
 			if lobby.multiplayer.get_peers().is_empty():
@@ -62,10 +62,10 @@ func run() -> void:
 		quit(0)
 		return
 	for i in range(200):
-		if lobby.discovery.games.get(id, {}).get("players", 0) == 3:
+		if lobby.discovery.games.get(id, {}).get("players", 0) == 4:
 			break
 		await create_timer(0.05).timeout
-	if not check(lobby.discovery.games.get(id, {}).get("players", 0) == 3, "Live host advertises full room"):
+	if not check(lobby.discovery.games.get(id, {}).get("players", 0) == 4, "Live host advertises full room"):
 		return
 	lobby.join_game()
 	if not check(full_notice(lobby) and lobby.joining_screen == null, "Full Join shows Room Full without connection or Retry"):
@@ -79,7 +79,7 @@ func run() -> void:
 	lobby.join_failed()
 	if not check(lobby.joining_screen.retry_button.visible and not is_instance_valid(lobby.disconnected_screen), "Unknown availability preserves existing Retry flow"):
 		return
-	lobby.discovery.games[id]["players"] = 3
+	lobby.discovery.games[id]["players"] = 4
 	lobby.discovery.games[id]["seen"] = Time.get_ticks_msec()
 	lobby.joining_screen.retry_button.pressed.emit()
 	if not check(full_notice(lobby) and not lobby.joining_screen.visible and lobby.joining_screen.timeout.is_stopped(), "Retry with fresh full listing shows Room Full and stops timer"):
@@ -88,7 +88,7 @@ func run() -> void:
 	lobby.discovery.games[id]["players"] = 0
 	lobby.join_game()
 	await create_timer(0.6).timeout
-	lobby.discovery.games[id]["players"] = 3
+	lobby.discovery.games[id]["players"] = 4
 	lobby.discovery.games[id]["seen"] = Time.get_ticks_msec()
 	lobby.refresh_games()
 	if not check(lobby.joining and not is_instance_valid(lobby.disconnected_screen), "Live full update may include us; wait for connection outcome"):

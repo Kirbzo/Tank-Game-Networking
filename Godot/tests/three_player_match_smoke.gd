@@ -1,6 +1,8 @@
 extends "res://tests/combat_smoke.gd"
 var room: Control
 var probe: MatchProbe
+func desired_players() -> int:
+	return 3
 class MatchProbe extends Node:
 	var test
 	var observed: Dictionary = {}
@@ -25,7 +27,7 @@ func labels() -> Array[String]:
 func health_shared(peer: int, hp: int, lives: int) -> bool:
 	if room.duel_vitals.get(peer,{}).get("health",-1) != hp or room.duel_vitals[peer].lives != lives:
 		return false
-	return probe.observed.size() == 2 and probe.observed.values().all(func(sample): return sample.vitals.get(peer,{}).get("health",-1) == hp and sample.vitals[peer].lives == lives)
+	return probe.observed.size() == desired_players() - 1 and probe.observed.values().all(func(sample): return sample.vitals.get(peer,{}).get("health",-1) == hp and sample.vitals[peer].lives == lives)
 func run() -> void:
 	var args = OS.get_cmdline_user_args()
 	var hosting: bool = args.has("host")
@@ -33,7 +35,7 @@ func run() -> void:
 	root.add_child(app)
 	current_scene = app
 	lobby = app.lobby
-	lobby.discovery.protocol = "three-player-match-test-guest" if args.has("guest-wins") else "three-player-match-test-host"
+	lobby.discovery.protocol = "%d-player-match-test-" % desired_players() + ("guest" if args.has("guest-wins") else "host")
 	probe = MatchProbe.new()
 	probe.name = "MatchProbe"
 	probe.test = self
@@ -44,7 +46,7 @@ func run() -> void:
 			return
 		lobby.game_id.text = lobby.discovery.games.keys()[0]
 		lobby.join_game()
-	if not check(await until(func(): return is_instance_valid(lobby.active_room) and lobby.active_room.phase == "ready" and lobby.active_room.player_names.size() == 3),"All three ready"):
+	if not check(await until(func(): return is_instance_valid(lobby.active_room) and lobby.active_room.phase == "ready" and lobby.active_room.player_names.size() == desired_players()),"All three ready"):
 		return
 	room = lobby.active_room
 	if not hosting:
@@ -59,10 +61,10 @@ func run() -> void:
 			return
 		if not check(await until(func(): return is_instance_valid(lobby.disconnected_screen)),"Clean host shutdown after completed match checks"):
 			return
-		print("PASS three-player guest: shared elimination/survivor, statistics, host-only start and replay")
+		print("PASS %d-player guest: shared elimination/survivor, statistics, host-only start and replay" % desired_players())
 		quit()
 		return
-	if not check(await until(func(): return probe.observed.size() == 2),"Guest reports"):
+	if not check(await until(func(): return probe.observed.size() == desired_players() - 1),"Guest reports"):
 		return
 	var session = lobby.session
 	room.begin_game()
@@ -75,7 +77,7 @@ func run() -> void:
 	for peer in room.player_names:
 		if peer != 1:
 			roster.append(peer)
-	var winner: int = roster[2] if args.has("guest-wins") else 1
+	var winner: int = roster[desired_players() - 1] if args.has("guest-wins") else 1
 	var losers: Array = []
 	for peer in roster:
 		if peer != winner:
@@ -87,7 +89,7 @@ func run() -> void:
 			room.tank_world.positions[loser] = Vector2(550,430)
 			for other in roster:
 				if other != winner and other != loser:
-					room.tank_world.positions[other] = Vector2(500,430) if other == first_eliminated else Vector2(800,430)
+					room.tank_world.positions[other] = Vector2(500,430) if other == first_eliminated else Vector2(800 + roster.find(other) * 90,430)
 			await create_timer(0.25).timeout
 			for shot in range(5):
 				if winner == 1:
@@ -105,6 +107,9 @@ func run() -> void:
 					return
 			if life<2:
 				await create_timer(2.1).timeout
+		if loser != losers[-1]:
+			if not check(room.phase == "running" and not room.combat.ended and lobby.match_started(),"Multiple survivors continue after every non-final elimination"):
+				return
 		if first_eliminated == 0:
 			first_eliminated = loser
 			if not check(room.phase == "running" and not room.combat.ended and lobby.match_started() and not is_instance_valid(room.result_overlay),"First elimination does not end match or reopen admission"):
@@ -128,11 +133,11 @@ func run() -> void:
 	if not check(await until(func(): return room.phase == "finished" and probe.observed.values().all(func(sample): return sample.phase == "finished" and sample.winner == winner)),"Only final survivor wins for every player"):
 		return
 	var texts := labels()
-	if not check(texts.has("PLAYER %d WINS!"%win_number) and texts.size() == 6 and texts.all(func(text): return not text.contains("GAME OVER")) and probe.observed.values().all(func(sample): return sample.labels == texts),"Three-player winner mapping and all statistics match"):
+	if not check(texts.has("PLAYER %d WINS!"%win_number) and texts.size() == desired_players() + 3 and texts.all(func(text): return not text.contains("GAME OVER")) and probe.observed.values().all(func(sample): return sample.labels == texts),"Three-player winner mapping and all statistics match"):
 		return
 	if args.has("render"):
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png("res://.godot/integration/P115-winner.png")
+		root.get_texture().get_image().save_png("res://.godot/integration/P117-winner.png" if desired_players() == 4 else "res://.godot/integration/P115-winner.png")
 	var old_epoch: int = room.epoch
 	room.play_again_button.pressed.emit()
 	if not check(await until(func(): return room.phase == "ready" and room.epoch>old_epoch and probe.observed.values().all(func(sample): return sample.epoch == room.epoch and sample.phase == "ready")),"Replay resets all three on same session"):
@@ -144,5 +149,5 @@ func run() -> void:
 	await create_timer(0.15).timeout
 	room.leave_room()
 	await create_timer(0.2).timeout
-	print("PASS three-player host: last standing, no early end, eliminated host/guest isolation, winner UI and replay")
+	print("PASS %d-player host: last standing, no early end, eliminated host/guest isolation, winner UI and replay" % desired_players())
 	quit()

@@ -59,7 +59,7 @@ func run() -> void:
 	print("TRACE Retry delay ms=", elapsed)
 	lobby.join_cancelled()
 	lobby.join_game()
-	lobby.discovery.games["ABC123"]["players"] = 3
+	lobby.discovery.games["ABC123"]["players"] = 4
 	lobby.discovery.games["ABC123"]["seen"] = Time.get_ticks_msec()
 	await create_timer(0.6).timeout
 	if not check(lobby.session == null and is_instance_valid(lobby.disconnected_screen) and lobby.disconnected_screen.title.text == "Room Full", "Capacity rechecked after delay"):

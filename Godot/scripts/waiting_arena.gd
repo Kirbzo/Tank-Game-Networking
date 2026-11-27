@@ -14,6 +14,8 @@ var extra_ice_sprites: Dictionary = {}
 var contact_timers: Dictionary = {}
 var muzzle_flashes: Array[Dictionary] = []
 const TankVisual = preload("res://scripts/lan_tank_visual.gd")
+const SPAWN_POINTS = preload("res://tank_world.gd").SPAWN_POINTS
+const GUEST_TINTS := [Color(1.8, 0.65, 1.0), Color("#9aff7a"), Color("#ffb86b")]
 
 func _ready() -> void:
 	# Same arena coordinates as the imported offline client; decoration only.
@@ -101,7 +103,7 @@ func set_members(names: Dictionary) -> void:
 		var marker := TankVisual.new()
 		marker.player_number = 1 if peer == 1 else 2
 		marker.z_index = 3 # Client tanks remain visible over foliage/moose.
-		marker.position = preload("res://tank_world.gd").SPAWN_POINTS[mini(tank_markers.size(), 2)]
+		marker.position = SPAWN_POINTS[mini(tank_markers.size(), SPAWN_POINTS.size() - 1)]
 		add_child(marker)
 		tank_markers[peer] = marker
 		var label := Label.new()
@@ -119,7 +121,7 @@ func set_members(names: Dictionary) -> void:
 	for peer in members:
 		var tint := Color.WHITE
 		if peer != 1:
-			tint = Color(1.8, 0.65, 1.0) if guest_slot == 0 else Color("#9aff7a")
+			tint = GUEST_TINTS[mini(guest_slot, GUEST_TINTS.size() - 1)]
 			guest_slot += 1
 		tank_markers[peer].chassis.modulate = tint
 		tank_markers[peer].turret.get_child(0).modulate = tint
