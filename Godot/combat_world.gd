@@ -269,6 +269,22 @@ func report_vitals(peer: int) -> void:
 		tanks.input_times.erase(peer)
 	confirmed.emit("vitals", {"vitals": vitals(), "revision": vitals_revision, "positions": tanks.positions.duplicate(), "tick": tanks.tick, "acks": tanks.processed_sequences.duplicate(), "respawn": peer if respawned else 0})
 
+func remove_player(peer: int) -> void:
+	if not proxies.has(peer):
+		return
+	var proxy: Node = proxies[peer]
+	for bullet in bullets.values():
+		if bullet.shooter == proxy:
+			bullet.free()
+	proxies.erase(peer)
+	for values in [controls, aims, cooldowns, previous_lives, fire_requests]:
+		values.erase(peer)
+	tanks.remove_player(peer)
+	for animal in moose:
+		animal.tanks = proxies.values()
+	proxy.free()
+	vitals_revision += 1
+
 func finish_duel() -> void:
 	if ended or not interactions_enabled:
 		return

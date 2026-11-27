@@ -606,7 +606,7 @@ func room_has_started() -> bool:
 	return listing.get("started", false) == true and Time.get_ticks_msec() - int(listing.get("seen", -Discovery.EXPIRY_MS - 1)) <= Discovery.EXPIRY_MS
 
 func show_game_started() -> void:
-	show_connection_notice("Game already started", "This lobby has already started a game.", "Please wait until the game has ended, then Retry or Return to Lobby.", true)
+	show_connection_notice("Game already started", "This lobby has already started a game.", "Please wait until the game has ended and the host presses Play Again, then Retry or Return to Lobby.", true)
 
 func retry_started_room() -> void:
 	if exiting or not is_instance_valid(disconnected_screen) or join_target.is_empty():

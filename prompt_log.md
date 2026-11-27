@@ -2,7 +2,7 @@
 
 Consolidated on October 27, 2026 by P042, revision S-2026-10-27-10. The merge audit describes that historical consolidation snapshot; subsequent requests are recorded below in the continuing local sequence.
 
-- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P118 and the next request is **P119**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
+- **Local sequence preserved:** P001-P041 retain their original IDs. The merge request is P042; the latest recorded request here is P122 and the next request is **P123**. P109 records the earlier main transfer on main and is not reused here. P099-P102 were used in earlier conversation investigations but are absent from this checkout and remain reserved. P049-P054 were used earlier in this conversation but are absent from this checkout and remain reserved. P044 records the earlier main transfer on that branch; its ID is not reused here. Branch-qualified imported IDs do not consume or reset the PXXX sequence. Preserve those imported IDs when referring to their source history.
 - **Ordering:** newest date first. Within each date, available receipt/recording times are sorted newest first. Recording times remain labelled as recording times; they are not substituted for unavailable receipt times. Other entries are grouped under **Time unavailable**. Their stable display order does not claim a cross-branch chronology. Missing dates/times were not inferred from Git commit times.
 - **Duplicates:** identical dated prompt text is one prompt identity. Exact duplicate source records are consolidated; different versions are preserved and labelled below. Sources already containing repeated P015 IDs are disambiguated as MAIN-P015-1 and MAIN-P015-2.
 - **Evidence boundary:** imported logs describe historical work on their source branches. Their test results, completion claims, referenced files and status revisions do not automatically apply to this checkout. No source-branch gameplay code was merged.
@@ -2666,3 +2666,47 @@ Actual prompt:
 > lets replace the current "player 1" message with the usernames of the players instead
 
 Associated status snapshot: S-2026-11-27-03. Winner headline, Winner line and all LAN result health/lives rows now use authoritative roster usernames; wrapped long text, kept existing colors/buttons/rules and local mode. All 10 current headless process checks PASS across two-/three-/four-player matches and result UI, including guest/host winners and replay. Commands, files and unverified graphical/physical checks recorded in status.md. Required logs only, no new report documents, commit or push; protected docs/source requirements and user changes preserved. Input tokens, cached input tokens, output tokens, model, usage source, whether input includes cached input, estimated monetary cost and billed charges: **Unavailable**; reliable per-request usage/model/rates are not exposed, so complete model/tool-continuation accounting cannot be determined.
+## P119 - Repository wording and legacy-code consistency audit
+
+Date: November 27, 2026.
+Time: 10:42:24 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Can you check each file within the current repositiory and look for any wording inconsistenies or old code that doesnt refrence the current state of the project. You can refer to the status.md as the current state of the project.
+
+Associated status snapshot: S-2026-11-27-04. Audited inventory of350 tracked files (315 text scanned,35 binary inventoried), extracted both requirements, checked resources/links, compared current P117/P118 with docs/code/tests/history. Found protected docs/current status drift, obsolete /2 tests and test recipes, misleading comments/names, unused Exit screen, tracked caches/Word lock, encoding damage and four historical broken links. Reproduced documented connected-room host/client test: both exit1 on stale /2 count assertions; no gameplay fixes applied. Distinguishes retained local modes, required shared rectangle foundations, historical source/report/log records from stale present-tense claims. Detailed locations, commands, results, limits and cleanup priorities in status entry and chat. Only required logs updated; no new report docs, implementation changes, protected edits, deletion, commit or push. Input/cached input/output tokens, model, usage source, cached-input inclusion, estimated monetary cost and actual charges: **Unavailable**, without reliable per-request complete model/tool-continuation accounting and applicable rates.
+## P120 - Preserve running LAN match after guest departure
+
+Date: November 27, 2026.
+Time: 11:27:36 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> Can we make it so when the game doesnt reset when 1 player leaves? currently when 1 player leaves in the middle of the game the entire game gets sent back to the lobby. Lets change it so when there's more than 2 players on the field, the game keeps going and if only 1 player remains connected, they will return back to the lobby asuming there still is one.
+
+Associated status snapshot: S-2026-11-27-05. Running matches now continue with at least2 connected roster members, preserving authoritative world/epoch/health/statistics and removing departed bodies/projectiles/control state. Sole host returns to existing lobby with explanation and closes listing. Existing living-survivor result, host-close behavior, waiting preview and local modes preserved.17 current process checks PASS, including4/3/2-person departures, abrupt disconnect, last-survivor result and duel/replay/preview/results regressions. Detailed files, commands, evidence and graphical/physical limits recorded in status.md. P119 log changes preserved; no unrelated repairs/protected edits/report docs/commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion, estimated monetary cost and actual charges: **Unavailable**, without reliable per-request complete model/tool-continuation accounting and applicable rates.
+## P121 - Return sole host to waiting game room instead of lobby
+
+Date: November 27, 2026.
+Time: 11:31:56 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> can we change it so it doesnt go to the lobby, but the game room instead?
+
+Associated status snapshot: S-2026-11-27-06. Refines P120 singleton destination: same hosted game room/session/ID retained, resets to harmless preview with movement/shooting and ID visible, reopens admission and allows same-ID rejoin/another match.2+ connected running behavior remains.17 final headless process checks PASS; initial visibility/readiness fixture failures corrected and rerun, details/commands/limits in status.md. Prior work preserved, only singleton implementation/shared fixture and required logs updated; no protected edits/report docs/commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion, estimated monetary cost and billed charges: **Unavailable**, without reliable complete-request model/tool-continuation accounting and applicable rates.
+## P122 - Block results admission until host presses Play Again
+
+Date: November 27, 2026.
+Time: 11:38:08 AM (recording time; America/Regina).
+Receipt time: **Unavailable**.
+
+Actual prompt:
+
+> lets also include some logic that doesnt allow people to join before the host presses play again
+
+Associated status snapshot: S-2026-11-27-07. Finished matches keep admission locked through results until host Play Again. Notice explains required host action; authoritative stale-listing joins denied as well as fresh listings/Retry. Finished-player departure cannot implicitly reopen room; P121 unfinished-match solo waiting behavior preserved.13 current headless process checks PASS across admission/retry/rejoin, results departures, solo preview, duel/replay and UI. Commands/files/limits recorded in status.md. Prior uncommitted work preserved; no protected edits/report docs/commit/push. Input/cached input/output tokens, model, usage source, cached-input inclusion, estimated cost and billed charges: **Unavailable**, without reliable complete-request model/tool-continuation accounting and applicable rates.

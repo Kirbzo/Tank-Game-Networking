@@ -73,7 +73,22 @@ func run() -> void:
 			return
 		set_stage("denied")
 		lobby.discovery.set_process(true)
-		if not check(await until(func(): return stage() == "ended" and not lobby.discovery.games.get(id,{}).get("started",true)), "End advertises reopened room"):
+		if not check(await until(func(): return stage() == "ended"), "Wait for results screen"):
+			return
+		lobby.disconnected_screen.retry_button.pressed.emit()
+		if not check(started_notice(), "Results remain closed before host replay"):
+			return
+		# A stale listing must also be rejected by the host while results show.
+		lobby.discovery.set_process(false)
+		lobby.disconnected_back()
+		lobby.discovery.games[id].started = false
+		lobby.discovery.games[id].seen = Time.get_ticks_msec()
+		lobby.join_game()
+		if not check(await until(started_notice), "Host denies stale-listing results admission"):
+			return
+		set_stage("results-denied")
+		lobby.discovery.set_process(true)
+		if not check(await until(func(): return stage() == "replay" and not lobby.discovery.games.get(id,{}).get("started",true)), "Host replay advertises reopened room"):
 			return
 		lobby.disconnected_screen.retry_button.pressed.emit()
 		if not check(lobby.joining and lobby.joining_screen.visible, "Retry after end uses normal loading"):
@@ -118,9 +133,19 @@ func run() -> void:
 	loser.clear_powerups()
 	loser.lives = 1
 	loser.take_damage(100)
-	if not check(room.phase == "finished" and not lobby.match_started(), "End reopens room without requiring Play Again"):
+	if not check(room.phase == "finished" and lobby.match_started(), "End keeps admission closed until Play Again"):
 		return
 	set_stage("ended")
+	if not check(await until(func(): return stage() == "results-denied" and lobby.multiplayer.get_peers().size() == 1), "Results-screen Join denied and released"):
+		return
+	if not check(room.phase == "finished" and room.epoch == epoch and is_instance_valid(room.result_overlay) and lobby.match_started(), "Rejected join preserves results and admission lock"):
+		return
+	# A connected member leaving results must not implicitly prepare replay.
+	room.refresh_world_members()
+	if not check(room.phase == "finished" and lobby.match_started(), "Membership refresh cannot reopen results"):
+		return
+	room.play_again_button.pressed.emit()
+	set_stage("replay")
 	if not check(await until(func(): return room.phase == "ready" and room.player_names.size() == 3 and probe.observed.size() == 2 and probe.observed.values().all(func(data): return data.phase == "ready" and data.count == 3)), "Both guests share reopened three-player preview"):
 		return
 	if not check(room.can_begin_game() and not room.combat.interactions_enabled, "Reopened three-player preview waits for host Start"):

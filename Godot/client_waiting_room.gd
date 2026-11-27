@@ -287,10 +287,34 @@ func add_world_player(peer: int, player_name: String) -> void:
 
 func receive_names(names: Dictionary) -> void:
 	super.receive_names(names)
+	if phase == "running":
+		for peer in tank_world.positions.keys():
+			if not player_names.has(peer):
+				tank_world.remove_player(peer)
+				ready_peers.erase(peer)
+				duel_vitals.erase(peer)
 	sync_members()
 
 func refresh_world_members() -> void:
 	super.refresh_world_members()
+	if multiplayer.is_server() and phase in ["running", "finished"] and is_instance_valid(combat):
+		var departed := false
+		for peer in combat.proxies.keys():
+			if not player_names.has(peer):
+				combat.remove_player(peer)
+				ready_peers.erase(peer)
+				departed = true
+		sync_members()
+		if departed and phase == "running":
+			if player_names.size() < 2:
+				# Keep hosting and restore the harmless game-room preview.
+				combat.process_mode = Node.PROCESS_MODE_DISABLED
+				phase = "waiting"
+				prepare_preview.call_deferred(true, "No opponents remain connected. Waiting for players to join.")
+			else:
+				apply_vitals({"vitals": combat.vitals(), "revision": combat.vitals_revision})
+				combat.finish_duel()
+		return
 	if multiplayer.is_server() and is_instance_valid(artwork) and not same_preview_members():
 		if is_instance_valid(combat):
 			combat.process_mode = Node.PROCESS_MODE_DISABLED
@@ -503,7 +527,8 @@ func show_duel_result(winner: int, summary: Dictionary = {}) -> void:
 	winner_peer = winner
 	phase = "finished"
 	if multiplayer.is_server():
-		session_lobby.set_match_started(false)
+		# Keep admission locked until host replay restores the waiting room.
+		session_lobby.set_match_started(true)
 	fire_held = false
 	combat_view.clear_shots()
 	combat_view.sound.play("victory" if winner == multiplayer.get_unique_id() else "defeat")

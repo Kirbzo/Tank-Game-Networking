@@ -56,6 +56,12 @@ func add_player(peer: int) -> void:
 		positions[peer] = spawn
 		directions[peer] = Vector2.ZERO
 
+func remove_player(peer: int) -> void:
+	super.remove_player(peer)
+	for values in [speed_multipliers, hit_push, contact_cooldowns, bounce_push]:
+		values.erase(peer)
+	inactive_peers.erase(peer)
+
 func step(delta: float, now: int) -> void:
 	for peer in positions:
 		if inactive_peers.has(peer):
