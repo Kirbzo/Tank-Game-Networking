@@ -1,5 +1,7 @@
 # Requirements status
 
+Current request: November 27, 2026. Revision S-2026-11-27-01-Jaden, P077. Created independent Server Framework/project.godot copy with project name Server Framework, preserving original Godot/. Import and actual host/client connected-room tests passed on Godot 4.7.2; environment user-data/log/certificate/editor-settings access errors persist. Physical/graphical acceptance and requirement statuses unchanged.
+
 Current integration: November 26, 2026. Revision S-2026-11-26-02-Jaden, P076. Imported through 5980b0d; current verification recorded below. Earlier source results remain historical.
 
 Updated: November 6, 2026. Revision: S-2026-11-06-10. Prompt: P075 (single-commit integration into main).

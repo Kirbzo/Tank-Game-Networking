@@ -1,5 +1,21 @@
 # Prompt log
 
+## P077 - November 27, 2026 (independent Server Framework project)
+
+Date: November 27, 2026. Time: 10:39:48 AM (recording time; America/Regina). Receipt time unavailable.
+
+Actual request:
+
+> Create a copy of the Moooze Tanks Alpha Lobby godot project, and call it Server Framework with it being in its own godot project.
+
+Result: copied the current Godot project into Server Framework/, excluding .godot editor caches. Renamed config/name to Server Framework and adapted the copy's README run commands. Scenes, GDScript, resources, tests and UIDs retained; res:// resolves within the new project. Original Godot project, root README/AGENTS and source documents unchanged. This copies current connected-room behavior despite the original project's older Alpha Lobby name; it does not revert to an old alpha snapshot. Discovery remains compatible with the original. Import Server Framework/project.godot in Godot 4.7.2 to run independently.
+
+Associated status.md: S-2026-11-27-01-Jaden. Requirement completion statuses unchanged.
+
+Validation: Godot 4.7.2 --headless --path "Server Framework" --editor --import --quit succeeded. Paired --headless --path "Server Framework" --script res://tests/connected_room_smoke.gd -- host and the same command without -- host both PASS/exit 0 for actual Host/Join room entry and client departure. Executable: C:/Users/jaden/Desktop/Godot_v4.7.2-stable_win64.exe. No script errors; sandbox user-data/log, certificate-store and editor-settings errors remain. Checked copied-file equivalence except intended project name/README, original Git diff boundaries, source checksums, 33 requirement IDs and documentation links. Existing historical VM-report links remain absent. Physical two-device and graphical acceptance not established. No staging/commit/push.
+
+Input/cached/output tokens, model usage attribution and cost: Unavailable; no reliable per-request accounting snapshot collected.
+
 ## P076 - November 26, 2026 (Jaden integration through 5980b0d)
 
 Actual request:

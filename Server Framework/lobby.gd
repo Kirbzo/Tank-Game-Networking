@@ -1,0 +1,510 @@
+extends Control
+
+const Discovery = preload("res://discovery.gd")
+const Usernames = preload("res://usernames.gd")
+const LanAddress = preload("res://lan_address.gd")
+var username: String = Usernames.generate()
+const JOIN_DELAY_SECONDS := 0.5
+const SESSION_ID_CHARACTERS := "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+var discovery := Discovery.new()
+var session: ENetMultiplayerPeer
+var host_button: Button
+var join_button: Button
+var exit_button: Button
+var game_list: ItemList
+var game_id: LineEdit
+var feedback: Label
+var hosted: Label
+var network_status: Label
+var network_address: LineEdit
+var listed_ids: Array[String] = []
+var local_addresses: Array[String] = []
+var ipv4_label: Label
+var joining_screen: Control
+var joining := false
+var join_target: Dictionary = {}
+var connected_game_id := ""
+var join_attempt := 0
+var exit_screen: Control
+var exiting := false
+var active_room: Control
+var room_return_message := ""
+var disconnected_screen: Control
+
+func _ready() -> void:
+	var margin := MarginContainer.new()
+	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for side in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 32)
+	add_child(margin)
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	margin.add_child(scroll)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 14)
+	scroll.add_child(column)
+	var title := add_label(column, "LOBBY")
+	title.add_theme_font_size_override("font_size", 30)
+	add_label(column, "Your username: " + username)
+	add_label(column, "Host a local session. Discover games on this computer or local network.")
+	# Match LobbyImage.jpeg: stacked actions beside the game list.
+	var lobby_row := HBoxContainer.new()
+	lobby_row.add_theme_constant_override("separation", 32)
+	column.add_child(lobby_row)
+	var controls := VBoxContainer.new()
+	controls.custom_minimum_size.x = 200
+	controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	controls.add_theme_constant_override("separation", 18)
+	lobby_row.add_child(controls)
+	host_button = add_button(controls, "Host")
+	host_button.pressed.connect(host_game)
+	join_button = add_button(controls, "Join")
+	join_button.disabled = true
+	join_button.tooltip_text = "Select a game or enter its ID to join."
+	join_button.pressed.connect(join_game)
+	exit_button = add_button(controls, "Exit")
+	exit_button.tooltip_text = "Disconnect from the session and show the exit screen."
+	exit_button.pressed.connect(show_exit_screen)
+	var games_column := VBoxContainer.new()
+	games_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	games_column.add_theme_constant_override("separation", 12)
+	lobby_row.add_child(games_column)
+	var games_title := add_label(games_column, "List of Games")
+	games_title.add_theme_font_size_override("font_size", 28)
+	game_list = ItemList.new()
+	game_list.custom_minimum_size = Vector2(0, 280)
+	game_list.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	game_list.item_selected.connect(select_game)
+	games_column.add_child(game_list)
+	game_id = LineEdit.new()
+	game_id.placeholder_text = "Enter a game ID"
+	game_id.text_changed.connect(identify_game)
+	games_column.add_child(game_id)
+	feedback = add_label(column, "No games available. Ask another user to press Host.")
+	hosted = add_label(column, "No session hosted.")
+	var address := LanAddress.detect()
+	if not address.is_empty():
+		local_addresses.append(address)
+	ipv4_label = add_label(column, "IPv4: " + (address if not address.is_empty() else "No unambiguous LAN address found"))
+	network_address = LineEdit.new()
+	network_address.placeholder_text = "If no game appears: enter the host laptop's IPv4 and press Enter"
+	network_address.text_submitted.connect(set_network_address)
+	column.add_child(network_address)
+	network_status = add_label(column, "")
+	network_status.hide()
+	discovery.games_changed.connect(refresh_games)
+	discovery.discovery_failed.connect(discovery_error)
+	discovery.network_warning.connect(show_network_status)
+	refresh_games()
+	add_child(discovery)
+	# Use the existing ENet transport with Godot's multiplayer lifecycle signals.
+	multiplayer.connected_to_server.connect(join_connected)
+	multiplayer.connection_failed.connect(join_failed)
+	multiplayer.server_disconnected.connect(join_server_disconnected)
+	multiplayer.peer_connected.connect(session_peers_changed)
+	multiplayer.peer_disconnected.connect(session_peers_changed)
+
+func session_peers_changed(_peer_id: int) -> void:
+	# Read the peer list after Godot finishes processing the connection event.
+	refresh_session_players.call_deferred()
+
+func refresh_session_players() -> void:
+	if exiting:
+		return
+	if session != null and not discovery.hosted_game.is_empty():
+		discovery.hosted_game["players"] = 1 + multiplayer.get_peers().size()
+		discovery.advertise()
+	refresh_games()
+	if is_instance_valid(active_room):
+		active_room.update_connection_status()
+		active_room.refresh_world_members()
+
+func update_session_feedback() -> bool:
+	if session == null or joining:
+		return false
+	var explanation := " Host and Join are disabled while in a session. Game start is not implemented."
+	if not discovery.hosted_game.is_empty():
+		var players := 1 + multiplayer.get_peers().size()
+		feedback.text = "Hosting game %s. Players: %d/2. %s" % [discovery.hosted_game["id"], players, "Client connected." if players == 2 else "Waiting for a client."] + explanation
+	elif not connected_game_id.is_empty():
+		feedback.text = "Connected to game %s. Waiting in the lobby." % connected_game_id + explanation
+	else:
+		return false
+	return true
+
+func show_exit_screen() -> void:
+	if exit_screen != null:
+		return
+	exiting = true
+	leave_game()
+	exit_screen = preload("res://exit_screen.gd").new()
+	get_parent().add_child(exit_screen)
+	# Keep the application open for the future main-screen destination.
+	hide()
+
+func leave_game() -> void:
+	# Cancel a pending join before its deferred frame or timeout can resume it.
+	joining = false
+	join_attempt += 1
+	connected_game_id = ""
+	join_target.clear()
+	if joining_screen != null:
+		joining_screen.timeout.stop()
+		joining_screen.hide()
+	# Clearing the listing stops announcements and direct-query replies.
+	if not discovery.hosted_game.is_empty():
+		discovery.games.erase(discovery.hosted_game["id"])
+	discovery.hosted_game.clear()
+	var leaving_session := session
+	session = null
+	multiplayer.multiplayer_peer = null
+	if leaving_session != null:
+		leaving_session.close()
+	hosted.text = "No session hosted."
+	host_button.disabled = true
+	refresh_games()
+
+# The lobby retains session/discovery ownership while displaying its room.
+func open_connected_room() -> void:
+	if is_instance_valid(active_room) or session == null:
+		return
+	active_room = preload("res://game_room.tscn").instantiate()
+	active_room.game_id = str(discovery.hosted_game["id"]) if not discovery.hosted_game.is_empty() else connected_game_id
+	active_room.session_lobby = self
+	get_child(0).hide()
+	add_child(active_room)
+	if not multiplayer.is_server():
+		room_ready.rpc_id(1, username)
+
+# RPCs live on the stable lobby path; a joining room must be ready first.
+@rpc("any_peer", "call_remote", "reliable")
+func room_ready(player_name: String) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender):
+		active_room.add_world_player(sender, discovery.clean_username(player_name))
+
+@rpc("authority", "call_remote", "reliable")
+func room_names(id: String, names: Dictionary) -> void:
+	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
+		active_room.receive_names(names)
+
+@rpc("any_peer", "call_remote", "unreliable_ordered", 1)
+func room_input(direction: Vector2, sequence: int = 0) -> void:
+	var sender := multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and is_instance_valid(active_room) and multiplayer.get_peers().has(sender) and sequence > 0:
+		active_room.world.accept_input(sender, direction, Time.get_ticks_msec(), sequence)
+
+@rpc("authority", "call_remote", "unreliable_ordered", 2)
+func room_snapshot(id: String, tick: int, positions: Dictionary, acknowledgements: Dictionary = {}) -> void:
+	if not multiplayer.is_server() and is_instance_valid(active_room) and active_room.game_id == id:
+		active_room.receive_world(tick, positions, acknowledgements)
+
+func return_from_room(message := "You left the room.") -> void:
+	if not is_instance_valid(active_room):
+		return
+	active_room.hide()
+	active_room.set_physics_process(false)
+	active_room.set_process(false)
+	active_room.queue_free()
+	active_room = null
+	leave_game()
+	get_child(0).show()
+	host_button.disabled = discovery.bound_port == -1
+	update_join_button()
+	room_return_message = message
+	feedback.text = message
+
+func add_label(parent: Node, text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	parent.add_child(label)
+	return label
+
+func add_button(parent: Node, text: String) -> Button:
+	var button := Button.new()
+	button.text = text
+	button.custom_minimum_size = Vector2(200, 64)
+	button.add_theme_font_size_override("font_size", 28)
+	parent.add_child(button)
+	return button
+
+func host_game() -> void:
+	# Guard the action as well as the button: one server per hosting instance.
+	if exiting or is_instance_valid(disconnected_screen) or session != null:
+		return
+	if discovery.bound_port == -1:
+		feedback.text = "Cannot host without discovery. Close another local lobby and restart."
+		return
+	session = ENetMultiplayerPeer.new()
+	var result := create_host_session()
+	if result != OK:
+		feedback.text = "Hosting failed: %s. Try Host again." % error_string(result)
+		session = null
+		return
+	room_return_message = ""
+	var id := generate_session_id()
+	discovery.hosted_game = {"id": id, "port": session.get_host().get_local_port(), "username": username, "players": 1}
+	# Joining requires the existing host endpoint to accept and poll peers.
+	multiplayer.multiplayer_peer = session
+	discovery.advertise()
+	host_button.disabled = true
+	hosted.text = "HOSTED SESSION  |  %s" % id
+	feedback.text = "Hosting is active. Verify this ID appears in the other user's lobby."
+	refresh_games()
+	open_connected_room()
+
+func create_host_session() -> Error:
+	return session.create_server(0, 1)
+
+func generate_session_id() -> String:
+	var id := ""
+	for index in range(6):
+		id += SESSION_ID_CHARACTERS[randi_range(0, SESSION_ID_CHARACTERS.length() - 1)]
+	return id
+
+func refresh_games() -> void:
+	var selected := game_id.text.strip_edges().to_upper()
+	game_list.clear()
+	listed_ids.clear()
+	var entries := discovery.games.duplicate()
+	if not discovery.hosted_game.is_empty():
+		var own_id: String = discovery.hosted_game["id"]
+		entries[own_id] = {"players": discovery.hosted_game["players"], "username": username, "id": own_id, "address": local_addresses[0] if not local_addresses.is_empty() else "127.0.0.1", "port": discovery.hosted_game["port"]}
+	var ids: Array = entries.keys()
+	ids.sort()
+	for id in ids:
+		listed_ids.append(str(id))
+		var players: int = entries[id].get("players", 0)
+		var count := "%d/2 players" % players if players > 0 else "?/2 players"
+		game_list.add_item("%s  |  %s  |  %s" % [id, entries[id].get("username", "UnknownHost"), count])
+		if id == selected:
+			game_list.select(game_list.item_count - 1)
+	if entries.is_empty():
+		feedback.text = "No games available. Ask another user to press Host."
+	elif not selected.is_empty():
+		identify_game(selected)
+	else:
+		feedback.text = "%d hosted session(s) found. Select one to see its game ID." % entries.size()
+	update_session_feedback()
+	if not room_return_message.is_empty() and session == null:
+		feedback.text = room_return_message
+	update_join_button()
+	# A live 2/2 update can include this connecting player: wait for success/failure.
+	if not joining and session == null and joining_screen != null and joining_screen.visible:
+		if room_is_full():
+			show_room_full()
+
+func select_game(index: int) -> void:
+	game_id.text = listed_ids[index]
+	identify_game(game_id.text)
+
+func identify_game(value: String) -> void:
+	if update_session_feedback():
+		update_join_button()
+		return
+	var id := value.strip_edges().to_upper()
+	if id.is_empty():
+		feedback.text = "Select a game or enter its ID to join."
+	elif listed_ids.has(id):
+		feedback.text = "Identified %s. Select Join to connect." % id
+	else:
+		feedback.text = "No available game matches this ID. Check the ID or wait for its host."
+	update_join_button()
+
+func update_join_button() -> void:
+	join_button.disabled = is_instance_valid(disconnected_screen) or exiting or joining or session != null or (joining_screen != null and joining_screen.visible) or available_join_target().is_empty()
+
+func available_join_target() -> Dictionary:
+	var id := game_id.text.strip_edges().to_upper()
+	if discovery.games.has(id):
+		return discovery.games[id]
+	# Discovery can expire while the loading/error screen is open. Back must
+	# still allow the same real connection attempt, just like Retry does.
+	if not join_target.is_empty() and join_target["id"] == id:
+		return join_target
+	return {}
+
+func join_game() -> void:
+	if exiting or is_instance_valid(disconnected_screen) or joining or session != null:
+		return
+	var target := available_join_target()
+	if target.is_empty():
+		feedback.text = "Select an available game or enter its game ID before joining."
+		update_join_button()
+		return
+	room_return_message = ""
+	join_target = target.duplicate()
+	start_join()
+
+# Keep transient-error Retry/Back; only fresh full-room information uses Room Full.
+func start_join() -> void:
+	if exiting or is_instance_valid(disconnected_screen) or joining or session != null:
+		return
+	# Prefer fresh discovery data if the endpoint changed before Retry.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
+	if room_is_full():
+		show_room_full()
+		return
+	joining = true
+	join_attempt += 1
+	var attempt := join_attempt
+	join_button.disabled = true
+	if joining_screen == null:
+		joining_screen = preload("res://joining_screen.gd").new()
+		add_child(joining_screen)
+		joining_screen.retry_requested.connect(start_join)
+		joining_screen.back_requested.connect(join_back)
+		joining_screen.timed_out.connect(join_timed_out)
+		joining_screen.cancel_requested.connect(join_cancelled)
+	# Hiding the previous UI also removes its mouse/keyboard focus targets.
+	get_child(0).hide()
+	joining_screen.begin()
+	# Join and Retry share this delay; UI/Cancel remain responsive.
+	# The delay is part of the existing ten-second attempt deadline.
+	await get_tree().create_timer(JOIN_DELAY_SECONDS).timeout
+	if not joining or attempt != join_attempt or not is_inside_tree():
+		return
+	# Capacity/endpoint can change during the delay, before we have a peer.
+	if discovery.games.has(join_target["id"]):
+		join_target = discovery.games[join_target["id"]].duplicate()
+	if room_is_full():
+		show_room_full()
+		return
+	session = ENetMultiplayerPeer.new()
+	var result := session.create_client(join_target["address"], int(join_target["port"]))
+	if result != OK:
+		join_failed()
+		return
+	multiplayer.multiplayer_peer = session
+
+func join_connected() -> void:
+	if not joining:
+		return
+	joining = false
+	connected_game_id = join_target["id"]
+	joining_screen.show_connected(connected_game_id)
+	joining_screen.hide()
+	open_connected_room()
+	host_button.disabled = true
+	update_session_feedback()
+	update_join_button()
+
+func join_timed_out() -> void:
+	join_failed("The connection timed out before you could enter the room.\nThe host may have left or disconnected, or the network may be unavailable.\nChoose Retry to reconnect or Back to return to the lobby.")
+
+func join_failed(message := "Could not finish joining the room.\nThe host may have left or disconnected, or the room may be full or unavailable.\nChoose Retry to reconnect or Back to return to the lobby.") -> void:
+	if not joining:
+		return
+	if room_is_full():
+		show_room_full()
+		return
+	joining = false
+	join_attempt += 1
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	joining_screen.show_failure(message)
+
+func join_cancelled() -> void:
+	if exiting or not joining:
+		return
+	# Invalidate the deferred connect and timeout before releasing the peer.
+	joining = false
+	join_attempt += 1
+	joining_screen.timeout.stop()
+	multiplayer.multiplayer_peer = null
+	if session != null:
+		session.close()
+		session = null
+	join_back()
+	feedback.text = "Connection cancelled."
+
+func join_back() -> void:
+	if exiting:
+		return
+	joining_screen.timeout.stop()
+	joining_screen.hide()
+	get_child(0).show()
+	refresh_games()
+	update_join_button()
+	join_button.grab_focus()
+
+func join_server_disconnected() -> void:
+	if exiting or is_instance_valid(disconnected_screen):
+		return
+	if is_instance_valid(active_room) or not connected_game_id.is_empty():
+		show_disconnected()
+	elif joining:
+		join_failed("The connection to the host was lost before you could enter the room.\nYour connection attempt has stopped.\nChoose Retry to reconnect or Back to return to the lobby.")
+
+func room_is_full() -> bool:
+	# A cached retry target alone cannot prove that a room is still full.
+	var listing: Dictionary = discovery.games.get(join_target.get("id", ""), {})
+	return not listing.is_empty() and listing.get("players", 0) == 2 and Time.get_ticks_msec() - int(listing.get("seen", -Discovery.EXPIRY_MS - 1)) <= Discovery.EXPIRY_MS
+
+func show_room_full() -> void:
+	# A successful connection takes precedence over a late discovery update.
+	if is_instance_valid(active_room) or not connected_game_id.is_empty():
+		return
+	if session != null and session.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED:
+		return
+	show_connection_notice("Room Full", "This room already has two players.", "Return to the lobby to choose another room.")
+
+func show_disconnected() -> void:
+	show_connection_notice("Disconnected", "The host disconnected or closed the room.", "Return to the lobby to join another room.")
+
+func show_connection_notice(heading: String, message: String, hint: String) -> void:
+	if exiting or is_instance_valid(disconnected_screen):
+		return
+	# Release transport, timers and world before presenting the notice.
+	if is_instance_valid(active_room):
+		return_from_room(message)
+	else:
+		leave_game()
+	room_return_message = message
+	disconnected_screen = preload("res://disconnected_screen.gd").new()
+	disconnected_screen.heading = heading
+	disconnected_screen.message = message
+	disconnected_screen.hint = hint
+	disconnected_screen.lobby_requested.connect(disconnected_back)
+	get_child(0).hide()
+	add_child(disconnected_screen)
+	host_button.disabled = true
+	update_join_button()
+
+func disconnected_back() -> void:
+	if not is_instance_valid(disconnected_screen):
+		return
+	disconnected_screen.hide()
+	disconnected_screen.queue_free()
+	disconnected_screen = null
+	get_child(0).show()
+	host_button.disabled = discovery.bound_port == -1
+	refresh_games()
+	host_button.grab_focus()
+
+func discovery_error(message: String) -> void:
+	host_button.disabled = true
+	feedback.text = message
+	show_network_status(message)
+
+func show_network_status(message: String) -> void:
+	network_status.text = message
+	network_status.visible = not message.is_empty()
+
+func set_network_address(value: String) -> void:
+	if not discovery.set_direct_address(value):
+		show_network_status("Enter a valid IPv4 address, such as 192.168.1.25 (not a game ID).")
+	elif discovery.direct_address.is_empty():
+		network_status.text = ""
+		network_status.hide()
+	else:
+		show_network_status("Looking for hosted games at %s. If none appear, check both firewalls and Wi-Fi isolation." % discovery.direct_address)
+
+func _exit_tree() -> void:
+	if session != null:
+		session.close()
